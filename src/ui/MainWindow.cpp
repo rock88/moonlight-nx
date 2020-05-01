@@ -7,4 +7,7 @@ MainWindow::MainWindow(Widget *parent): ContentWindow(parent, "Moonlight") {
     
     auto button = container()->add<Button>("Add Host");
     button->set_fixed_size(Size(100, 100));
+    button->set_callback([this] {
+        this->m_add_host_callback();
+    });
 }

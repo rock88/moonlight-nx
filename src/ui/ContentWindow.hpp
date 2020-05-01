@@ -9,12 +9,12 @@ public:
     
     void draw(NVGcontext *ctx) override;
     
-    void set_left_title_button(int icon, const std::function<void(ContentWindow *)> &callback);
+    void set_left_title_button(int icon, const std::function<void()> &callback);
     void pop();
     
     void set_left_pop_button() {
-        set_left_title_button(FA_ANGLE_LEFT, [](auto window) {
-            window->pop();
+        set_left_title_button(FA_ANGLE_LEFT, [this]() {
+            this->pop();
         });
     }
     

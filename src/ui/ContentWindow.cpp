@@ -6,10 +6,12 @@ using namespace nanogui;
 
 ContentWindow::ContentWindow(Widget *parent, const std::string& title): Widget(parent) {
     set_layout(new BoxLayout(Orientation::Vertical, Alignment::Middle, 0, 30));
+    set_size(parent->size());
+    set_fixed_size(parent->size());
     
     auto title_container = add<Widget>();
     title_container->set_fixed_size(Size(parent->width() - 40, 80));
-    title_container->set_layout(new BoxLayout(Orientation::Horizontal, Alignment::Middle));
+    title_container->set_layout(new BoxLayout(Orientation::Horizontal, Alignment::Middle, 0, 10));
     
     m_title_button_container = title_container->add<Widget>();
     m_title_button_container->set_layout(new BoxLayout(Orientation::Horizontal));
@@ -48,8 +50,13 @@ void ContentWindow::draw(NVGcontext *ctx) {
     Widget::draw(ctx);
 }
 
-void ContentWindow::set_left_title_button(int icon, const std::function<void(ContentWindow *)> &callback) {
-    
+void ContentWindow::set_left_title_button(int icon, const std::function<void()> &callback) {
+    auto button = m_title_button_container->add<Button>("", icon);
+    button->set_fixed_size(Size(40, 40));
+    button->set_icon_extra_scale(2);
+    button->set_callback([callback] {
+        callback();
+    });
 }
 
 void ContentWindow::pop() {
