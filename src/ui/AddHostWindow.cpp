@@ -1,4 +1,5 @@
 #include "AddHostWindow.hpp"
+#include "Server.hpp"
 
 using namespace nanogui;
 
@@ -48,7 +49,13 @@ AddHostWindow::AddHostWindow(Widget *parent): ContentWindow(parent, "Add Host") 
     connect->set_fixed_size(Size(100, 100));
     connect->set_callback([text] {
         if (text->value().size() > 0) {
-            printf("Connect...\n");
+            Server::server().connect(text->value(), [](auto result) {
+                if (result.isSuccess()) {
+                    printf("Pair: %i\n", result.value()->paired);
+                } else {
+                    printf("Error: %s\n", result.error().c_str());
+                }
+            });
         }
     });
 }
