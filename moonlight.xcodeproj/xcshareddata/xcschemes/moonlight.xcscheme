@@ -43,8 +43,11 @@
       debugDocumentVersioning = "YES"
       debugServiceExtension = "internal"
       allowLocationSimulation = "YES">
-      <BuildableProductRunnable
-         runnableDebuggingMode = "0">
+      <PathRunnable
+         runnableDebuggingMode = "0"
+         FilePath = "/Applications/RetroArch.app">
+      </PathRunnable>
+      <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "36DBDE8D2450BB7E0057C8D3"
@@ -52,10 +55,10 @@
             BlueprintName = "moonlight"
             ReferencedContainer = "container:moonlight.xcodeproj">
          </BuildableReference>
-      </BuildableProductRunnable>
+      </MacroExpansion>
       <CommandLineArguments>
          <CommandLineArgument
-            argument = "-L /Users/rock88/Documents/Projects/RetroArch/moonlight_libretro/moonlight_libretro.dylib"
+            argument = "-L /Users/rock88/Documents/Projects/RetroArch/moonlight-libretro/moonlight_libretro.dylib"
             isEnabled = "YES">
          </CommandLineArgument>
       </CommandLineArguments>

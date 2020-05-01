@@ -6,6 +6,7 @@
 
 #include "glsym/glsym.h"
 #include "libretro.h"
+#include "moonlight_libretro_wrapper.h"
 
 #define ARRAY_SIZE(a) (sizeof(a) / sizeof((a)[0]))
 static struct retro_hw_render_callback hw_render;
@@ -32,9 +33,16 @@ static struct retro_hw_render_callback hw_render;
 static unsigned width  = BASE_WIDTH;
 static unsigned height = BASE_HEIGHT;
 
+static retro_video_refresh_t video_cb;
+static retro_audio_sample_t audio_cb;
+static retro_audio_sample_batch_t audio_batch_cb;
+static retro_environment_t environ_cb;
+static retro_input_poll_t input_poll_cb;
+static retro_input_state_t input_state_cb;
+static retro_log_printf_t log_cb;
+
 void retro_init(void) {
-    //OpenSSL_add_all_algorithms();
-    //curl_global_init(CURL_GLOBAL_ALL);
+    //moonlight_libretro_wrapper_init();
 }
 
 void retro_deinit(void){
@@ -73,18 +81,19 @@ void retro_get_system_av_info(struct retro_system_av_info *info) {
     };
 }
 
-static retro_video_refresh_t video_cb;
-static retro_audio_sample_t audio_cb;
-static retro_audio_sample_batch_t audio_batch_cb;
-static retro_environment_t environ_cb;
-static retro_input_poll_t input_poll_cb;
-static retro_input_state_t input_state_cb;
-
 void retro_set_environment(retro_environment_t cb) {
     environ_cb = cb;
     
     bool no_game = true;
     cb(RETRO_ENVIRONMENT_SET_SUPPORT_NO_GAME, &no_game);
+    
+    const char *dir = NULL;
+    cb(RETRO_ENVIRONMENT_GET_SYSTEM_DIRECTORY, &dir);
+    moonlight_libretro_wrapper_set_working_dir(dir);
+    
+    static struct retro_log_callback logging;
+    if (cb(RETRO_ENVIRONMENT_GET_LOG_INTERFACE, &logging))
+       log_cb = logging.log;
 }
 
 void retro_set_audio_sample(retro_audio_sample_t cb) {
@@ -108,22 +117,68 @@ void retro_set_video_refresh(retro_video_refresh_t cb) {
 }
 
 static void update_variables(void) {
-    
+    bool updated = false;
+    if (environ_cb(RETRO_ENVIRONMENT_GET_VARIABLE_UPDATE, &updated) && updated) {
+        
+    }
 }
 
-static unsigned frame_count;
+double last_mouse_x = 0, last_mouse_y = 0;
 
 void retro_run(void) {
-    bool updated = false;
+    moonlight_libretro_wrapper_init(width, height);
     
-    if (environ_cb(RETRO_ENVIRONMENT_GET_VARIABLE_UPDATE, &updated) && updated) {
-        update_variables();
+    // Handle inputs
+    input_poll_cb();
+    
+    double mouse_x = input_state_cb(0, RETRO_DEVICE_MOUSE, 0, RETRO_DEVICE_ID_MOUSE_X);
+    double mouse_y = input_state_cb(0, RETRO_DEVICE_MOUSE, 0, RETRO_DEVICE_ID_MOUSE_Y);
+    
+//    if (mouse_x == 0 && mouse_y == 0) {
+//        int pointer_x = input_state_cb(0, RETRO_DEVICE_POINTER, 0, RETRO_DEVICE_ID_POINTER_X);
+//        int pointer_y = input_state_cb(0, RETRO_DEVICE_POINTER, 0, RETRO_DEVICE_ID_POINTER_Y);
+//
+//        if (pointer_x != 0 && pointer_y != 0) {
+//            mouse_x = (pointer_x / 32768.0f + 1) / 2 * width;
+//            mouse_y = (pointer_y / 32768.0f + 1) / 2 * height;
+//        }
+//    }
+    
+    if (input_state_cb(0, RETRO_DEVICE_POINTER, 0, RETRO_DEVICE_ID_POINTER_PRESSED)) {
+    int p_x = input_state_cb(0, RETRO_DEVICE_POINTER, 0, RETRO_DEVICE_ID_POINTER_X);
+    int p_y = input_state_cb(0, RETRO_DEVICE_POINTER, 0, RETRO_DEVICE_ID_POINTER_Y);
+
+        //int px=(int)((float)retro.width/854.0*(float)p_x);
+        //int py=(int)((float)retro.height/480.0*(float)p_y);
+    mouse_x=(int)((p_x+0x7fff)*width/0xffff);
+    mouse_y=(int)((p_y+0x7fff)*height/0xffff);
     }
     
-    input_poll_cb();
+    if (mouse_x != 0 && mouse_y != 0) {
+        moonlight_libretro_wrapper_handle_mouse_move(mouse_x, mouse_y);
+    }
+    
+    
+    
+    last_mouse_x = mouse_x;
+    last_mouse_y = mouse_y;
+    
+    static bool mouse_l_pressed = false;
+    
+    if (input_state_cb(0, RETRO_DEVICE_MOUSE, 0, RETRO_DEVICE_ID_MOUSE_LEFT) && !mouse_l_pressed) {
+        mouse_l_pressed = true;
+        moonlight_libretro_wrapper_handle_mouse_button(0, 1, 0);
+    } else if (!input_state_cb(0, RETRO_DEVICE_MOUSE, 0, RETRO_DEVICE_ID_MOUSE_LEFT) && mouse_l_pressed) {
+        mouse_l_pressed = false;
+        moonlight_libretro_wrapper_handle_mouse_button(0, 0, 0);
+    }
+    
+    // Draw
     glBindFramebuffer(RARCH_GL_FRAMEBUFFER, hw_render.get_current_framebuffer());
     
     glViewport(0, 0, width, height);
+    
+    moonlight_libretro_wrapper_draw();
     
     video_cb(RETRO_HW_FRAME_BUFFER_VALID, width, height, 0);
 }
@@ -139,7 +194,7 @@ static void context_destroy(void) {
 }
 
 static bool retro_init_hw_context(void) {
-#if 0
+#if 1
     hw_render.context_type = RETRO_HW_CONTEXT_OPENGL_CORE;
     hw_render.version_major = 3;
     hw_render.version_minor = 1;

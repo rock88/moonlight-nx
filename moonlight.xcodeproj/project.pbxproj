@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		361F8A3A245CB44E00A8D9C0 /* moonlight_libretro_wrapper.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 361F8A38245CB44E00A8D9C0 /* moonlight_libretro_wrapper.cpp */; };
 		3652EFCD245B3B00001FABF3 /* widget.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3652EF0F245B3B00001FABF3 /* widget.cpp */; };
 		3652EFCE245B3B00001FABF3 /* common.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3652EF10245B3B00001FABF3 /* common.cpp */; };
 		3652EFCF245B3B00001FABF3 /* checkbox.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3652EF11245B3B00001FABF3 /* checkbox.cpp */; };
@@ -22,7 +23,6 @@
 		3652EFD9245B3B00001FABF3 /* popup.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3652EF1B245B3B00001FABF3 /* popup.cpp */; };
 		3652EFDA245B3B00001FABF3 /* layout.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3652EF1C245B3B00001FABF3 /* layout.cpp */; };
 		3652EFDB245B3B00001FABF3 /* texture.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3652EF1D245B3B00001FABF3 /* texture.cpp */; };
-		3652EFDC245B3B00001FABF3 /* darwin.mm in Sources */ = {isa = PBXBuildFile; fileRef = 3652EF1E245B3B00001FABF3 /* darwin.mm */; };
 		3652EFDD245B3B00001FABF3 /* texture_gl.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3652EF1F245B3B00001FABF3 /* texture_gl.cpp */; };
 		3652EFDE245B3B00001FABF3 /* tabwidget.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3652EF20245B3B00001FABF3 /* tabwidget.cpp */; };
 		3652EFDF245B3B00001FABF3 /* shader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3652EF21245B3B00001FABF3 /* shader.cpp */; };
@@ -104,6 +104,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		361F8A38245CB44E00A8D9C0 /* moonlight_libretro_wrapper.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = moonlight_libretro_wrapper.cpp; sourceTree = "<group>"; };
+		361F8A39245CB44E00A8D9C0 /* moonlight_libretro_wrapper.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = moonlight_libretro_wrapper.h; sourceTree = "<group>"; };
 		3652ECE8245B3AFF001FABF3 /* colorpicker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = colorpicker.h; sourceTree = "<group>"; };
 		3652ECE9245B3AFF001FABF3 /* renderpass.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = renderpass.h; sourceTree = "<group>"; };
 		3652ECEA245B3AFF001FABF3 /* theme.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = theme.h; sourceTree = "<group>"; };
@@ -550,6 +552,8 @@
 				3652F004245C28C6001FABF3 /* Server.hpp */,
 				3652F084245C6CFC001FABF3 /* libretro.h */,
 				3652F085245C6CFC001FABF3 /* moonlight_libretro.c */,
+				361F8A39245CB44E00A8D9C0 /* moonlight_libretro_wrapper.h */,
+				361F8A38245CB44E00A8D9C0 /* moonlight_libretro_wrapper.cpp */,
 			);
 			path = src;
 			sourceTree = "<group>";
@@ -697,6 +701,7 @@
 				3652F075245C292B001FABF3 /* VideoStream.c in Sources */,
 				3652EFE0245B3B00001FABF3 /* imageview.cpp in Sources */,
 				3652EFDB245B3B00001FABF3 /* texture.cpp in Sources */,
+				361F8A3A245CB44E00A8D9C0 /* moonlight_libretro_wrapper.cpp in Sources */,
 				3652F079245C292B001FABF3 /* RtpReorderQueue.c in Sources */,
 				3652F065245C292B001FABF3 /* list.c in Sources */,
 				36DFE0CD2459FA3F00FC51CE /* nanogui_resources.cpp in Sources */,
@@ -737,7 +742,6 @@
 				3652EFD4245B3B00001FABF3 /* shader_gl.cpp in Sources */,
 				3652EFE7245B3B00001FABF3 /* label.cpp in Sources */,
 				3652EFDA245B3B00001FABF3 /* layout.cpp in Sources */,
-				3652EFDC245B3B00001FABF3 /* darwin.mm in Sources */,
 				3652F080245C292B001FABF3 /* ByteBuffer.c in Sources */,
 				3652EFF3245B3B00001FABF3 /* slider.cpp in Sources */,
 				3652EFCE245B3B00001FABF3 /* common.cpp in Sources */,

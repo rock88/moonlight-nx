@@ -44,12 +44,13 @@ else ifneq (,$(findstring osx,$(platform)))
    GL_LIB := -framework OpenGL
    CFLAGS += -DOSX
 	 INCLUDES += -I/usr/local/include -I/usr/local/opt/openssl@1.1/include
+	 LIBS += -L/usr/local/lib -L/usr/local/opt/openssl@1.1/lib
 	ifeq ($(arch),ppc)
 		CFLAGS += -D__ppc__ -DOSX_PPC
 	endif
 	OSXVER = `sw_vers -productVersion | cut -d. -f 2`
 	OSX_LT_MAVERICKS = `(( $(OSXVER) <= 9)) && echo "YES"`
-	fpic += -mmacosx-version-min=10.1
+	fpic += -mmacosx-version-min=10.12
 else ifeq ($(platform), pi)
    TARGET := $(TARGET_NAME)_libretro.so
    fpic := -fPIC
@@ -66,8 +67,8 @@ ifeq ($(IOSSDK),)
    IOSSDK := $(shell xcodebuild -version -sdk iphoneos Path)
 endif
    GL_LIB := -framework OpenGLES
-   DEFINES := -DIOS
-   CFLAGS += -DHAVE_OPENGLES $(DEFINES)
+   DEFINES += -DIOS
+   CFLAGS += -DHAVE_OPENGLES
    CC = cc -arch armv7 -isysroot $(IOSSDK)
 ifeq ($(platform),ios9)
 	CC     += -miphoneos-version-min=8.0
@@ -150,38 +151,25 @@ else
 	CFLAGS += -std=gnu99
 endif
 
-INCLUDES += \
-	-Isrc \
-	-Isrc/nanogui_resources \
-	-Isrc/ui \
-	-Ilibgamestream \
-	-Ithird_party/moonlight-common-c/reedsolomon \
-	-Ithird_party/moonlight-common-c/src \
-	-Ithird_party/moonlight-common-c/enet/include \
-	-Ithird_party/nanogui/include \
-	-Ithird_party/nanogui/ext/nanovg/src
-
-LIBS += \
-	-lcrypto -lssl -lcurl -lz -lexpat \
-	-lavcodec -lavformat -lavutil -lavdevice
-
 LIBGAMESTREAM_SOURCES = \
 	libgamestream/client.c \
 	libgamestream/http.c \
 	libgamestream/mkcert.c \
 	libgamestream/xml.c
 
-MOONLIGHT_LIBRETRO_SOURCES = \
+MOONLIGHT_LIBRETRO_C_SOURCES = \
 	src/glsym/rglgen.c \
 	src/nanogui_resources/nanogui_resources.c \
-	src/moonlight_libretro.c \
+	src/moonlight_libretro.c
+
+MOONLIGHT_LIBRETRO_CXX_SOURCES = \
 	src/ui/AddHostWindow.cpp \
 	src/ui/Application.cpp \
 	src/ui/ContentWindow.cpp \
 	src/ui/LoadingOverlay.cpp \
 	src/ui/MainWindow.cpp \
-	src/moonlight_libretro.c \
-	src/Server.cpp
+	src/Server.cpp \
+	src/moonlight_libretro_wrapper.cpp
 
 MOONLIGHT_COMMON_C_SOURCES = \
 	third_party/moonlight-common-c/enet/callbacks.c \
@@ -213,11 +201,65 @@ MOONLIGHT_COMMON_C_SOURCES = \
 	third_party/moonlight-common-c/src/VideoDepacketizer.c \
 	third_party/moonlight-common-c/src/VideoStream.c
 
-C_SOURCES = $(MOONLIGHT_COMMON_C_SOURCES) $(H264BITSTREAM_SOURCES) $(MOONLIGHT_LIBRETRO_SOURCES)
+NANOGUI_C_SOURCES = \
+	third_party/nanogui/ext/nanovg/src/nanovg.c
 
-OBJECTS := $(C_SOURCES:.c=.o)
-CFLAGS += -Wall -pedantic $(fpic) -std=gnu11 -DNANOGUI_USE_OPENGL -DNVG_STB_IMAGE_IMPLEMENTATION -DNANOGUI_NO_GLFW
-CXXFLAGS += $(CFLAGS) -std=gnu++17
+NANOGUI_CXX_SOURCES = \
+	third_party/nanogui/src/widget.cpp \
+	third_party/nanogui/src/button.cpp \
+	third_party/nanogui/src/common.cpp \
+	third_party/nanogui/src/screen.cpp \
+	third_party/nanogui/src/checkbox.cpp \
+	third_party/nanogui/src/vscrollpanel.cpp \
+	third_party/nanogui/src/colorpicker.cpp \
+	third_party/nanogui/src/textarea.cpp \
+	third_party/nanogui/src/shader_gl.cpp \
+	third_party/nanogui/src/canvas.cpp \
+	third_party/nanogui/src/window.cpp \
+	third_party/nanogui/src/graph.cpp \
+	third_party/nanogui/src/popup.cpp \
+	third_party/nanogui/src/layout.cpp \
+	third_party/nanogui/src/texture.cpp \
+	third_party/nanogui/src/texture_gl.cpp \
+	third_party/nanogui/src/tabwidget.cpp \
+	third_party/nanogui/src/shader.cpp \
+	third_party/nanogui/src/imageview.cpp \
+	third_party/nanogui/src/progressbar.cpp \
+	third_party/nanogui/src/combobox.cpp \
+	third_party/nanogui/src/theme.cpp \
+	third_party/nanogui/src/traits.cpp \
+	third_party/nanogui/src/label.cpp \
+	third_party/nanogui/src/opengl.cpp \
+	third_party/nanogui/src/renderpass_gl.cpp \
+	third_party/nanogui/src/imagepanel.cpp \
+	third_party/nanogui/src/colorwheel.cpp \
+	third_party/nanogui/src/messagedialog.cpp \
+	third_party/nanogui/src/textbox.cpp \
+	third_party/nanogui/src/slider.cpp \
+	third_party/nanogui/src/popupbutton.cpp
+
+INCLUDES += \
+	-Isrc \
+	-Isrc/nanogui_resources \
+	-Isrc/ui \
+	-Ilibgamestream \
+	-Ithird_party/moonlight-common-c/reedsolomon \
+	-Ithird_party/moonlight-common-c/src \
+	-Ithird_party/moonlight-common-c/enet/include \
+	-Ithird_party/nanogui/include \
+	-Ithird_party/nanogui/ext/nanovg/src
+
+C_SOURCES = $(LIBGAMESTREAM_SOURCES) $(MOONLIGHT_LIBRETRO_C_SOURCES) $(MOONLIGHT_COMMON_C_SOURCES) $(NANOGUI_C_SOURCES)
+CXX_SOURCES = $(MOONLIGHT_LIBRETRO_CXX_SOURCES) $(NANOGUI_CXX_SOURCES)
+
+OBJECTS := $(C_SOURCES:.c=.o) $(CXX_SOURCES:.cpp=.o)
+DEFINES += -DNANOGUI_USE_OPENGL -DNVG_STB_IMAGE_IMPLEMENTATION -DNANOGUI_NO_GLFW
+CFLAGS += -Wall -pedantic $(fpic) -std=gnu11 $(DEFINES)
+CXXFLAGS += -std=gnu++17 -stdlib=libc++ $(DEFINES)
+
+LIBS += \
+	-lcrypto -lssl -lcurl -lz -lexpat \
+	-lavcodec -lavformat -lavutil -lavdevice -lstdc++
 
 ifeq ($(GLES), 1)
    CFLAGS += -DHAVE_OPENGLES -DHAVE_OPENGLES2
@@ -246,7 +288,7 @@ $(TARGET): $(OBJECTS)
 	$(CC) $(CFLAGS) $(fpic) $(INCLUDES) -c -o $@ $<
 
 %.o: %.cpp
-	gcc $(CXXFLAGS) $(fpic) $(INCLUDES) -c -o $@ $<
+	$(CXX) $(CXXFLAGS) $(fpic) $(INCLUDES) -c -o $@ $<
 
 clean:
 	rm -f $(OBJECTS) $(TARGET)

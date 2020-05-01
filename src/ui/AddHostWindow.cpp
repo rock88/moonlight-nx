@@ -1,5 +1,6 @@
 #include "AddHostWindow.hpp"
 #include "Server.hpp"
+#include "LoadingOverlay.hpp"
 
 using namespace nanogui;
 
@@ -47,12 +48,17 @@ AddHostWindow::AddHostWindow(Widget *parent): ContentWindow(parent, "Add Host") 
     
     auto connect = other_buttons_container->add<Button>("Connect");
     connect->set_fixed_size(Size(100, 100));
-    connect->set_callback([text] {
+    connect->set_callback([text, this] {
         if (text->value().size() > 0) {
-            Server::server().connect(text->value(), [](auto result) {
+            auto loader = add<LoadingOverlay>();
+            
+            Server::server().connect(text->value(), [this, loader](auto result) {
+                loader->dispose();
+                
                 if (result.isSuccess()) {
                     printf("Pair: %i\n", result.value()->paired);
                 } else {
+                    screen()->add<MessageDialog>(MessageDialog::Type::Information, "Error", result.error());
                     printf("Error: %s\n", result.error().c_str());
                 }
             });
