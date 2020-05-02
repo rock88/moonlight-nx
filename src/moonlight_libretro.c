@@ -125,8 +125,6 @@ static void update_variables(void) {
     }
 }
 
-double last_mouse_x = 0, last_mouse_y = 0;
-
 void retro_run(void) {
     moonlight_libretro_wrapper_init(width, height);
     
@@ -150,17 +148,13 @@ void retro_run(void) {
         moonlight_libretro_wrapper_handle_mouse_move(mouse_x, mouse_y);
     }
     
-    static bool mouse_l_pressed = false;
-    
-    if (input_state_cb(0, RETRO_DEVICE_MOUSE, 0, RETRO_DEVICE_ID_MOUSE_LEFT) && !mouse_l_pressed) {
+    if (input_state_cb(0, RETRO_DEVICE_MOUSE, 0, RETRO_DEVICE_ID_MOUSE_LEFT)) {
         if (pointer_x != 0 && pointer_y != 0) {
             moonlight_libretro_wrapper_handle_mouse_move(pointer_x, pointer_y);
         }
         
-        mouse_l_pressed = true;
         moonlight_libretro_wrapper_handle_mouse_button(0, 1, 0);
-    } else if (!input_state_cb(0, RETRO_DEVICE_MOUSE, 0, RETRO_DEVICE_ID_MOUSE_LEFT) && mouse_l_pressed) {
-        mouse_l_pressed = false;
+    } else if (!input_state_cb(0, RETRO_DEVICE_MOUSE, 0, RETRO_DEVICE_ID_MOUSE_LEFT)) {
         moonlight_libretro_wrapper_handle_mouse_button(0, 0, 0);
     }
     

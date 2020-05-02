@@ -10,13 +10,13 @@
 
 using namespace std;
 
-using Task = const function<void()>;
+using Task = function<void()>;
 
 mutex m_task_mutex;
 vector<Task> m_tasks;
 thread m_task_thread;
 
-void perform_load_task(Task &task) {
+void perform_load_task(Task task) {
     lock_guard<std::mutex> guard(m_task_mutex);
     m_tasks.push_back(task);
 }
@@ -75,7 +75,7 @@ vector<string> Server::hosts() {
     return m_hosts;
 }
 
-void Server::connect(const string &address, ServerCallback<SERVER_DATA> &callback) {
+void Server::connect(const string &address, ServerCallback(SERVER_DATA) callback) {
     perform_load_task([this, address, callback] {
         SERVER_DATA data;
         
@@ -91,7 +91,7 @@ void Server::connect(const string &address, ServerCallback<SERVER_DATA> &callbac
     });
 }
 
-void Server::pair(SERVER_DATA data, const string &pin, ServerCallback<bool> &callback) {
+void Server::pair(SERVER_DATA data, const string &pin, ServerCallback(bool) callback) {
     perform_load_task([data, pin, callback] {
         SERVER_DATA copy(data);
         
@@ -107,7 +107,7 @@ void Server::pair(SERVER_DATA data, const string &pin, ServerCallback<bool> &cal
     });
 }
 
-void Server::applist(SERVER_DATA data, ServerCallback<PAPP_LIST> &callback) {
+void Server::applist(SERVER_DATA data, ServerCallback(PAPP_LIST) callback) {
     perform_load_task([data, callback] {
         SERVER_DATA copy(data);
         PAPP_LIST app_list;

@@ -1,5 +1,6 @@
 #include <string>
 #include <vector>
+#include <functional>
 
 extern "C" {
     #include "client.h"
@@ -45,7 +46,7 @@ private:
     bool _isSuccess = false;
 };
 
-template<class T> using ServerCallback = const std::function<void(Result<T>)>;
+#define ServerCallback(T) std::function<void(Result<T>)>
 
 class Server {
 public:
@@ -61,9 +62,9 @@ public:
     void add_host(std::string address);
     std::vector<std::string> hosts();
     
-    void connect(const std::string &address, ServerCallback<SERVER_DATA> &callback);
-    void pair(SERVER_DATA data, const std::string &pin, ServerCallback<bool> &callback);
-    void applist(SERVER_DATA data, ServerCallback<PAPP_LIST> &callback);
+    void connect(const std::string &address, ServerCallback(SERVER_DATA) callback);
+    void pair(SERVER_DATA data, const std::string &pin, ServerCallback(bool) callback);
+    void applist(SERVER_DATA data, ServerCallback(PAPP_LIST) callback);
     
 private:
     Server();

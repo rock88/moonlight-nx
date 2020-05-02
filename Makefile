@@ -51,86 +51,19 @@ else ifneq (,$(findstring osx,$(platform)))
 	OSXVER = `sw_vers -productVersion | cut -d. -f 2`
 	OSX_LT_MAVERICKS = `(( $(OSXVER) <= 9)) && echo "YES"`
 	fpic += -mmacosx-version-min=10.12
-else ifeq ($(platform), pi)
-   TARGET := $(TARGET_NAME)_libretro.so
-   fpic := -fPIC
-   SHARED := -shared -Wl,--version-script=link.T -Wl,--no-undefined
-   CFLAGS += -I/opt/vc/include -I/opt/vc/include/interface/vcos/pthreads -I/opt/vc/include/vmcs_host/linux
-   GLES := 1
-   LIBS += -L/opt/vc/lib
-else ifneq (,$(findstring ios,$(platform)))
-   TARGET := $(TARGET_NAME)_libretro_ios.dylib
-   fpic := -fPIC
-   SHARED := -dynamiclib
-
-ifeq ($(IOSSDK),)
-   IOSSDK := $(shell xcodebuild -version -sdk iphoneos Path)
-endif
-   GL_LIB := -framework OpenGLES
-   DEFINES += -DIOS
-   CFLAGS += -DHAVE_OPENGLES
-   CC = cc -arch armv7 -isysroot $(IOSSDK)
-ifeq ($(platform),ios9)
-	CC     += -miphoneos-version-min=8.0
-	CFLAGS += -miphoneos-version-min=8.0
-else
-	CC     += -miphoneos-version-min=5.0
-	CFLAGS += -miphoneos-version-min=5.0
-endif
-else ifneq (,$(findstring qnx,$(platform)))
-   TARGET := $(TARGET_NAME)_libretro_qnx.so
-   fpic := -fPIC
-   SHARED := -shared -Wl,--version-script=link.T
-   GL_LIB := -lGL
-
-   CC = qcc -Vgcc_ntoarmv7le
-   AR = qcc -Vgcc_ntoarmv7le
-   GL_LIB := -lGLESv2
-   GLES := 1
-else ifneq (,$(findstring armv,$(platform)))
-   CC = gcc
-   TARGET := $(TARGET_NAME)_libretro.so
-   fpic := -fPIC
-   SHARED := -shared -Wl,--version-script=link.T -Wl,--no-undefined
-   CFLAGS += -I.
-ifneq (,$(findstring gles,$(platform)))
-   GLES := 1
-else
-   GL_LIB := -lGL
-endif
-ifneq (,$(findstring cortexa8,$(platform)))
-   CFLAGS += -marm -mcpu=cortex-a8
-else ifneq (,$(findstring cortexa9,$(platform)))
-   CFLAGS += -marm -mcpu=cortex-a9
-endif
-   CFLAGS += -marm
-ifneq (,$(findstring neon,$(platform)))
-   CFLAGS += -mfpu=neon
-endif
-ifneq (,$(findstring softfloat,$(platform)))
-   CFLAGS += -mfloat-abi=softfp
-else ifneq (,$(findstring hardfloat,$(platform)))
-   CFLAGS += -mfloat-abi=hard
-endif
-   CFLAGS += -DARM
-# emscripten
-else ifeq ($(platform), emscripten)
-	TARGET := $(TARGET_NAME)_libretro_emscripten.bc
 # Lakka Switch
-else ifeq ($(platform), lakka_switch)
-   LAKKA_ROOT := /Users/rock88/Documents/Projects/RetroArch/gcc-linaro-7.3.1-2018.05-x86_64_aarch64-linux-gnu
-	 LAKKA_TOOLCHAIN := $(LAKKA_ROOT)/toolchain
-	 CC = $(LAKKA_TOOLCHAIN)/bin/aarch64-libreelec-linux-gnueabi-gcc
-	 TARGET := $(TARGET_NAME)_libretro.so
-	 CFLAGS += -mcpu=cortex-a57+crypto+crc+fp+simd -mabi=lp64 -Wno-psabi -mtune=cortex-a57 \
-	 -march=armv8-a+crypto+crc+fp+simd -fomit-frame-pointer -Wall -pipe -O2 \
-	 -mcpu=cortex-a57 -std=c99 -fomit-frame-pointer -fPIC -pthread \
-	 -I/home/rock88/Documents/Lakka-LibreELEC/build.Lakka-L4T.aarch64-2.2-devel/toolchain/aarch64-libreelec-linux-gnueabi/sysroot/usr/include \
-	 -Wdeclaration-after-statement -Wall -Wdisabled-optimization -Wpointer-arith -Wredundant-decls -Wwrite-strings \
-	 -Wtype-limits -Wundef -Wmissing-prototypes -Wno-pointer-to-int-cast -Wstrict-prototypes -Wempty-body \
-	 -Wno-parentheses -Wno-switch -Wno-format-zero-length -Wno-pointer-sign -Wno-unused-const-variable -O3 \
-	 -fno-math-errno -fno-signed-zeros -fno-tree-vectorize -Werror=format-security -Werror=implicit-function-declaration \
-	 -Werror=missing-prototypes -Werror=return-type -Werror=vla -Wformat -fdiagnostics-color=auto -Wno-maybe-uninitialized
+else ifeq ($(platform), lakka-switch)
+   LAKKA_ROOT := /home/rock88/Documents/Lakka-LibreELEC/build.Lakka-L4T.aarch64-2.2-devel
+   LAKKA_TOOLCHAIN := $(LAKKA_ROOT)/toolchain
+   CC = $(LAKKA_TOOLCHAIN)/bin/aarch64-libreelec-linux-gnueabi-gcc
+   CXX = $(LAKKA_TOOLCHAIN)/bin/aarch64-libreelec-linux-gnueabi-c++
+   TARGET := $(TARGET_NAME)_libretro.so
+   DEFINES += -mcpu=cortex-a57+crypto+crc+fp+simd -mabi=lp64 -Wno-psabi -mtune=cortex-a57 \
+	 -march=armv8-a+crypto+crc+fp+simd -fomit-frame-pointer -Wall -pipe -fPIC -pthread
+   INCLUDES += -I$(LAKKA_TOOLCHAIN)/aarch64-libreelec-linux-gnueabi/sysroot/usr/include \
+	-I$(LAKKA_TOOLCHAIN)/include
+   LIBS += -lpthread -lGL -luuid
+   SHARED := -shared -Wl,--version-script=link.T -Wl,--no-undefined
 else
    CC = gcc
    TARGET := $(TARGET_NAME)_libretro.dll
@@ -256,31 +189,17 @@ C_SOURCES = $(LIBGAMESTREAM_SOURCES) $(MOONLIGHT_LIBRETRO_C_SOURCES) $(MOONLIGHT
 CXX_SOURCES = $(MOONLIGHT_LIBRETRO_CXX_SOURCES) $(NANOGUI_CXX_SOURCES)
 
 OBJECTS := $(C_SOURCES:.c=.o) $(CXX_SOURCES:.cpp=.o)
-DEFINES += -DNANOGUI_USE_OPENGL -DNVG_STB_IMAGE_IMPLEMENTATION -DNANOGUI_NO_GLFW
-CFLAGS += -Wall -pedantic $(fpic) -std=gnu11 $(DEFINES)
-CXXFLAGS += -std=gnu++17 -stdlib=libc++ $(DEFINES)
+DEFINES += -DNANOGUI_USE_OPENGL -DNVG_STB_IMAGE_IMPLEMENTATION -DNANOGUI_NO_GLFW \
+	-DHAS_SOCKLEN_T -DHAS_POLL -DHAS_FCNTL -D_GNU_SOURCE
 
-LIBS += \
-	-lcrypto -lssl -lcurl -lz -lexpat \
+CFLAGS += -Wall -pedantic $(fpic) -std=gnu11 $(DEFINES)
+CXXFLAGS += -std=gnu++17 -fno-permissive $(DEFINES)
+
+LIBS += -lcrypto -lssl -lcurl -lz -lexpat \
 	-lavcodec -lavformat -lavutil -lavdevice -lstdc++
 
-ifeq ($(GLES), 1)
-   CFLAGS += -DHAVE_OPENGLES -DHAVE_OPENGLES2
-   ifeq ($(GLES31), 1)
-      CFLAGS += -DHAVE_OPENGLES3 -DHAVE_OPENGLES_3_1
-   else ifeq ($(GLES3), 1)
-      CFLAGS += -DHAVE_OPENGLES3
-   endif
-   LIBS += -lGLESv2 # Still link against GLESv2 when using GLES3 API, at least on desktop Linux.
-   OBJECTS += src/glsym/glsym_es2.o
-else
-   OBJECTS += src/glsym/glsym_gl.o
-   LIBS += $(GL_LIB)
-endif
-
-ifeq ($(CORE), 1)
-   CFLAGS += -DCORE
-endif
+OBJECTS += src/glsym/glsym_gl.o
+LIBS += $(GL_LIB)
 
 all: $(TARGET)
 
