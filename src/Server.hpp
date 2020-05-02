@@ -46,6 +46,8 @@ private:
     bool _isSuccess = false;
 };
 
+#define LOG(fmt, ...) fprintf(stderr, fmt, __VA_ARGS__);
+
 #define ServerCallback(T) std::function<void(Result<T>)>
 
 class Server {

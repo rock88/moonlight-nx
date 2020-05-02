@@ -13,6 +13,8 @@ HostButton::HostButton(Widget* parent, const std::string &host): Button(parent, 
     add<Widget>()->set_fixed_height(80);
     add<Label>(host);
     
+    LOG("Try connect to %s\n", host.c_str());
+    
     Server::server()->connect(host, [this](auto result) {
         if (result.isSuccess()) {
             m_data = result.value();

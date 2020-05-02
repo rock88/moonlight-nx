@@ -14,6 +14,8 @@ void moonlight_libretro_wrapper_init(int width, int height) {
         return;
     }
     
+    LOG("Begin init...\n", 0);
+    
     moonlight_is_initialized = true;
     
     OpenSSL_add_all_algorithms();
@@ -25,9 +27,12 @@ void moonlight_libretro_wrapper_init(int width, int height) {
     app = new Application(Size(width, height), Size(width, height));
     
     nanogui::setup(1.0 / 60.0);
+    
+    LOG("End init...\n", 0);
 }
 
 void moonlight_libretro_wrapper_set_working_dir(const char* dir) {
+    LOG("Set working dir: %s\n", dir);
     Server::server()->set_working_dir(dir);
 }
 

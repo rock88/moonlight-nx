@@ -30,6 +30,9 @@ StreamWindow::StreamWindow(Widget *parent, SERVER_DATA data, int id): nanogui::W
             setup_stream();
         } else {
             screen()->add<MessageDialog>(MessageDialog::Type::Information, "Error", result.error());
+            
+            auto app = static_cast<Application *>(screen());
+            app->pop_window();
         }
     });
 }

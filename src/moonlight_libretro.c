@@ -174,7 +174,6 @@ static void context_reset(void) {
 
 static void context_destroy(void) {
     fprintf(stderr, "Context destroy!\n");
-    // cleanup
 }
 
 static bool retro_init_hw_context(void) {
@@ -187,8 +186,6 @@ static bool retro_init_hw_context(void) {
 #endif
     hw_render.context_reset = context_reset;
     hw_render.context_destroy = context_destroy;
-    //hw_render.depth = true;
-    //hw_render.stencil = true;
     hw_render.bottom_left_origin = true;
     
     if (!environ_cb(RETRO_ENVIRONMENT_SET_HW_RENDER, &hw_render))

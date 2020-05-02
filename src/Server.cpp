@@ -56,13 +56,16 @@ void Server::add_host(string address) {
 }
 
 vector<string> Server::hosts() {
+    LOG("Find hosts.txt...\n", 0);
     if (!m_hosts.empty()) {
+        LOG("Return m_hosts\n", 0);
         return m_hosts;
     }
     
     ifstream in(m_working_dir + "/hosts.txt");
     
     if (!in) {
+        LOG("hosts.txt not found, exit...\n", 0);
         return {};
     }
     
@@ -71,6 +74,7 @@ vector<string> Server::hosts() {
         if (str.size() > 0)
             m_hosts.push_back(str);
     }
+    LOG("Close file...\n", 0);
     in.close();
     return m_hosts;
 }
