@@ -59,7 +59,8 @@ else ifeq ($(platform), lakka-switch)
    CXX = $(LAKKA_TOOLCHAIN)/bin/aarch64-libreelec-linux-gnueabi-c++
    TARGET := $(TARGET_NAME)_libretro.so
    DEFINES += -mcpu=cortex-a57+crypto+crc+fp+simd -mabi=lp64 -Wno-psabi -mtune=cortex-a57 \
-	 -march=armv8-a+crypto+crc+fp+simd -fomit-frame-pointer -Wall -pipe -fPIC -pthread
+	 -march=armv8-a+crypto+crc+fp+simd -fomit-frame-pointer -Wall -pipe -fPIC -pthread \
+	 -D__LAKKA_SWITCH__
    INCLUDES += -I$(LAKKA_TOOLCHAIN)/aarch64-libreelec-linux-gnueabi/sysroot/usr/include \
 	-I$(LAKKA_TOOLCHAIN)/include
    LIBS += -lpthread -lGL -luuid

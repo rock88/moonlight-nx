@@ -87,15 +87,15 @@ void retro_set_environment(retro_environment_t cb) {
     bool no_game = true;
     cb(RETRO_ENVIRONMENT_SET_SUPPORT_NO_GAME, &no_game);
     
+#ifdef __LAKKA_SWITCH__
+    moonlight_libretro_wrapper_set_working_dir("/storage/cores");
+#else
     const char *dir = NULL;
     cb(RETRO_ENVIRONMENT_GET_SYSTEM_DIRECTORY, &dir);
     if (dir != NULL) {
         moonlight_libretro_wrapper_set_working_dir(dir);
     }
-    
-    static struct retro_log_callback logging;
-    if (cb(RETRO_ENVIRONMENT_GET_LOG_INTERFACE, &logging))
-       log_cb = logging.log;
+#endif
 }
 
 void retro_set_audio_sample(retro_audio_sample_t cb) {
