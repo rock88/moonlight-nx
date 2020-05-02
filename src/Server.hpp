@@ -65,6 +65,7 @@ public:
     void connect(const std::string &address, ServerCallback(SERVER_DATA) callback);
     void pair(SERVER_DATA data, const std::string &pin, ServerCallback(bool) callback);
     void applist(SERVER_DATA data, ServerCallback(PAPP_LIST) callback);
+    void start(SERVER_DATA data, STREAM_CONFIGURATION config, int appId, ServerCallback(STREAM_CONFIGURATION) callback);
     
 private:
     Server();

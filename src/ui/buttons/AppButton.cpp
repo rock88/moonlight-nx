@@ -3,13 +3,17 @@
 
 using namespace nanogui;
 
-AppButton::AppButton(Widget* parent, APP_LIST app): Button(parent, "") {
+AppButton::AppButton(Widget* parent, APP_LIST app, int currentGame): Button(parent, "") {
     m_app = app;
     
     set_layout(new BoxLayout(Orientation::Vertical, Alignment::Middle));
     
     m_label = add<Label>(m_app.name);
     m_label->set_fixed_width(220);
+    
+    if (m_app.id == currentGame) {
+        m_label->set_caption(m_label->caption() + " (Running)");
+    }
 }
 
 void AppButton::draw(NVGcontext *ctx) {

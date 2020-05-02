@@ -83,6 +83,10 @@
 		3652F083245C60D1001FABF3 /* LoadingOverlay.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3652F081245C60D1001FABF3 /* LoadingOverlay.cpp */; };
 		3652F086245C6CFC001FABF3 /* moonlight_libretro.c in Sources */ = {isa = PBXBuildFile; fileRef = 3652F085245C6CFC001FABF3 /* moonlight_libretro.c */; };
 		3652F08A245C8569001FABF3 /* ContentWindow.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3652F089245C8569001FABF3 /* ContentWindow.cpp */; };
+		367CD95A245DE25F00A95738 /* StreamWindow.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 367CD958245DE25F00A95738 /* StreamWindow.cpp */; };
+		367CD960245DE6A900A95738 /* gl_render.c in Sources */ = {isa = PBXBuildFile; fileRef = 367CD95C245DE6A900A95738 /* gl_render.c */; };
+		367CD961245DE6A900A95738 /* video_decoder.c in Sources */ = {isa = PBXBuildFile; fileRef = 367CD95D245DE6A900A95738 /* video_decoder.c */; };
+		367CD964245DE6D500A95738 /* ffmpeg.c in Sources */ = {isa = PBXBuildFile; fileRef = 367CD962245DE6D500A95738 /* ffmpeg.c */; };
 		36B406982459F5CB005BD903 /* moonlight_glfw.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 36B406962459F460005BD903 /* moonlight_glfw.cpp */; };
 		36DBDE9A2450BCD50057C8D3 /* CoreFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 36DBDE992450BCD50057C8D3 /* CoreFoundation.framework */; };
 		36DBDE9C2450BCD90057C8D3 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 36DBDE9B2450BCD90057C8D3 /* CoreGraphics.framework */; };
@@ -266,6 +270,14 @@
 		3652F084245C6CFC001FABF3 /* libretro.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = libretro.h; sourceTree = "<group>"; };
 		3652F085245C6CFC001FABF3 /* moonlight_libretro.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = moonlight_libretro.c; sourceTree = "<group>"; };
 		3652F089245C8569001FABF3 /* ContentWindow.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ContentWindow.cpp; sourceTree = "<group>"; };
+		367CD958245DE25F00A95738 /* StreamWindow.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = StreamWindow.cpp; sourceTree = "<group>"; };
+		367CD959245DE25F00A95738 /* StreamWindow.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = StreamWindow.hpp; sourceTree = "<group>"; };
+		367CD95C245DE6A900A95738 /* gl_render.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = gl_render.c; sourceTree = "<group>"; };
+		367CD95D245DE6A900A95738 /* video_decoder.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = video_decoder.c; sourceTree = "<group>"; };
+		367CD95E245DE6A900A95738 /* gl_render.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = gl_render.h; sourceTree = "<group>"; };
+		367CD95F245DE6A900A95738 /* video_decoder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = video_decoder.h; sourceTree = "<group>"; };
+		367CD962245DE6D500A95738 /* ffmpeg.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = ffmpeg.c; sourceTree = "<group>"; };
+		367CD963245DE6D500A95738 /* ffmpeg.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ffmpeg.h; sourceTree = "<group>"; };
 		36B406962459F460005BD903 /* moonlight_glfw.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = moonlight_glfw.cpp; sourceTree = "<group>"; };
 		36DBDE8E2450BB7E0057C8D3 /* moonlight */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = moonlight; sourceTree = BUILT_PRODUCTS_DIR; };
 		36DBDE992450BCD50057C8D3 /* CoreFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreFoundation.framework; path = System/Library/Frameworks/CoreFoundation.framework; sourceTree = SDKROOT; };
@@ -326,6 +338,8 @@
 				3652F001245B6961001FABF3 /* AddHostWindow.hpp */,
 				3602C3B8245DB3C800368900 /* AppListWindow.cpp */,
 				3602C3B9245DB3C800368900 /* AppListWindow.hpp */,
+				367CD958245DE25F00A95738 /* StreamWindow.cpp */,
+				367CD959245DE25F00A95738 /* StreamWindow.hpp */,
 			);
 			path = windows;
 			sourceTree = "<group>";
@@ -467,15 +481,15 @@
 		3652F006245C2918001FABF3 /* libgamestream */ = {
 			isa = PBXGroup;
 			children = (
+				3652F00C245C2918001FABF3 /* client.c */,
+				3652F009245C2918001FABF3 /* client.h */,
+				3652F00F245C2918001FABF3 /* http.c */,
+				3652F00A245C2918001FABF3 /* http.h */,
+				3652F00D245C2918001FABF3 /* mkcert.c */,
 				3652F007245C2918001FABF3 /* mkcert.h */,
 				3652F008245C2918001FABF3 /* xml.c */,
-				3652F009245C2918001FABF3 /* client.h */,
-				3652F00A245C2918001FABF3 /* http.h */,
-				3652F00B245C2918001FABF3 /* errors.h */,
-				3652F00C245C2918001FABF3 /* client.c */,
-				3652F00D245C2918001FABF3 /* mkcert.c */,
 				3652F00E245C2918001FABF3 /* xml.h */,
-				3652F00F245C2918001FABF3 /* http.c */,
+				3652F00B245C2918001FABF3 /* errors.h */,
 			);
 			path = libgamestream;
 			sourceTree = "<group>";
@@ -577,12 +591,26 @@
 			path = src;
 			sourceTree = "<group>";
 		};
+		367CD95B245DE6A900A95738 /* decoders */ = {
+			isa = PBXGroup;
+			children = (
+				367CD962245DE6D500A95738 /* ffmpeg.c */,
+				367CD963245DE6D500A95738 /* ffmpeg.h */,
+				367CD95D245DE6A900A95738 /* video_decoder.c */,
+				367CD95F245DE6A900A95738 /* video_decoder.h */,
+				367CD95C245DE6A900A95738 /* gl_render.c */,
+				367CD95E245DE6A900A95738 /* gl_render.h */,
+			);
+			path = decoders;
+			sourceTree = "<group>";
+		};
 		36B406932459F41E005BD903 /* src */ = {
 			isa = PBXGroup;
 			children = (
 				36DFE0D5245A1FEC00FC51CE /* glsym */,
 				36DFE0CA2459FA3F00FC51CE /* nanogui_resources */,
 				36DFDCF12459F79000FC51CE /* ui */,
+				367CD95B245DE6A900A95738 /* decoders */,
 				3652F003245C28C6001FABF3 /* Server.cpp */,
 				3652F004245C28C6001FABF3 /* Server.hpp */,
 				3652F084245C6CFC001FABF3 /* libretro.h */,
@@ -745,6 +773,7 @@
 				3652EFD3245B3B00001FABF3 /* button.cpp in Sources */,
 				3652EFE6245B3B00001FABF3 /* traits.cpp in Sources */,
 				3652EFDE245B3B00001FABF3 /* tabwidget.cpp in Sources */,
+				367CD961245DE6A900A95738 /* video_decoder.c in Sources */,
 				3652F07A245C292B001FABF3 /* SdpGenerator.c in Sources */,
 				3652EFEB245B3B00001FABF3 /* imagepanel.cpp in Sources */,
 				3652F06E245C292B001FABF3 /* rs.c in Sources */,
@@ -783,11 +812,13 @@
 				3652EFF1245B3B00001FABF3 /* messagedialog.cpp in Sources */,
 				36B406982459F5CB005BD903 /* moonlight_glfw.cpp in Sources */,
 				3652F06F245C292B001FABF3 /* ControlStream.c in Sources */,
+				367CD964245DE6D500A95738 /* ffmpeg.c in Sources */,
 				3652EFD6245B3B00001FABF3 /* window.cpp in Sources */,
 				3652F071245C292B001FABF3 /* InputStream.c in Sources */,
 				3652EFDD245B3B00001FABF3 /* texture_gl.cpp in Sources */,
 				3652F013245C2919001FABF3 /* http.c in Sources */,
 				3652F069245C292B001FABF3 /* peer.c in Sources */,
+				367CD960245DE6A900A95738 /* gl_render.c in Sources */,
 				3602C3B7245D903000368900 /* HostButton.cpp in Sources */,
 				3652EFD0245B3B00001FABF3 /* vscrollpanel.cpp in Sources */,
 				3652F06D245C292B001FABF3 /* win32.c in Sources */,
@@ -804,6 +835,7 @@
 				3652F073245C292B001FABF3 /* PlatformSockets.c in Sources */,
 				3652F08A245C8569001FABF3 /* ContentWindow.cpp in Sources */,
 				3652EFE5245B3B00001FABF3 /* theme.cpp in Sources */,
+				367CD95A245DE25F00A95738 /* StreamWindow.cpp in Sources */,
 				3652F07F245C292B001FABF3 /* LinkedBlockingQueue.c in Sources */,
 				3652EFD2245B3B00001FABF3 /* textarea.cpp in Sources */,
 				3652EFD5245B3B00001FABF3 /* canvas.cpp in Sources */,
@@ -888,6 +920,12 @@
 					"-DNVG_STB_IMAGE_IMPLEMENTATION",
 					"-DNANOGUI_NO_GLFW",
 					"-DNANOGUI_SHOW_WIDGET_BOUNDS",
+					"-D_GNU_SOURCE",
+					"-DHAVE_USLEEP",
+					"-DHAS_SOCKLEN_T",
+					"-DENET_DEBUG",
+					"-DHAS_POLL",
+					"-DHAS_FCNTL",
 				);
 				OTHER_LDFLAGS = (
 					"-lglfw3",
@@ -970,6 +1008,12 @@
 					"-DNVG_STB_IMAGE_IMPLEMENTATION",
 					"-DNANOGUI_NO_GLFW",
 					"-DNANOGUI_SHOW_WIDGET_BOUNDS",
+					"-D_GNU_SOURCE",
+					"-DHAVE_USLEEP",
+					"-DHAS_SOCKLEN_T",
+					"-DENET_DEBUG",
+					"-DHAS_POLL",
+					"-DHAS_FCNTL",
 				);
 				OTHER_LDFLAGS = (
 					"-lglfw3",

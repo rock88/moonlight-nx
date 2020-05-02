@@ -4,7 +4,7 @@
 
 class AppButton: public nanogui::Button {
 public:
-    AppButton(Widget* parent, APP_LIST app);
+    AppButton(Widget* parent, APP_LIST app, int currentGame);
     
     void draw(NVGcontext *ctx) override;
     

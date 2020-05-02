@@ -4,6 +4,7 @@
 #include "glsym/glsym.h"
 #include "Application.hpp"
 #include "Server.hpp"
+#include "gl_render.h"
 
 int main(int argc, const char * argv[]) {
     glfwInit();
@@ -17,6 +18,8 @@ int main(int argc, const char * argv[]) {
     glfwMakeContextCurrent(window);
     rglgen_resolve_symbols(glfwGetProcAddress);
     glfwSwapInterval(1);
+    
+    gl_render_init();
     
     glfwSetCursorPosCallback(window, [](GLFWwindow *w, double x, double y) {
         nanogui::cursor_pos_callback_event(x, y);

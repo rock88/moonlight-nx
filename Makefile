@@ -94,12 +94,16 @@ LIBGAMESTREAM_SOURCES = \
 MOONLIGHT_LIBRETRO_C_SOURCES = \
 	src/glsym/rglgen.c \
 	src/nanogui_resources/nanogui_resources.c \
-	src/moonlight_libretro.c
+	src/moonlight_libretro.c \
+	src/decoders/ffmpeg.c \
+	src/decoders/gl_render.c \
+	src/decoders/video_decoder.c
 
 MOONLIGHT_LIBRETRO_CXX_SOURCES = \
 	src/ui/windows/AddHostWindow.cpp \
 	src/ui/windows/ContentWindow.cpp \
 	src/ui/windows/MainWindow.cpp \
+	src/ui/windows/StreamWindow.cpp \
 	src/ui/windows/AppListWindow.cpp \
 	src/ui/buttons/AppButton.cpp \
 	src/ui/buttons/HostButton.cpp \
@@ -176,7 +180,7 @@ NANOGUI_CXX_SOURCES = \
 	third_party/nanogui/src/popupbutton.cpp
 
 INCLUDES += \
-	-Isrc \
+	-Isrc -Isrc/decoders -Isrc/glsym \
 	-Isrc/nanogui_resources \
 	-Isrc/ui -Isrc/ui/buttons -Isrc/ui/windows \
 	-Ilibgamestream \

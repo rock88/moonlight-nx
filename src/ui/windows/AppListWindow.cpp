@@ -1,6 +1,7 @@
 #include "AppListWindow.hpp"
 #include "LoadingOverlay.hpp"
 #include "AppButton.hpp"
+#include "StreamWindow.hpp"
 
 using namespace nanogui;
 
@@ -20,7 +21,7 @@ AppListWindow::AppListWindow(Widget *parent, SERVER_DATA data): ContentWindow(pa
             PAPP_LIST app = m_app_list;
             
             while (app != NULL) {
-                auto button = container()->add<AppButton>(*app);
+                auto button = container()->add<AppButton>(*app, m_data.currentGame);
                 button->set_fixed_size(Size(220, 100));
                 button->set_callback([this, app] {
                     run_game(app->id);
@@ -35,5 +36,5 @@ AppListWindow::AppListWindow(Widget *parent, SERVER_DATA data): ContentWindow(pa
 }
 
 void AppListWindow::run_game(int id) {
-    printf("Run %i\n", id);
+    application()->push_window<StreamWindow>(m_data, id);
 }

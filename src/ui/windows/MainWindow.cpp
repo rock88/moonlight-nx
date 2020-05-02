@@ -49,4 +49,6 @@ void MainWindow::reload() {
             this->application()->pop_window();
         });
     });
+    
+    screen()->perform_layout();
 }

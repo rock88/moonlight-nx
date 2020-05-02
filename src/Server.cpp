@@ -97,7 +97,7 @@ void Server::pair(SERVER_DATA data, const string &pin, ServerCallback(bool) call
         
         int status = gs_pair(&copy, (char *)pin.c_str());
         
-        nanogui::async([callback, data, status] {
+        nanogui::async([callback, status] {
             if (status == GS_OK) {
                 callback(Result<bool>::success(true));
             } else {
@@ -119,6 +119,23 @@ void Server::applist(SERVER_DATA data, ServerCallback(PAPP_LIST) callback) {
                 callback(Result<PAPP_LIST>::success(app_list));
             } else {
                 callback(Result<PAPP_LIST>::failure(gs_error != NULL ? gs_error : "Unknown error..."));
+            }
+        });
+    });
+}
+
+void Server::start(SERVER_DATA data, STREAM_CONFIGURATION config, int appId, ServerCallback(STREAM_CONFIGURATION) callback) {
+    perform_load_task([data, config, appId, callback] {
+        SERVER_DATA copy_data(data);
+        STREAM_CONFIGURATION copy_config(config);
+        
+        int status = gs_start_app(&copy_data, &copy_config, appId, false, false, 0);
+        
+        nanogui::async([callback, status, copy_config] {
+            if (status == GS_OK) {
+                callback(Result<STREAM_CONFIGURATION>::success(copy_config));
+            } else {
+                callback(Result<STREAM_CONFIGURATION>::failure(gs_error != NULL ? gs_error : "Unknown error..."));
             }
         });
     });

@@ -1,6 +1,7 @@
 #include "moonlight_libretro_wrapper.h"
 #include "Application.hpp"
 #include "Server.hpp"
+#include "gl_render.h"
 #include <openssl/ssl.h>
 #include <curl/curl.h>
 
@@ -17,6 +18,8 @@ void moonlight_libretro_wrapper_init(int width, int height) {
     
     OpenSSL_add_all_algorithms();
     curl_global_init(CURL_GLOBAL_ALL);
+    
+    gl_render_init();
     
     nanogui::init();
     app = new Application(Size(width, height), Size(width, height));
