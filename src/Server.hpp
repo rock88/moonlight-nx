@@ -11,19 +11,19 @@ extern "C" {
 template <typename T>
 struct Result {
 public:
-    static Result success(T* value) {
+    static Result success(T value) {
         return result(value, "", true);
     }
     
     static Result failure(std::string error) {
-        return result(NULL, error, false);
+        return result(T(), error, false);
     }
     
     bool isSuccess() const {
         return _isSuccess;
     }
     
-    T* value() const {
+    T value() const {
         return _value;
     }
     
@@ -32,7 +32,7 @@ public:
     }
     
 private:
-    static Result result(T* value, std::string error, bool isSuccess) {
+    static Result result(T value, std::string error, bool isSuccess) {
         Result result;
         result._value = value;
         result._error = error;
@@ -40,7 +40,7 @@ private:
         return result;
     }
     
-    T* _value;
+    T _value;
     std::string _error = "";
     bool _isSuccess = false;
 };
@@ -61,8 +61,10 @@ public:
     void add_host(std::string address);
     std::vector<std::string> hosts();
     
-    void connect(std::string address, ServerCallback<SERVER_DATA> &callback);
-
+    void connect(const std::string &address, ServerCallback<SERVER_DATA> &callback);
+    void pair(SERVER_DATA data, const std::string &pin, ServerCallback<bool> &callback);
+    void applist(SERVER_DATA data, ServerCallback<PAPP_LIST> &callback);
+    
 private:
     Server();
     

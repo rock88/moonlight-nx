@@ -75,24 +75,50 @@ vector<string> Server::hosts() {
     return m_hosts;
 }
 
-void Server::connect(string address, ServerCallback<SERVER_DATA> &callback) {
+void Server::connect(const string &address, ServerCallback<SERVER_DATA> &callback) {
     perform_load_task([this, address, callback] {
         SERVER_DATA data;
         
         int status = gs_init(&data, (char *)address.c_str(), (m_working_dir + "/key").c_str(), 0, false);
         
         nanogui::async([address, callback, data, status] {
-            SERVER_DATA copy(data);
-            
             if (status == GS_OK) {
-                callback(Result<SERVER_DATA>::success(&copy));
-                //free(data);
+                callback(Result<SERVER_DATA>::success(data));
             } else {
-                if (gs_error != NULL) {
-                    callback(Result<SERVER_DATA>::failure(gs_error));
-                } else {
-                    callback(Result<SERVER_DATA>::failure("Unknown error..."));
-                }
+                callback(Result<SERVER_DATA>::failure(gs_error != NULL ? gs_error : "Unknown error..."));
+            }
+        });
+    });
+}
+
+void Server::pair(SERVER_DATA data, const string &pin, ServerCallback<bool> &callback) {
+    perform_load_task([data, pin, callback] {
+        SERVER_DATA copy(data);
+        
+        int status = gs_pair(&copy, (char *)pin.c_str());
+        
+        nanogui::async([callback, data, status] {
+            if (status == GS_OK) {
+                callback(Result<bool>::success(true));
+            } else {
+                callback(Result<bool>::failure(gs_error != NULL ? gs_error : "Unknown error..."));
+            }
+        });
+    });
+}
+
+void Server::applist(SERVER_DATA data, ServerCallback<PAPP_LIST> &callback) {
+    perform_load_task([data, callback] {
+        SERVER_DATA copy(data);
+        PAPP_LIST app_list;
+        
+        int status = gs_applist(&copy, &app_list);
+        
+        nanogui::async([callback, app_list, status] {
+            if (status == GS_OK) {
+                callback(Result<PAPP_LIST>::success(app_list));
+            } else {
+                callback(Result<PAPP_LIST>::failure(gs_error != NULL ? gs_error : "Unknown error..."));
             }
         });
     });

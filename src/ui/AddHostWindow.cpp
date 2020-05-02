@@ -9,11 +9,11 @@ AddHostWindow::AddHostWindow(Widget *parent): ContentWindow(parent, "Add Host") 
     set_box_layout(Orientation::Vertical, Alignment::Fill, 10, 10);
     
     auto text = container()->add<TextBox>("");
-    text->set_placeholder("Plz enter IP address...");
+    text->set_placeholder("Enter your IP address... (192.168.1.10)");
     text->set_fixed_height(40);
     
     std::vector<std::string> keys {"7", "8", "9", "4", "5", "6", "1", "2", "3"};
-        
+    
     auto number_buttons_container = container()->add<Widget>();
     number_buttons_container->set_fixed_width(320);
     number_buttons_container->set_layout(new GridLayout(Orientation::Horizontal, 3, Alignment::Middle, 0, 10));
@@ -57,8 +57,8 @@ AddHostWindow::AddHostWindow(Widget *parent): ContentWindow(parent, "Add Host") 
                 loader->dispose();
                 
                 if (result.isSuccess()) {
-                    Server::server()->add_host(result.value()->serverInfo.address);
-                    m_host_added_callback(*result.value());
+                    Server::server()->add_host(result.value().serverInfo.address);
+                    m_host_added_callback(result.value());
                 } else {
                     screen()->add<MessageDialog>(MessageDialog::Type::Information, "Error", result.error());
                 }
