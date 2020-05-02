@@ -3,8 +3,11 @@
 
 using namespace nanogui;
 
-LoadingOverlay::LoadingOverlay(Widget* parent): Widget(parent->screen()) {
+LoadingOverlay::LoadingOverlay(Widget* parent, const std::string &caption): Widget(parent->screen()) {
     set_fixed_size(parent->screen()->size());
+    set_layout(new BoxLayout(Orientation::Vertical, Alignment::Middle));
+    add<Widget>()->set_fixed_height(fixed_height() / 2 - 60);
+    add<Label>(caption)->set_font_size(24);
     
     m_icon = FA_SPINNER;
     screen()->perform_layout();
@@ -33,6 +36,8 @@ void LoadingOverlay::draw(NVGcontext *ctx) {
     nvgText(ctx, 0, 0, utf8(m_icon).data(), NULL);
     
     nvgRestore(ctx);
+    
+    Widget::draw(ctx);
 }
 
 bool LoadingOverlay::mouse_enter_event(const nanogui::Vector2i &p, bool enter) {

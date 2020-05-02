@@ -3,6 +3,7 @@
 #include <GLFW/glfw3.h>
 #include "glsym/glsym.h"
 #include "Application.hpp"
+#include "Server.hpp"
 
 int main(int argc, const char * argv[]) {
     glfwInit();
@@ -33,26 +34,22 @@ int main(int argc, const char * argv[]) {
     glfwGetWindowSize(window, &width, &height);
     glfwGetFramebufferSize(window, &fb_width, &fb_height);
     
+    Server::server()->set_working_dir("/Users/rock88/Documents/RetroArch/system");
+    
     nanogui::init();
     nanogui::ref<Application> app = new Application(Size(width, height), Size(fb_width, fb_height));
     
-    nanogui::setup(1.0 / 60.0);
+    nanogui::setup(1.0 / 60.0 * 1000);
     
     while (!glfwWindowShouldClose(window)) {
         glfwPollEvents();
         
         int width, height;
         glfwGetFramebufferSize(window, &width, &height);
-        
         glViewport(0, 0, width, height);
         
         nanogui::draw();
         
-        //glfwGetWindowSize(win, &width, &height);
-        //glViewport(0, 0, width, height);
-        //glClear(GL_COLOR_BUFFER_BIT);
-        
-        //glfwWaitEvents();
         glfwSwapBuffers(window);
     }
     return 0;

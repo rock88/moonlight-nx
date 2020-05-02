@@ -133,39 +133,28 @@ void retro_run(void) {
     
     double mouse_x = input_state_cb(0, RETRO_DEVICE_MOUSE, 0, RETRO_DEVICE_ID_MOUSE_X);
     double mouse_y = input_state_cb(0, RETRO_DEVICE_MOUSE, 0, RETRO_DEVICE_ID_MOUSE_Y);
+    double pointer_x = 0;
+    double pointer_y = 0;
     
-//    if (mouse_x == 0 && mouse_y == 0) {
-//        int pointer_x = input_state_cb(0, RETRO_DEVICE_POINTER, 0, RETRO_DEVICE_ID_POINTER_X);
-//        int pointer_y = input_state_cb(0, RETRO_DEVICE_POINTER, 0, RETRO_DEVICE_ID_POINTER_Y);
-//
-//        if (pointer_x != 0 && pointer_y != 0) {
-//            mouse_x = (pointer_x / 32768.0f + 1) / 2 * width;
-//            mouse_y = (pointer_y / 32768.0f + 1) / 2 * height;
-//        }
-//    }
-    
+    // TODO: Pointers in MacBook currently work incorrectly...
     if (input_state_cb(0, RETRO_DEVICE_POINTER, 0, RETRO_DEVICE_ID_POINTER_PRESSED)) {
-    int p_x = input_state_cb(0, RETRO_DEVICE_POINTER, 0, RETRO_DEVICE_ID_POINTER_X);
-    int p_y = input_state_cb(0, RETRO_DEVICE_POINTER, 0, RETRO_DEVICE_ID_POINTER_Y);
-
-        //int px=(int)((float)retro.width/854.0*(float)p_x);
-        //int py=(int)((float)retro.height/480.0*(float)p_y);
-    mouse_x=(int)((p_x+0x7fff)*width/0xffff);
-    mouse_y=(int)((p_y+0x7fff)*height/0xffff);
+        int p_x = input_state_cb(0, RETRO_DEVICE_POINTER, 0, RETRO_DEVICE_ID_POINTER_X);
+        int p_y = input_state_cb(0, RETRO_DEVICE_POINTER, 0, RETRO_DEVICE_ID_POINTER_Y);
+        pointer_x = (p_x + 0x7fff) * width / 0xffff;
+        pointer_y = (p_y + 0x7fff) * height / 0xffff;
     }
     
     if (mouse_x != 0 && mouse_y != 0) {
         moonlight_libretro_wrapper_handle_mouse_move(mouse_x, mouse_y);
     }
     
-    
-    
-    last_mouse_x = mouse_x;
-    last_mouse_y = mouse_y;
-    
     static bool mouse_l_pressed = false;
     
     if (input_state_cb(0, RETRO_DEVICE_MOUSE, 0, RETRO_DEVICE_ID_MOUSE_LEFT) && !mouse_l_pressed) {
+        if (pointer_x != 0 && pointer_y != 0) {
+            moonlight_libretro_wrapper_handle_mouse_move(pointer_x, pointer_y);
+        }
+        
         mouse_l_pressed = true;
         moonlight_libretro_wrapper_handle_mouse_button(0, 1, 0);
     } else if (!input_state_cb(0, RETRO_DEVICE_MOUSE, 0, RETRO_DEVICE_ID_MOUSE_LEFT) && mouse_l_pressed) {
@@ -177,7 +166,6 @@ void retro_run(void) {
     glBindFramebuffer(RARCH_GL_FRAMEBUFFER, hw_render.get_current_framebuffer());
     
     glViewport(0, 0, width, height);
-    
     moonlight_libretro_wrapper_draw();
     
     video_cb(RETRO_HW_FRAME_BUFFER_VALID, width, height, 0);

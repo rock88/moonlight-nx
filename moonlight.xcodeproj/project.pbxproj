@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		3602C3B7245D903000368900 /* HostButton.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3602C3B5245D903000368900 /* HostButton.cpp */; };
 		361F8A3A245CB44E00A8D9C0 /* moonlight_libretro_wrapper.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 361F8A38245CB44E00A8D9C0 /* moonlight_libretro_wrapper.cpp */; };
 		3652EFCD245B3B00001FABF3 /* widget.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3652EF0F245B3B00001FABF3 /* widget.cpp */; };
 		3652EFCE245B3B00001FABF3 /* common.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3652EF10245B3B00001FABF3 /* common.cpp */; };
@@ -104,6 +105,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		3602C3B5245D903000368900 /* HostButton.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = HostButton.cpp; sourceTree = "<group>"; };
+		3602C3B6245D903000368900 /* HostButton.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = HostButton.hpp; sourceTree = "<group>"; };
 		361F8A38245CB44E00A8D9C0 /* moonlight_libretro_wrapper.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = moonlight_libretro_wrapper.cpp; sourceTree = "<group>"; };
 		361F8A39245CB44E00A8D9C0 /* moonlight_libretro_wrapper.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = moonlight_libretro_wrapper.h; sourceTree = "<group>"; };
 		3652ECE8245B3AFF001FABF3 /* colorpicker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = colorpicker.h; sourceTree = "<group>"; };
@@ -547,13 +550,13 @@
 				36DFE0D5245A1FEC00FC51CE /* glsym */,
 				36DFE0CA2459FA3F00FC51CE /* nanogui_resources */,
 				36DFDCF12459F79000FC51CE /* ui */,
-				36B406962459F460005BD903 /* moonlight_glfw.cpp */,
 				3652F003245C28C6001FABF3 /* Server.cpp */,
 				3652F004245C28C6001FABF3 /* Server.hpp */,
 				3652F084245C6CFC001FABF3 /* libretro.h */,
-				3652F085245C6CFC001FABF3 /* moonlight_libretro.c */,
 				361F8A39245CB44E00A8D9C0 /* moonlight_libretro_wrapper.h */,
 				361F8A38245CB44E00A8D9C0 /* moonlight_libretro_wrapper.cpp */,
+				3652F085245C6CFC001FABF3 /* moonlight_libretro.c */,
+				36B406962459F460005BD903 /* moonlight_glfw.cpp */,
 			);
 			path = src;
 			sourceTree = "<group>";
@@ -603,6 +606,8 @@
 				3652F001245B6961001FABF3 /* AddHostWindow.hpp */,
 				3652F081245C60D1001FABF3 /* LoadingOverlay.cpp */,
 				3652F082245C60D1001FABF3 /* LoadingOverlay.hpp */,
+				3602C3B5245D903000368900 /* HostButton.cpp */,
+				3602C3B6245D903000368900 /* HostButton.hpp */,
 			);
 			path = ui;
 			sourceTree = "<group>";
@@ -754,6 +759,7 @@
 				3652EFDD245B3B00001FABF3 /* texture_gl.cpp in Sources */,
 				3652F013245C2919001FABF3 /* http.c in Sources */,
 				3652F069245C292B001FABF3 /* peer.c in Sources */,
+				3602C3B7245D903000368900 /* HostButton.cpp in Sources */,
 				3652EFD0245B3B00001FABF3 /* vscrollpanel.cpp in Sources */,
 				3652F06D245C292B001FABF3 /* win32.c in Sources */,
 				3652F012245C2919001FABF3 /* mkcert.c in Sources */,

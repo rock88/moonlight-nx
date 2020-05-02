@@ -1,7 +1,6 @@
 #include <nanogui/nanogui.h>
+#include "Application.hpp"
 #pragma once
-
-#define Size(x, y) (nanogui::Vector2f((x), (y)))
 
 class ContentWindow: public nanogui::Widget {
 public:
@@ -22,7 +21,12 @@ public:
         return m_container;
     }
     
-    void set_box_layout(nanogui::Orientation orientation, nanogui::Alignment alignment = nanogui::Alignment::Middle, int margin = 0, int spacing = 0) {
+    Application* application() {
+        auto application = static_cast<Application *>(screen());
+        return application;
+    }
+    
+    void set_box_layout(nanogui::Orientation orientation, nanogui::Alignment alignment = nanogui::Alignment::Middle, int margin = 10, int spacing = 10) {
         m_container->set_layout(new nanogui::BoxLayout(orientation, alignment, margin, spacing));
     }
     

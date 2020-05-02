@@ -1,5 +1,6 @@
 #include "moonlight_libretro_wrapper.h"
 #include "Application.hpp"
+#include "Server.hpp"
 #include <openssl/ssl.h>
 #include <curl/curl.h>
 
@@ -23,17 +24,15 @@ void moonlight_libretro_wrapper_init(int width, int height) {
     nanogui::setup(1.0 / 60.0);
 }
 
-void moonlight_libretro_wrapper_set_working_dir(char* dir) {
-    
+void moonlight_libretro_wrapper_set_working_dir(const char* dir) {
+    Server::server()->set_working_dir(dir);
 }
 
 void moonlight_libretro_wrapper_handle_mouse_move(double x, double y) {
-    //printf("mouse_move: %fx%f\n", x, y);
     nanogui::cursor_pos_callback_event(x, y);
 }
 
 void moonlight_libretro_wrapper_handle_mouse_button(int button, int action, int modifiers) {
-    //printf("mouse_button: %i x %i\n", button, action);
     nanogui::mouse_button_callback_event(button, action, modifiers);
 }
 

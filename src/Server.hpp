@@ -1,4 +1,5 @@
 #include <string>
+#include <vector>
 
 extern "C" {
     #include "client.h"
@@ -48,16 +49,23 @@ template<class T> using ServerCallback = const std::function<void(Result<T>)>;
 
 class Server {
 public:
-    static Server server() {
-        static Server* server = NULL;
-        if (server == NULL) {
-            server = new Server();
-        }
-        return *server;
+    static Server* server() {
+        static Server server;
+        return &server;
     }
 
+    void set_working_dir(const std::string &dir) {
+        m_working_dir = std::string(dir + "/moonlight");
+    }
+    
+    void add_host(std::string address);
+    std::vector<std::string> hosts();
+    
     void connect(std::string address, ServerCallback<SERVER_DATA> &callback);
 
 private:
     Server();
+    
+    std::string m_working_dir;
+    std::vector<std::string> m_hosts;
 };

@@ -60,6 +60,5 @@ void ContentWindow::set_left_title_button(int icon, const std::function<void()> 
 }
 
 void ContentWindow::pop() {
-    auto app = static_cast<Application *>(screen());
-    app->pop_window();
+    application()->pop_window();
 }

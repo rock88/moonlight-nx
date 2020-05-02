@@ -5,24 +5,10 @@
 using namespace nanogui;
 
 Application::Application(Vector2f size, Vector2f framebuffer_size): Screen(size, framebuffer_size) {
-    auto main = push_window<MainWindow>();
-    main->set_add_host_callback([this] {
-        this->push_window<AddHostWindow>();
-    });
-}
-
-template<typename WidgetClass, typename... Args>
-WidgetClass* Application::push_window(const Args&... args) {
-    for (auto window: m_windows) {
-        window->set_visible(false);
-    }
+    theme()->m_button_font_size = 24;
+    theme()->m_text_box_font_size = 34;
     
-    auto window = new WidgetClass(this, args...);
-    window->set_size(size());
-    window->set_fixed_size(size());
-    m_windows.push_back(window);
-    perform_layout();
-    return window;
+    push_window<MainWindow>();
 }
 
 void Application::pop_window() {

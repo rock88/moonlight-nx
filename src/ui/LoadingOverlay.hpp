@@ -3,7 +3,7 @@
 
 class LoadingOverlay: public nanogui::Widget {
 public:
-    LoadingOverlay(nanogui::Widget* parent);
+    LoadingOverlay(nanogui::Widget* parent, const std::string &caption = "");
     
     void draw(NVGcontext *ctx) override;
     

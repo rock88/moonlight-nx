@@ -37,6 +37,7 @@ AddHostWindow::AddHostWindow(Widget *parent): ContentWindow(parent, "Add Host") 
     
     auto backspace = other_buttons_container->add<Button>("");
     backspace->set_icon(FA_BACKSPACE);
+    backspace->set_icon_extra_scale(2);
     backspace->set_fixed_size(Size(210, 100));
     backspace->set_callback([text] {
         if (text->value().size() > 0) {
@@ -52,14 +53,14 @@ AddHostWindow::AddHostWindow(Widget *parent): ContentWindow(parent, "Add Host") 
         if (text->value().size() > 0) {
             auto loader = add<LoadingOverlay>();
             
-            Server::server().connect(text->value(), [this, loader](auto result) {
+            Server::server()->connect(text->value(), [this, loader](auto result) {
                 loader->dispose();
                 
                 if (result.isSuccess()) {
-                    printf("Pair: %i\n", result.value()->paired);
+                    Server::server()->add_host(result.value()->serverInfo.address);
+                    m_host_added_callback(*result.value());
                 } else {
                     screen()->add<MessageDialog>(MessageDialog::Type::Information, "Error", result.error());
-                    printf("Error: %s\n", result.error().c_str());
                 }
             });
         }
