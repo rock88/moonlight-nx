@@ -163,11 +163,14 @@ MOONLIGHT_LIBRETRO_C_SOURCES = \
 	src/moonlight_libretro.c
 
 MOONLIGHT_LIBRETRO_CXX_SOURCES = \
-	src/ui/AddHostWindow.cpp \
+	src/ui/windows/AddHostWindow.cpp \
+	src/ui/windows/ContentWindow.cpp \
+	src/ui/windows/MainWindow.cpp \
+	src/ui/windows/AppListWindow.cpp \
+	src/ui/buttons/AppButton.cpp \
+	src/ui/buttons/HostButton.cpp \
 	src/ui/Application.cpp \
-	src/ui/ContentWindow.cpp \
 	src/ui/LoadingOverlay.cpp \
-	src/ui/MainWindow.cpp \
 	src/Server.cpp \
 	src/moonlight_libretro_wrapper.cpp
 
@@ -241,7 +244,7 @@ NANOGUI_CXX_SOURCES = \
 INCLUDES += \
 	-Isrc \
 	-Isrc/nanogui_resources \
-	-Isrc/ui \
+	-Isrc/ui -Isrc/ui/buttons -Isrc/ui/windows \
 	-Ilibgamestream \
 	-Ithird_party/moonlight-common-c/reedsolomon \
 	-Ithird_party/moonlight-common-c/src \

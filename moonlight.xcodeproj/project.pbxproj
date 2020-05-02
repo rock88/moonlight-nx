@@ -303,6 +303,32 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		3602C3BE245DBFF900368900 /* buttons */ = {
+			isa = PBXGroup;
+			children = (
+				3602C3B5245D903000368900 /* HostButton.cpp */,
+				3602C3B6245D903000368900 /* HostButton.hpp */,
+				3602C3BB245DBA9100368900 /* AppButton.cpp */,
+				3602C3BC245DBA9100368900 /* AppButton.hpp */,
+			);
+			path = buttons;
+			sourceTree = "<group>";
+		};
+		3602C3BF245DC00700368900 /* windows */ = {
+			isa = PBXGroup;
+			children = (
+				3652F089245C8569001FABF3 /* ContentWindow.cpp */,
+				3652EFFD245B645C001FABF3 /* ContentWindow.hpp */,
+				3652EFFA245B6434001FABF3 /* MainWindow.cpp */,
+				3652EFFB245B6434001FABF3 /* MainWindow.hpp */,
+				3652F000245B6961001FABF3 /* AddHostWindow.cpp */,
+				3652F001245B6961001FABF3 /* AddHostWindow.hpp */,
+				3602C3B8245DB3C800368900 /* AppListWindow.cpp */,
+				3602C3B9245DB3C800368900 /* AppListWindow.hpp */,
+			);
+			path = windows;
+			sourceTree = "<group>";
+		};
 		3652ECC3245B3AFF001FABF3 /* nanogui */ = {
 			isa = PBXGroup;
 			children = (
@@ -602,22 +628,12 @@
 		36DFDCF12459F79000FC51CE /* ui */ = {
 			isa = PBXGroup;
 			children = (
+				3602C3BF245DC00700368900 /* windows */,
+				3602C3BE245DBFF900368900 /* buttons */,
 				36DFDCF22459F7A200FC51CE /* Application.cpp */,
 				36DFDCF32459F7A200FC51CE /* Application.hpp */,
-				3652F089245C8569001FABF3 /* ContentWindow.cpp */,
-				3652EFFD245B645C001FABF3 /* ContentWindow.hpp */,
-				3652EFFA245B6434001FABF3 /* MainWindow.cpp */,
-				3652EFFB245B6434001FABF3 /* MainWindow.hpp */,
-				3652F000245B6961001FABF3 /* AddHostWindow.cpp */,
-				3652F001245B6961001FABF3 /* AddHostWindow.hpp */,
-				3602C3B8245DB3C800368900 /* AppListWindow.cpp */,
-				3602C3B9245DB3C800368900 /* AppListWindow.hpp */,
 				3652F081245C60D1001FABF3 /* LoadingOverlay.cpp */,
 				3652F082245C60D1001FABF3 /* LoadingOverlay.hpp */,
-				3602C3B5245D903000368900 /* HostButton.cpp */,
-				3602C3B6245D903000368900 /* HostButton.hpp */,
-				3602C3BB245DBA9100368900 /* AppButton.cpp */,
-				3602C3BC245DBA9100368900 /* AppButton.hpp */,
 			);
 			path = ui;
 			sourceTree = "<group>";

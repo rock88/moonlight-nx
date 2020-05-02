@@ -89,7 +89,9 @@ void retro_set_environment(retro_environment_t cb) {
     
     const char *dir = NULL;
     cb(RETRO_ENVIRONMENT_GET_SYSTEM_DIRECTORY, &dir);
-    moonlight_libretro_wrapper_set_working_dir(dir);
+    if (dir != NULL) {
+        moonlight_libretro_wrapper_set_working_dir(dir);
+    }
     
     static struct retro_log_callback logging;
     if (cb(RETRO_ENVIRONMENT_GET_LOG_INTERFACE, &logging))
