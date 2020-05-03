@@ -62,8 +62,8 @@ else ifeq ($(platform), lakka-switch)
 	 -march=armv8-a+crypto+crc+fp+simd -fomit-frame-pointer -Wall -pipe -fPIC -pthread \
 	 -D__LAKKA_SWITCH__
    INCLUDES += -I$(LAKKA_TOOLCHAIN)/aarch64-libreelec-linux-gnueabi/sysroot/usr/include \
-	-I$(LAKKA_TOOLCHAIN)/include
-   LIBS += -lpthread -lGL -luuid
+	-I$(LAKKA_TOOLCHAIN)/include -Ithird_party/opus/include
+   LIBS += -lpthread -lGL -luuid -Lthird_party/opus/lib
    SHARED := -shared -Wl,--version-script=link.T -Wl,--no-undefined
 else
    CC = gcc

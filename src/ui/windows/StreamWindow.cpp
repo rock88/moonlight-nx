@@ -34,7 +34,7 @@ StreamWindow::StreamWindow(Widget *parent, const std::string &address, int app_i
     m_config.audioConfiguration = AUDIO_CONFIGURATION_STEREO;
     m_config.packetSize = 1392;
     m_config.streamingRemotely = 2;
-    m_config.bitrate = 2000;
+    m_config.bitrate = 1000;
     
     m_loader = add<LoadingOverlay>();
     
@@ -64,7 +64,6 @@ void StreamWindow::setup_stream() {
             }
         });
     });
-    
 }
 
 void StreamWindow::draw(NVGcontext *ctx) {
@@ -124,8 +123,8 @@ bool StreamWindow::mouse_button_event(const nanogui::Vector2i &p, int button, bo
 bool StreamWindow::mouse_motion_event(const Vector2i &p, const Vector2i &rel, int button, int modifiers) {
 #if defined(__LAKKA_SWITCH__) || defined(__APPLE__)
     if (pressed) {
-        current_mouse_x = current_mouse_x + p.x() - start_mouse_x;
-        current_mouse_y = current_mouse_y + p.y() - start_mouse_y;
+        current_mouse_x = std::min(std::max(current_mouse_x + p.x() - start_mouse_x, 0), width());
+        current_mouse_y = std::min(std::max(current_mouse_y + p.y() - start_mouse_y, 0), height());
         
         LiSendMousePositionEvent(current_mouse_x, current_mouse_y, width(), height());
         

@@ -83,6 +83,8 @@ void gl_render_init() {
 void gl_render_setup(int width, int height) {
     if (gl_render_width != width || gl_render_height != height) {
         glDeleteTextures(3, texture_id);
+    } else {
+        return;
     }
     
     gl_render_width = width;
