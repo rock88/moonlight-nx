@@ -3,12 +3,15 @@
 #include "GameStreamClient.hpp"
 #include "gl_render.h"
 #include <openssl/ssl.h>
+#include "libretro.h"
 #include <curl/curl.h>
 
 static bool moonlight_is_initialized = false;
 
 static Application* app;
 static std::string working_dir;
+
+int16_t keyboard_state[RETROK_LAST];
 
 void moonlight_libretro_wrapper_preinit() {
     OpenSSL_add_all_algorithms();

@@ -123,10 +123,6 @@ static void update_variables(void) {
 }
 
 void retro_run(void) {
-//    bool updated = false;
-//    if (environ_cb(RETRO_ENVIRONMENT_GET_VARIABLE_UPDATE, &updated) && updated)
-//       update_variables();
-    
     moonlight_libretro_wrapper_init(width, height);
     
     // Handle inputs
@@ -157,6 +153,10 @@ void retro_run(void) {
         moonlight_libretro_wrapper_handle_mouse_button(0, 1, 0);
     } else if (!input_state_cb(0, RETRO_DEVICE_MOUSE, 0, RETRO_DEVICE_ID_MOUSE_LEFT)) {
         moonlight_libretro_wrapper_handle_mouse_button(0, 0, 0);
+    }
+    
+    for (int i = 0; i < RETROK_LAST; i++) {
+        keyboard_state[i] = input_state_cb(0, RETRO_DEVICE_KEYBOARD, 0, i);
     }
     
     // Draw

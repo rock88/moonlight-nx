@@ -3,8 +3,10 @@
 #ifdef __cplusplus
 #define EXTERN extern "C"
 #else
-#define EXTERN
+#define EXTERN extern
 #endif
+
+EXTERN int16_t keyboard_state[];
 
 EXTERN void moonlight_libretro_wrapper_preinit();
 EXTERN void moonlight_libretro_wrapper_init(int width, int height);

@@ -32,6 +32,7 @@ static int video_decoder_setup(int videoFormat, int width, int height, int redra
 
 static void video_decoder_cleanup() {
     ffmpeg_destroy();
+    frame = NULL;
 }
 
 static int video_decoder_submit_decode_unit(PDECODE_UNIT decodeUnit) {
