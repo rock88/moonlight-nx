@@ -35,7 +35,7 @@ static unsigned height = BASE_HEIGHT;
 
 static retro_video_refresh_t video_cb;
 static retro_audio_sample_t audio_cb;
-static retro_audio_sample_batch_t audio_batch_cb;
+retro_audio_sample_batch_t audio_batch_cb;
 static retro_environment_t environ_cb;
 static retro_input_poll_t input_poll_cb;
 static retro_input_state_t input_state_cb;
@@ -45,7 +45,7 @@ void retro_init(void) {
     moonlight_libretro_wrapper_preinit();
 }
 
-void retro_deinit(void){
+void retro_deinit(void) {
     
 }
 
@@ -69,7 +69,7 @@ void retro_get_system_info(struct retro_system_info *info) {
 void retro_get_system_av_info(struct retro_system_av_info *info) {
     info->timing = (struct retro_system_timing) {
         .fps = 60.0,
-        .sample_rate = 0.0,
+        .sample_rate = 48000,
     };
     
     info->geometry = (struct retro_game_geometry) {

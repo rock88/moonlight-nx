@@ -3,7 +3,9 @@
 #include "GameStreamClient.hpp"
 #include "gl_render.h"
 #include "video_decoder.h"
+#include "audio_decoder.h"
 #include "nanovg.h"
+#include <algorithm>
 
 using namespace nanogui;
 
@@ -42,7 +44,7 @@ StreamWindow::StreamWindow(Widget *parent, const std::string &address, int app_i
 void StreamWindow::setup_stream() {
     perform_async([this] {
         auto m_data = GameStreamClient::client()->server_data(m_address);
-        LiStartConnection(&m_data.serverInfo, &m_config, NULL, &video_decoder_callbacks, NULL, NULL, 0, NULL, 0);
+        LiStartConnection(&m_data.serverInfo, &m_config, NULL, &video_decoder_callbacks, &audio_decoder_callbacks, NULL, 0, NULL, 0);
         
         async([this] {
             m_loader->dispose();
@@ -63,15 +65,31 @@ void StreamWindow::draw(NVGcontext *ctx) {
     nvgRestore(ctx);
 }
 
+static bool pressed = false;
+static int start_mouse_x = 0, start_mouse_y = 0;
+
 bool StreamWindow::mouse_button_event(const nanogui::Vector2i &p, int button, bool down, int modifiers) {
     if (button == 0) {
-        LiSendMouseButtonEvent(down ? BUTTON_ACTION_PRESS : BUTTON_ACTION_RELEASE, BUTTON_LEFT);
+        if (down && !pressed) {
+            start_mouse_x = p.x();
+            start_mouse_y = p.y();
+        }
+        pressed = down;
+        //LiSendMouseButtonEvent(down ? BUTTON_ACTION_PRESS : BUTTON_ACTION_RELEASE, BUTTON_LEFT);
     }
-    
     return true;
 }
 
 bool StreamWindow::mouse_motion_event(const Vector2i &p, const Vector2i &rel, int button, int modifiers) {
+#if defined(__LAKKA_SWITCH__) || defined(__APPLE__)
+    if (pressed) {
+        LiSendMouseMoveEvent(p.x() - start_mouse_x, p.y() - start_mouse_y);
+        
+        start_mouse_x = p.x();
+        start_mouse_y = p.y();
+    }
+#else
     LiSendMousePositionEvent(p.x(), p.y(), width(), height());
-    return false;
+#endif
+    return true;
 }

@@ -98,7 +98,8 @@ MOONLIGHT_LIBRETRO_C_SOURCES = \
 	src/moonlight_libretro.c \
 	src/decoders/ffmpeg.c \
 	src/decoders/gl_render.c \
-	src/decoders/video_decoder.c
+	src/decoders/video_decoder.c \
+	src/decoders/audio_decoder.c
 
 MOONLIGHT_LIBRETRO_CXX_SOURCES = \
 	src/ui/windows/AddHostWindow.cpp \
@@ -201,7 +202,7 @@ DEFINES += -DNANOGUI_USE_OPENGL -DNVG_STB_IMAGE_IMPLEMENTATION -DNANOGUI_NO_GLFW
 CFLAGS += -Wall -pedantic $(fpic) -std=gnu11 $(DEFINES)
 CXXFLAGS += -std=gnu++17 -fno-permissive $(DEFINES)
 
-LIBS += -lcrypto -lssl -lcurl -lz -lexpat \
+LIBS += -lcrypto -lssl -lcurl -lz -lexpat -lopus \
 	-lavcodec -lavformat -lavutil -lavdevice -lstdc++
 
 OBJECTS += src/glsym/glsym_gl.o
