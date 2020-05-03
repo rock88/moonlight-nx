@@ -1,5 +1,5 @@
 #include "AddHostWindow.hpp"
-#include "Server.hpp"
+#include "GameStreamClient.hpp"
 #include "LoadingOverlay.hpp"
 
 using namespace nanogui;
@@ -53,11 +53,10 @@ AddHostWindow::AddHostWindow(Widget *parent): ContentWindow(parent, "Add Host") 
         if (text->value().size() > 0) {
             auto loader = add<LoadingOverlay>();
             
-            Server::server()->connect(text->value(), [this, loader](auto result) {
+            GameStreamClient::client()->connect(text->value(), [this, loader](auto result) {
                 loader->dispose();
                 
                 if (result.isSuccess()) {
-                    Server::server()->add_host(result.value().serverInfo.address);
                     m_host_added_callback(result.value());
                 } else {
                     screen()->add<MessageDialog>(MessageDialog::Type::Information, "Error", result.error());

@@ -1,11 +1,10 @@
 #include "HostButton.hpp"
-#include "Server.hpp"
+#include "GameStreamClient.hpp"
 
 using namespace nanogui;
 
 HostButton::HostButton(Widget* parent, const std::string &host): Button(parent, "", FA_POWER_OFF) {
     m_host = host;
-    m_data.paired = false;
     set_icon_extra_scale(2);
     set_icon_position(IconPosition::LeftCentered);
     
@@ -15,16 +14,15 @@ HostButton::HostButton(Widget* parent, const std::string &host): Button(parent, 
     
     LOG("Try connect to %s\n", host.c_str());
     
-    Server::server()->connect(host, [this](auto result) {
+    GameStreamClient::client()->connect(host, [this](auto result) {
         if (result.isSuccess()) {
-            m_data = result.value();
-            m_data.serverInfo.address = m_host.c_str();
-            
-            if (m_data.paired) {
-                set_icon(FA_DESKTOP);
-            } else {
-                set_icon(FA_QUESTION);
-            }
+            m_is_active = true;
+            m_is_paired = result.value().paired;
+            set_icon(m_is_paired ? FA_DESKTOP : FA_QUESTION);
+        } else {
+            m_is_paired = false;
+            m_is_active = false;
+            set_icon(FA_POWER_OFF);
         }
     });
 }

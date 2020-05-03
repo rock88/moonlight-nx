@@ -1,6 +1,5 @@
 #include "video_decoder.h"
 #include "ffmpeg.h"
-#include "gl_render.h"
 
 #define DECODER_BUFFER_SIZE 92 * 1024
 
@@ -10,8 +9,6 @@ volatile int frame_is_ready = 0;
 pthread_mutex_t mutex;
 
 static int video_decoder_setup(int videoFormat, int width, int height, int redrawRate, void* context, int drFlags) {
-    gl_render_setup(width, height);
-    
     pthread_mutex_init(&mutex, NULL);
     
     printf("decoder_setup: %ix%i\n", width, height);

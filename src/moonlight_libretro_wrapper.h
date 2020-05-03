@@ -6,6 +6,7 @@
 #define EXTERN
 #endif
 
+EXTERN void moonlight_libretro_wrapper_preinit();
 EXTERN void moonlight_libretro_wrapper_init(int width, int height);
 EXTERN void moonlight_libretro_wrapper_set_working_dir(const char* dir);
 EXTERN void moonlight_libretro_wrapper_handle_mouse_move(double x, double y);

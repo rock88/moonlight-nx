@@ -1,5 +1,5 @@
 #include "ContentWindow.hpp"
-#include "Server.hpp"
+#include "GameStreamClient.hpp"
 #pragma once
 
 class AddHostWindow: public ContentWindow {

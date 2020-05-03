@@ -5,23 +5,22 @@
 
 using namespace nanogui;
 
-AppListWindow::AppListWindow(Widget *parent, SERVER_DATA data): ContentWindow(parent, "Appications"), m_data(data) {
+AppListWindow::AppListWindow(Widget *parent, const std::string &address): ContentWindow(parent, "Appications"), m_address(address) {
     set_left_pop_button();
     
     auto loader = add<LoadingOverlay>();
     
-    Server::server()->applist(m_data, [this, loader](auto result) {
+    GameStreamClient::client()->applist(m_address, [this, loader](auto result) {
         loader->dispose();
         
         if (result.isSuccess()) {
             container()->set_layout(new GridLayout(Orientation::Horizontal, 5, Alignment::Minimum, 10, 10));
             
-            m_app_list = result.value();
-            
-            PAPP_LIST app = m_app_list;
+            int currentGame = GameStreamClient::client()->server_data(m_address).currentGame;
+            PAPP_LIST app = result.value();
             
             while (app != NULL) {
-                auto button = container()->add<AppButton>(*app, m_data.currentGame);
+                auto button = container()->add<AppButton>(*app, currentGame);
                 button->set_fixed_size(Size(220, 100));
                 button->set_callback([this, app] {
                     run_game(app->id);
@@ -35,6 +34,6 @@ AppListWindow::AppListWindow(Widget *parent, SERVER_DATA data): ContentWindow(pa
     });
 }
 
-void AppListWindow::run_game(int id) {
-    application()->push_window<StreamWindow>(m_data, id);
+void AppListWindow::run_game(int app_id) {
+    application()->push_window<StreamWindow>(m_address, app_id);
 }

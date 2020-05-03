@@ -75,6 +75,7 @@ endif
 
 ifeq ($(DEBUG), 1)
    CFLAGS += -O0 -g
+   CXXFLAGS += -O0 -g
 else
    CFLAGS += -O3
 endif
@@ -109,7 +110,7 @@ MOONLIGHT_LIBRETRO_CXX_SOURCES = \
 	src/ui/buttons/HostButton.cpp \
 	src/ui/Application.cpp \
 	src/ui/LoadingOverlay.cpp \
-	src/Server.cpp \
+	src/GameStreamClient.cpp \
 	src/moonlight_libretro_wrapper.cpp
 
 MOONLIGHT_COMMON_C_SOURCES = \

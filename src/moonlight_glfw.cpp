@@ -3,14 +3,18 @@
 #include <GLFW/glfw3.h>
 #include "glsym/glsym.h"
 #include "Application.hpp"
-#include "Server.hpp"
+#include "GameStreamClient.hpp"
 #include "gl_render.h"
 
 int main(int argc, const char * argv[]) {
     glfwInit();
     
+    glfwSetErrorCallback([](int i, const char *error) {
+        printf("GLFW error: %s\n", error);
+    });
+    
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 2);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
     glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
     
@@ -37,7 +41,7 @@ int main(int argc, const char * argv[]) {
     glfwGetWindowSize(window, &width, &height);
     glfwGetFramebufferSize(window, &fb_width, &fb_height);
     
-    Server::server()->set_working_dir("/Users/rock88/Documents/RetroArch/system");
+    GameStreamClient::client()->set_working_dir("/Users/rock88/Documents/RetroArch/system");
     
     nanogui::init();
     nanogui::ref<Application> app = new Application(Size(width, height), Size(fb_width, fb_height));

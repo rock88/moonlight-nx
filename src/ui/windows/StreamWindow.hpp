@@ -1,10 +1,11 @@
 #include "ContentWindow.hpp"
-#include "Server.hpp"
+#include "GameStreamClient.hpp"
+#include "LoadingOverlay.hpp"
 #pragma once
 
 class StreamWindow: public nanogui::Widget {
 public:
-    StreamWindow(Widget *parent, SERVER_DATA data, int id);
+    StreamWindow(Widget *parent, const std::string &address, int app_id);
     
     void setup_stream();
     
@@ -14,7 +15,8 @@ public:
     bool mouse_motion_event(const nanogui::Vector2i &p, const nanogui::Vector2i &rel, int button, int modifiers) override;
     
 private:
-    SERVER_DATA m_data;
+    std::string m_address;
+    int m_app_id;
     STREAM_CONFIGURATION m_config;
-    int m_id;
+    LoadingOverlay* m_loader;
 };

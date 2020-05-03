@@ -47,7 +47,7 @@
 		3652EFF8245B4EE2001FABF3 /* Application.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 36DFDCF22459F7A200FC51CE /* Application.cpp */; };
 		3652EFFC245B6434001FABF3 /* MainWindow.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3652EFFA245B6434001FABF3 /* MainWindow.cpp */; };
 		3652F002245B6961001FABF3 /* AddHostWindow.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3652F000245B6961001FABF3 /* AddHostWindow.cpp */; };
-		3652F005245C28C6001FABF3 /* Server.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3652F003245C28C6001FABF3 /* Server.cpp */; };
+		3652F005245C28C6001FABF3 /* GameStreamClient.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3652F003245C28C6001FABF3 /* GameStreamClient.cpp */; };
 		3652F010245C2919001FABF3 /* xml.c in Sources */ = {isa = PBXBuildFile; fileRef = 3652F008245C2918001FABF3 /* xml.c */; };
 		3652F011245C2919001FABF3 /* client.c in Sources */ = {isa = PBXBuildFile; fileRef = 3652F00C245C2918001FABF3 /* client.c */; };
 		3652F012245C2919001FABF3 /* mkcert.c in Sources */ = {isa = PBXBuildFile; fileRef = 3652F00D245C2918001FABF3 /* mkcert.c */; };
@@ -204,8 +204,8 @@
 		3652EFFD245B645C001FABF3 /* ContentWindow.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = ContentWindow.hpp; sourceTree = "<group>"; };
 		3652F000245B6961001FABF3 /* AddHostWindow.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = AddHostWindow.cpp; sourceTree = "<group>"; };
 		3652F001245B6961001FABF3 /* AddHostWindow.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = AddHostWindow.hpp; sourceTree = "<group>"; };
-		3652F003245C28C6001FABF3 /* Server.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Server.cpp; sourceTree = "<group>"; };
-		3652F004245C28C6001FABF3 /* Server.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Server.hpp; sourceTree = "<group>"; };
+		3652F003245C28C6001FABF3 /* GameStreamClient.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = GameStreamClient.cpp; sourceTree = "<group>"; };
+		3652F004245C28C6001FABF3 /* GameStreamClient.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = GameStreamClient.hpp; sourceTree = "<group>"; };
 		3652F007245C2918001FABF3 /* mkcert.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = mkcert.h; sourceTree = "<group>"; };
 		3652F008245C2918001FABF3 /* xml.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = xml.c; sourceTree = "<group>"; };
 		3652F009245C2918001FABF3 /* client.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = client.h; sourceTree = "<group>"; };
@@ -611,8 +611,8 @@
 				36DFE0CA2459FA3F00FC51CE /* nanogui_resources */,
 				36DFDCF12459F79000FC51CE /* ui */,
 				367CD95B245DE6A900A95738 /* decoders */,
-				3652F003245C28C6001FABF3 /* Server.cpp */,
-				3652F004245C28C6001FABF3 /* Server.hpp */,
+				3652F003245C28C6001FABF3 /* GameStreamClient.cpp */,
+				3652F004245C28C6001FABF3 /* GameStreamClient.hpp */,
 				3652F084245C6CFC001FABF3 /* libretro.h */,
 				361F8A39245CB44E00A8D9C0 /* moonlight_libretro_wrapper.h */,
 				361F8A38245CB44E00A8D9C0 /* moonlight_libretro_wrapper.cpp */,
@@ -708,6 +708,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 36DBDE952450BB7E0057C8D3 /* Build configuration list for PBXNativeTarget "moonlight" */;
 			buildPhases = (
+				36A562F9245EE20200901354 /* ShellScript */,
 				36DBDE8A2450BB7E0057C8D3 /* Sources */,
 				36DBDE8B2450BB7E0057C8D3 /* Frameworks */,
 				36DBDE8C2450BB7E0057C8D3 /* CopyFiles */,
@@ -753,6 +754,26 @@
 		};
 /* End PBXProject section */
 
+/* Begin PBXShellScriptBuildPhase section */
+		36A562F9245EE20200901354 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\n\nmake DEBUG=1\n";
+		};
+/* End PBXShellScriptBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
 		36DBDE8A2450BB7E0057C8D3 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
@@ -792,7 +813,7 @@
 				3652EFF6245B3CF2001FABF3 /* nanovg.c in Sources */,
 				3652F067245C292B001FABF3 /* packet.c in Sources */,
 				3652F072245C292B001FABF3 /* RtspConnection.c in Sources */,
-				3652F005245C28C6001FABF3 /* Server.cpp in Sources */,
+				3652F005245C28C6001FABF3 /* GameStreamClient.cpp in Sources */,
 				3652EFE8245B3B00001FABF3 /* opengl.cpp in Sources */,
 				3652EFD7245B3B00001FABF3 /* screen.cpp in Sources */,
 				3652EFE1245B3B00001FABF3 /* progressbar.cpp in Sources */,

@@ -1,5 +1,5 @@
 #include <nanogui/nanogui.h>
-#include "Server.hpp"
+#include "GameStreamClient.hpp"
 #pragma once
 
 class AppButton: public nanogui::Button {

@@ -1,6 +1,7 @@
 #include "Application.hpp"
 #include "MainWindow.hpp"
 #include "AddHostWindow.hpp"
+#include "StreamWindow.hpp"
 
 using namespace nanogui;
 

@@ -1,14 +1,14 @@
 #include "ContentWindow.hpp"
-#include "Server.hpp"
+#include "GameStreamClient.hpp"
 #pragma once
 
 class AppListWindow: public ContentWindow {
 public:
-    AppListWindow(Widget *parent, SERVER_DATA data);
+    AppListWindow(Widget *parent, const std::string &address);
     
-    void run_game(int id);
+    void run_game(int app_id);
 
 private:
-    SERVER_DATA m_data;
+    std::string m_address;
     PAPP_LIST m_app_list;
 };

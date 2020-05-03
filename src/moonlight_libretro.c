@@ -42,7 +42,7 @@ static retro_input_state_t input_state_cb;
 static retro_log_printf_t log_cb;
 
 void retro_init(void) {
-    //moonlight_libretro_wrapper_init();
+    moonlight_libretro_wrapper_preinit();
 }
 
 void retro_deinit(void){
@@ -62,7 +62,7 @@ void retro_get_system_info(struct retro_system_info *info) {
     memset(info, 0, sizeof(*info));
     info->library_name     = "Moonlight";
     info->library_version  = "v1";
-    info->need_fullpath    = true;
+    info->need_fullpath    = false;
     info->valid_extensions = NULL; // Anything is fine, we don't care.
 }
 
@@ -119,13 +119,14 @@ void retro_set_video_refresh(retro_video_refresh_t cb) {
 }
 
 static void update_variables(void) {
-    bool updated = false;
-    if (environ_cb(RETRO_ENVIRONMENT_GET_VARIABLE_UPDATE, &updated) && updated) {
-        
-    }
+    // Nothing here...
 }
 
 void retro_run(void) {
+//    bool updated = false;
+//    if (environ_cb(RETRO_ENVIRONMENT_GET_VARIABLE_UPDATE, &updated) && updated)
+//       update_variables();
+    
     moonlight_libretro_wrapper_init(width, height);
     
     // Handle inputs
@@ -180,12 +181,14 @@ static bool retro_init_hw_context(void) {
 #if 1
     hw_render.context_type = RETRO_HW_CONTEXT_OPENGL_CORE;
     hw_render.version_major = 3;
-    hw_render.version_minor = 1;
+    hw_render.version_minor = 2;
 #else
     hw_render.context_type = RETRO_HW_CONTEXT_OPENGL;
 #endif
     hw_render.context_reset = context_reset;
     hw_render.context_destroy = context_destroy;
+    hw_render.depth = true;
+    hw_render.stencil = true;
     hw_render.bottom_left_origin = true;
     
     if (!environ_cb(RETRO_ENVIRONMENT_SET_HW_RENDER, &hw_render))

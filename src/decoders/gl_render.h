@@ -5,6 +5,8 @@
 #define EXTERN
 #endif
 
+#include <stdint.h>
+
 EXTERN void gl_render_init();
 EXTERN void gl_render_setup(int width, int height);
-EXTERN void gl_render_draw(char* image[3]);
+EXTERN void gl_render_draw(uint8_t* image[3]);

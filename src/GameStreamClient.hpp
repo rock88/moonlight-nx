@@ -1,6 +1,7 @@
 #include <string>
 #include <vector>
 #include <functional>
+#include <map>
 
 extern "C" {
     #include "client.h"
@@ -8,6 +9,8 @@ extern "C" {
 }
 
 #pragma once
+
+extern void perform_async(std::function<void()> task);
 
 template <typename T>
 struct Result {
@@ -50,28 +53,36 @@ private:
 
 #define ServerCallback(T) std::function<void(Result<T>)>
 
-class Server {
+class GameStreamClient {
 public:
-    static Server* server() {
-        static Server server;
-        return &server;
+    static GameStreamClient* client() {
+        static GameStreamClient client;
+        return &client;
     }
-
+    
     void set_working_dir(const std::string &dir) {
         m_working_dir = std::string(dir + "/moonlight");
     }
     
-    void add_host(std::string address);
     std::vector<std::string> hosts();
     
+    SERVER_DATA server_data(const std::string &address) {
+        return m_server_data[address];
+    }
+    
     void connect(const std::string &address, ServerCallback(SERVER_DATA) callback);
-    void pair(SERVER_DATA data, const std::string &pin, ServerCallback(bool) callback);
-    void applist(SERVER_DATA data, ServerCallback(PAPP_LIST) callback);
-    void start(SERVER_DATA data, STREAM_CONFIGURATION config, int appId, ServerCallback(STREAM_CONFIGURATION) callback);
+    void pair(const std::string &address, const std::string &pin, ServerCallback(bool) callback);
+    void applist(const std::string &address, ServerCallback(PAPP_LIST) callback);
+    void start(const std::string &address, STREAM_CONFIGURATION config, int app_id, ServerCallback(STREAM_CONFIGURATION) callback);
     
 private:
-    Server();
+    GameStreamClient() {};
+    
+    void add_host(const std::string address);
     
     std::string m_working_dir;
     std::vector<std::string> m_hosts;
+    std::map<std::string, SERVER_DATA> m_server_data;
+    std::map<std::string, PAPP_LIST>  m_app_list;
+    STREAM_CONFIGURATION m_config;
 };
