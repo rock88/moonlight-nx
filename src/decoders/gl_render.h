@@ -1,11 +1,11 @@
 #include <stdio.h>
+#include <stdint.h>
+
 #ifdef __cplusplus
 #define EXTERN extern "C"
 #else
 #define EXTERN
 #endif
-
-#include <stdint.h>
 
 EXTERN void gl_render_init();
 EXTERN void gl_render_setup(int width, int height);

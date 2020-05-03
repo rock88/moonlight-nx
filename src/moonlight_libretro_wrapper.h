@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <stdint.h>
 
 #ifdef __cplusplus
 #define EXTERN extern "C"
