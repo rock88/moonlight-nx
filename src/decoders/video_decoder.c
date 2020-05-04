@@ -31,6 +31,7 @@ static int video_decoder_setup(int videoFormat, int width, int height, int redra
 }
 
 static void video_decoder_cleanup() {
+    //TODO: free ffmpeg_buffer?
     ffmpeg_destroy();
     frame = NULL;
 }

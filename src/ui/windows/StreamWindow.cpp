@@ -40,8 +40,8 @@ StreamWindow::StreamWindow(Widget *parent, const std::string &address, int app_i
     m_config.fps = 30;
     m_config.audioConfiguration = AUDIO_CONFIGURATION_STEREO;
     m_config.packetSize = 1392;
-    m_config.streamingRemotely = 2;
-    m_config.bitrate = 1000;
+    m_config.streamingRemotely = STREAM_CFG_LOCAL;
+    m_config.bitrate = 2000;
     
     m_loader = add<LoadingOverlay>();
     
@@ -99,7 +99,7 @@ void StreamWindow::setup_stream() {
 void StreamWindow::draw(NVGcontext *ctx) {
     nvgSave(ctx);
     
-    gl_render_setup(width(), height());
+    gl_render_setup(m_config.width, m_config.height);
     
     if (frame != NULL) {
         gl_render_draw(frame->data);
