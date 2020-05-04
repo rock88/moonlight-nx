@@ -21,4 +21,9 @@ void Application::pop_window() {
         m_windows.back()->set_visible(true);
         perform_layout();
     }
+    
+    if (m_windows.size() == 1) {
+        auto main = static_cast<MainWindow *>(m_windows.front());
+        main->reload();
+    }
 }

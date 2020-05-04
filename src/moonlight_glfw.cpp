@@ -4,7 +4,9 @@
 #include "glsym/glsym.h"
 #include "Application.hpp"
 #include "GameStreamClient.hpp"
+#include "moonlight_libretro_wrapper.h"
 #include "gl_render.h"
+#include "libretro.h"
 
 int main(int argc, const char * argv[]) {
     glfwInit();
@@ -35,6 +37,15 @@ int main(int argc, const char * argv[]) {
     
     glfwSetScrollCallback(window, [](GLFWwindow *w, double x, double y) {
         nanogui::scroll_callback_event(x, y);
+    });
+    
+    glfwSetKeyCallback(window, [](GLFWwindow *w, int key, int scancode, int action, int mods) {
+        if (GLFW_KEY_A <= key && key <= GLFW_KEY_Z) {
+            keyboard_state[RETROK_a + key - GLFW_KEY_A] = action == GLFW_PRESS;
+        }
+        
+        keyboard_state[RETROK_w] ? game_pad_state.buttonFlags |= UP_FLAG : game_pad_state.buttonFlags &= ~UP_FLAG;
+        keyboard_state[RETROK_s] ? game_pad_state.buttonFlags |= DOWN_FLAG : game_pad_state.buttonFlags &= ~DOWN_FLAG;
     });
     
     int width, height, fb_width, fb_height;

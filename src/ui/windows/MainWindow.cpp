@@ -47,11 +47,7 @@ void MainWindow::reload() {
     auto button = container()->add<Button>("Add Host");
     button->set_fixed_size(Size(100, 100));
     button->set_callback([this] {
-        auto add_host = application()->push_window<AddHostWindow>();
-        add_host->set_host_added_callback([this](auto _) {
-            this->reload();
-            this->application()->pop_window();
-        });
+        application()->push_window<AddHostWindow>();
     });
     
     screen()->perform_layout();

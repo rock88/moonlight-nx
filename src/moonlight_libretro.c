@@ -38,7 +38,7 @@ static retro_audio_sample_t audio_cb;
 retro_audio_sample_batch_t audio_batch_cb;
 static retro_environment_t environ_cb;
 static retro_input_poll_t input_poll_cb;
-static retro_input_state_t input_state_cb;
+retro_input_state_t input_state_cb;
 static retro_log_printf_t log_cb;
 
 void retro_init(void) {
@@ -158,6 +158,8 @@ void retro_run(void) {
     for (int i = 0; i < RETROK_LAST; i++) {
         keyboard_state[i] = input_state_cb(0, RETRO_DEVICE_KEYBOARD, 0, i);
     }
+    
+    moonlight_libretro_wrapper_handle_game_pad();
     
     // Draw
     glBindFramebuffer(RARCH_GL_FRAMEBUFFER, hw_render.get_current_framebuffer());

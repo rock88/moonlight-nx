@@ -57,7 +57,7 @@ AddHostWindow::AddHostWindow(Widget *parent): ContentWindow(parent, "Add Host") 
                 loader->dispose();
                 
                 if (result.isSuccess()) {
-                    m_host_added_callback(result.value());
+                    this->pop();
                 } else {
                     screen()->add<MessageDialog>(MessageDialog::Type::Information, "Error", result.error());
                 }

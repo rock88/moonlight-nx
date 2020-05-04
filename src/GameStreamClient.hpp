@@ -74,6 +74,7 @@ public:
     void pair(const std::string &address, const std::string &pin, ServerCallback(bool) callback);
     void applist(const std::string &address, ServerCallback(PAPP_LIST) callback);
     void start(const std::string &address, STREAM_CONFIGURATION config, int app_id, ServerCallback(STREAM_CONFIGURATION) callback);
+    void quit(const std::string &address, ServerCallback(bool) callback);
     
 private:
     GameStreamClient() {};

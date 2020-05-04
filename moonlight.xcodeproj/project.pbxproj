@@ -560,6 +560,7 @@
 		3652F046245C292B001FABF3 /* src */ = {
 			isa = PBXGroup;
 			children = (
+				3652F04E245C292B001FABF3 /* Limelight.h */,
 				3652F047245C292B001FABF3 /* PlatformThreads.h */,
 				3652F048245C292B001FABF3 /* Input.h */,
 				3652F049245C292B001FABF3 /* ControlStream.c */,
@@ -567,7 +568,6 @@
 				3652F04B245C292B001FABF3 /* Rtsp.h */,
 				3652F04C245C292B001FABF3 /* SimpleStun.c */,
 				3652F04D245C292B001FABF3 /* InputStream.c */,
-				3652F04E245C292B001FABF3 /* Limelight.h */,
 				3652F04F245C292B001FABF3 /* RtpFecQueue.h */,
 				3652F050245C292B001FABF3 /* RtspConnection.c */,
 				3652F051245C292B001FABF3 /* ByteBuffer.h */,
@@ -775,7 +775,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\n\nmake DEBUG=1\n";
+			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\n\n#make DEBUG=1\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 

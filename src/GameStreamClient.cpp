@@ -124,7 +124,7 @@ void GameStreamClient::start(const std::string &address, STREAM_CONFIGURATION co
     
     m_config = config;
     
-    perform_async([this, address, app_id, callback]() {
+    perform_async([this, address, app_id, callback] {
         int status = gs_start_app(&m_server_data[address], &m_config, app_id, false, false, 0);
         
         nanogui::async([this, callback, status] {
@@ -132,6 +132,25 @@ void GameStreamClient::start(const std::string &address, STREAM_CONFIGURATION co
                 callback(Result<STREAM_CONFIGURATION>::success(m_config));
             } else {
                 callback(Result<STREAM_CONFIGURATION>::failure(gs_error != NULL ? gs_error : "Unknown error..."));
+            }
+        });
+    });
+}
+
+void GameStreamClient::quit(const std::string &address, ServerCallback(bool) callback) {
+    if (m_server_data.count(address) == 0) {
+        callback(Result<bool>::failure("Firstly call connect() & pair()..."));
+        return;
+    }
+    
+    perform_async([this, address, callback] {
+        int status = gs_quit_app(&m_server_data[address]);
+        
+        nanogui::async([this, callback, status] {
+            if (status == GS_OK) {
+                callback(Result<bool>::success(true));
+            } else {
+                callback(Result<bool>::failure(gs_error != NULL ? gs_error : "Unknown error..."));
             }
         });
     });
