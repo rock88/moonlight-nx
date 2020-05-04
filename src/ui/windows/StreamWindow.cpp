@@ -144,7 +144,7 @@ bool StreamWindow::mouse_button_event(const nanogui::Vector2i &p, int button, bo
         }
         pressed = down;
         
-        if (pressed && keyboard_state[RETROK_LCTRL]) {
+        if (pressed && (keyboard_state[RETROK_LCTRL] || (game_pad_state.buttonFlags & LB_FLAG))) {
             sent_l_press = true;
             LiSendMouseButtonEvent(BUTTON_ACTION_PRESS, BUTTON_LEFT);
         } else if (sent_l_press) {
@@ -152,7 +152,7 @@ bool StreamWindow::mouse_button_event(const nanogui::Vector2i &p, int button, bo
             LiSendMouseButtonEvent(BUTTON_ACTION_RELEASE, BUTTON_LEFT);
         }
         
-        if (pressed && keyboard_state[RETROK_LALT]) {
+        if (pressed && (keyboard_state[RETROK_LALT] || (game_pad_state.buttonFlags & RB_FLAG))) {
             sent_r_press = true;
             LiSendMouseButtonEvent(BUTTON_ACTION_PRESS, BUTTON_RIGHT);
         } else if (sent_r_press) {

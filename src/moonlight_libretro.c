@@ -141,9 +141,11 @@ void retro_run(void) {
         pointer_y = (p_y + 0x7fff) * height / 0xffff;
     }
     
+    #ifndef __LAKKA_SWITCH__
     if (mouse_x != 0 && mouse_y != 0) {
         moonlight_libretro_wrapper_handle_mouse_move(mouse_x, mouse_y);
     }
+    #endif
     
     if (input_state_cb(0, RETRO_DEVICE_MOUSE, 0, RETRO_DEVICE_ID_MOUSE_LEFT)) {
         if (pointer_x != 0 && pointer_y != 0) {
