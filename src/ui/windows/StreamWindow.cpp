@@ -118,7 +118,7 @@ void StreamWindow::draw(NVGcontext *ctx) {
     }
     
     // TODO: Get out of here...
-    if (keyboard_state[RETROK_q]) {
+    if (keyboard_state[RETROK_q] || ((game_pad_state.buttonFlags & LB_FLAG) && (game_pad_state.buttonFlags & RB_FLAG) && (game_pad_state.buttonFlags & DOWN_FLAG))) {
         async([this] {
             this->terminate();
         });
