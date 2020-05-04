@@ -8,6 +8,7 @@
 #include "moonlight_libretro_wrapper.h"
 #include "libretro.h"
 #include <algorithm>
+#include <memory>
 
 static bool pressed = false, sent_l_press = false, sent_r_press = false;
 static int current_mouse_x = 0, current_mouse_y = 0;
