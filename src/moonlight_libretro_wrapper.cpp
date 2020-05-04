@@ -62,10 +62,13 @@ static void set_game_pad_state(short flag, int16_t state) {
 }
 
 void moonlight_libretro_wrapper_handle_game_pad() {
+    game_pad_state.leftTrigger = 0xFFFF * input_state_cb(0, RETRO_DEVICE_JOYPAD, 0, RETRO_DEVICE_ID_JOYPAD_L2);
+    game_pad_state.rightTrigger = 0xFFFF * input_state_cb(0, RETRO_DEVICE_JOYPAD, 0, RETRO_DEVICE_ID_JOYPAD_R2);
+    
     game_pad_state.leftStickX = input_state_cb(0, RETRO_DEVICE_ANALOG, RETRO_DEVICE_INDEX_ANALOG_LEFT, RETRO_DEVICE_ID_ANALOG_X);
-    game_pad_state.leftStickY = input_state_cb(0, RETRO_DEVICE_ANALOG, RETRO_DEVICE_INDEX_ANALOG_LEFT, RETRO_DEVICE_ID_ANALOG_Y);
+    game_pad_state.leftStickY = 0xFFFF - input_state_cb(0, RETRO_DEVICE_ANALOG, RETRO_DEVICE_INDEX_ANALOG_LEFT, RETRO_DEVICE_ID_ANALOG_Y);
     game_pad_state.rightStickX = input_state_cb(0, RETRO_DEVICE_ANALOG, RETRO_DEVICE_INDEX_ANALOG_RIGHT, RETRO_DEVICE_ID_ANALOG_X);
-    game_pad_state.rightStickY = input_state_cb(0, RETRO_DEVICE_ANALOG, RETRO_DEVICE_INDEX_ANALOG_RIGHT, RETRO_DEVICE_ID_ANALOG_Y);
+    game_pad_state.rightStickY = 0xFFFF - input_state_cb(0, RETRO_DEVICE_ANALOG, RETRO_DEVICE_INDEX_ANALOG_RIGHT, RETRO_DEVICE_ID_ANALOG_Y);
 
     #define GAME_PAD_STATE(KEY) \
         input_state_cb(0, RETRO_DEVICE_JOYPAD, 0, KEY)
@@ -78,16 +81,24 @@ void moonlight_libretro_wrapper_handle_game_pad() {
     set_game_pad_state(BACK_FLAG, GAME_PAD_STATE(RETRO_DEVICE_ID_JOYPAD_SELECT));
     set_game_pad_state(PLAY_FLAG, GAME_PAD_STATE(RETRO_DEVICE_ID_JOYPAD_START));
     
-    set_game_pad_state(A_FLAG, GAME_PAD_STATE(RETRO_DEVICE_ID_JOYPAD_A));
-    set_game_pad_state(B_FLAG, GAME_PAD_STATE(RETRO_DEVICE_ID_JOYPAD_B));
-    set_game_pad_state(X_FLAG, GAME_PAD_STATE(RETRO_DEVICE_ID_JOYPAD_X));
-    set_game_pad_state(Y_FLAG, GAME_PAD_STATE(RETRO_DEVICE_ID_JOYPAD_Y));
-
     set_game_pad_state(LB_FLAG, GAME_PAD_STATE(RETRO_DEVICE_ID_JOYPAD_L));
     set_game_pad_state(RB_FLAG, GAME_PAD_STATE(RETRO_DEVICE_ID_JOYPAD_R));
     
     set_game_pad_state(LS_CLK_FLAG, GAME_PAD_STATE(RETRO_DEVICE_ID_JOYPAD_L3));
     set_game_pad_state(RS_CLK_FLAG, GAME_PAD_STATE(RETRO_DEVICE_ID_JOYPAD_R3));
+    
+    #if 0
+    set_game_pad_state(A_FLAG, GAME_PAD_STATE(RETRO_DEVICE_ID_JOYPAD_A));
+    set_game_pad_state(B_FLAG, GAME_PAD_STATE(RETRO_DEVICE_ID_JOYPAD_B));
+    set_game_pad_state(X_FLAG, GAME_PAD_STATE(RETRO_DEVICE_ID_JOYPAD_X));
+    set_game_pad_state(Y_FLAG, GAME_PAD_STATE(RETRO_DEVICE_ID_JOYPAD_Y));
+    #else
+    // Swap A/B & X/Y
+    set_game_pad_state(A_FLAG, GAME_PAD_STATE(RETRO_DEVICE_ID_JOYPAD_B));
+    set_game_pad_state(B_FLAG, GAME_PAD_STATE(RETRO_DEVICE_ID_JOYPAD_A));
+    set_game_pad_state(X_FLAG, GAME_PAD_STATE(RETRO_DEVICE_ID_JOYPAD_Y));
+    set_game_pad_state(Y_FLAG, GAME_PAD_STATE(RETRO_DEVICE_ID_JOYPAD_X));
+    #endif
 }
 
 void moonlight_libretro_wrapper_draw() {
