@@ -24,6 +24,7 @@ HostButton::HostButton(Widget* parent, const std::string &host): Button(parent, 
             m_is_active = false;
             set_icon(FA_POWER_OFF);
         }
+        screen()->redraw();
     });
 }
 
