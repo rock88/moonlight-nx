@@ -107,11 +107,14 @@ MOONLIGHT_LIBRETRO_CXX_SOURCES = \
 	src/ui/windows/MainWindow.cpp \
 	src/ui/windows/StreamWindow.cpp \
 	src/ui/windows/AppListWindow.cpp \
+	src/ui/windows/SettingsWindow.cpp \
+	src/ui/buttons/AddHostButton.cpp \
 	src/ui/buttons/AppButton.cpp \
 	src/ui/buttons/HostButton.cpp \
 	src/ui/Application.cpp \
 	src/ui/LoadingOverlay.cpp \
 	src/GameStreamClient.cpp \
+	src/Settings.cpp \
 	src/moonlight_libretro_wrapper.cpp
 
 MOONLIGHT_COMMON_C_SOURCES = \

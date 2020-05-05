@@ -4,6 +4,7 @@
 #include "Application.hpp"
 #include "GameStreamClient.hpp"
 #include "Limelight.h"
+#include "Settings.hpp"
 #include <curl/curl.h>
 #include <openssl/ssl.h>
 
@@ -87,18 +88,17 @@ void moonlight_libretro_wrapper_handle_game_pad() {
     set_game_pad_state(LS_CLK_FLAG, GAME_PAD_STATE(RETRO_DEVICE_ID_JOYPAD_L3));
     set_game_pad_state(RS_CLK_FLAG, GAME_PAD_STATE(RETRO_DEVICE_ID_JOYPAD_R3));
     
-    #if 0
-    set_game_pad_state(A_FLAG, GAME_PAD_STATE(RETRO_DEVICE_ID_JOYPAD_A));
-    set_game_pad_state(B_FLAG, GAME_PAD_STATE(RETRO_DEVICE_ID_JOYPAD_B));
-    set_game_pad_state(X_FLAG, GAME_PAD_STATE(RETRO_DEVICE_ID_JOYPAD_X));
-    set_game_pad_state(Y_FLAG, GAME_PAD_STATE(RETRO_DEVICE_ID_JOYPAD_Y));
-    #else
-    // Swap A/B & X/Y
-    set_game_pad_state(A_FLAG, GAME_PAD_STATE(RETRO_DEVICE_ID_JOYPAD_B));
-    set_game_pad_state(B_FLAG, GAME_PAD_STATE(RETRO_DEVICE_ID_JOYPAD_A));
-    set_game_pad_state(X_FLAG, GAME_PAD_STATE(RETRO_DEVICE_ID_JOYPAD_Y));
-    set_game_pad_state(Y_FLAG, GAME_PAD_STATE(RETRO_DEVICE_ID_JOYPAD_X));
-    #endif
+    if (Settings::settings()->swap_ab_xy()) {
+        set_game_pad_state(A_FLAG, GAME_PAD_STATE(RETRO_DEVICE_ID_JOYPAD_B));
+        set_game_pad_state(B_FLAG, GAME_PAD_STATE(RETRO_DEVICE_ID_JOYPAD_A));
+        set_game_pad_state(X_FLAG, GAME_PAD_STATE(RETRO_DEVICE_ID_JOYPAD_Y));
+        set_game_pad_state(Y_FLAG, GAME_PAD_STATE(RETRO_DEVICE_ID_JOYPAD_X));
+    } else {
+        set_game_pad_state(A_FLAG, GAME_PAD_STATE(RETRO_DEVICE_ID_JOYPAD_A));
+        set_game_pad_state(B_FLAG, GAME_PAD_STATE(RETRO_DEVICE_ID_JOYPAD_B));
+        set_game_pad_state(X_FLAG, GAME_PAD_STATE(RETRO_DEVICE_ID_JOYPAD_X));
+        set_game_pad_state(Y_FLAG, GAME_PAD_STATE(RETRO_DEVICE_ID_JOYPAD_Y));
+    }
 }
 
 void moonlight_libretro_wrapper_draw() {

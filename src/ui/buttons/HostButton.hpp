@@ -22,6 +22,7 @@ public:
     
 private:
     std::string m_host;
+    int m_host_status_icon;
     bool m_is_active = false;
     bool m_is_paired = false;
 };

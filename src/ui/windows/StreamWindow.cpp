@@ -1,6 +1,7 @@
 #include "StreamWindow.hpp"
 #include "LoadingOverlay.hpp"
 #include "GameStreamClient.hpp"
+#include "Settings.hpp"
 #include "gl_render.h"
 #include "video_decoder.h"
 #include "audio_decoder.h"
@@ -33,15 +34,15 @@ StreamWindow::StreamWindow(Widget *parent, const std::string &address, int app_i
     
     LiInitializeStreamConfiguration(&m_config);
     
-    int h = 720;
+    int h = Settings::settings()->resolution();
     int w = h * 16 / 9;
     m_config.width = w;
     m_config.height = h;
-    m_config.fps = 30;
+    m_config.fps = Settings::settings()->fps();
     m_config.audioConfiguration = AUDIO_CONFIGURATION_STEREO;
     m_config.packetSize = 1392;
     m_config.streamingRemotely = STREAM_CFG_LOCAL;
-    m_config.bitrate = 2000;
+    m_config.bitrate = Settings::settings()->bitrate();
     
     m_loader = add<LoadingOverlay>();
     
@@ -68,7 +69,7 @@ void StreamWindow::setup_stream() {
             .connectionStarted = NULL,
             .connectionTerminated = [](int errorCode) {
                 if (auto stream = _weak.lock()) {
-                    (*stream)->terminate();
+                    (*stream)->terminate(true);
                 }
             },
             .logMessage = NULL,
@@ -120,7 +121,7 @@ void StreamWindow::draw(NVGcontext *ctx) {
     // TODO: Get out of here...
     if (keyboard_state[RETROK_q] || ((game_pad_state.buttonFlags & LB_FLAG) && (game_pad_state.buttonFlags & RB_FLAG) && (game_pad_state.buttonFlags & DOWN_FLAG))) {
         async([this] {
-            this->terminate();
+            this->terminate(true);
         });
     }
     
@@ -187,13 +188,16 @@ bool StreamWindow::mouse_motion_event(const Vector2i &p, const Vector2i &rel, in
     return true;
 }
 
-void StreamWindow::terminate() {
+void StreamWindow::terminate(bool close_app) {
     if (m_loader) {
         m_loader->dispose();
         m_loader = NULL;
     }
     
-    GameStreamClient::client()->quit(m_address, [](auto _) {});
+    if (close_app) {
+        GameStreamClient::client()->quit(m_address, [](auto _) {});
+    }
+    
     LiStopConnection();
     
     auto app = static_cast<Application *>(screen());

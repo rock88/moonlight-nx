@@ -84,6 +84,9 @@
 		3652F086245C6CFC001FABF3 /* moonlight_libretro.c in Sources */ = {isa = PBXBuildFile; fileRef = 3652F085245C6CFC001FABF3 /* moonlight_libretro.c */; };
 		3652F08A245C8569001FABF3 /* ContentWindow.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3652F089245C8569001FABF3 /* ContentWindow.cpp */; };
 		367CD95A245DE25F00A95738 /* StreamWindow.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 367CD958245DE25F00A95738 /* StreamWindow.cpp */; };
+		36A0C0372461DBA30083289C /* AddHostButton.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 36A0C0352461DBA30083289C /* AddHostButton.cpp */; };
+		36A0C03A2461E4C00083289C /* SettingsWindow.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 36A0C0382461E4C00083289C /* SettingsWindow.cpp */; };
+		36A0C03D2461F03C0083289C /* Settings.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 36A0C03B2461F03C0083289C /* Settings.cpp */; };
 		36A56313245F194000901354 /* gl_render.c in Sources */ = {isa = PBXBuildFile; fileRef = 36A5630C245F194000901354 /* gl_render.c */; };
 		36A56314245F194000901354 /* audio_decoder.c in Sources */ = {isa = PBXBuildFile; fileRef = 36A5630E245F194000901354 /* audio_decoder.c */; };
 		36A56315245F194000901354 /* ffmpeg.c in Sources */ = {isa = PBXBuildFile; fileRef = 36A56310245F194000901354 /* ffmpeg.c */; };
@@ -273,6 +276,12 @@
 		3652F089245C8569001FABF3 /* ContentWindow.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ContentWindow.cpp; sourceTree = "<group>"; };
 		367CD958245DE25F00A95738 /* StreamWindow.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = StreamWindow.cpp; sourceTree = "<group>"; };
 		367CD959245DE25F00A95738 /* StreamWindow.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = StreamWindow.hpp; sourceTree = "<group>"; };
+		36A0C0352461DBA30083289C /* AddHostButton.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = AddHostButton.cpp; sourceTree = "<group>"; };
+		36A0C0362461DBA30083289C /* AddHostButton.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = AddHostButton.hpp; sourceTree = "<group>"; };
+		36A0C0382461E4C00083289C /* SettingsWindow.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = SettingsWindow.cpp; sourceTree = "<group>"; };
+		36A0C0392461E4C00083289C /* SettingsWindow.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = SettingsWindow.hpp; sourceTree = "<group>"; };
+		36A0C03B2461F03C0083289C /* Settings.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Settings.cpp; sourceTree = "<group>"; };
+		36A0C03C2461F03C0083289C /* Settings.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Settings.hpp; sourceTree = "<group>"; };
 		36A5630B245F194000901354 /* gl_render.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = gl_render.h; sourceTree = "<group>"; };
 		36A5630C245F194000901354 /* gl_render.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = gl_render.c; sourceTree = "<group>"; };
 		36A5630D245F194000901354 /* audio_decoder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = audio_decoder.h; sourceTree = "<group>"; };
@@ -322,6 +331,8 @@
 		3602C3BE245DBFF900368900 /* buttons */ = {
 			isa = PBXGroup;
 			children = (
+				36A0C0352461DBA30083289C /* AddHostButton.cpp */,
+				36A0C0362461DBA30083289C /* AddHostButton.hpp */,
 				3602C3B5245D903000368900 /* HostButton.cpp */,
 				3602C3B6245D903000368900 /* HostButton.hpp */,
 				3602C3BB245DBA9100368900 /* AppButton.cpp */,
@@ -343,6 +354,8 @@
 				3602C3B9245DB3C800368900 /* AppListWindow.hpp */,
 				367CD958245DE25F00A95738 /* StreamWindow.cpp */,
 				367CD959245DE25F00A95738 /* StreamWindow.hpp */,
+				36A0C0382461E4C00083289C /* SettingsWindow.cpp */,
+				36A0C0392461E4C00083289C /* SettingsWindow.hpp */,
 			);
 			path = windows;
 			sourceTree = "<group>";
@@ -618,6 +631,8 @@
 				367CD95B245DE6A900A95738 /* decoders */,
 				3652F003245C28C6001FABF3 /* GameStreamClient.cpp */,
 				3652F004245C28C6001FABF3 /* GameStreamClient.hpp */,
+				36A0C03B2461F03C0083289C /* Settings.cpp */,
+				36A0C03C2461F03C0083289C /* Settings.hpp */,
 				3652F084245C6CFC001FABF3 /* libretro.h */,
 				361F8A39245CB44E00A8D9C0 /* moonlight_libretro_wrapper.h */,
 				361F8A38245CB44E00A8D9C0 /* moonlight_libretro_wrapper.cpp */,
@@ -790,6 +805,7 @@
 				3652EFE0245B3B00001FABF3 /* imageview.cpp in Sources */,
 				3652EFDB245B3B00001FABF3 /* texture.cpp in Sources */,
 				361F8A3A245CB44E00A8D9C0 /* moonlight_libretro_wrapper.cpp in Sources */,
+				36A0C03D2461F03C0083289C /* Settings.cpp in Sources */,
 				3652F079245C292B001FABF3 /* RtpReorderQueue.c in Sources */,
 				3652F065245C292B001FABF3 /* list.c in Sources */,
 				36DFE0CD2459FA3F00FC51CE /* nanogui_resources.cpp in Sources */,
@@ -803,6 +819,7 @@
 				3652F07A245C292B001FABF3 /* SdpGenerator.c in Sources */,
 				36A56316245F194000901354 /* video_decoder.c in Sources */,
 				3652EFEB245B3B00001FABF3 /* imagepanel.cpp in Sources */,
+				36A0C0372461DBA30083289C /* AddHostButton.cpp in Sources */,
 				3652F06E245C292B001FABF3 /* rs.c in Sources */,
 				3652EFD1245B3B00001FABF3 /* colorpicker.cpp in Sources */,
 				3652F010245C2919001FABF3 /* xml.c in Sources */,
@@ -829,6 +846,7 @@
 				3652F068245C292B001FABF3 /* unix.c in Sources */,
 				3652F07B245C292B001FABF3 /* RtspParser.c in Sources */,
 				3652EFCF245B3B00001FABF3 /* checkbox.cpp in Sources */,
+				36A0C03A2461E4C00083289C /* SettingsWindow.cpp in Sources */,
 				3652EFD4245B3B00001FABF3 /* shader_gl.cpp in Sources */,
 				3602C3BD245DBA9100368900 /* AppButton.cpp in Sources */,
 				3652EFE7245B3B00001FABF3 /* label.cpp in Sources */,
@@ -946,7 +964,6 @@
 					"-DNANOGUI_USE_OPENGL",
 					"-DNVG_STB_IMAGE_IMPLEMENTATION",
 					"-DNANOGUI_NO_GLFW",
-					"-DNANOGUI_SHOW_WIDGET_BOUNDS",
 					"-D_GNU_SOURCE",
 					"-DHAVE_USLEEP",
 					"-DHAS_SOCKLEN_T",
@@ -1035,7 +1052,6 @@
 					"-DNANOGUI_USE_OPENGL",
 					"-DNVG_STB_IMAGE_IMPLEMENTATION",
 					"-DNANOGUI_NO_GLFW",
-					"-DNANOGUI_SHOW_WIDGET_BOUNDS",
 					"-D_GNU_SOURCE",
 					"-DHAVE_USLEEP",
 					"-DHAS_SOCKLEN_T",

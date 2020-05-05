@@ -1,30 +1,36 @@
 #include "MainWindow.hpp"
 #include "AddHostWindow.hpp"
+#include "AddHostButton.hpp"
 #include "HostButton.hpp"
 #include "GameStreamClient.hpp"
 #include "LoadingOverlay.hpp"
 #include "AppListWindow.hpp"
+#include "SettingsWindow.hpp"
 
 using namespace nanogui;
 
 MainWindow::MainWindow(Widget *parent): ContentWindow(parent, "Moonlight") {
     set_box_layout(Orientation::Horizontal, Alignment::Minimum);
     
+    set_right_title_button(FA_COG, [this] {
+        push<SettingsWindow>();
+    });
+}
+
+void MainWindow::window_appear() {
     reload();
 }
 
 void MainWindow::reload() {
-    for (auto child: container()->children()) {
-        container()->remove_child(child);
-    }
+    clean_container();
     
     for (auto host: GameStreamClient::client()->hosts()) {
         auto button = container()->add<HostButton>(host);
-        button->set_fixed_size(Size(100, 100));
+        button->set_fixed_size(Size(200, 200));
         button->set_callback([this, button] {
             if (button->is_active()) {
                 if (button->is_paired()) {
-                    application()->push_window<AppListWindow>(button->host());
+                    push<AppListWindow>(button->host());
                 } else {
                     auto loader = add<LoadingOverlay>("Pairing... (Enter 0000)");
                     
@@ -44,11 +50,11 @@ void MainWindow::reload() {
         });
     }
     
-    auto button = container()->add<Button>("Add Host");
-    button->set_fixed_size(Size(100, 100));
+    auto button = container()->add<AddHostButton>();
+    button->set_fixed_size(Size(200, 200));
     button->set_callback([this] {
-        application()->push_window<AddHostWindow>();
+        push<AddHostWindow>();
     });
     
-    screen()->perform_layout();
+    perform_layout();
 }

@@ -237,6 +237,9 @@ static int load_server_status(PSERVER_DATA server) {
     if (xml_search(data->memory, data->size, "GsVersion", &server->gsVersion) != GS_OK)
       goto cleanup;
 
+    if (xml_search(data->memory, data->size, "hostname", &server->hostname) != GS_OK)
+      goto cleanup;
+
     if (xml_search(data->memory, data->size, "GfeVersion", (char**) &server->serverInfo.serverInfoGfeVersion) != GS_OK)
       goto cleanup;
 

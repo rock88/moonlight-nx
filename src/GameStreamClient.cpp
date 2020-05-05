@@ -69,7 +69,6 @@ void GameStreamClient::connect(const std::string &address, ServerCallback(SERVER
                 this->add_host(address);
                 callback(Result<SERVER_DATA>::success(m_server_data[address]));
             } else {
-                this->add_host(address);
                 callback(Result<SERVER_DATA>::failure(gs_error != NULL ? gs_error : "Unknown error..."));
             }
         });
