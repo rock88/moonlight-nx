@@ -53,16 +53,15 @@ else ifneq (,$(findstring osx,$(platform)))
 	fpic += -mmacosx-version-min=10.12
 # Lakka Switch
 else ifeq ($(platform), lakka-switch)
-   LAKKA_ROOT := /home/rock88/Documents/Lakka-LibreELEC/build.Lakka-L4T.aarch64-2.2-devel
-   LAKKA_TOOLCHAIN := $(LAKKA_ROOT)/toolchain
-   CC = $(LAKKA_TOOLCHAIN)/bin/aarch64-libreelec-linux-gnueabi-gcc
-   CXX = $(LAKKA_TOOLCHAIN)/bin/aarch64-libreelec-linux-gnueabi-c++
+   TOOLCHAIN := /home/rock88/Documents/Lakka-LibreELEC/build.Lakka-L4T.aarch64-2.2-devel/toolchain
+   CC = $(TOOLCHAIN)/bin/aarch64-libreelec-linux-gnueabi-gcc
+   CXX = $(TOOLCHAIN)/bin/aarch64-libreelec-linux-gnueabi-c++
    TARGET := $(TARGET_NAME)_libretro.so
    DEFINES += -mcpu=cortex-a57+crypto+crc+fp+simd -mabi=lp64 -Wno-psabi -mtune=cortex-a57 \
 	 -march=armv8-a+crypto+crc+fp+simd -fomit-frame-pointer -Wall -pipe -fPIC -pthread \
 	 -D__LAKKA_SWITCH__
-   INCLUDES += -I$(LAKKA_TOOLCHAIN)/aarch64-libreelec-linux-gnueabi/sysroot/usr/include \
-	-I$(LAKKA_TOOLCHAIN)/include -Ithird_party/opus/include
+   INCLUDES += -I$(TOOLCHAIN)/aarch64-libreelec-linux-gnueabi/sysroot/usr/include \
+	-I$(TOOLCHAIN)/include -Ithird_party/opus/include
    LIBS += -lpthread -lGL -luuid -Lthird_party/opus/lib
    SHARED := -shared -Wl,--version-script=link.T -Wl,--no-undefined
 else
@@ -193,7 +192,8 @@ INCLUDES += \
 	-Ithird_party/moonlight-common-c/src \
 	-Ithird_party/moonlight-common-c/enet/include \
 	-Ithird_party/nanogui/include \
-	-Ithird_party/nanogui/ext/nanovg/src
+	-Ithird_party/nanogui/ext/nanovg/src \
+	-Ithird_party/json/single_include/nlohmann
 
 C_SOURCES = $(LIBGAMESTREAM_SOURCES) $(MOONLIGHT_LIBRETRO_C_SOURCES) $(MOONLIGHT_COMMON_C_SOURCES) $(NANOGUI_C_SOURCES)
 CXX_SOURCES = $(MOONLIGHT_LIBRETRO_CXX_SOURCES) $(NANOGUI_CXX_SOURCES)

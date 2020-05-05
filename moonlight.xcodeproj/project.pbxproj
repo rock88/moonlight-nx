@@ -282,6 +282,7 @@
 		36A0C0392461E4C00083289C /* SettingsWindow.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = SettingsWindow.hpp; sourceTree = "<group>"; };
 		36A0C03B2461F03C0083289C /* Settings.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Settings.cpp; sourceTree = "<group>"; };
 		36A0C03C2461F03C0083289C /* Settings.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Settings.hpp; sourceTree = "<group>"; };
+		36A0C03E2461FFF10083289C /* build_opus_lakka_switch.sh */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = build_opus_lakka_switch.sh; sourceTree = "<group>"; };
 		36A5630B245F194000901354 /* gl_render.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = gl_render.h; sourceTree = "<group>"; };
 		36A5630C245F194000901354 /* gl_render.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = gl_render.c; sourceTree = "<group>"; };
 		36A5630D245F194000901354 /* audio_decoder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = audio_decoder.h; sourceTree = "<group>"; };
@@ -646,6 +647,7 @@
 			isa = PBXGroup;
 			children = (
 				3602C3C0245DC7E300368900 /* Makefile */,
+				36A0C03E2461FFF10083289C /* build_opus_lakka_switch.sh */,
 				3652F006245C2918001FABF3 /* libgamestream */,
 				36B406932459F41E005BD903 /* src */,
 				36DFDCF62459F80600FC51CE /* third_party */,
@@ -951,6 +953,7 @@
 					"\"$(SRCROOT)/src/nanogui_resources\"",
 					"\"$(SRCROOT)/third_party/moonlight-common-c/enet/include\"",
 					"\"$(SRCROOT)/third_party/moonlight-common-c/src\"",
+					"\"$(SRCROOT)/third_party/json/single_include/nlohmann\"",
 				);
 				LIBRARY_SEARCH_PATHS = (
 					/usr/local/lib,
@@ -1040,6 +1043,7 @@
 					"\"$(SRCROOT)/src/nanogui_resources\"",
 					"\"$(SRCROOT)/third_party/moonlight-common-c/enet/include\"",
 					"\"$(SRCROOT)/third_party/moonlight-common-c/src\"",
+					"\"$(SRCROOT)/third_party/json/single_include/nlohmann\"",
 				);
 				LIBRARY_SEARCH_PATHS = (
 					/usr/local/lib,
