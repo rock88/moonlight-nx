@@ -2,7 +2,7 @@
 #include "libretro.h"
 #include "gl_render.h"
 #include "Application.hpp"
-#include "GameStreamClient.hpp"
+#include "Settings.hpp"
 #include "Limelight.h"
 #include "Settings.hpp"
 #include <curl/curl.h>
@@ -30,7 +30,7 @@ void moonlight_libretro_wrapper_init(int width, int height) {
     
     moonlight_is_initialized = true;
     
-    GameStreamClient::client()->set_working_dir(working_dir);
+    Settings::settings()->set_working_dir(working_dir);
     
     gl_render_init();
     
@@ -41,7 +41,6 @@ void moonlight_libretro_wrapper_init(int width, int height) {
 }
 
 void moonlight_libretro_wrapper_set_working_dir(const char* dir) {
-    LOG("Set working dir: %s\n", dir);
     std::string str(dir, strlen(dir));
     working_dir = str;
 }

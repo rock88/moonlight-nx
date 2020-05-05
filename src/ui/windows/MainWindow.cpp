@@ -6,6 +6,7 @@
 #include "LoadingOverlay.hpp"
 #include "AppListWindow.hpp"
 #include "SettingsWindow.hpp"
+#include "Settings.hpp"
 
 using namespace nanogui;
 
@@ -24,7 +25,7 @@ void MainWindow::window_appear() {
 void MainWindow::reload() {
     clean_container();
     
-    for (auto host: GameStreamClient::client()->hosts()) {
+    for (auto host: Settings::settings()->hosts()) {
         auto button = container()->add<HostButton>(host);
         button->set_fixed_size(Size(200, 200));
         button->set_callback([this, button] {

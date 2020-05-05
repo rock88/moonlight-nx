@@ -1,4 +1,6 @@
 #include <stdio.h>
+#include <string>
+#include <vector>
 #pragma once
 
 class Settings {
@@ -7,6 +9,21 @@ public:
         static Settings settings;
         return &settings;
     }
+    
+    std::string working_dir() const {
+        return m_working_dir;
+    }
+    
+    void set_working_dir(std::string working_dir) {
+        m_working_dir = working_dir + "/moonlight";
+        load();
+    }
+    
+    std::vector<std::string> hosts() const {
+        return m_hosts;
+    }
+    
+    void add_host(const std::string address);
     
     int resolution() const {
         return m_resolution;
@@ -40,11 +57,14 @@ public:
         m_swap_ab_xy = swap_ab_xy;
     }
     
+    void load();
     void save();
 
 private:
     Settings() {};
     
+    std::string m_working_dir;
+    std::vector<std::string> m_hosts;
     int m_resolution = 720;
     int m_fps = 30;
     int m_bitrate = 500;

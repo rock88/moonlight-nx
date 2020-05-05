@@ -60,12 +60,6 @@ public:
         return &client;
     }
     
-    void set_working_dir(const std::string &dir) {
-        m_working_dir = std::string(dir + "/moonlight");
-    }
-    
-    std::vector<std::string> hosts();
-    
     SERVER_DATA server_data(const std::string &address) {
         return m_server_data[address];
     }
@@ -79,11 +73,7 @@ public:
 private:
     GameStreamClient() {};
     
-    void add_host(const std::string address);
-    
-    std::string m_working_dir;
-    std::vector<std::string> m_hosts;
     std::map<std::string, SERVER_DATA> m_server_data;
-    std::map<std::string, PAPP_LIST>  m_app_list;
+    std::map<std::string, PAPP_LIST> m_app_list;
     STREAM_CONFIGURATION m_config;
 };

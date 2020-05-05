@@ -3,7 +3,8 @@
 #include <GLFW/glfw3.h>
 #include "glsym/glsym.h"
 #include "Application.hpp"
-#include "GameStreamClient.hpp"
+#include "Settings.hpp"
+#include "Limelight.h"
 #include "moonlight_libretro_wrapper.h"
 #include "gl_render.h"
 #include "libretro.h"
@@ -52,7 +53,7 @@ int main(int argc, const char * argv[]) {
     glfwGetWindowSize(window, &width, &height);
     glfwGetFramebufferSize(window, &fb_width, &fb_height);
     
-    GameStreamClient::client()->set_working_dir("/Users/rock88/Documents/RetroArch/system");
+    Settings::settings()->set_working_dir("/Users/rock88/Documents/RetroArch/system");
     
     nanogui::init();
     nanogui::ref<Application> app = new Application(Size(width, height), Size(fb_width, fb_height));
