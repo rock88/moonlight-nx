@@ -1,6 +1,7 @@
 #include "HostButton.hpp"
 #include "GameStreamClient.hpp"
 #include "nanovg.h"
+#include <memory>
 
 using namespace nanogui;
 
@@ -13,7 +14,9 @@ HostButton::HostButton(Widget* parent, const std::string &host): Button(parent, 
     auto label = add<Label>(host);
     label->set_font_size(20);
     
-    GameStreamClient::client()->connect(host, [this, label](auto result) {
+    std::weak_ptr<HostButton *> weak = std::make_shared<HostButton *>(this);
+    
+    GameStreamClient::client()->connect(host, [this, weak, label](auto result) {
         if (result.isSuccess()) {
             label->set_caption(result.value().hostname ?: m_host);
             m_is_active = true;
@@ -24,7 +27,10 @@ HostButton::HostButton(Widget* parent, const std::string &host): Button(parent, 
             m_is_active = false;
             m_host_status_icon = FA_POWER_OFF;
         }
-        screen()->perform_layout();
+        
+        if (auto button = weak.lock()) {
+            (*button)->screen()->perform_layout();
+        }
     });
 }
 
