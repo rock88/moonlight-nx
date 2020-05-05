@@ -12,6 +12,7 @@
 #include <memory>
 
 static bool pressed = false, sent_l_press = false, sent_r_press = false;
+static bool sent_alt_tab = false;
 static int current_mouse_x = 0, current_mouse_y = 0;
 static int start_mouse_x = 0, start_mouse_y = 0;
 
@@ -28,6 +29,7 @@ StreamWindow::StreamWindow(Widget *parent, const std::string &address, int app_i
     m_size = parent->size();
     
     pressed = sent_l_press = sent_r_press = false;
+    sent_alt_tab = false;
     current_mouse_x = width() / 2;
     current_mouse_y = height() / 2;
     start_mouse_x = start_mouse_y = 0;
@@ -124,7 +126,7 @@ void StreamWindow::draw(NVGcontext *ctx) {
             this->terminate(true);
         });
     }
-    
+        
     LiSendControllerEvent(
         game_pad_state.buttonFlags,
         game_pad_state.leftTrigger,
@@ -134,6 +136,17 @@ void StreamWindow::draw(NVGcontext *ctx) {
         game_pad_state.rightStickX,
         game_pad_state.rightStickY
     );
+    
+    // Send Alt + Tab
+    if (sent_alt_tab) {
+        sent_alt_tab = false;
+        LiSendKeyboardEvent(0x09, KEY_ACTION_UP, MODIFIER_ALT);
+    }
+    
+    if ((game_pad_state.buttonFlags & LB_FLAG) && (game_pad_state.buttonFlags & RB_FLAG) && (game_pad_state.buttonFlags & LEFT_FLAG)) {
+        sent_alt_tab = true;
+        LiSendKeyboardEvent(0x09, KEY_ACTION_DOWN, MODIFIER_ALT);
+    }
 }
 
 bool StreamWindow::mouse_button_event(const nanogui::Vector2i &p, int button, bool down, int modifiers) {
