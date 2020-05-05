@@ -14,9 +14,9 @@ HostButton::HostButton(Widget* parent, const std::string &host): Button(parent, 
     auto label = add<Label>(host);
     label->set_font_size(20);
     
-    std::weak_ptr<HostButton *> weak = std::make_shared<HostButton *>(this);
+    inc_ref();
     
-    GameStreamClient::client()->connect(host, [this, weak, label](auto result) {
+    GameStreamClient::client()->connect(host, [this, label](auto result) {
         if (result.isSuccess()) {
             label->set_caption(result.value().hostname ?: m_host);
             m_is_active = true;
@@ -27,10 +27,8 @@ HostButton::HostButton(Widget* parent, const std::string &host): Button(parent, 
             m_is_active = false;
             m_host_status_icon = FA_POWER_OFF;
         }
-        
-        if (auto button = weak.lock()) {
-            (*button)->screen()->perform_layout();
-        }
+        screen()->perform_layout();
+        this->dec_ref();
     });
 }
 
