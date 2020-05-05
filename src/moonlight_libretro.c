@@ -88,7 +88,7 @@ void retro_set_environment(retro_environment_t cb) {
     cb(RETRO_ENVIRONMENT_SET_SUPPORT_NO_GAME, &no_game);
     
 #ifdef __LAKKA_SWITCH__
-    moonlight_libretro_wrapper_set_working_dir("/storage/cores");
+    moonlight_libretro_wrapper_set_working_dir("/storage/system");
 #else
     const char *dir = NULL;
     cb(RETRO_ENVIRONMENT_GET_SYSTEM_DIRECTORY, &dir);
