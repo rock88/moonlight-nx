@@ -4,8 +4,14 @@
 #include <fstream>
 #include <iomanip>
 
-#define TRY_JSON(x) try { \
-    x; } catch (const std::exception &e) {}
+extern "C" {
+    int mkdirtree(const char* directory);
+}
+
+#define JSON_GET_VALUE(to, json, check, type) \
+    if (json.check()) { \
+        to = json.get<type>(); \
+    }
 
 void Settings::add_host(const std::string address) {
     if (std::find(m_hosts.begin(), m_hosts.end(), address) == m_hosts.end()) {
@@ -24,24 +30,30 @@ void Settings::load() {
     nlohmann::json json;
     stream >> json;
     
-    TRY_JSON(m_hosts = json["hosts"].get<std::vector<std::string>>());
-    TRY_JSON(m_resolution = json["settings"]["resolution"].get<int>());
-    TRY_JSON(m_fps = json["settings"]["fps"].get<int>());
-    TRY_JSON(m_bitrate = json["settings"]["bitrate"].get<int>());
-    TRY_JSON(m_swap_ab_xy = json["settings"]["swap_ab_xy"].get<bool>());
+    JSON_GET_VALUE(m_hosts, json["hosts"], is_array, std::vector<std::string>);
+    JSON_GET_VALUE(m_resolution, json["settings"]["resolution"], is_number_integer, int);
+    JSON_GET_VALUE(m_fps, json["settings"]["fps"], is_number_integer, int);
+    JSON_GET_VALUE(m_bitrate, json["settings"]["bitrate"], is_number_integer, int);
+    JSON_GET_VALUE(m_swap_ab_xy, json["settings"]["swap_ab_xy"], is_number_integer, bool);
 }
 
 void Settings::save() {
-    nlohmann::json json;
-    
-    json["hosts"] = m_hosts;
-    json["settings"] = {
-        {"resolution", m_resolution},
-        {"fps", m_fps},
-        {"bitrate", m_bitrate},
-        {"swap_ab_xy", m_swap_ab_xy}
-    };
-    
-    std::ofstream stream(m_working_dir + "/settings.json");
-    stream << std::setw(4) << json << std::endl;
+    try {
+        mkdirtree(m_working_dir.c_str());
+        
+        nlohmann::json json;
+        
+        json["hosts"] = m_hosts;
+        json["settings"] = {
+            {"resolution", m_resolution},
+            {"fps", m_fps},
+            {"bitrate", m_bitrate},
+            {"swap_ab_xy", m_swap_ab_xy}
+        };
+        
+        std::ofstream stream(m_working_dir + "/settings.json");
+        stream << std::setw(4) << json << std::endl;
+    } catch (const std::exception &e) {
+        printf("Save settings error: %s\n", e.what());
+    }
 }

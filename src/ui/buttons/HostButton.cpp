@@ -13,8 +13,7 @@ HostButton::HostButton(Widget* parent, const std::string &host): Button(parent, 
     add<Widget>()->set_fixed_height(170);
     auto label = add<Label>(host);
     label->set_font_size(20);
-    
-    inc_ref();
+    label->inc_ref();
     
     GameStreamClient::client()->connect(host, [this, label](auto result) {
         if (result.isSuccess()) {
@@ -27,8 +26,12 @@ HostButton::HostButton(Widget* parent, const std::string &host): Button(parent, 
             m_is_active = false;
             m_host_status_icon = FA_POWER_OFF;
         }
-        screen()->perform_layout();
-        this->dec_ref();
+        
+        if (m_parent != NULL) {
+            screen()->perform_layout();
+        }
+        
+        label->dec_ref();
     });
 }
 

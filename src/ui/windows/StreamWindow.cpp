@@ -2,19 +2,14 @@
 #include "LoadingOverlay.hpp"
 #include "GameStreamClient.hpp"
 #include "Settings.hpp"
+#include "InputController.hpp"
 #include "gl_render.h"
 #include "video_decoder.h"
 #include "audio_decoder.h"
 #include "nanovg.h"
-#include "moonlight_libretro_wrapper.h"
 #include "libretro.h"
 #include <algorithm>
 #include <memory>
-
-static bool pressed = false, sent_l_press = false, sent_r_press = false;
-static bool sent_alt_tab = false;
-static int current_mouse_x = 0, current_mouse_y = 0;
-static int start_mouse_x = 0, start_mouse_y = 0;
 
 using namespace nanogui;
 
@@ -27,12 +22,6 @@ StreamWindow::StreamWindow(Widget *parent, const std::string &address, int app_i
     m_app_id = app_id;
     m_connection_status_is_poor = false;
     m_size = parent->size();
-    
-    pressed = sent_l_press = sent_r_press = false;
-    sent_alt_tab = false;
-    current_mouse_x = width() / 2;
-    current_mouse_y = height() / 2;
-    start_mouse_x = start_mouse_y = 0;
     
     LiInitializeStreamConfiguration(&m_config);
     
@@ -121,83 +110,22 @@ void StreamWindow::draw(NVGcontext *ctx) {
     }
     
     // TODO: Get out of here...
-    if (keyboard_state[RETROK_q] || ((game_pad_state.buttonFlags & LB_FLAG) && (game_pad_state.buttonFlags & RB_FLAG) && (game_pad_state.buttonFlags & DOWN_FLAG))) {
-        async([this] {
-            this->terminate(true);
-        });
-    }
-        
-    LiSendControllerEvent(
-        game_pad_state.buttonFlags,
-        game_pad_state.leftTrigger,
-        game_pad_state.rightTrigger,
-        game_pad_state.leftStickX,
-        game_pad_state.leftStickY,
-        game_pad_state.rightStickX,
-        game_pad_state.rightStickY
-    );
-    
-    // Send Alt + Tab
-    if (sent_alt_tab) {
-        sent_alt_tab = false;
-        LiSendKeyboardEvent(0x09, KEY_ACTION_UP, MODIFIER_ALT);
+    if (GAME_PAD_COMBO(DOWN_FLAG)) {
+        async([this] { this->terminate(true); });
     }
     
-    if ((game_pad_state.buttonFlags & LB_FLAG) && (game_pad_state.buttonFlags & RB_FLAG) && (game_pad_state.buttonFlags & LEFT_FLAG)) {
-        sent_alt_tab = true;
-        LiSendKeyboardEvent(0x09, KEY_ACTION_DOWN, MODIFIER_ALT);
+    if (GAME_PAD_COMBO(UP_FLAG)) {
+        async([this] { this->terminate(false); });
     }
+    
+    InputController::controller()->send_to_stream();
 }
 
 bool StreamWindow::mouse_button_event(const nanogui::Vector2i &p, int button, bool down, int modifiers) {
-#if defined(__LIBRETRO__) && (defined(__LAKKA_SWITCH__) || defined(__APPLE__))
-    if (button == 0) {
-        if (down && !pressed) {
-            start_mouse_x = p.x();
-            start_mouse_y = p.y();
-        }
-        pressed = down;
-        
-        if (pressed && (keyboard_state[RETROK_LCTRL] || (game_pad_state.buttonFlags & LB_FLAG))) {
-            sent_l_press = true;
-            LiSendMouseButtonEvent(BUTTON_ACTION_PRESS, BUTTON_LEFT);
-        } else if (sent_l_press) {
-            sent_l_press = false;
-            LiSendMouseButtonEvent(BUTTON_ACTION_RELEASE, BUTTON_LEFT);
-        }
-        
-        if (pressed && (keyboard_state[RETROK_LALT] || (game_pad_state.buttonFlags & RB_FLAG))) {
-            sent_r_press = true;
-            LiSendMouseButtonEvent(BUTTON_ACTION_PRESS, BUTTON_RIGHT);
-        } else if (sent_r_press) {
-            sent_r_press = false;
-            LiSendMouseButtonEvent(BUTTON_ACTION_RELEASE, BUTTON_RIGHT);
-        }
-    }
-#else
-    if (button == 0) {
-        LiSendMouseButtonEvent(down ? BUTTON_ACTION_PRESS : BUTTON_ACTION_RELEASE, BUTTON_LEFT);
-    } else if (button == 1) {
-        LiSendMouseButtonEvent(down ? BUTTON_ACTION_PRESS : BUTTON_ACTION_RELEASE, BUTTON_RIGHT);
-    }
-#endif
     return true;
 }
 
 bool StreamWindow::mouse_motion_event(const Vector2i &p, const Vector2i &rel, int button, int modifiers) {
-#if defined(__LIBRETRO__) && (defined(__LAKKA_SWITCH__) || defined(__APPLE__))
-    if (pressed) {
-        current_mouse_x = std::min(std::max(current_mouse_x + p.x() - start_mouse_x, 0), width());
-        current_mouse_y = std::min(std::max(current_mouse_y + p.y() - start_mouse_y, 0), height());
-        
-        LiSendMousePositionEvent(current_mouse_x, current_mouse_y, width(), height());
-        
-        start_mouse_x = p.x();
-        start_mouse_y = p.y();
-    }
-#else
-    LiSendMousePositionEvent(p.x(), p.y(), width(), height());
-#endif
     return true;
 }
 

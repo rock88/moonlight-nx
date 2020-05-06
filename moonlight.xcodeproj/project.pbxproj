@@ -10,7 +10,7 @@
 		3602C3B7245D903000368900 /* HostButton.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3602C3B5245D903000368900 /* HostButton.cpp */; };
 		3602C3BA245DB3C800368900 /* AppListWindow.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3602C3B8245DB3C800368900 /* AppListWindow.cpp */; };
 		3602C3BD245DBA9100368900 /* AppButton.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3602C3BB245DBA9100368900 /* AppButton.cpp */; };
-		361F8A3A245CB44E00A8D9C0 /* moonlight_libretro_wrapper.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 361F8A38245CB44E00A8D9C0 /* moonlight_libretro_wrapper.cpp */; };
+		3603E93C246316400051287D /* InputController.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3603E93A246316400051287D /* InputController.cpp */; };
 		3652EFCD245B3B00001FABF3 /* widget.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3652EF0F245B3B00001FABF3 /* widget.cpp */; };
 		3652EFCE245B3B00001FABF3 /* common.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3652EF10245B3B00001FABF3 /* common.cpp */; };
 		3652EFCF245B3B00001FABF3 /* checkbox.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3652EF11245B3B00001FABF3 /* checkbox.cpp */; };
@@ -81,7 +81,7 @@
 		3652F07F245C292B001FABF3 /* LinkedBlockingQueue.c in Sources */ = {isa = PBXBuildFile; fileRef = 3652F062245C292B001FABF3 /* LinkedBlockingQueue.c */; };
 		3652F080245C292B001FABF3 /* ByteBuffer.c in Sources */ = {isa = PBXBuildFile; fileRef = 3652F064245C292B001FABF3 /* ByteBuffer.c */; };
 		3652F083245C60D1001FABF3 /* LoadingOverlay.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3652F081245C60D1001FABF3 /* LoadingOverlay.cpp */; };
-		3652F086245C6CFC001FABF3 /* moonlight_libretro.c in Sources */ = {isa = PBXBuildFile; fileRef = 3652F085245C6CFC001FABF3 /* moonlight_libretro.c */; };
+		3652F086245C6CFC001FABF3 /* moonlight_libretro.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3652F085245C6CFC001FABF3 /* moonlight_libretro.cpp */; };
 		3652F08A245C8569001FABF3 /* ContentWindow.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3652F089245C8569001FABF3 /* ContentWindow.cpp */; };
 		367CD95A245DE25F00A95738 /* StreamWindow.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 367CD958245DE25F00A95738 /* StreamWindow.cpp */; };
 		36A0C0372461DBA30083289C /* AddHostButton.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 36A0C0352461DBA30083289C /* AddHostButton.cpp */; };
@@ -122,8 +122,8 @@
 		3602C3BB245DBA9100368900 /* AppButton.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = AppButton.cpp; sourceTree = "<group>"; };
 		3602C3BC245DBA9100368900 /* AppButton.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = AppButton.hpp; sourceTree = "<group>"; };
 		3602C3C0245DC7E300368900 /* Makefile */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.make; path = Makefile; sourceTree = "<group>"; };
-		361F8A38245CB44E00A8D9C0 /* moonlight_libretro_wrapper.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = moonlight_libretro_wrapper.cpp; sourceTree = "<group>"; };
-		361F8A39245CB44E00A8D9C0 /* moonlight_libretro_wrapper.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = moonlight_libretro_wrapper.h; sourceTree = "<group>"; };
+		3603E93A246316400051287D /* InputController.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = InputController.cpp; sourceTree = "<group>"; };
+		3603E93B246316400051287D /* InputController.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = InputController.hpp; sourceTree = "<group>"; };
 		3652ECE8245B3AFF001FABF3 /* colorpicker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = colorpicker.h; sourceTree = "<group>"; };
 		3652ECE9245B3AFF001FABF3 /* renderpass.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = renderpass.h; sourceTree = "<group>"; };
 		3652ECEA245B3AFF001FABF3 /* theme.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = theme.h; sourceTree = "<group>"; };
@@ -272,7 +272,7 @@
 		3652F081245C60D1001FABF3 /* LoadingOverlay.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = LoadingOverlay.cpp; sourceTree = "<group>"; };
 		3652F082245C60D1001FABF3 /* LoadingOverlay.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = LoadingOverlay.hpp; sourceTree = "<group>"; };
 		3652F084245C6CFC001FABF3 /* libretro.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = libretro.h; sourceTree = "<group>"; };
-		3652F085245C6CFC001FABF3 /* moonlight_libretro.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = moonlight_libretro.c; sourceTree = "<group>"; };
+		3652F085245C6CFC001FABF3 /* moonlight_libretro.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = moonlight_libretro.cpp; sourceTree = "<group>"; };
 		3652F089245C8569001FABF3 /* ContentWindow.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ContentWindow.cpp; sourceTree = "<group>"; };
 		367CD958245DE25F00A95738 /* StreamWindow.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = StreamWindow.cpp; sourceTree = "<group>"; };
 		367CD959245DE25F00A95738 /* StreamWindow.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = StreamWindow.hpp; sourceTree = "<group>"; };
@@ -634,10 +634,10 @@
 				3652F004245C28C6001FABF3 /* GameStreamClient.hpp */,
 				36A0C03B2461F03C0083289C /* Settings.cpp */,
 				36A0C03C2461F03C0083289C /* Settings.hpp */,
+				3603E93A246316400051287D /* InputController.cpp */,
+				3603E93B246316400051287D /* InputController.hpp */,
 				3652F084245C6CFC001FABF3 /* libretro.h */,
-				361F8A39245CB44E00A8D9C0 /* moonlight_libretro_wrapper.h */,
-				361F8A38245CB44E00A8D9C0 /* moonlight_libretro_wrapper.cpp */,
-				3652F085245C6CFC001FABF3 /* moonlight_libretro.c */,
+				3652F085245C6CFC001FABF3 /* moonlight_libretro.cpp */,
 				36B406962459F460005BD903 /* moonlight_glfw.cpp */,
 			);
 			path = src;
@@ -806,7 +806,6 @@
 				3652F075245C292B001FABF3 /* VideoStream.c in Sources */,
 				3652EFE0245B3B00001FABF3 /* imageview.cpp in Sources */,
 				3652EFDB245B3B00001FABF3 /* texture.cpp in Sources */,
-				361F8A3A245CB44E00A8D9C0 /* moonlight_libretro_wrapper.cpp in Sources */,
 				36A0C03D2461F03C0083289C /* Settings.cpp in Sources */,
 				3652F079245C292B001FABF3 /* RtpReorderQueue.c in Sources */,
 				3652F065245C292B001FABF3 /* list.c in Sources */,
@@ -814,7 +813,7 @@
 				36DFE217245A278700FC51CE /* glsym_gl.c in Sources */,
 				3652F06A245C292B001FABF3 /* protocol.c in Sources */,
 				3652EFFC245B6434001FABF3 /* MainWindow.cpp in Sources */,
-				3652F086245C6CFC001FABF3 /* moonlight_libretro.c in Sources */,
+				3652F086245C6CFC001FABF3 /* moonlight_libretro.cpp in Sources */,
 				3652EFD3245B3B00001FABF3 /* button.cpp in Sources */,
 				3652EFE6245B3B00001FABF3 /* traits.cpp in Sources */,
 				3652EFDE245B3B00001FABF3 /* tabwidget.cpp in Sources */,
@@ -876,6 +875,7 @@
 				3652F011245C2919001FABF3 /* client.c in Sources */,
 				3652EFE4245B3B00001FABF3 /* combobox.cpp in Sources */,
 				36A56313245F194000901354 /* gl_render.c in Sources */,
+				3603E93C246316400051287D /* InputController.cpp in Sources */,
 				3652EFF2245B3B00001FABF3 /* textbox.cpp in Sources */,
 				3652F074245C292B001FABF3 /* Platform.c in Sources */,
 				3652EFCD245B3B00001FABF3 /* widget.cpp in Sources */,

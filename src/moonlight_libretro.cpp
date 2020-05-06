@@ -3,12 +3,16 @@
 #include <stdlib.h>
 #include <string.h>
 #include <math.h>
+#include <curl/curl.h>
+#include <openssl/ssl.h>
 
 #include "glsym/glsym.h"
 #include "libretro.h"
-#include "moonlight_libretro_wrapper.h"
+#include "gl_render.h"
+#include "Application.hpp"
+#include "InputController.hpp"
+#include "Settings.hpp"
 
-#define ARRAY_SIZE(a) (sizeof(a) / sizeof((a)[0]))
 static struct retro_hw_render_callback hw_render;
 
 #if defined(HAVE_PSGL)
@@ -39,10 +43,32 @@ retro_audio_sample_batch_t audio_batch_cb;
 static retro_environment_t environ_cb;
 static retro_input_poll_t input_poll_cb;
 retro_input_state_t input_state_cb;
-static retro_log_printf_t log_cb;
+
+static Application* app;
+static bool moonlight_is_initialized = false;
+
+void moonlight_init(int width, int height) {
+    if (moonlight_is_initialized) {
+        return;
+    }
+    
+    moonlight_is_initialized = true;
+    
+    gl_render_init();
+    
+    nanogui::init();
+    app = new Application(Size(width, height), Size(width, height));
+    
+    nanogui::setup(1.0 / 15.0);
+}
 
 void retro_init(void) {
-    moonlight_libretro_wrapper_preinit();
+    #ifdef __LAKKA_SWITCH__
+    Settings::settings()->set_working_dir("/storage/system");
+    #endif
+    
+    OpenSSL_add_all_algorithms();
+    curl_global_init(CURL_GLOBAL_ALL);
 }
 
 void retro_deinit(void) {
@@ -87,13 +113,11 @@ void retro_set_environment(retro_environment_t cb) {
     bool no_game = true;
     cb(RETRO_ENVIRONMENT_SET_SUPPORT_NO_GAME, &no_game);
     
-#ifdef __LAKKA_SWITCH__
-    moonlight_libretro_wrapper_set_working_dir("/storage/system");
-#else
+#ifndef __LAKKA_SWITCH__
     const char *dir = NULL;
     cb(RETRO_ENVIRONMENT_GET_SYSTEM_DIRECTORY, &dir);
     if (dir != NULL) {
-        moonlight_libretro_wrapper_set_working_dir(dir);
+        Settings::settings()->set_working_dir(dir);
     }
 #endif
 }
@@ -123,51 +147,15 @@ static void update_variables(void) {
 }
 
 void retro_run(void) {
-    moonlight_libretro_wrapper_init(width, height);
+    moonlight_init(width, height);
     
-    // Handle inputs
     input_poll_cb();
+    InputController::controller()->handle_input(width, height);
     
-    double mouse_x = input_state_cb(0, RETRO_DEVICE_MOUSE, 0, RETRO_DEVICE_ID_MOUSE_X);
-    double mouse_y = input_state_cb(0, RETRO_DEVICE_MOUSE, 0, RETRO_DEVICE_ID_MOUSE_Y);
-    double pointer_x = 0;
-    double pointer_y = 0;
-    
-    // TODO: Pointers in MacBook currently work incorrectly...
-    if (input_state_cb(0, RETRO_DEVICE_POINTER, 0, RETRO_DEVICE_ID_POINTER_PRESSED)) {
-        int p_x = input_state_cb(0, RETRO_DEVICE_POINTER, 0, RETRO_DEVICE_ID_POINTER_X);
-        int p_y = input_state_cb(0, RETRO_DEVICE_POINTER, 0, RETRO_DEVICE_ID_POINTER_Y);
-        pointer_x = (p_x + 0x7fff) * width / 0xffff;
-        pointer_y = (p_y + 0x7fff) * height / 0xffff;
-    }
-    
-    #ifndef __LAKKA_SWITCH__
-    if (mouse_x != 0 && mouse_y != 0) {
-        moonlight_libretro_wrapper_handle_mouse_move(mouse_x, mouse_y);
-    }
-    #endif
-    
-    if (input_state_cb(0, RETRO_DEVICE_MOUSE, 0, RETRO_DEVICE_ID_MOUSE_LEFT)) {
-        if (pointer_x != 0 && pointer_y != 0) {
-            moonlight_libretro_wrapper_handle_mouse_move(pointer_x, pointer_y);
-        }
-        
-        moonlight_libretro_wrapper_handle_mouse_button(0, 1, 0);
-    } else if (!input_state_cb(0, RETRO_DEVICE_MOUSE, 0, RETRO_DEVICE_ID_MOUSE_LEFT)) {
-        moonlight_libretro_wrapper_handle_mouse_button(0, 0, 0);
-    }
-    
-    for (int i = 0; i < RETROK_LAST; i++) {
-        keyboard_state[i] = input_state_cb(0, RETRO_DEVICE_KEYBOARD, 0, i);
-    }
-    
-    moonlight_libretro_wrapper_handle_game_pad();
-    
-    // Draw
     glBindFramebuffer(RARCH_GL_FRAMEBUFFER, hw_render.get_current_framebuffer());
     
     glViewport(0, 0, width, height);
-    moonlight_libretro_wrapper_draw();
+    nanogui::draw();
     
     video_cb(RETRO_HW_FRAME_BUFFER_VALID, width, height, 0);
 }

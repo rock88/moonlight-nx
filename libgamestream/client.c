@@ -58,7 +58,7 @@ static EVP_PKEY *privateKey;
 
 const char* gs_error;
 
-static int mkdirtree(const char* directory) {
+int mkdirtree(const char* directory) {
   char buffer[PATH_MAX];
   char* p = buffer;
 

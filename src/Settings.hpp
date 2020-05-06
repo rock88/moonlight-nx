@@ -15,7 +15,7 @@ public:
     }
     
     void set_working_dir(std::string working_dir) {
-        m_working_dir = working_dir + "/moonlight";
+        m_working_dir = std::string(working_dir + "/moonlight");
         load();
     }
     

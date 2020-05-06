@@ -114,7 +114,7 @@ MOONLIGHT_LIBRETRO_CXX_SOURCES = \
 	src/ui/LoadingOverlay.cpp \
 	src/GameStreamClient.cpp \
 	src/Settings.cpp \
-	src/moonlight_libretro_wrapper.cpp
+	src/InputController.cpp
 
 MOONLIGHT_COMMON_C_SOURCES = \
 	third_party/moonlight-common-c/enet/callbacks.c \
