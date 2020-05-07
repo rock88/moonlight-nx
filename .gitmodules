@@ -3,7 +3,7 @@
 	url = https://github.com/moonlight-stream/moonlight-common-c.git
 [submodule "third_party/nanogui"]
 	path = third_party/nanogui
-	url=git@github.com:rock88/nanogui.git
+	url=https://github.com/rock88/nanogui.git
 [submodule "third_party/json"]
 	path = third_party/json
 	url = https://github.com/nlohmann/json.git
