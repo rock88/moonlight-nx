@@ -122,10 +122,16 @@ void InputController::send_to_stream() {
     bool move_mouse = (game_pad_state.leftTrigger == 0) && (game_pad_state.rightTrigger == 0);
     
     if (move_mouse) {
+        static int last_send_mouse_x = 0, last_send_mouse_y = 0;
+        
         mouse_x = std::min(std::max(mouse_x + mouse_state.x - last_mouse_x, 0), m_width);
         mouse_y = std::min(std::max(mouse_y + mouse_state.y - last_mouse_y, 0), m_height);
         
-        LiSendMousePositionEvent(mouse_x, mouse_y, m_width, m_height);
+        if (mouse_x != last_send_mouse_x || mouse_y != last_send_mouse_y) {
+            LiSendMousePositionEvent(mouse_x, mouse_y, m_width, m_height);
+            last_send_mouse_x = mouse_x;
+            last_send_mouse_y = mouse_y;
+        }
     }
     
     last_mouse_x = mouse_state.x;
