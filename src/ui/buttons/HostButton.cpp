@@ -5,19 +5,19 @@
 
 using namespace nanogui;
 
-HostButton::HostButton(Widget* parent, const std::string &host): Button(parent, "") {
-    m_host = host;
+HostButton::HostButton(Widget* parent, const std::string &address): Button(parent, "") {
+    m_address = address;
     m_host_status_icon = FA_QUESTION;
     
     set_layout(new BoxLayout(Orientation::Vertical, Alignment::Middle));
     add<Widget>()->set_fixed_height(170);
-    auto label = add<Label>(host);
-    label->set_font_size(20);
-    label->inc_ref();
+    m_label = add<Label>(m_address);
+    m_label->set_font_size(20);
     
-    GameStreamClient::client()->connect(host, [this, label](auto result) {
+    inc_ref();
+    GameStreamClient::client()->connect(m_address, [this](auto result) {
         if (result.isSuccess()) {
-            label->set_caption(result.value().hostname ?: m_host);
+            m_label->set_caption(result.value().hostname ?: m_address);
             m_is_active = true;
             m_is_paired = result.value().paired;
             m_host_status_icon = m_is_paired ? FA_CHECK : FA_QUESTION;
@@ -27,11 +27,11 @@ HostButton::HostButton(Widget* parent, const std::string &host): Button(parent, 
             m_host_status_icon = FA_POWER_OFF;
         }
         
-        if (m_parent != NULL) {
-            screen()->perform_layout();
+        if (auto scr = screen()) {
+            scr->perform_layout();
         }
         
-        label->dec_ref();
+        dec_ref();
     });
 }
 

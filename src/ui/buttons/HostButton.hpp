@@ -4,10 +4,10 @@
 
 class HostButton: public nanogui::Button {
 public:
-    HostButton(Widget* parent, const std::string &host);
+    HostButton(Widget* parent, const std::string &address);
     
-    std::string host() const {
-        return m_host;
+    std::string address() const {
+        return m_address;
     }
     
     bool is_active() const {
@@ -21,7 +21,8 @@ public:
     void draw(NVGcontext *ctx) override;
     
 private:
-    std::string m_host;
+    std::string m_address;
+    nanogui::Label* m_label;
     int m_host_status_icon;
     bool m_is_active = false;
     bool m_is_paired = false;
