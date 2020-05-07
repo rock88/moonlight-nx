@@ -45,12 +45,8 @@ public:
         screen()->perform_layout();
     }
         
-    void set_box_layout(nanogui::Orientation orientation, nanogui::Alignment alignment = nanogui::Alignment::Middle, int margin = 10, int spacing = 10) {
+    void set_box_layout(nanogui::Orientation orientation, nanogui::Alignment alignment = nanogui::Alignment::Middle, int margin = 30, int spacing = 10) {
         m_container->set_layout(new nanogui::BoxLayout(orientation, alignment, margin, spacing));
-    }
-    
-    void set_group_layout() {
-        m_container->set_layout(new nanogui::GroupLayout());
     }
     
 private:

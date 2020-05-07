@@ -4,10 +4,6 @@
 #include <fstream>
 #include <iomanip>
 
-extern "C" {
-    int mkdirtree(const char* directory);
-}
-
 #define JSON_GET_VALUE(to, json, check, type) \
     if (json.check()) { \
         to = json.get<type>(); \
@@ -39,8 +35,6 @@ void Settings::load() {
 
 void Settings::save() {
     try {
-        mkdirtree(m_working_dir.c_str());
-        
         nlohmann::json json;
         
         json["hosts"] = m_hosts;

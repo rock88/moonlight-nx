@@ -6,7 +6,7 @@ using namespace nanogui;
 
 AddHostWindow::AddHostWindow(Widget *parent): ContentWindow(parent, "Add Host") {
     set_left_pop_button();
-    set_box_layout(Orientation::Vertical, Alignment::Fill, 10, 10);
+    set_box_layout(Orientation::Vertical, Alignment::Fill);
     
     auto text = container()->add<TextBox>("");
     text->set_placeholder("Enter the IP address of your GameStream PC");
@@ -18,11 +18,8 @@ AddHostWindow::AddHostWindow(Widget *parent): ContentWindow(parent, "Add Host") 
     number_buttons_container->set_fixed_width(320);
     number_buttons_container->set_layout(new GridLayout(Orientation::Horizontal, 3, Alignment::Middle, 0, 10));
     
-    auto bg_color = Color(150, 150, 150, 200);
-    
     for (auto key: keys) {
         auto button = number_buttons_container->add<Button>(key);
-        button->set_background_color(bg_color);
         button->set_fixed_size(Size(100, 100));
         button->set_callback([text, button] {
             text->set_value(text->value() + button->caption());
@@ -33,14 +30,12 @@ AddHostWindow::AddHostWindow(Widget *parent): ContentWindow(parent, "Add Host") 
     other_buttons_container->set_layout(new BoxLayout(Orientation::Horizontal, Alignment::Minimum, 0, 10));
     
     auto dot = other_buttons_container->add<Button>(".");
-    dot->set_background_color(bg_color);
     dot->set_fixed_size(Size(100, 100));
     dot->set_callback([text, dot] {
         text->set_value(text->value() + dot->caption());
     });
     
     auto backspace = other_buttons_container->add<Button>("");
-    backspace->set_background_color(bg_color);
     backspace->set_icon(FA_BACKSPACE);
     backspace->set_icon_extra_scale(2);
     backspace->set_fixed_size(Size(210, 100));
@@ -53,7 +48,6 @@ AddHostWindow::AddHostWindow(Widget *parent): ContentWindow(parent, "Add Host") 
     });
     
     auto connect = other_buttons_container->add<Button>("Connect");
-    connect->set_background_color(bg_color);
     connect->set_fixed_size(Size(100, 100));
     connect->set_callback([text, this] {
         if (text->value().size() > 0) {

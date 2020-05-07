@@ -5,7 +5,7 @@ using namespace nanogui;
 
 SettingsWindow::SettingsWindow(nanogui::Widget* parent): ContentWindow(parent, "Settings") {
     set_left_pop_button();
-    container()->set_layout(new GroupLayout(10, 10));
+    container()->set_layout(new GroupLayout(30, 10));
     
     container()->add<Label>("Resolution");
     std::vector<std::string> resolutions = { "720p", "1080p" };
@@ -75,8 +75,10 @@ SettingsWindow::SettingsWindow(nanogui::Widget* parent): ContentWindow(parent, "
     video_bitrate_slider->set_highlight_color(Color(62, 78, 184, 255));
     video_bitrate_slider->set_range({0.5, 30});
     video_bitrate_slider->set_value(float(Settings::settings()->bitrate()) / 1000);
+    video_bitrate_slider->set_highlighted_range({0, float(Settings::settings()->bitrate()) / 1000 / 30});
     video_bitrate_slider->set_fixed_size(Size(200, 30));
-    video_bitrate_slider->set_callback([video_bitrate_label](auto value) {
+    video_bitrate_slider->set_callback([video_bitrate_label, video_bitrate_slider](auto value) {
+        video_bitrate_slider->set_highlighted_range({0, value / 30});
         float bitrate = round(2.0 * value) / 2.0;
         char bitrate_str[100];
         sprintf(bitrate_str, "Video bitrate: %0.1f Mbps", bitrate);

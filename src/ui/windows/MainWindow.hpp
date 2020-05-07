@@ -7,6 +7,8 @@ public:
     
     void window_appear() override;
     
+    void draw(NVGcontext *ctx) override;
+    
 private:
     void reload();
 };

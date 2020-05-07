@@ -7,10 +7,11 @@
 #include "AppListWindow.hpp"
 #include "SettingsWindow.hpp"
 #include "Settings.hpp"
+#include "nanovg.h"
 
 using namespace nanogui;
 
-MainWindow::MainWindow(Widget *parent): ContentWindow(parent, "Moonlight") {
+MainWindow::MainWindow(Widget *parent): ContentWindow(parent, "Moonlight ") {
     set_box_layout(Orientation::Horizontal, Alignment::Minimum);
     
     set_right_title_button(FA_COG, [this] {
@@ -31,11 +32,11 @@ void MainWindow::reload() {
         button->set_callback([this, button] {
             if (button->is_active()) {
                 if (button->is_paired()) {
-                    push<AppListWindow>(button->host());
+                    push<AppListWindow>(button->address());
                 } else {
                     auto loader = add<LoadingOverlay>("Pairing... (Enter 0000)");
                     
-                    GameStreamClient::client()->pair(button->host(), "0000", [this, loader](auto result){
+                    GameStreamClient::client()->pair(button->address(), "0000", [this, loader](auto result){
                         loader->dispose();
                         
                         if (result.isSuccess()) {
@@ -58,4 +59,17 @@ void MainWindow::reload() {
     });
     
     perform_layout();
+}
+
+void MainWindow::draw(NVGcontext *ctx) {
+    ContentWindow::draw(ctx);
+    
+    nvgSave(ctx);
+    
+    nvgFillColor(ctx, Color(255, 255, 255, 200));
+    nvgFontSize(ctx, 20);
+    nvgFontFace(ctx, "sans");
+    nvgText(ctx, width() - 40, height() - 8, MOONLIGHT_LIBRETRO_VERSION, NULL);
+    
+    nvgRestore(ctx);
 }

@@ -3,6 +3,8 @@
 #include <vector>
 #pragma once
 
+#define MOONLIGHT_LIBRETRO_VERSION "1.0.0"
+
 class Settings {
 public:
     static Settings* settings() {
@@ -15,7 +17,7 @@ public:
     }
     
     void set_working_dir(std::string working_dir) {
-        m_working_dir = std::string(working_dir + "/moonlight");
+        m_working_dir = std::string(working_dir);
         load();
     }
     

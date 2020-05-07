@@ -93,7 +93,7 @@ int main(int argc, const char * argv[]) {
     glfwGetWindowSize(window, &width, &height);
     glfwGetFramebufferSize(window, &fb_width, &fb_height);
     
-    Settings::settings()->set_working_dir("/Users/rock88/Documents/RetroArch/system");
+    Settings::settings()->set_working_dir("/Users/rock88/Documents/RetroArch/system/moonlight");
     
     nanogui::init();
     nanogui::ref<Application> app = new Application(Size(width, height), Size(fb_width, fb_height));

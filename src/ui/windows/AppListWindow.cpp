@@ -14,14 +14,13 @@ AppListWindow::AppListWindow(Widget *parent, const std::string &address): Conten
         loader->dispose();
         
         if (result.isSuccess()) {
-            container()->set_layout(new GridLayout(Orientation::Horizontal, 5, Alignment::Minimum, 10, 20));
+            container()->set_layout(new GridLayout(Orientation::Horizontal, 5, Alignment::Minimum, 30, 18));
             
             int currentGame = GameStreamClient::client()->server_data(m_address).currentGame;
             PAPP_LIST app = result.value();
             
             while (app != NULL) {
-                auto button = container()->add<AppButton>(*app, currentGame);
-                button->set_fixed_size(Size(220, 300));
+                auto button = container()->add<AppButton>(m_address, *app, currentGame);
                 button->set_callback([this, app] {
                     run_game(app->id);
                 });

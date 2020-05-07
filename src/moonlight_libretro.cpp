@@ -13,6 +13,10 @@
 #include "InputController.hpp"
 #include "Settings.hpp"
 
+extern "C" {
+    #include "client.h"
+}
+
 static struct retro_hw_render_callback hw_render;
 
 #if defined(HAVE_PSGL)
@@ -64,7 +68,8 @@ void moonlight_init(int width, int height) {
 
 void retro_init(void) {
     #ifdef __LAKKA_SWITCH__
-    Settings::settings()->set_working_dir("/storage/system");
+    mkdirtree("/storage/system/moonlight");
+    Settings::settings()->set_working_dir("/storage/system/moonlight");
     #endif
     
     OpenSSL_add_all_algorithms();
@@ -87,7 +92,7 @@ void retro_set_controller_port_device(unsigned port, unsigned device) {
 void retro_get_system_info(struct retro_system_info *info) {
     memset(info, 0, sizeof(*info));
     info->library_name     = "Moonlight";
-    info->library_version  = "v1";
+    info->library_version  = "v" MOONLIGHT_LIBRETRO_VERSION;
     info->need_fullpath    = false;
     info->valid_extensions = NULL; // Anything is fine, we don't care.
 }

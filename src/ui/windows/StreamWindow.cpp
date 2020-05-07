@@ -112,9 +112,7 @@ void StreamWindow::draw(NVGcontext *ctx) {
     // TODO: Get out of here...
     if (GAME_PAD_COMBO(DOWN_FLAG)) {
         async([this] { this->terminate(true); });
-    }
-    
-    if (GAME_PAD_COMBO(UP_FLAG)) {
+    } else if (GAME_PAD_COMBO(UP_FLAG)) {
         async([this] { this->terminate(false); });
     }
     
@@ -141,6 +139,7 @@ void StreamWindow::terminate(bool close_app) {
     
     LiStopConnection();
     
-    auto app = static_cast<Application *>(screen());
-    app->pop_window();
+    if (auto app = dynamic_cast<Application *>(screen())) {
+        app->pop_window();
+    }
 }

@@ -5,7 +5,7 @@
 using namespace nanogui;
 
 ContentWindow::ContentWindow(Widget *parent, const std::string& title): Widget(parent) {
-    set_layout(new BoxLayout(Orientation::Vertical, Alignment::Middle, 0, 30));
+    set_layout(new BoxLayout(Orientation::Vertical, Alignment::Middle, 0, 0));
     set_size(parent->size());
     set_fixed_size(parent->size());
     
@@ -24,7 +24,7 @@ ContentWindow::ContentWindow(Widget *parent, const std::string& title): Widget(p
     m_right_title_button_container->set_layout(new BoxLayout(Orientation::Horizontal));
     
     m_scroll = add<VScrollPanel>();
-    m_scroll->set_fixed_size(Size(parent->width() - 60, parent->height() - 140));
+    m_scroll->set_fixed_size(Size(parent->width() - 60, parent->height() - 80));
     m_container = m_scroll->add<Widget>();
 }
 
@@ -48,12 +48,6 @@ void ContentWindow::draw(NVGcontext *ctx) {
     NVGpaint gradient = nvgLinearGradient(ctx, 0, 80, 0, 84, Color(0, 0, 0, 100), Color(0, 0, 0, 0));
     nvgFillPaint(ctx, gradient);
     nvgRect(ctx, 0, 80, width(), 4);
-    nvgFill(ctx);
-    
-    // Draw content
-    nvgFillColor(ctx, Color(255, 255, 255, 10));
-    nvgBeginPath(ctx);
-    nvgRect(ctx, m_scroll->position().x(), m_scroll->position().y(), m_scroll->width(), m_scroll->height());
     nvgFill(ctx);
     
     nvgRestore(ctx);
