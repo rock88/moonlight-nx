@@ -6,7 +6,7 @@ In the first place it's development for use on a Nintendo Switch, for use with [
 # Installing (Nintendo Switch)
 1. Install [Lakka](https://lakka-switch.github.io/documentation/installation.html "Lakka")
 2. Download latest Moonlight-libretro [release](https://github.com/rock88/moonlight-libretro/releases "release")
-3. Put moonlight_libretro.so to lakka/storage/cores directory on your SD card.
+3. Put moonlight_libretro.so to lakka/storage/cores directory on your SD card (create dir if it not exist).
 4. Choose Load Core and select moonlight_libretro.so, then push Start Core.
 
 # Controls (Nintendo Switch)
