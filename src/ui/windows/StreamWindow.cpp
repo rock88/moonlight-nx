@@ -41,6 +41,7 @@ StreamWindow::StreamWindow(Widget *parent, const std::string &address, int app_i
             break;
         case H265:
             m_config.supportsHevc = 1;
+            m_config.hevcBitratePercentageMultiplier = 75;
             break;
         default:
             break;

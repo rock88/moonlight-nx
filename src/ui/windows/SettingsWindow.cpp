@@ -103,12 +103,12 @@ SettingsWindow::SettingsWindow(nanogui::Widget* parent): ContentWindow(parent, "
     auto video_bitrate_label = container()->add<Label>(bitrate_str);
     auto video_bitrate_slider = container()->add<Slider>();
     video_bitrate_slider->set_highlight_color(Color(62, 78, 184, 255));
-    video_bitrate_slider->set_range({0.5, 30});
+    video_bitrate_slider->set_range({0.5, 150});
     video_bitrate_slider->set_value(float(Settings::settings()->bitrate()) / 1000);
-    video_bitrate_slider->set_highlighted_range({0, float(Settings::settings()->bitrate()) / 1000 / 30});
-    video_bitrate_slider->set_fixed_size(Size(200, 30));
+    video_bitrate_slider->set_highlighted_range({0, float(Settings::settings()->bitrate()) / 1000 / 150});
+    video_bitrate_slider->set_fixed_size(Size(300, 30));
     video_bitrate_slider->set_callback([video_bitrate_label, video_bitrate_slider](auto value) {
-        video_bitrate_slider->set_highlighted_range({0, value / 30});
+        video_bitrate_slider->set_highlighted_range({0, value / 150});
         float bitrate = round(2.0 * value) / 2.0;
         char bitrate_str[100];
         sprintf(bitrate_str, "Video bitrate: %0.1f Mbps", bitrate);
