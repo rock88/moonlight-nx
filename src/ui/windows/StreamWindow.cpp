@@ -106,7 +106,7 @@ void StreamWindow::draw(NVGcontext *ctx) {
     gl_render_setup(m_config.width, m_config.height);
     
     if (frame != NULL) {
-        gl_render_draw(frame->data);
+        gl_render_draw(frame->data, frame->colorspace, frame->color_range);
     }
     
     nvgRestore(ctx);
