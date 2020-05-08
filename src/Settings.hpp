@@ -3,7 +3,7 @@
 #include <vector>
 #pragma once
 
-#define MOONLIGHT_LIBRETRO_VERSION "1.0.0"
+#define MOONLIGHT_LIBRETRO_VERSION "1.0.1"
 
 class Settings {
 public:
