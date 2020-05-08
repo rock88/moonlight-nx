@@ -31,12 +31,10 @@ void main() {\n\
 }";
 
 static const float vertices[] = {
-    -1.f, 1.f,
     -1.f, -1.f,
     1.f, -1.f,
-    1.f, -1.f,
-    1.f, 1.f,
-    -1.f, 1.f
+    -1.f, 1.f,
+    1.f, 1.f
 };
 
 static const char* texture_mappings[] = { "ymap", "umap", "vmap" };
@@ -115,5 +113,5 @@ void gl_render_draw(uint8_t* image[3]) {
     }
     
     glBindVertexArray(vao);
-    glDrawArrays(GL_TRIANGLES, 0, 6);
+    glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
 }
