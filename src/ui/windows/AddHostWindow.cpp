@@ -35,10 +35,16 @@ AddHostWindow::AddHostWindow(Widget *parent): ContentWindow(parent, "Add Host") 
         text->set_value(text->value() + dot->caption());
     });
     
+    auto zero = other_buttons_container->add<Button>("0");
+    zero->set_fixed_size(Size(100, 100));
+    zero->set_callback([text, zero] {
+        text->set_value(text->value() + zero->caption());
+    });
+    
     auto backspace = other_buttons_container->add<Button>("");
     backspace->set_icon(FA_BACKSPACE);
     backspace->set_icon_extra_scale(2);
-    backspace->set_fixed_size(Size(210, 100));
+    backspace->set_fixed_size(Size(100, 100));
     backspace->set_callback([text] {
         if (text->value().size() > 0) {
             auto value = text->value();
