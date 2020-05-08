@@ -29,6 +29,7 @@ void Settings::load() {
     JSON_GET_VALUE(m_hosts, json["hosts"], is_array, std::vector<std::string>);
     JSON_GET_VALUE(m_resolution, json["settings"]["resolution"], is_number_integer, int);
     JSON_GET_VALUE(m_fps, json["settings"]["fps"], is_number_integer, int);
+    JSON_GET_VALUE(m_video_codec, json["settings"]["video_codec"], is_number_integer, VideoCodec);
     JSON_GET_VALUE(m_bitrate, json["settings"]["bitrate"], is_number_integer, int);
     JSON_GET_VALUE(m_swap_ab_xy, json["settings"]["swap_ab_xy"], is_number_integer, bool);
 }
@@ -41,6 +42,7 @@ void Settings::save() {
         json["settings"] = {
             {"resolution", m_resolution},
             {"fps", m_fps},
+            {"video_codec", m_video_codec},
             {"bitrate", m_bitrate},
             {"swap_ab_xy", m_swap_ab_xy}
         };

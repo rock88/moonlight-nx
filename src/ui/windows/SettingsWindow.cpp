@@ -67,6 +67,36 @@ SettingsWindow::SettingsWindow(nanogui::Widget* parent): ContentWindow(parent, "
             break;
     }
     
+    container()->add<Label>("Video codec");
+    std::vector<std::string> video_codec = { "H.264", "HEVC (H.265)" };
+    auto video_codec_combo_box = container()->add<ComboBox>(video_codec);
+    video_codec_combo_box->set_fixed_width(200);
+    video_codec_combo_box->popup()->set_fixed_width(200);
+    video_codec_combo_box->set_callback([](auto value) {
+        switch (value) {
+            case 0:
+                Settings::settings()->set_video_codec(H264);
+                break;
+            case 1:
+                Settings::settings()->set_video_codec(H265);
+                break;
+            default:
+                break;
+        }
+    });
+    container()->add<Widget>()->set_fixed_height(20);
+    
+    switch (Settings::settings()->video_codec()) {
+        case H264:
+            video_codec_combo_box->set_selected_index(0);
+            break;
+        case H265:
+            video_codec_combo_box->set_selected_index(1);
+            break;
+        default:
+            break;
+    }
+    
     char bitrate_str[100];
     sprintf(bitrate_str, "Video bitrate: %0.1f Mbps", float(Settings::settings()->bitrate()) / 1000);
     

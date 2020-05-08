@@ -5,6 +5,11 @@
 
 #define MOONLIGHT_LIBRETRO_VERSION "1.0.1"
 
+enum VideoCodec: int {
+    H264,
+    H265
+};
+
 class Settings {
 public:
     static Settings* settings() {
@@ -43,6 +48,14 @@ public:
         m_fps = fps;
     }
     
+    VideoCodec video_codec() const {
+        return m_video_codec;
+    }
+    
+    void set_video_codec(VideoCodec video_codec) {
+        m_video_codec = video_codec;
+    }
+    
     int bitrate() const {
         return m_bitrate;
     }
@@ -69,6 +82,7 @@ private:
     std::vector<std::string> m_hosts;
     int m_resolution = 720;
     int m_fps = 30;
+    VideoCodec m_video_codec = H264;
     int m_bitrate = 500;
     bool m_swap_ab_xy = true;
 };

@@ -35,6 +35,17 @@ StreamWindow::StreamWindow(Widget *parent, const std::string &address, int app_i
     m_config.streamingRemotely = STREAM_CFG_LOCAL;
     m_config.bitrate = Settings::settings()->bitrate();
     
+    switch (Settings::settings()->video_codec()) {
+        case H264:
+            m_config.supportsHevc = 0;
+            break;
+        case H265:
+            m_config.supportsHevc = 1;
+            break;
+        default:
+            break;
+    }
+    
     m_loader = add<LoadingOverlay>();
     
     GameStreamClient::client()->start(m_address, m_config, m_app_id, [this](auto result) {
