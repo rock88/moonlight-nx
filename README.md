@@ -16,6 +16,7 @@ In the first place it's development for use on a Nintendo Switch, for use with [
 4. L+R+Down - exit from stream (and close current app)
 5. L+R+Up - exit from stream (without closing current app)
 6. L+R+Left - sent Alt+Enter to host (for enable/disable fullscreen mode)
+7. L+R+Right - ESC key.
 
 # Building (Nintendo Switch)
 1. Firstly needs build toolchain from [Lakka on the Nintendo Switch](https://github.com/lakka-switch/Lakka-LibreELEC)
