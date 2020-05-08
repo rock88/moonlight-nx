@@ -165,6 +165,16 @@ void InputController::send_to_stream() {
         LiSendKeyboardEvent(0x0D, KEY_ACTION_UP, MODIFIER_ALT);
     }
     
+    static bool send_escape = false;
+    
+    if (!send_escape && GAME_PAD_COMBO(RIGHT_FLAG)) {
+        send_escape = true;
+        LiSendKeyboardEvent(0x1B, KEY_ACTION_DOWN, 0);
+    } else if (send_escape && !GAME_PAD_COMBO(RIGHT_FLAG)) {
+        send_escape = false;
+        LiSendKeyboardEvent(0x1B, KEY_ACTION_UP, 0);
+    }
+    
     LiSendControllerEvent(
         game_pad_state.buttonFlags,
         game_pad_state.leftTrigger,
