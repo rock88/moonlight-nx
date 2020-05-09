@@ -1,6 +1,11 @@
 #include "gl_render.h"
 #include "libretro.h"
+
+#ifdef __SWITCH__
+#include <glad/glad.h>
+#else
 #include "glsym.h"
+#endif
 
 static const char *vertex_shader_string = "\
 #version 140\n\

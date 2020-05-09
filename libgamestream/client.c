@@ -30,7 +30,6 @@
 #include <stdbool.h>
 #include <stdio.h>
 #include <string.h>
-#include <uuid/uuid.h>
 #include <openssl/sha.h>
 #include <openssl/aes.h>
 #include <openssl/rand.h>
@@ -57,6 +56,138 @@ static char cert_hex[4096];
 static EVP_PKEY *privateKey;
 
 const char* gs_error;
+
+typedef unsigned char uuid_t[16];
+
+struct uuid {
+    uint32_t    time_low;
+    uint16_t    time_mid;
+    uint16_t    time_hi_and_version;
+    uint16_t    clock_seq;
+    uint8_t    node[6];
+};
+
+uid_t getuid() {
+    return 123;
+}
+
+void __random_get_bytes(void *buf, size_t nbytes) {
+    size_t i, n = nbytes;
+    int fd = 1;
+    int lose_counter = 0;
+    unsigned char *cp = (unsigned char *) buf;
+
+    if (fd >= 0) {
+        while (n > 0) {
+            ssize_t x = rand();
+            if (x <= 0) {
+                if (lose_counter++ > 16)
+                    break;
+                continue;
+            }
+            n -= x;
+            cp += x;
+            lose_counter = 0;
+        }
+    }
+    
+    for (cp = buf, i = 0; i < nbytes; i++)
+        *cp++ ^= (rand() >> 7) & 0xFF;
+}
+
+void __uuid_pack(const struct uuid *uu, uuid_t ptr) {
+    uint32_t    tmp;
+    unsigned char    *out = ptr;
+
+    tmp = uu->time_low;
+    out[3] = (unsigned char) tmp;
+    tmp >>= 8;
+    out[2] = (unsigned char) tmp;
+    tmp >>= 8;
+    out[1] = (unsigned char) tmp;
+    tmp >>= 8;
+    out[0] = (unsigned char) tmp;
+
+    tmp = uu->time_mid;
+    out[5] = (unsigned char) tmp;
+    tmp >>= 8;
+    out[4] = (unsigned char) tmp;
+
+    tmp = uu->time_hi_and_version;
+    out[7] = (unsigned char) tmp;
+    tmp >>= 8;
+    out[6] = (unsigned char) tmp;
+
+    tmp = uu->clock_seq;
+    out[9] = (unsigned char) tmp;
+    tmp >>= 8;
+    out[8] = (unsigned char) tmp;
+
+    memcpy(out+10, uu->node, 6);
+}
+
+void __uuid_unpack(const uuid_t in, struct uuid *uu) {
+    const uint8_t    *ptr = in;
+    uint32_t        tmp;
+
+    tmp = *ptr++;
+    tmp = (tmp << 8) | *ptr++;
+    tmp = (tmp << 8) | *ptr++;
+    tmp = (tmp << 8) | *ptr++;
+    uu->time_low = tmp;
+
+    tmp = *ptr++;
+    tmp = (tmp << 8) | *ptr++;
+    uu->time_mid = tmp;
+
+    tmp = *ptr++;
+    tmp = (tmp << 8) | *ptr++;
+    uu->time_hi_and_version = tmp;
+
+    tmp = *ptr++;
+    tmp = (tmp << 8) | *ptr++;
+    uu->clock_seq = tmp;
+
+    memcpy(uu->node, ptr, 6);
+}
+
+void __uuid_generate_random(uuid_t out) {
+    int nm = 1;
+    int *num = &nm;
+    uuid_t    buf;
+    struct uuid uu;
+    int i, n;
+
+    if (!num || !*num)
+        n = 1;
+    else
+        n = *num;
+
+    for (i = 0; i < n; i++) {
+        __random_get_bytes(buf, sizeof(buf));
+        __uuid_unpack(buf, &uu);
+
+        uu.clock_seq = (uu.clock_seq & 0x3FFF) | 0x8000;
+        uu.time_hi_and_version = (uu.time_hi_and_version & 0x0FFF)
+            | 0x4000;
+        __uuid_pack(&uu, out);
+        out += sizeof(uuid_t);
+    }
+}
+
+void __uuid_unparse(const uuid_t uu, char *out) {
+    struct uuid uuid;
+
+    __uuid_unpack(uu, &uuid);
+    sprintf(out, "%08X-%04X-%04X-%02X%02X-%02X%02X%02X%02X%02X%02X",
+        uuid.time_low, uuid.time_mid, uuid.time_hi_and_version,
+        uuid.clock_seq >> 8, uuid.clock_seq & 0xFF,
+        uuid.node[0], uuid.node[1], uuid.node[2],
+        uuid.node[3], uuid.node[4], uuid.node[5]);
+}
+
+#define uuid_generate_random __uuid_generate_random
+#define uuid_unparse __uuid_unparse
 
 int mkdirtree(const char* directory) {
   char buffer[PATH_MAX];

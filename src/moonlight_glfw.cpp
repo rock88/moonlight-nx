@@ -1,13 +1,19 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <GLFW/glfw3.h>
-#include "glsym/glsym.h"
 #include "Application.hpp"
 #include "Settings.hpp"
 #include "Limelight.h"
 #include "gl_render.h"
 #include "libretro.h"
 #include "InputController.hpp"
+
+#ifdef __SWITCH__
+#include <glad/glad.h>
+#else
+#include "glsym/glsym.h"
+#endif
+
+#include <GLFW/glfw3.h>
 
 extern retro_input_state_t input_state_cb;
 
@@ -63,8 +69,13 @@ int main(int argc, const char * argv[]) {
     
     GLFWwindow* window = glfwCreateWindow(1280, 720, "Test", NULL, NULL);
     glfwMakeContextCurrent(window);
-    rglgen_resolve_symbols(glfwGetProcAddress);
     glfwSwapInterval(1);
+    
+    #ifdef __SWITCH__
+    gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
+    #else
+    rglgen_resolve_symbols(glfwGetProcAddress);
+    #endif
     
     gl_render_init();
     
@@ -93,7 +104,11 @@ int main(int argc, const char * argv[]) {
     glfwGetWindowSize(window, &width, &height);
     glfwGetFramebufferSize(window, &fb_width, &fb_height);
     
+    #ifdef __SWITCH__
+    Settings::settings()->set_working_dir("sdmc:/switch/moonlight");
+    #else
     Settings::settings()->set_working_dir("/Users/rock88/Documents/RetroArch/system/moonlight");
+    #endif
     
     nanogui::init();
     nanogui::ref<Application> app = new Application(Size(width, height), Size(fb_width, fb_height));
