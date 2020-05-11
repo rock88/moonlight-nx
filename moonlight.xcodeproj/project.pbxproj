@@ -83,15 +83,15 @@
 		3652F083245C60D1001FABF3 /* LoadingOverlay.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3652F081245C60D1001FABF3 /* LoadingOverlay.cpp */; };
 		3652F086245C6CFC001FABF3 /* moonlight_libretro.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3652F085245C6CFC001FABF3 /* moonlight_libretro.cpp */; };
 		3652F08A245C8569001FABF3 /* ContentWindow.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3652F089245C8569001FABF3 /* ContentWindow.cpp */; };
+		3661D2F92469D1940060EE24 /* FFmpegVideoDecoder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3661D2F72469D1940060EE24 /* FFmpegVideoDecoder.cpp */; };
+		3661D2FF2469E0C00060EE24 /* GLVideoRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3661D2FD2469E0C00060EE24 /* GLVideoRenderer.cpp */; };
+		3661D3022469EFFA0060EE24 /* RetroAudioRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3661D3002469EFFA0060EE24 /* RetroAudioRenderer.cpp */; };
 		367CD95A245DE25F00A95738 /* StreamWindow.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 367CD958245DE25F00A95738 /* StreamWindow.cpp */; };
 		36A0C0372461DBA30083289C /* AddHostButton.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 36A0C0352461DBA30083289C /* AddHostButton.cpp */; };
 		36A0C03A2461E4C00083289C /* SettingsWindow.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 36A0C0382461E4C00083289C /* SettingsWindow.cpp */; };
 		36A0C03D2461F03C0083289C /* Settings.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 36A0C03B2461F03C0083289C /* Settings.cpp */; };
-		36A56313245F194000901354 /* gl_render.c in Sources */ = {isa = PBXBuildFile; fileRef = 36A5630C245F194000901354 /* gl_render.c */; };
-		36A56314245F194000901354 /* audio_decoder.c in Sources */ = {isa = PBXBuildFile; fileRef = 36A5630E245F194000901354 /* audio_decoder.c */; };
-		36A56315245F194000901354 /* ffmpeg.c in Sources */ = {isa = PBXBuildFile; fileRef = 36A56310245F194000901354 /* ffmpeg.c */; };
-		36A56316245F194000901354 /* video_decoder.c in Sources */ = {isa = PBXBuildFile; fileRef = 36A56312245F194000901354 /* video_decoder.c */; };
 		36B406982459F5CB005BD903 /* moonlight_glfw.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 36B406962459F460005BD903 /* moonlight_glfw.cpp */; };
+		36D3F8442469B5C400CDEF9B /* MoonlightSession.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 36D3F8422469B5C400CDEF9B /* MoonlightSession.cpp */; };
 		36DBDE9A2450BCD50057C8D3 /* CoreFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 36DBDE992450BCD50057C8D3 /* CoreFoundation.framework */; };
 		36DBDE9C2450BCD90057C8D3 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 36DBDE9B2450BCD90057C8D3 /* CoreGraphics.framework */; };
 		36DBDE9E2450BCF00057C8D3 /* IOKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 36DBDE9D2450BCF00057C8D3 /* IOKit.framework */; };
@@ -274,6 +274,14 @@
 		3652F084245C6CFC001FABF3 /* libretro.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = libretro.h; sourceTree = "<group>"; };
 		3652F085245C6CFC001FABF3 /* moonlight_libretro.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = moonlight_libretro.cpp; sourceTree = "<group>"; };
 		3652F089245C8569001FABF3 /* ContentWindow.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ContentWindow.cpp; sourceTree = "<group>"; };
+		3661D2F72469D1940060EE24 /* FFmpegVideoDecoder.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = FFmpegVideoDecoder.cpp; sourceTree = "<group>"; };
+		3661D2F82469D1940060EE24 /* FFmpegVideoDecoder.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = FFmpegVideoDecoder.hpp; sourceTree = "<group>"; };
+		3661D2FA2469D1E50060EE24 /* IFFmpegVideoDecoder.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = IFFmpegVideoDecoder.hpp; sourceTree = "<group>"; };
+		3661D2FC2469DEEF0060EE24 /* IVideoRenderer.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = IVideoRenderer.hpp; sourceTree = "<group>"; };
+		3661D2FD2469E0C00060EE24 /* GLVideoRenderer.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = GLVideoRenderer.cpp; sourceTree = "<group>"; };
+		3661D2FE2469E0C00060EE24 /* GLVideoRenderer.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = GLVideoRenderer.hpp; sourceTree = "<group>"; };
+		3661D3002469EFFA0060EE24 /* RetroAudioRenderer.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = RetroAudioRenderer.cpp; sourceTree = "<group>"; };
+		3661D3012469EFFA0060EE24 /* RetroAudioRenderer.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = RetroAudioRenderer.hpp; sourceTree = "<group>"; };
 		367CD958245DE25F00A95738 /* StreamWindow.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = StreamWindow.cpp; sourceTree = "<group>"; };
 		367CD959245DE25F00A95738 /* StreamWindow.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = StreamWindow.hpp; sourceTree = "<group>"; };
 		36A0C0352461DBA30083289C /* AddHostButton.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = AddHostButton.cpp; sourceTree = "<group>"; };
@@ -283,15 +291,11 @@
 		36A0C03B2461F03C0083289C /* Settings.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Settings.cpp; sourceTree = "<group>"; };
 		36A0C03C2461F03C0083289C /* Settings.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Settings.hpp; sourceTree = "<group>"; };
 		36A0C03E2461FFF10083289C /* build_opus_lakka_switch.sh */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = build_opus_lakka_switch.sh; sourceTree = "<group>"; };
-		36A5630B245F194000901354 /* gl_render.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = gl_render.h; sourceTree = "<group>"; };
-		36A5630C245F194000901354 /* gl_render.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = gl_render.c; sourceTree = "<group>"; };
-		36A5630D245F194000901354 /* audio_decoder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = audio_decoder.h; sourceTree = "<group>"; };
-		36A5630E245F194000901354 /* audio_decoder.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = audio_decoder.c; sourceTree = "<group>"; };
-		36A5630F245F194000901354 /* video_decoder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = video_decoder.h; sourceTree = "<group>"; };
-		36A56310245F194000901354 /* ffmpeg.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = ffmpeg.c; sourceTree = "<group>"; };
-		36A56311245F194000901354 /* ffmpeg.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ffmpeg.h; sourceTree = "<group>"; };
-		36A56312245F194000901354 /* video_decoder.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = video_decoder.c; sourceTree = "<group>"; };
 		36B406962459F460005BD903 /* moonlight_glfw.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = moonlight_glfw.cpp; sourceTree = "<group>"; };
+		36D3F8422469B5C400CDEF9B /* MoonlightSession.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = MoonlightSession.cpp; sourceTree = "<group>"; };
+		36D3F8432469B5C400CDEF9B /* MoonlightSession.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = MoonlightSession.hpp; sourceTree = "<group>"; };
+		36D3F8452469C6BC00CDEF9B /* Log.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Log.h; sourceTree = "<group>"; };
+		36D3F8492469CC2600CDEF9B /* IAudioRenderer.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = IAudioRenderer.hpp; sourceTree = "<group>"; };
 		36DBDE8E2450BB7E0057C8D3 /* moonlight */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = moonlight; sourceTree = BUILT_PRODUCTS_DIR; };
 		36DBDE992450BCD50057C8D3 /* CoreFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreFoundation.framework; path = System/Library/Frameworks/CoreFoundation.framework; sourceTree = SDKROOT; };
 		36DBDE9B2450BCD90057C8D3 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -608,19 +612,14 @@
 			path = src;
 			sourceTree = "<group>";
 		};
-		367CD95B245DE6A900A95738 /* decoders */ = {
+		3661D2FB2469DEDB0060EE24 /* video */ = {
 			isa = PBXGroup;
 			children = (
-				36A56310245F194000901354 /* ffmpeg.c */,
-				36A56311245F194000901354 /* ffmpeg.h */,
-				36A5630C245F194000901354 /* gl_render.c */,
-				36A5630B245F194000901354 /* gl_render.h */,
-				36A56312245F194000901354 /* video_decoder.c */,
-				36A5630F245F194000901354 /* video_decoder.h */,
-				36A5630E245F194000901354 /* audio_decoder.c */,
-				36A5630D245F194000901354 /* audio_decoder.h */,
+				3661D2FD2469E0C00060EE24 /* GLVideoRenderer.cpp */,
+				3661D2FE2469E0C00060EE24 /* GLVideoRenderer.hpp */,
+				3661D2FC2469DEEF0060EE24 /* IVideoRenderer.hpp */,
 			);
-			path = decoders;
+			path = video;
 			sourceTree = "<group>";
 		};
 		36B406932459F41E005BD903 /* src */ = {
@@ -629,18 +628,51 @@
 				36DFE0D5245A1FEC00FC51CE /* glsym */,
 				36DFE0CA2459FA3F00FC51CE /* nanogui_resources */,
 				36DFDCF12459F79000FC51CE /* ui */,
-				367CD95B245DE6A900A95738 /* decoders */,
+				36D3F8462469C8DD00CDEF9B /* streaming */,
 				3652F003245C28C6001FABF3 /* GameStreamClient.cpp */,
 				3652F004245C28C6001FABF3 /* GameStreamClient.hpp */,
 				36A0C03B2461F03C0083289C /* Settings.cpp */,
 				36A0C03C2461F03C0083289C /* Settings.hpp */,
 				3603E93A246316400051287D /* InputController.cpp */,
 				3603E93B246316400051287D /* InputController.hpp */,
+				36D3F8452469C6BC00CDEF9B /* Log.h */,
 				3652F084245C6CFC001FABF3 /* libretro.h */,
 				3652F085245C6CFC001FABF3 /* moonlight_libretro.cpp */,
 				36B406962459F460005BD903 /* moonlight_glfw.cpp */,
 			);
 			path = src;
+			sourceTree = "<group>";
+		};
+		36D3F8462469C8DD00CDEF9B /* streaming */ = {
+			isa = PBXGroup;
+			children = (
+				36D3F8482469CC0400CDEF9B /* audio */,
+				3661D2FB2469DEDB0060EE24 /* video */,
+				36D3F8472469CB8800CDEF9B /* ffmpeg */,
+				36D3F8422469B5C400CDEF9B /* MoonlightSession.cpp */,
+				36D3F8432469B5C400CDEF9B /* MoonlightSession.hpp */,
+			);
+			path = streaming;
+			sourceTree = "<group>";
+		};
+		36D3F8472469CB8800CDEF9B /* ffmpeg */ = {
+			isa = PBXGroup;
+			children = (
+				3661D2F72469D1940060EE24 /* FFmpegVideoDecoder.cpp */,
+				3661D2F82469D1940060EE24 /* FFmpegVideoDecoder.hpp */,
+				3661D2FA2469D1E50060EE24 /* IFFmpegVideoDecoder.hpp */,
+			);
+			path = ffmpeg;
+			sourceTree = "<group>";
+		};
+		36D3F8482469CC0400CDEF9B /* audio */ = {
+			isa = PBXGroup;
+			children = (
+				3661D3002469EFFA0060EE24 /* RetroAudioRenderer.cpp */,
+				3661D3012469EFFA0060EE24 /* RetroAudioRenderer.hpp */,
+				36D3F8492469CC2600CDEF9B /* IAudioRenderer.hpp */,
+			);
+			path = audio;
 			sourceTree = "<group>";
 		};
 		36DBDE852450BB7E0057C8D3 = {
@@ -801,7 +833,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				36A56315245F194000901354 /* ffmpeg.c in Sources */,
+				3661D3022469EFFA0060EE24 /* RetroAudioRenderer.cpp in Sources */,
 				36DFE218245A278900FC51CE /* rglgen.c in Sources */,
 				3652F075245C292B001FABF3 /* VideoStream.c in Sources */,
 				3652EFE0245B3B00001FABF3 /* imageview.cpp in Sources */,
@@ -818,7 +850,6 @@
 				3652EFE6245B3B00001FABF3 /* traits.cpp in Sources */,
 				3652EFDE245B3B00001FABF3 /* tabwidget.cpp in Sources */,
 				3652F07A245C292B001FABF3 /* SdpGenerator.c in Sources */,
-				36A56316245F194000901354 /* video_decoder.c in Sources */,
 				3652EFEB245B3B00001FABF3 /* imagepanel.cpp in Sources */,
 				36A0C0372461DBA30083289C /* AddHostButton.cpp in Sources */,
 				3652F06E245C292B001FABF3 /* rs.c in Sources */,
@@ -836,9 +867,9 @@
 				3652F083245C60D1001FABF3 /* LoadingOverlay.cpp in Sources */,
 				3652EFF6245B3CF2001FABF3 /* nanovg.c in Sources */,
 				3652F067245C292B001FABF3 /* packet.c in Sources */,
+				3661D2F92469D1940060EE24 /* FFmpegVideoDecoder.cpp in Sources */,
 				3652F072245C292B001FABF3 /* RtspConnection.c in Sources */,
 				3652F005245C28C6001FABF3 /* GameStreamClient.cpp in Sources */,
-				36A56314245F194000901354 /* audio_decoder.c in Sources */,
 				3652EFE8245B3B00001FABF3 /* opengl.cpp in Sources */,
 				3652EFD7245B3B00001FABF3 /* screen.cpp in Sources */,
 				3652EFE1245B3B00001FABF3 /* progressbar.cpp in Sources */,
@@ -850,6 +881,7 @@
 				36A0C03A2461E4C00083289C /* SettingsWindow.cpp in Sources */,
 				3652EFD4245B3B00001FABF3 /* shader_gl.cpp in Sources */,
 				3602C3BD245DBA9100368900 /* AppButton.cpp in Sources */,
+				36D3F8442469B5C400CDEF9B /* MoonlightSession.cpp in Sources */,
 				3652EFE7245B3B00001FABF3 /* label.cpp in Sources */,
 				3652EFDA245B3B00001FABF3 /* layout.cpp in Sources */,
 				3652F080245C292B001FABF3 /* ByteBuffer.c in Sources */,
@@ -874,10 +906,10 @@
 				3652F076245C292B001FABF3 /* Connection.c in Sources */,
 				3652F011245C2919001FABF3 /* client.c in Sources */,
 				3652EFE4245B3B00001FABF3 /* combobox.cpp in Sources */,
-				36A56313245F194000901354 /* gl_render.c in Sources */,
 				3603E93C246316400051287D /* InputController.cpp in Sources */,
 				3652EFF2245B3B00001FABF3 /* textbox.cpp in Sources */,
 				3652F074245C292B001FABF3 /* Platform.c in Sources */,
+				3661D2FF2469E0C00060EE24 /* GLVideoRenderer.cpp in Sources */,
 				3652EFCD245B3B00001FABF3 /* widget.cpp in Sources */,
 				3652F073245C292B001FABF3 /* PlatformSockets.c in Sources */,
 				3652F08A245C8569001FABF3 /* ContentWindow.cpp in Sources */,

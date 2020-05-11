@@ -13,13 +13,34 @@
 #include <unistd.h>
 
 static std::mutex m_async_mutex;
+static std::vector<std::function<void()>> m_tasks;
 
-void perform_async(std::function<void()> task) {
-    auto thread = std::thread([task](){
-        std::lock_guard<std::mutex> guard(m_async_mutex);
-        task();
+static void task_loop() {
+    auto thread = std::thread([](){
+        while (1) {
+            std::vector<std::function<void()>> m_tasks_copy; {
+                std::lock_guard<std::mutex> guard(m_async_mutex);
+                m_tasks_copy = m_tasks;
+                m_tasks.clear();
+            }
+            
+            for (auto task: m_tasks_copy) {
+                task();
+            }
+            
+            usleep(500'000);
+        }
     });
     thread.detach();
+}
+
+void perform_async(std::function<void()> task) {
+    std::lock_guard<std::mutex> guard(m_async_mutex);
+    m_tasks.push_back(task);
+}
+
+GameStreamClient::GameStreamClient() {
+    task_loop();
 }
 
 void GameStreamClient::connect(const std::string &address, ServerCallback<SERVER_DATA> callback) {

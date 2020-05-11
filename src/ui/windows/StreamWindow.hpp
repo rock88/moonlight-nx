@@ -1,13 +1,13 @@
 #include "ContentWindow.hpp"
 #include "GameStreamClient.hpp"
 #include "LoadingOverlay.hpp"
+#include "MoonlightSession.hpp"
 #pragma once
 
 class StreamWindow: public nanogui::Widget {
 public:
     StreamWindow(Widget *parent, const std::string &address, int app_id);
-    
-    void setup_stream();
+    ~StreamWindow();
     
     void draw(NVGcontext *ctx) override;
     
@@ -17,9 +17,7 @@ public:
     void terminate(bool close_app);
     
 private:
-    std::string m_address;
-    int m_app_id;
-    STREAM_CONFIGURATION m_config;
+    MoonlightSession* m_session;
     LoadingOverlay* m_loader;
-    bool m_connection_status_is_poor;
+    bool m_connection_status_is_poor = false;
 };

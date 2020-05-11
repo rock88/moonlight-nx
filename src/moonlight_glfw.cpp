@@ -5,7 +5,6 @@
 #include "Application.hpp"
 #include "Settings.hpp"
 #include "Limelight.h"
-#include "gl_render.h"
 #include "libretro.h"
 #include "InputController.hpp"
 
@@ -65,8 +64,6 @@ int main(int argc, const char * argv[]) {
     glfwMakeContextCurrent(window);
     rglgen_resolve_symbols(glfwGetProcAddress);
     glfwSwapInterval(1);
-    
-    gl_render_init();
     
     glfwSetCursorPosCallback(window, [](GLFWwindow *w, double x, double y) {
         mouse_x = x;

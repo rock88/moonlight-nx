@@ -49,10 +49,7 @@ private:
     bool _isSuccess = false;
 };
 
-#define LOG(fmt, ...) fprintf(stderr, fmt, __VA_ARGS__);
-
 template<class T> using ServerCallback = const std::function<void(Result<T>)>;
-//#define ServerCallback(T) std::function<void(Result<T>)>
 
 class GameStreamClient {
 public:
@@ -73,7 +70,7 @@ public:
     void quit(const std::string &address, ServerCallback<bool> callback);
     
 private:
-    GameStreamClient() {};
+    GameStreamClient();
     
     std::map<std::string, SERVER_DATA> m_server_data;
     std::map<std::string, PAPP_LIST> m_app_list;

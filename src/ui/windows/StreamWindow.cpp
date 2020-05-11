@@ -1,113 +1,52 @@
 #include "StreamWindow.hpp"
 #include "LoadingOverlay.hpp"
-#include "GameStreamClient.hpp"
-#include "Settings.hpp"
 #include "InputController.hpp"
-#include "gl_render.h"
-#include "video_decoder.h"
-#include "audio_decoder.h"
+#include "FFmpegVideoDecoder.hpp"
+#include "GLVideoRenderer.hpp"
+#include "RetroAudioRenderer.hpp"
 #include "nanovg.h"
-#include "libretro.h"
 #include <algorithm>
 #include <memory>
 
 using namespace nanogui;
 
-static std::weak_ptr<StreamWindow *> _weak;
-
 StreamWindow::StreamWindow(Widget *parent, const std::string &address, int app_id): Widget(parent) {
-    _weak = std::make_shared<StreamWindow *>(this);
-    
-    m_address = address;
-    m_app_id = app_id;
-    m_connection_status_is_poor = false;
     m_size = parent->size();
+    m_session = new MoonlightSession(address, app_id);
+    m_session->set_video_decoder(new FFmpegVideoDecoder());
+    m_session->set_video_renderer(new GLVideoRenderer());
     
-    LiInitializeStreamConfiguration(&m_config);
-    
-    int h = Settings::settings()->resolution();
-    int w = h * 16 / 9;
-    m_config.width = w;
-    m_config.height = h;
-    m_config.fps = Settings::settings()->fps();
-    m_config.audioConfiguration = AUDIO_CONFIGURATION_STEREO;
-    m_config.packetSize = 1392;
-    m_config.streamingRemotely = STREAM_CFG_LOCAL;
-    m_config.bitrate = Settings::settings()->bitrate();
-    
-    switch (Settings::settings()->video_codec()) {
-        case H264:
-            m_config.supportsHevc = 0;
-            break;
-        case H265:
-            m_config.supportsHevc = 1;
-            m_config.hevcBitratePercentageMultiplier = 75;
-            break;
-        default:
-            break;
-    }
+    #ifdef __LIBRETRO__
+    m_session->set_audio_renderer(new RetroAudioRenderer());
+    #endif
     
     m_loader = add<LoadingOverlay>();
     
-    GameStreamClient::client()->start(m_address, m_config, m_app_id, [this](auto result) {
-        if (result.isSuccess()) {
-            m_config = result.value();
-            setup_stream();
+    m_session->start([this](auto result) {
+        if (result) {
+            if (m_loader) {
+                m_loader->dispose();
+                m_loader = NULL;
+            }
         } else {
-            m_loader->dispose();
-            screen()->add<MessageDialog>(MessageDialog::Type::Information, "Error", result.error());
-            
             auto app = static_cast<Application *>(screen());
             app->pop_window();
         }
     });
 }
 
-void StreamWindow::setup_stream() {
-    perform_async([this] {
-        CONNECTION_LISTENER_CALLBACKS connection_listener_callbacks = {
-            .stageStarting = NULL,
-            .stageComplete = NULL,
-            .stageFailed = NULL,
-            .connectionStarted = NULL,
-            .connectionTerminated = [](int errorCode) {
-                if (auto stream = _weak.lock()) {
-                    (*stream)->terminate(true);
-                }
-            },
-            .logMessage = NULL,
-            .rumble = NULL,
-            .connectionStatusUpdate = [](int status) {
-                if (auto stream = _weak.lock()) {
-                    if (status == CONN_STATUS_POOR) {
-                        (*stream)->m_connection_status_is_poor = true;
-                    } else {
-                        (*stream)->m_connection_status_is_poor = false;
-                    }
-                }
-            }
-        };
-        
-        auto m_data = GameStreamClient::client()->server_data(m_address);
-        LiStartConnection(&m_data.serverInfo, &m_config, &connection_listener_callbacks, &video_decoder_callbacks, &audio_decoder_callbacks, NULL, 0, NULL, 0);
-        
-        async([this] {
-            if (m_loader) {
-                m_loader->dispose();
-                m_loader = NULL;
-            }
-        });
-    });
+StreamWindow::~StreamWindow() {
+    delete m_session;
 }
 
 void StreamWindow::draw(NVGcontext *ctx) {
+    if (!m_session->is_active()) {
+        async([this] { this->terminate(false); });
+    }
+    
     nvgSave(ctx);
     
-    gl_render_setup(m_config.width, m_config.height);
-    
-    if (frame != NULL) {
-        gl_render_draw(frame->data, frame->colorspace, frame->color_range);
-    }
+    m_session->draw();
     
     nvgRestore(ctx);
     
@@ -145,11 +84,7 @@ void StreamWindow::terminate(bool close_app) {
         m_loader = NULL;
     }
     
-    if (close_app) {
-        GameStreamClient::client()->quit(m_address, [](auto _) {});
-    }
-    
-    LiStopConnection();
+    m_session->stop(close_app);
     
     if (auto app = dynamic_cast<Application *>(screen())) {
         app->pop_window();

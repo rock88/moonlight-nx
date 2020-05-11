@@ -8,7 +8,6 @@
 
 #include "glsym/glsym.h"
 #include "libretro.h"
-#include "gl_render.h"
 #include "Application.hpp"
 #include "InputController.hpp"
 #include "Settings.hpp"
@@ -57,8 +56,6 @@ void moonlight_init(int width, int height) {
     }
     
     moonlight_is_initialized = true;
-    
-    gl_render_init();
     
     nanogui::init();
     app = new Application(Size(width, height), Size(width, height));
