@@ -28,6 +28,8 @@
 #include <openssl/engine.h>
 #endif
 
+#define LOG printf("%s:%i\n", __FUNCTION__, __LINE__);
+
 static const int NUM_BITS = 2048;
 static const int SERIAL = 0;
 static const int NUM_YEARS = 10;
@@ -36,27 +38,28 @@ int mkcert(X509 **x509p, EVP_PKEY **pkeyp, int bits, int serial, int years);
 int add_ext(X509 *cert, int nid, char *value);
 
 CERT_KEY_PAIR mkcert_generate() {
+    LOG
     BIO *bio_err;
     X509 *x509 = NULL;
     EVP_PKEY *pkey = NULL;
     PKCS12 *p12 = NULL;
-
+LOG
     CRYPTO_mem_ctrl(CRYPTO_MEM_CHECK_ON);
     bio_err = BIO_new_fp(stderr, BIO_NOCLOSE);
-
+LOG
     OpenSSL_add_all_algorithms();
-
+LOG
     mkcert(&x509, &pkey, NUM_BITS, SERIAL, NUM_YEARS);
-
+LOG
     p12 = PKCS12_create("limelight", "GameStream", pkey, x509, NULL, 0, 0, 0, 0, 0);
-
+LOG
 #ifndef OPENSSL_NO_ENGINE
     ENGINE_cleanup();
 #endif
     CRYPTO_cleanup_all_ex_data();
-
+LOG
     BIO_free(bio_err);
-
+LOG
     return (CERT_KEY_PAIR) {x509, pkey, p12};
 }
 
@@ -86,7 +89,7 @@ int mkcert(X509 **x509p, EVP_PKEY **pkeyp, int bits, int serial, int years) {
     EVP_PKEY *pk;
     RSA *rsa;
     X509_NAME *name = NULL;
-
+LOG
     if (*pkeyp == NULL) {
         if ((pk=EVP_PKEY_new()) == NULL) {
             abort();
@@ -95,7 +98,7 @@ int mkcert(X509 **x509p, EVP_PKEY **pkeyp, int bits, int serial, int years) {
     } else {
         pk = *pkeyp;
     }
-
+LOG
     if (*x509p == NULL) {
         if ((x = X509_new()) == NULL) {
             goto err;
@@ -103,57 +106,58 @@ int mkcert(X509 **x509p, EVP_PKEY **pkeyp, int bits, int serial, int years) {
     } else {
         x = *x509p;
     }
-
+LOG
     if ((rsa = RSA_new()) == NULL)
         goto err;
-
+LOG
     BIGNUM* bne = BN_new();
     if (bne == NULL) {
         abort();
         goto err;
     }
-
-    BN_set_word(bne, RSA_F4);
+LOG
+    BN_set_word(bne, RSA_F4);LOG
     if (RSA_generate_key_ex(rsa, bits, bne, NULL) == 0) {
+        LOG
         abort();
         goto err;
     }
-
+LOG
     if (!EVP_PKEY_assign_RSA(pk, rsa)) {
         abort();
         goto err;
     }
-
-    X509_set_version(x, 2);
-    ASN1_INTEGER_set(X509_get_serialNumber(x), serial);
-    X509_gmtime_adj(X509_get_notBefore(x), 0);
-    X509_gmtime_adj(X509_get_notAfter(x), (long)60*60*24*365*years);
-    X509_set_pubkey(x, pk);
-
+LOG
+    X509_set_version(x, 2);LOG
+    ASN1_INTEGER_set(X509_get_serialNumber(x), serial);LOG
+    X509_gmtime_adj(X509_get_notBefore(x), 0);LOG
+    X509_gmtime_adj(X509_get_notAfter(x), (long)60*60*24*365*years);LOG
+    X509_set_pubkey(x, pk);LOG
+LOG
     name = X509_get_subject_name(x);
-
+LOG
     /* This function creates and adds the entry, working out the
      * correct string type and performing checks on its length.
      */
     X509_NAME_add_entry_by_txt(name,"CN", MBSTRING_ASC, (unsigned char*)"NVIDIA GameStream Client", -1, -1, 0);
-
+LOG
     /* Its self signed so set the issuer name to be the same as the
      * subject.
      */
     X509_set_issuer_name(x, name);
-
+LOG
     /* Add various extensions: standard extensions */
     add_ext(x, NID_key_usage, "critical,digitalSignature,keyEncipherment");
-
+LOG
     add_ext(x, NID_subject_key_identifier, "hash");
-
+LOG
     if (!X509_sign(x, pk, EVP_sha256())) {
         goto err;
     }
-
+LOG
     *x509p = x;
     *pkeyp = pk;
-
+LOG
     return(1);
 err:
     return(0);
@@ -165,22 +169,22 @@ err:
 
 int add_ext(X509 *cert, int nid, char *value)
 {
-    X509_EXTENSION *ex;
+    X509_EXTENSION *ex;LOG
     X509V3_CTX ctx;
     /* This sets the 'context' of the extensions. */
     /* No configuration database */
-    X509V3_set_ctx_nodb(&ctx);
+    X509V3_set_ctx_nodb(&ctx);LOG
     /* Issuer and subject certs: both the target since it is self signed,
      * no request and no CRL
      */
-    X509V3_set_ctx(&ctx, cert, cert, NULL, NULL, 0);
-    ex = X509V3_EXT_conf_nid(NULL, &ctx, nid, value);
+    X509V3_set_ctx(&ctx, cert, cert, NULL, NULL, 0);LOG
+    ex = X509V3_EXT_conf_nid(NULL, &ctx, nid, value);LOG
     if (!ex) {
         return 0;
     }
-
-    X509_add_ext(cert, ex, -1);
-    X509_EXTENSION_free(ex);
+LOG
+    X509_add_ext(cert, ex, -1);LOG
+    X509_EXTENSION_free(ex);LOG
     return 1;
 }
 

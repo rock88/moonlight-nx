@@ -13,13 +13,13 @@ extern "C" {
 extern void perform_async(std::function<void()> task);
 
 template <typename T>
-struct Result {
+struct GameStreamResult {
 public:
-    static Result success(T value) {
+    static GameStreamResult success(T value) {
         return result(value, "", true);
     }
     
-    static Result failure(std::string error) {
+    static GameStreamResult failure(std::string error) {
         return result(T(), error, false);
     }
     
@@ -36,8 +36,8 @@ public:
     }
     
 private:
-    static Result result(T value, std::string error, bool isSuccess) {
-        Result result;
+    static GameStreamResult result(T value, std::string error, bool isSuccess) {
+        GameStreamResult result;
         result._value = value;
         result._error = error;
         result._isSuccess = isSuccess;
@@ -51,8 +51,7 @@ private:
 
 #define LOG(fmt, ...) fprintf(stderr, fmt, __VA_ARGS__);
 
-template<class T> using ServerCallback = const std::function<void(Result<T>)>;
-//#define ServerCallback(T) std::function<void(Result<T>)>
+template<class T> using ServerCallback = const std::function<void(GameStreamResult<T>)>;
 
 class GameStreamClient {
 public:
