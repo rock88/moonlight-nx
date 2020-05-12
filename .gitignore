@@ -27,3 +27,4 @@ DerivedData/
 *.dylib
 *.so
 third_party/opus
+third_party/ffmpeg
