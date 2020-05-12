@@ -95,11 +95,7 @@ LIBGAMESTREAM_SOURCES = \
 MOONLIGHT_LIBRETRO_C_SOURCES = \
 	src/glsym/rglgen.c \
 	src/nanogui_resources/nanogui_resources.c \
-	src/moonlight_libretro.c \
-	src/decoders/ffmpeg.c \
-	src/decoders/gl_render.c \
-	src/decoders/video_decoder.c \
-	src/decoders/audio_decoder.c
+	src/moonlight_libretro.c
 
 MOONLIGHT_LIBRETRO_CXX_SOURCES = \
 	src/ui/windows/AddHostWindow.cpp \
@@ -115,7 +111,11 @@ MOONLIGHT_LIBRETRO_CXX_SOURCES = \
 	src/ui/LoadingOverlay.cpp \
 	src/GameStreamClient.cpp \
 	src/Settings.cpp \
-	src/InputController.cpp
+	src/InputController.cpp \
+	src/streaming/MoonlightSession.cpp \
+	src/streaming/audio/RetroAudioRenderer.cpp \
+	src/streaming/ffmpeg/FFmpegVideoDecoder.cpp \
+	src/streaming/video/GLVideoRenderer.cpp
 
 MOONLIGHT_COMMON_C_SOURCES = \
 	third_party/moonlight-common-c/enet/callbacks.c \
@@ -188,6 +188,7 @@ INCLUDES += \
 	-Isrc -Isrc/decoders -Isrc/glsym \
 	-Isrc/nanogui_resources \
 	-Isrc/ui -Isrc/ui/buttons -Isrc/ui/windows \
+	-Isrc/streaming -Isrc/streaming/audio -Isrc/streaming/video -Isrc/streaming/ffmpeg \
 	-Ilibgamestream \
 	-Ithird_party/moonlight-common-c/reedsolomon \
 	-Ithird_party/moonlight-common-c/src \
