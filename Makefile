@@ -37,6 +37,7 @@ ifeq ($(platform), unix)
    fpic := -fPIC
    SHARED := -shared -Wl,--version-script=link.T -Wl,--no-undefined
    GL_LIB := -lGL
+   LIBS += -lpthread -lGL -luuid -Lthird_party/opus/lib
 else ifneq (,$(findstring osx,$(platform)))
    TARGET := $(TARGET_NAME)_libretro.dylib
    fpic := -fPIC
