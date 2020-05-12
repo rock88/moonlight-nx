@@ -61,9 +61,10 @@ else ifeq ($(platform), lakka-switch)
    DEFINES += -mcpu=cortex-a57+crypto+crc+fp+simd -mabi=lp64 -Wno-psabi -mtune=cortex-a57 \
 	 -march=armv8-a+crypto+crc+fp+simd -fomit-frame-pointer -Wall -pipe -fPIC -pthread \
 	 -D__LAKKA_SWITCH__
-   INCLUDES += -I$(TOOLCHAIN)/aarch64-libreelec-linux-gnueabi/sysroot/usr/include \
-	-I$(TOOLCHAIN)/include -Ithird_party/opus/include
-   LIBS += -lpthread -lGL -luuid -Lthird_party/opus/lib
+   INCLUDES += -Ithird_party/opus/include -Ithird_party/ffmpeg/include \
+	 -I$(TOOLCHAIN)/aarch64-libreelec-linux-gnueabi/sysroot/usr/include -I$(TOOLCHAIN)/include
+   LIBS += -Lthird_party/opus/lib -Lthird_party/ffmpeg/lib \
+	 -lpthread -lGL -luuid -lvdpau -lX11
    SHARED := -shared -Wl,--version-script=link.T -Wl,--no-undefined
 else
    CC = gcc
@@ -115,6 +116,7 @@ MOONLIGHT_LIBRETRO_CXX_SOURCES = \
 	src/streaming/MoonlightSession.cpp \
 	src/streaming/audio/RetroAudioRenderer.cpp \
 	src/streaming/ffmpeg/FFmpegVideoDecoder.cpp \
+	src/streaming/ffmpeg/VDPAUVideoDecoder.cpp \
 	src/streaming/video/GLVideoRenderer.cpp
 
 MOONLIGHT_COMMON_C_SOURCES = \
@@ -208,7 +210,7 @@ CFLAGS += -Wall -pedantic $(fpic) -std=gnu11 $(DEFINES)
 CXXFLAGS += -std=gnu++17 -fno-permissive $(DEFINES)
 
 LIBS += -lcrypto -lssl -lcurl -lz -lexpat -lopus \
-	-lavcodec -lavformat -lavutil -lavdevice -lstdc++
+	-lavcodec -lavformat -lavutil -lavdevice -lstdc++ -lswresample
 
 OBJECTS += src/glsym/glsym_gl.o
 LIBS += $(GL_LIB)
