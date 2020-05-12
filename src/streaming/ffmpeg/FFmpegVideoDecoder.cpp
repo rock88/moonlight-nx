@@ -41,7 +41,6 @@ int FFmpegVideoDecoder::setup(int video_format, int width, int height, int redra
     
     int perf_lvl = SLICE_THREADING;
     
-    //ffmpeg_decoder = perf_lvl & VAAPI_ACCELERATION ? VAAPI : SOFTWARE;
     switch (video_format) {
         case VIDEO_FORMAT_H264:
             m_decoder = avcodec_find_decoder_by_name("h264");
@@ -107,6 +106,10 @@ int FFmpegVideoDecoder::setup(int video_format, int width, int height, int redra
         LOG("Not enough memory\n");
         cleanup();
         return -1;
+    }
+    
+    if (m_hardware_video_decoder) {
+        m_hardware_video_decoder->prepare_decoder_context(m_decoder_context, nullptr);
     }
     
     return DR_OK;
