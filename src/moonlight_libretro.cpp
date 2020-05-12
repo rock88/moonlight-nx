@@ -16,7 +16,7 @@ extern "C" {
     #include "client.h"
 }
 
-static struct retro_hw_render_callback hw_render;
+struct retro_hw_render_callback hw_render;
 
 #if defined(HAVE_PSGL)
 #define RARCH_GL_FRAMEBUFFER GL_FRAMEBUFFER_OES

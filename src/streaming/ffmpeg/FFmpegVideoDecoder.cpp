@@ -16,9 +16,7 @@
 
 #define DECODER_BUFFER_SIZE 92 * 1024
 
-FFmpegVideoDecoder::FFmpegVideoDecoder(IFFmpegHardwareVideoDecoder* hardware_video_decoder) {
-    m_hardware_video_decoder = hardware_video_decoder;
-    
+FFmpegVideoDecoder::FFmpegVideoDecoder() {
     pthread_mutex_init(&m_mutex, NULL);
 }
 
