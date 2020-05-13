@@ -1,7 +1,7 @@
 #!/bin/sh
 
 INSTALL_DIR=`pwd`/third_party/ffmpeg
-#git clone https://github.com/FFmpeg/FFmpeg.git ffmpeg_tmp
+git clone https://github.com/FFmpeg/FFmpeg.git ffmpeg_tmp
 cd ffmpeg_tmp
 
 # Fix TOOLCHAIN path!
@@ -14,7 +14,6 @@ TARGET_ARCH=aarch64
 TARGET_VARIANT=armv8-a
 TARGET_ABI=eabi
 SIMD_SUPPORT="yes"
-#TARGET_GCC_ARCH=$TARGET_SUBARCH/-
 TARGET_KERNEL_ARCH=arm64
 TARGET_NAME=$TARGET_SUBARCH-libreelec-linux-gnu${TARGET_ABI}
 
@@ -166,5 +165,5 @@ $FFMPEG_FPU \
 $FFMPEG_X11GRAB
 
 make install
-#cd ..
-#rm -fr ffmpeg_tmp
+cd ..
+rm -fr ffmpeg_tmp
