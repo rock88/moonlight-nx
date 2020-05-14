@@ -30,6 +30,8 @@ FFmpegVideoDecoder::~FFmpegVideoDecoder() {
 }
 
 int FFmpegVideoDecoder::setup(int video_format, int width, int height, int redraw_rate, void *context, int dr_flags) {
+    m_stream_fps = redraw_rate;
+    
     av_log_set_level(AV_LOG_QUIET);
 #if LIBAVCODEC_VERSION_INT < AV_VERSION_INT(58,10,100)
     avcodec_register_all();
@@ -37,7 +39,7 @@ int FFmpegVideoDecoder::setup(int video_format, int width, int height, int redra
     
     av_init_packet(&m_packet);
     
-    int perf_lvl = SLICE_THREADING;
+    int perf_lvl = LOW_LATENCY_DECODE & SLICE_THREADING;
     
     switch (video_format) {
         case VIDEO_FORMAT_H264:
@@ -72,7 +74,7 @@ int FFmpegVideoDecoder::setup(int video_format, int width, int height, int redra
     else
         m_decoder_context->thread_type = FF_THREAD_FRAME;
     
-    m_decoder_context->thread_count = 2;
+    m_decoder_context->thread_count = 4;
     
     m_decoder_context->width = width;
     m_decoder_context->height = height;
@@ -139,19 +141,50 @@ void FFmpegVideoDecoder::cleanup() {
 int FFmpegVideoDecoder::submit_decode_unit(PDECODE_UNIT decode_unit) {
     if (decode_unit->fullLength < DECODER_BUFFER_SIZE) {
         PLENTRY entry = decode_unit->bufferList;
+        
+        if (!m_last_frame) {
+            m_video_decode_stats.measurement_start_timestamp = LiGetMillis();
+            m_last_frame = decode_unit->frameNumber;
+        }
+        else {
+            // Any frame number greater than m_LastFrameNumber + 1 represents a dropped frame
+            m_video_decode_stats.network_dropped_frames += decode_unit->frameNumber - (m_last_frame + 1);
+            m_video_decode_stats.total_frames += decode_unit->frameNumber - (m_last_frame + 1);
+            m_last_frame = decode_unit->frameNumber;
+        }
+        
+        m_video_decode_stats.received_frames++;
+        m_video_decode_stats.total_frames++;
+        
         int length = 0;
         while (entry != NULL) {
             memcpy(m_ffmpeg_buffer + length, entry->data, entry->length);
             length += entry->length;
             entry = entry->next;
         }
-        decode(m_ffmpeg_buffer, length);
         
-        if (pthread_mutex_lock(&m_mutex) == 0) {
-            m_frame = get_frame(true);
+        m_video_decode_stats.total_reassembly_time += LiGetMillis() - decode_unit->receiveTimeMs;
+        
+        m_frames_in++;
+        
+        uint64_t before_decode = LiGetMillis();
+        
+        if (decode(m_ffmpeg_buffer, length) == 0) {
+            m_frames_out++;
             
-            // Push event!!
-            pthread_mutex_unlock(&m_mutex);
+            m_video_decode_stats.total_decode_time += LiGetMillis() - before_decode;
+            
+            // Also count the frame-to-frame delay if the decoder is delaying frames
+            // until a subsequent frame is submitted.
+            m_video_decode_stats.total_decode_time += (m_frames_in - m_frames_out) * (1000 / m_stream_fps);
+            m_video_decode_stats.decoded_frames++;
+            
+            if (pthread_mutex_lock(&m_mutex) == 0) {
+                m_frame = get_frame(true);
+                
+                // Push event!!
+                pthread_mutex_unlock(&m_mutex);
+            }
         }
     }
     return DR_OK;
@@ -193,4 +226,12 @@ AVFrame* FFmpegVideoDecoder::get_frame(bool native_frame) {
 
 AVFrame* FFmpegVideoDecoder::frame() const {
     return m_frame;
+}
+
+VideoDecodeStats* FFmpegVideoDecoder::video_decode_stats() {
+    uint64_t now = LiGetMillis();
+    m_video_decode_stats.total_fps = (float)m_video_decode_stats.total_frames / ((float)(now - m_video_decode_stats.measurement_start_timestamp) / 1000);
+    m_video_decode_stats.received_fps = (float)m_video_decode_stats.received_frames / ((float)(now - m_video_decode_stats.measurement_start_timestamp) / 1000);
+    m_video_decode_stats.decoded_fps = (float)m_video_decode_stats.decoded_frames / ((float)(now - m_video_decode_stats.measurement_start_timestamp) / 1000);
+    return (VideoDecodeStats*)&m_video_decode_stats;
 }

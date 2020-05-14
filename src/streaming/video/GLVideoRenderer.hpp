@@ -9,6 +9,8 @@ public:
     
     void draw(int width, int height, AVFrame *frame) override;
     
+    VideoRenderStats* video_render_stats() override;
+    
 private:
     void initialize();
     
@@ -18,4 +20,5 @@ private:
     GLuint m_vbo, m_vao;
     int m_width = 0, m_height = 0;
     int m_yuvmat_location, m_offset_location;
+    VideoRenderStats m_video_render_stats = {};
 };

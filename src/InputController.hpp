@@ -28,6 +28,9 @@ extern struct GamePadState game_pad_state;
 #define GAME_PAD_COMBO(KEY) \
     ((game_pad_state.buttonFlags & LB_FLAG) && (game_pad_state.buttonFlags & RB_FLAG) && (game_pad_state.buttonFlags & KEY))
 
+#define GAME_PAD_COMBO_R(KEY) \
+    (game_pad_state.leftTrigger && game_pad_state.rightTrigger && (game_pad_state.buttonFlags & KEY))
+
 class InputController {
 public:
     static InputController* controller() {

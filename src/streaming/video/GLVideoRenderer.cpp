@@ -150,6 +150,12 @@ void GLVideoRenderer::initialize() {
 }
 
 void GLVideoRenderer::draw(int width, int height, AVFrame *frame) {
+    if (!m_video_render_stats.rendered_frames) {
+        m_video_render_stats.measurement_start_timestamp = LiGetMillis();
+    }
+    
+    uint32_t before_render = LiGetMillis();
+    
     if (!m_is_initialized) {
         initialize();
         m_is_initialized = true;
@@ -194,4 +200,12 @@ void GLVideoRenderer::draw(int width, int height, AVFrame *frame) {
     
     glBindVertexArray(m_vao);
     glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
+    
+    m_video_render_stats.total_render_time += LiGetMillis() - before_render;
+    m_video_render_stats.rendered_frames++;
+}
+
+VideoRenderStats* GLVideoRenderer::video_render_stats() {
+    m_video_render_stats.rendered_fps = (float)m_video_render_stats.rendered_frames / ((float)(LiGetMillis() - m_video_render_stats.measurement_start_timestamp) / 1000);
+    return (VideoRenderStats*)&m_video_render_stats;
 }

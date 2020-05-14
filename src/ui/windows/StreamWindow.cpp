@@ -24,11 +24,13 @@ StreamWindow::StreamWindow(Widget *parent, const std::string &address, int app_i
     m_loader = add<LoadingOverlay>();
     
     m_session->start([this](auto result) {
+        if (m_loader) {
+            m_loader->dispose();
+            m_loader = NULL;
+        }
+        
         if (result) {
-            if (m_loader) {
-                m_loader->dispose();
-                m_loader = NULL;
-            }
+            //
         } else {
             auto app = static_cast<Application *>(screen());
             app->pop_window();
@@ -51,7 +53,7 @@ void StreamWindow::draw(NVGcontext *ctx) {
     
     nvgRestore(ctx);
     
-    if (m_connection_status_is_poor) {
+    if (m_session->connection_status_is_poor()) {
         nvgFillColor(ctx, Color(255, 255, 255, 200));
         nvgFontSize(ctx, 20);
         nvgFontFace(ctx, "icons");
@@ -61,6 +63,40 @@ void StreamWindow::draw(NVGcontext *ctx) {
         nvgText(ctx, 50, height() - 28, "Bad connection...", NULL);
     }
     
+    if (m_draw_stats) {
+        static char output[1024];
+        
+        int offset = 0;
+        
+        auto stats = m_session->session_stats();
+        
+        offset += sprintf(&output[offset],
+                          "Estimated host PC frame rate: %.2f FPS\n"
+                          "Incoming frame rate from network: %.2f FPS\n"
+                          "Decoding frame rate: %.2f FPS\n"
+                          "Rendering frame rate: %.2f FPS\n",
+                          stats->video_decode_stats.total_fps,
+                          stats->video_decode_stats.received_fps,
+                          stats->video_decode_stats.decoded_fps,
+                          stats->video_render_stats.rendered_fps);
+        
+        offset += sprintf(&output[offset],
+                          "Frames dropped by your network connection: %.2f%%\n"
+                          "Average receive time: %.2f ms\n"
+                          "Average decoding time: %.2f ms\n"
+                          "Average rendering time: %.2f ms\n",
+                          (float)stats->video_decode_stats.network_dropped_frames / stats->video_decode_stats.total_frames * 100,
+                          (float)stats->video_decode_stats.total_reassembly_time / stats->video_decode_stats.received_frames,
+                          (float)stats->video_decode_stats.total_decode_time / stats->video_decode_stats.decoded_frames,
+                          (float)stats->video_render_stats.total_render_time / stats->video_render_stats.rendered_frames);
+        
+        nvgFillColor(ctx, Color(0, 255, 0, 255));
+        nvgFontFace(ctx, "sans-bold");
+        nvgFontSize(ctx, 20);
+        nvgTextAlign(ctx, NVG_ALIGN_LEFT | NVG_ALIGN_BOTTOM);
+        nvgTextBox(ctx, 20, 30, width(), output, NULL);
+    }
+    
     // TODO: Get out of here...
     if (GAME_PAD_COMBO(DOWN_FLAG)) {
         async([this] { this->terminate(true); });
@@ -68,6 +104,12 @@ void StreamWindow::draw(NVGcontext *ctx) {
         async([this] { this->terminate(false); });
     }
     
+    if (!m_draw_stats && GAME_PAD_COMBO_R(LEFT_FLAG)) {
+        m_draw_stats = true;
+    } else if (m_draw_stats && GAME_PAD_COMBO_R(LEFT_FLAG)) {
+        m_draw_stats = false;
+    }
+        
     InputController::controller()->send_to_stream();
 }
 

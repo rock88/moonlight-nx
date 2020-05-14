@@ -19,5 +19,5 @@ public:
 private:
     MoonlightSession* m_session;
     LoadingOverlay* m_loader;
-    bool m_connection_status_is_poor = false;
+    bool m_draw_stats = false;
 };

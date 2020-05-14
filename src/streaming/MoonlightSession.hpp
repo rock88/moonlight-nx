@@ -4,6 +4,11 @@
 #include "IFFmpegVideoDecoder.hpp"
 #pragma once
 
+struct SessionStats {
+    VideoDecodeStats video_decode_stats;
+    VideoRenderStats video_render_stats;
+};
+
 class MoonlightSession {
 public:
     MoonlightSession(const std::string &address, int app_id);
@@ -28,6 +33,14 @@ public:
     
     bool is_active() const {
         return m_is_active;
+    }
+    
+    bool connection_status_is_poor() const {
+        return m_connection_status_is_poor;
+    }
+    
+    SessionStats* session_stats() const {
+        return (SessionStats*)&m_session_stats;
     }
     
 private:
@@ -64,4 +77,7 @@ private:
     IAudioRenderer* m_audio_renderer = nullptr;
     
     bool m_is_active = true;
+    bool m_connection_status_is_poor = false;
+    
+    SessionStats m_session_stats = {};
 };

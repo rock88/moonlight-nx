@@ -82,7 +82,9 @@ void MoonlightSession::connection_rumble(unsigned short controller, unsigned sho
 }
 
 void MoonlightSession::connection_status_update(int connection_status) {
-    
+    if (m_active_session) {
+        m_active_session->m_connection_status_is_poor = connection_status == CONN_STATUS_POOR;
+    }
 }
 
 // MARK: Video decoder callbacks
@@ -224,6 +226,7 @@ void MoonlightSession::start(std::function<void(bool)> callback) {
                 });
             });
         } else {
+            LOG_FMT("Failed to start stream: %s\n", result.error().c_str());
             callback(false);
         }
     });
@@ -242,5 +245,8 @@ void MoonlightSession::draw() {
         if (auto frame = m_video_decoder->frame()) {
             m_video_renderer->draw(m_config.width, m_config.height, frame);
         }
+        
+        m_session_stats.video_decode_stats = *m_video_decoder->video_decode_stats();
+        m_session_stats.video_render_stats = *m_video_renderer->video_render_stats();
     }
 }
