@@ -86,7 +86,6 @@
 		3661D2F92469D1940060EE24 /* FFmpegVideoDecoder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3661D2F72469D1940060EE24 /* FFmpegVideoDecoder.cpp */; };
 		3661D2FF2469E0C00060EE24 /* GLVideoRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3661D2FD2469E0C00060EE24 /* GLVideoRenderer.cpp */; };
 		3661D3022469EFFA0060EE24 /* RetroAudioRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3661D3002469EFFA0060EE24 /* RetroAudioRenderer.cpp */; };
-		3661D30A246B0C820060EE24 /* VDPAUVideoDecoder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3661D308246B0C820060EE24 /* VDPAUVideoDecoder.cpp */; };
 		367CD95A245DE25F00A95738 /* StreamWindow.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 367CD958245DE25F00A95738 /* StreamWindow.cpp */; };
 		36A0C0372461DBA30083289C /* AddHostButton.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 36A0C0352461DBA30083289C /* AddHostButton.cpp */; };
 		36A0C03A2461E4C00083289C /* SettingsWindow.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 36A0C0382461E4C00083289C /* SettingsWindow.cpp */; };
@@ -283,8 +282,6 @@
 		3661D2FE2469E0C00060EE24 /* GLVideoRenderer.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = GLVideoRenderer.hpp; sourceTree = "<group>"; };
 		3661D3002469EFFA0060EE24 /* RetroAudioRenderer.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = RetroAudioRenderer.cpp; sourceTree = "<group>"; };
 		3661D3012469EFFA0060EE24 /* RetroAudioRenderer.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = RetroAudioRenderer.hpp; sourceTree = "<group>"; };
-		3661D308246B0C820060EE24 /* VDPAUVideoDecoder.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = VDPAUVideoDecoder.cpp; sourceTree = "<group>"; };
-		3661D309246B0C820060EE24 /* VDPAUVideoDecoder.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = VDPAUVideoDecoder.hpp; sourceTree = "<group>"; };
 		3661D30B246B1C680060EE24 /* build_ffmpeg_lakka_switch.sh */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = build_ffmpeg_lakka_switch.sh; sourceTree = "<group>"; };
 		367CD958245DE25F00A95738 /* StreamWindow.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = StreamWindow.cpp; sourceTree = "<group>"; };
 		367CD959245DE25F00A95738 /* StreamWindow.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = StreamWindow.hpp; sourceTree = "<group>"; };
@@ -664,8 +661,6 @@
 			children = (
 				3661D2F72469D1940060EE24 /* FFmpegVideoDecoder.cpp */,
 				3661D2F82469D1940060EE24 /* FFmpegVideoDecoder.hpp */,
-				3661D308246B0C820060EE24 /* VDPAUVideoDecoder.cpp */,
-				3661D309246B0C820060EE24 /* VDPAUVideoDecoder.hpp */,
 				3661D2FA2469D1E50060EE24 /* IFFmpegVideoDecoder.hpp */,
 			);
 			path = ffmpeg;
@@ -927,7 +922,6 @@
 				3652EFD5245B3B00001FABF3 /* canvas.cpp in Sources */,
 				3652F078245C292B001FABF3 /* FakeCallbacks.c in Sources */,
 				3652F06B245C292B001FABF3 /* host.c in Sources */,
-				3661D30A246B0C820060EE24 /* VDPAUVideoDecoder.cpp in Sources */,
 				3602C3BA245DB3C800368900 /* AppListWindow.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

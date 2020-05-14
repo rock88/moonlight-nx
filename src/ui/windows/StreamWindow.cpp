@@ -2,7 +2,6 @@
 #include "LoadingOverlay.hpp"
 #include "InputController.hpp"
 #include "FFmpegVideoDecoder.hpp"
-#include "VDPAUVideoDecoder.hpp"
 #include "GLVideoRenderer.hpp"
 #include "RetroAudioRenderer.hpp"
 #include "nanovg.h"
@@ -15,11 +14,8 @@ StreamWindow::StreamWindow(Widget *parent, const std::string &address, int app_i
     m_size = parent->size();
     m_session = new MoonlightSession(address, app_id);
     
-    auto video_decoder = new FFmpegVideoDecoder();
-    m_session->set_video_decoder(video_decoder);
+    m_session->set_video_decoder(new FFmpegVideoDecoder());
     m_session->set_video_renderer(new GLVideoRenderer());
-    
-    //video_decoder->set_hardware_video_decoder(new VDPAUVideoDecoder());
     
     #ifdef __LIBRETRO__
     m_session->set_audio_renderer(new RetroAudioRenderer());

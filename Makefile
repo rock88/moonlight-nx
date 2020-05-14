@@ -116,7 +116,6 @@ MOONLIGHT_LIBRETRO_CXX_SOURCES = \
 	src/streaming/MoonlightSession.cpp \
 	src/streaming/audio/RetroAudioRenderer.cpp \
 	src/streaming/ffmpeg/FFmpegVideoDecoder.cpp \
-	src/streaming/ffmpeg/VDPAUVideoDecoder.cpp \
 	src/streaming/video/GLVideoRenderer.cpp
 
 MOONLIGHT_COMMON_C_SOURCES = \
