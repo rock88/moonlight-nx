@@ -154,7 +154,7 @@ void GLVideoRenderer::draw(int width, int height, AVFrame *frame) {
         m_video_render_stats.measurement_start_timestamp = LiGetMillis();
     }
     
-    uint32_t before_render = LiGetMillis();
+    uint64_t before_render = LiGetMillis();
     
     if (!m_is_initialized) {
         initialize();

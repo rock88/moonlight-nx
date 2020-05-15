@@ -81,11 +81,12 @@ void StreamWindow::draw(NVGcontext *ctx) {
                           stats->video_render_stats.rendered_fps);
         
         offset += sprintf(&output[offset],
-                          "Frames dropped by your network connection: %.2f%%\n"
+                          "Frames dropped by your network connection: %.2f%% (Total: %u)\n"
                           "Average receive time: %.2f ms\n"
                           "Average decoding time: %.2f ms\n"
                           "Average rendering time: %.2f ms\n",
                           (float)stats->video_decode_stats.network_dropped_frames / stats->video_decode_stats.total_frames * 100,
+                          stats->video_decode_stats.network_dropped_frames,
                           (float)stats->video_decode_stats.total_reassembly_time / stats->video_decode_stats.received_frames,
                           (float)stats->video_decode_stats.total_decode_time / stats->video_decode_stats.decoded_frames,
                           (float)stats->video_render_stats.total_render_time / stats->video_render_stats.rendered_frames);
@@ -106,10 +107,10 @@ void StreamWindow::draw(NVGcontext *ctx) {
     
     if (!m_draw_stats && GAME_PAD_COMBO_R(LEFT_FLAG)) {
         m_draw_stats = true;
-    } else if (m_draw_stats && GAME_PAD_COMBO_R(LEFT_FLAG)) {
+    } else if (m_draw_stats && GAME_PAD_COMBO_R(RIGHT_FLAG)) {
         m_draw_stats = false;
     }
-        
+    
     InputController::controller()->send_to_stream();
 }
 
