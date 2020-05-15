@@ -1,18 +1,11 @@
 #include "FFmpegVideoDecoder.hpp"
+#include "Settings.hpp"
 #include "Log.h"
 
 // Disables the deblocking filter at the cost of image quality
 #define DISABLE_LOOP_FILTER 0x1
 // Uses the low latency decode flag (disables multithreading)
 #define LOW_LATENCY_DECODE 0x2
-// Threads process each slice, rather than each frame
-#define SLICE_THREADING 0x4
-// Uses nonstandard speedup tricks
-#define FAST_DECODE 0x8
-// Uses bilinear filtering instead of bicubic
-#define BILINEAR_FILTERING 0x10
-// Uses a faster bilinear filtering with lower image quality
-#define FAST_BILINEAR_FILTERING 0x20
 
 #define DECODER_BUFFER_SIZE 92 * 1024
 
@@ -39,7 +32,7 @@ int FFmpegVideoDecoder::setup(int video_format, int width, int height, int redra
     
     av_init_packet(&m_packet);
     
-    int perf_lvl = LOW_LATENCY_DECODE & SLICE_THREADING;
+    int perf_lvl = LOW_LATENCY_DECODE;
     
     switch (video_format) {
         case VIDEO_FORMAT_H264:
@@ -69,12 +62,14 @@ int FFmpegVideoDecoder::setup(int video_format, int width, int height, int redra
         // Use low delay single threaded encoding
         m_decoder_context->flags |= AV_CODEC_FLAG_LOW_DELAY;
     
-    if (perf_lvl & SLICE_THREADING)
-        m_decoder_context->thread_type = FF_THREAD_SLICE;
-    else
-        m_decoder_context->thread_type = FF_THREAD_FRAME;
+    int decoder_threads = Settings::settings()->decoder_threads();
     
-    m_decoder_context->thread_count = 4;
+    if (decoder_threads == 0) {
+        m_decoder_context->thread_type = FF_THREAD_FRAME;
+    } else {
+        m_decoder_context->thread_type = FF_THREAD_SLICE;
+        m_decoder_context->thread_count = decoder_threads;
+    }
     
     m_decoder_context->width = width;
     m_decoder_context->height = height;

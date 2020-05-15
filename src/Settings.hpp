@@ -72,6 +72,14 @@ public:
         m_swap_ab_xy = swap_ab_xy;
     }
     
+    void set_decoder_threads(int decoder_threads) {
+        m_decoder_threads = decoder_threads;
+    }
+    
+    int decoder_threads() const {
+        return m_decoder_threads;
+    }
+    
     void load();
     void save();
 
@@ -85,4 +93,5 @@ private:
     VideoCodec m_video_codec = H264;
     int m_bitrate = 500;
     bool m_swap_ab_xy = true;
+    int m_decoder_threads = 2;
 };
