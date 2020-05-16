@@ -1,7 +1,7 @@
 #include "GameStreamClient.hpp"
+#include "ServerInfoRequest.hpp"
 #include "Settings.hpp"
 #include <thread>
-#include <chrono>
 #include <mutex>
 #include <algorithm>
 #include <vector>
@@ -9,12 +9,42 @@
 #include <fstream>
 #include <future>
 #include <nanogui/nanogui.h>
-
 #include <unistd.h>
 
 static std::mutex m_async_mutex;
 static std::vector<std::function<void()>> m_tasks;
 
+#ifdef __SWITCH__
+#include <switch.h>
+static void task_loop() {
+    Thread thread;
+    threadCreate(
+        &thread,
+        [](void* a) {
+            while (1) {
+                std::vector<std::function<void()>> m_tasks_copy; {
+                    std::lock_guard<std::mutex> guard(m_async_mutex);
+                    m_tasks_copy = m_tasks;
+                    m_tasks.clear();
+                }
+                
+                for (auto task: m_tasks_copy) {
+                    task();
+                }
+                
+                usleep(500'000);
+            }
+        },
+        NULL,
+        NULL,
+        0x10000,
+        0x2C,
+        -2
+    );
+    threadStart(&thread);
+
+}
+#else
 static void task_loop() {
     auto thread = std::thread([](){
         while (1) {
@@ -33,6 +63,7 @@ static void task_loop() {
     });
     thread.detach();
 }
+#endif
 
 void perform_async(std::function<void()> task) {
     std::lock_guard<std::mutex> guard(m_async_mutex);
@@ -48,15 +79,14 @@ void GameStreamClient::connect(const std::string &address, ServerCallback<SERVER
     
     perform_async([this, address, callback] {
         // TODO: mem leak here :(
-        std::string key_dir = Settings::settings()->working_dir() + "/key";
-        int status = gs_init(&m_server_data[address], (char *)(new std::string(address))->c_str(), key_dir.c_str(), 0, false);
+        int status = ServerInfoRequest::request(address, &m_server_data[address]);
         
         nanogui::async([this, address, callback, status] {
-            if (status == GS_OK) {
+            if (status == NetworkClientOK) {
                 Settings::settings()->add_host(address);
-                callback(Result<SERVER_DATA>::success(m_server_data[address]));
+                callback(GSResult<SERVER_DATA>::success(m_server_data[address]));
             } else {
-                callback(Result<SERVER_DATA>::failure(gs_error != NULL ? gs_error : "Unknown error..."));
+                callback(GSResult<SERVER_DATA>::failure(gs_error != NULL ? gs_error : "Unknown error..."));
             }
         });
     });
@@ -64,7 +94,7 @@ void GameStreamClient::connect(const std::string &address, ServerCallback<SERVER
 
 void GameStreamClient::pair(const std::string &address, const std::string &pin, ServerCallback<bool> callback) {
     if (m_server_data.count(address) == 0) {
-        callback(Result<bool>::failure("Firstly call connect()..."));
+        callback(GSResult<bool>::failure("Firstly call connect()..."));
         return;
     }
     
@@ -73,9 +103,9 @@ void GameStreamClient::pair(const std::string &address, const std::string &pin, 
         
         nanogui::async([callback, status] {
             if (status == GS_OK) {
-                callback(Result<bool>::success(true));
+                callback(GSResult<bool>::success(true));
             } else {
-                callback(Result<bool>::failure(gs_error != NULL ? gs_error : "Unknown error..."));
+                callback(GSResult<bool>::failure(gs_error != NULL ? gs_error : "Unknown error..."));
             }
         });
     });
@@ -83,7 +113,7 @@ void GameStreamClient::pair(const std::string &address, const std::string &pin, 
 
 void GameStreamClient::applist(const std::string &address, ServerCallback<PAPP_LIST> callback) {
     if (m_server_data.count(address) == 0) {
-        callback(Result<PAPP_LIST>::failure("Firstly call connect() & pair()..."));
+        callback(GSResult<PAPP_LIST>::failure("Firstly call connect() & pair()..."));
         return;
     }
     
@@ -94,9 +124,9 @@ void GameStreamClient::applist(const std::string &address, ServerCallback<PAPP_L
         
         nanogui::async([this, address, callback, status] {
             if (status == GS_OK) {
-                callback(Result<PAPP_LIST>::success(m_app_list[address]));
+                callback(GSResult<PAPP_LIST>::success(m_app_list[address]));
             } else {
-                callback(Result<PAPP_LIST>::failure(gs_error != NULL ? gs_error : "Unknown error..."));
+                callback(GSResult<PAPP_LIST>::failure(gs_error != NULL ? gs_error : "Unknown error..."));
             }
         });
     });
@@ -104,7 +134,7 @@ void GameStreamClient::applist(const std::string &address, ServerCallback<PAPP_L
 
 void GameStreamClient::app_boxart(const std::string &address, int app_id, ServerCallback<std::pair<char*, size_t>> callback) {
     if (m_server_data.count(address) == 0) {
-        callback(Result<std::pair<char*, size_t>>::failure("Firstly call connect() & pair()..."));
+        callback(GSResult<std::pair<char*, size_t>>::failure("Firstly call connect() & pair()..."));
         return;
     }
     
@@ -116,9 +146,9 @@ void GameStreamClient::app_boxart(const std::string &address, int app_id, Server
         
         nanogui::async([this, callback, data, size, status] {
             if (status == GS_OK) {
-                callback(Result<std::pair<char*, size_t>>::success(std::make_pair(data, size)));
+                callback(GSResult<std::pair<char*, size_t>>::success(std::make_pair(data, size)));
             } else {
-                callback(Result<std::pair<char*, size_t>>::failure(gs_error != NULL ? gs_error : "Unknown error..."));
+                callback(GSResult<std::pair<char*, size_t>>::failure(gs_error != NULL ? gs_error : "Unknown error..."));
             }
         });
     });
@@ -126,7 +156,7 @@ void GameStreamClient::app_boxart(const std::string &address, int app_id, Server
 
 void GameStreamClient::start(const std::string &address, STREAM_CONFIGURATION config, int app_id, ServerCallback<STREAM_CONFIGURATION> callback) {
     if (m_server_data.count(address) == 0) {
-        callback(Result<STREAM_CONFIGURATION>::failure("Firstly call connect() & pair()..."));
+        callback(GSResult<STREAM_CONFIGURATION>::failure("Firstly call connect() & pair()..."));
         return;
     }
     
@@ -137,9 +167,9 @@ void GameStreamClient::start(const std::string &address, STREAM_CONFIGURATION co
         
         nanogui::async([this, callback, status] {
             if (status == GS_OK) {
-                callback(Result<STREAM_CONFIGURATION>::success(m_config));
+                callback(GSResult<STREAM_CONFIGURATION>::success(m_config));
             } else {
-                callback(Result<STREAM_CONFIGURATION>::failure(gs_error != NULL ? gs_error : "Unknown error..."));
+                callback(GSResult<STREAM_CONFIGURATION>::failure(gs_error != NULL ? gs_error : "Unknown error..."));
             }
         });
     });
@@ -147,7 +177,7 @@ void GameStreamClient::start(const std::string &address, STREAM_CONFIGURATION co
 
 void GameStreamClient::quit(const std::string &address, ServerCallback<bool> callback) {
     if (m_server_data.count(address) == 0) {
-        callback(Result<bool>::failure("Firstly call connect() & pair()..."));
+        callback(GSResult<bool>::failure("Firstly call connect() & pair()..."));
         return;
     }
     
@@ -156,9 +186,9 @@ void GameStreamClient::quit(const std::string &address, ServerCallback<bool> cal
         
         nanogui::async([this, callback, status] {
             if (status == GS_OK) {
-                callback(Result<bool>::success(true));
+                callback(GSResult<bool>::success(true));
             } else {
-                callback(Result<bool>::failure(gs_error != NULL ? gs_error : "Unknown error..."));
+                callback(GSResult<bool>::failure(gs_error != NULL ? gs_error : "Unknown error..."));
             }
         });
     });

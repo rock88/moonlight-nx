@@ -30,7 +30,6 @@
 #include <stdbool.h>
 #include <stdio.h>
 #include <string.h>
-#include <uuid/uuid.h>
 #include <openssl/sha.h>
 #include <openssl/aes.h>
 #include <openssl/rand.h>
@@ -38,6 +37,7 @@
 #include <openssl/x509.h>
 #include <openssl/pem.h>
 #include <openssl/err.h>
+#include "Log.h"
 
 #define UNIQUE_FILE_NAME "uniqueid.dat"
 #define P12_FILE_NAME "client.p12"
@@ -57,6 +57,35 @@ static char cert_hex[4096];
 static EVP_PKEY *privateKey;
 
 const char* gs_error;
+
+typedef unsigned char uuid_t[16];
+typedef uuid_t uuid;
+
+uid_t getuid() {
+    return 1;
+}
+
+void simple_uuid_generate_random(uuid_t out) {
+    static bool once = false;
+    if (!once) {
+        srand(time(NULL));
+        once = true;
+    }
+    
+    for (int i = 0; i < 16; i++) {
+        out[i] = (rand() % 16) * 10 + rand() % 16;
+    }
+}
+
+void simple_uuid_unparse(const uuid_t uu, char *out) {
+    sprintf(out, "%02X%02X%02X%02X-%02X%02X-%02X%02X-%02X%02X-%02X%02X%02X%02X%02X%02X",
+        uu[0], uu[1], uu[2], uu[3], uu[4], uu[5], uu[6], uu[7],
+        uu[8], uu[9], uu[10], uu[11], uu[12], uu[13], uu[14], uu[15]);
+    LOG_FMT("out = %s\n", out);
+}
+
+#define uuid_generate_random simple_uuid_generate_random
+#define uuid_unparse simple_uuid_unparse
 
 int mkdirtree(const char* directory) {
   char buffer[PATH_MAX];
@@ -86,211 +115,211 @@ int mkdirtree(const char* directory) {
 
   return 0;
 }
-
-static int load_unique_id(const char* keyDirectory) {
-  char uniqueFilePath[PATH_MAX];
-  snprintf(uniqueFilePath, PATH_MAX, "%s/%s", keyDirectory, UNIQUE_FILE_NAME);
-
-  FILE *fd = fopen(uniqueFilePath, "r");
-  if (fd == NULL) {
-    unsigned char unique_data[UNIQUEID_BYTES];
-    RAND_bytes(unique_data, UNIQUEID_BYTES);
-    for (int i = 0; i < UNIQUEID_BYTES; i++) {
-      sprintf(unique_id + (i * 2), "%02x", unique_data[i]);
-    }
-    fd = fopen(uniqueFilePath, "w");
-    if (fd == NULL)
-      return GS_FAILED;
-
-    fwrite(unique_id, UNIQUEID_CHARS, 1, fd);
-  } else {
-    fread(unique_id, UNIQUEID_CHARS, 1, fd);
-  }
-  fclose(fd);
-  unique_id[UNIQUEID_CHARS] = 0;
-
-  return GS_OK;
-}
-
-static int load_cert(const char* keyDirectory) {
-  char certificateFilePath[PATH_MAX];
-  snprintf(certificateFilePath, PATH_MAX, "%s/%s", keyDirectory, CERTIFICATE_FILE_NAME);
-
-  char keyFilePath[PATH_MAX];
-  snprintf(&keyFilePath[0], PATH_MAX, "%s/%s", keyDirectory, KEY_FILE_NAME);
-
-  FILE *fd = fopen(certificateFilePath, "r");
-  if (fd == NULL) {
-    printf("Generating certificate...");
-    CERT_KEY_PAIR cert = mkcert_generate();
-    printf("done\n");
-
-    char p12FilePath[PATH_MAX];
-    snprintf(p12FilePath, PATH_MAX, "%s/%s", keyDirectory, P12_FILE_NAME);
-
-    mkcert_save(certificateFilePath, p12FilePath, keyFilePath, cert);
-    mkcert_free(cert);
-    fd = fopen(certificateFilePath, "r");
-  }
-
-  if (fd == NULL) {
-    gs_error = "Can't open certificate file";
-    return GS_FAILED;
-  }
-
-  if (!(cert = PEM_read_X509(fd, NULL, NULL, NULL))) {
-    gs_error = "Error loading cert into memory";
-    return GS_FAILED;
-  }
-
-  rewind(fd);
-
-  int c;
-  int length = 0;
-  while ((c = fgetc(fd)) != EOF) {
-    sprintf(cert_hex + length, "%02x", c);
-    length += 2;
-  }
-  cert_hex[length] = 0;
-
-  fclose(fd);
-
-  fd = fopen(keyFilePath, "r");
-  if (fd == NULL) {
-    gs_error = "Error loading key into memory";
-    return GS_FAILED;
-  }
-
-  PEM_read_PrivateKey(fd, &privateKey, NULL, NULL);
-  fclose(fd);
-
-  return GS_OK;
-}
-
-static int load_server_status(PSERVER_DATA server) {
-
-  uuid_t uuid;
-  char uuid_str[37];
-
-  int ret;
-  char url[4096];
-  int i;
-
-  i = 0;
-  do {
-    char *pairedText = NULL;
-    char *currentGameText = NULL;
-    char *stateText = NULL;
-    char *serverCodecModeSupportText = NULL;
-
-    ret = GS_INVALID;
-
-    uuid_generate_random(uuid);
-    uuid_unparse(uuid, uuid_str);
-
-    // Modern GFE versions don't allow serverinfo to be fetched over HTTPS if the client
-    // is not already paired. Since we can't pair without knowing the server version, we
-    // make another request over HTTP if the HTTPS request fails. We can't just use HTTP
-    // for everything because it doesn't accurately tell us if we're paired.
-
-    printf("server->serverInfo.address: %s\n", server->serverInfo.address);
-    printf("unique_id: %s\n", unique_id);
-    printf("uuid_str: %s\n", uuid_str);
-
-    snprintf(url, sizeof(url), "%s://%s:%d/serverinfo?uniqueid=%s&uuid=%s",
-      i == 0 ? "https" : "http", server->serverInfo.address, i == 0 ? 47984 : 47989, unique_id, uuid_str);
-
-    PHTTP_DATA data = http_create_data();
-    if (data == NULL) {
-      ret = GS_OUT_OF_MEMORY;
-      goto cleanup;
-    }
-    if (http_request(url, data) != GS_OK) {
-      ret = GS_IO_ERROR;
-      goto cleanup;
-    }
-
-    if (xml_status(data->memory, data->size) == GS_ERROR) {
-      ret = GS_ERROR;
-      goto cleanup;
-    }
-
-    if (xml_search(data->memory, data->size, "currentgame", &currentGameText) != GS_OK) {
-      goto cleanup;
-    }
-
-    if (xml_search(data->memory, data->size, "PairStatus", &pairedText) != GS_OK)
-      goto cleanup;
-
-    if (xml_search(data->memory, data->size, "appversion", (char**) &server->serverInfo.serverInfoAppVersion) != GS_OK)
-      goto cleanup;
-
-    if (xml_search(data->memory, data->size, "state", &stateText) != GS_OK)
-      goto cleanup;
-
-    if (xml_search(data->memory, data->size, "ServerCodecModeSupport", &serverCodecModeSupportText) != GS_OK)
-      goto cleanup;
-
-    if (xml_search(data->memory, data->size, "gputype", &server->gpuType) != GS_OK)
-      goto cleanup;
-
-    if (xml_search(data->memory, data->size, "GsVersion", &server->gsVersion) != GS_OK)
-      goto cleanup;
-
-    if (xml_search(data->memory, data->size, "hostname", &server->hostname) != GS_OK)
-      goto cleanup;
-
-    if (xml_search(data->memory, data->size, "GfeVersion", (char**) &server->serverInfo.serverInfoGfeVersion) != GS_OK)
-      goto cleanup;
-
-    if (xml_modelist(data->memory, data->size, &server->modes) != GS_OK)
-      goto cleanup;
-
-    // These fields are present on all version of GFE that this client supports
-    if (!strlen(currentGameText) || !strlen(pairedText) || !strlen(server->serverInfo.serverInfoAppVersion) || !strlen(stateText))
-      goto cleanup;
-
-    server->paired = pairedText != NULL && strcmp(pairedText, "1") == 0;
-    server->currentGame = currentGameText == NULL ? 0 : atoi(currentGameText);
-    server->supports4K = serverCodecModeSupportText != NULL;
-    server->serverMajorVersion = atoi(server->serverInfo.serverInfoAppVersion);
-
-    if (strstr(stateText, "_SERVER_BUSY") == NULL) {
-      // After GFE 2.8, current game remains set even after streaming
-      // has ended. We emulate the old behavior by forcing it to zero
-      // if streaming is not active.
-      server->currentGame = 0;
-    }
-    ret = GS_OK;
-
-    cleanup:
-    if (data != NULL)
-      http_free_data(data);
-
-    if (pairedText != NULL)
-      free(pairedText);
-
-    if (currentGameText != NULL)
-      free(currentGameText);
-
-    if (serverCodecModeSupportText != NULL)
-      free(serverCodecModeSupportText);
-
-    i++;
-  } while (ret != GS_OK && i < 2);
-
-  if (ret == GS_OK && !server->unsupported) {
-    if (server->serverMajorVersion > MAX_SUPPORTED_GFE_VERSION) {
-      gs_error = "Ensure you're running the latest version of Moonlight Embedded or downgrade GeForce Experience and try again";
-      ret = GS_UNSUPPORTED_VERSION;
-    } else if (server->serverMajorVersion < MIN_SUPPORTED_GFE_VERSION) {
-      gs_error = "Moonlight Embedded requires a newer version of GeForce Experience. Please upgrade GFE on your PC and try again.";
-      ret = GS_UNSUPPORTED_VERSION;
-    }
-  }
-
-  return ret;
-}
+//
+//static int load_unique_id(const char* keyDirectory) {
+//  char uniqueFilePath[PATH_MAX];
+//  snprintf(uniqueFilePath, PATH_MAX, "%s/%s", keyDirectory, UNIQUE_FILE_NAME);
+//
+//  FILE *fd = fopen(uniqueFilePath, "r");
+//  if (fd == NULL) {
+//    unsigned char unique_data[UNIQUEID_BYTES];
+//    RAND_bytes(unique_data, UNIQUEID_BYTES);
+//    for (int i = 0; i < UNIQUEID_BYTES; i++) {
+//      sprintf(unique_id + (i * 2), "%02x", unique_data[i]);
+//    }
+//    fd = fopen(uniqueFilePath, "w");
+//    if (fd == NULL)
+//      return GS_FAILED;
+//
+//    fwrite(unique_id, UNIQUEID_CHARS, 1, fd);
+//  } else {
+//    fread(unique_id, UNIQUEID_CHARS, 1, fd);
+//  }
+//  fclose(fd);
+//  unique_id[UNIQUEID_CHARS] = 0;
+//
+//  return GS_OK;
+//}
+//
+//static int load_cert(const char* keyDirectory) {
+//  char certificateFilePath[PATH_MAX];
+//  snprintf(certificateFilePath, PATH_MAX, "%s/%s", keyDirectory, CERTIFICATE_FILE_NAME);
+//
+//  char keyFilePath[PATH_MAX];
+//  snprintf(&keyFilePath[0], PATH_MAX, "%s/%s", keyDirectory, KEY_FILE_NAME);
+//
+//  FILE *fd = fopen(certificateFilePath, "r");
+//  if (fd == NULL) {
+//    printf("Generating certificate...");
+//    CERT_KEY_PAIR cert = mkcert_generate();
+//    printf("done\n");
+//
+//    char p12FilePath[PATH_MAX];
+//    snprintf(p12FilePath, PATH_MAX, "%s/%s", keyDirectory, P12_FILE_NAME);
+//
+//    mkcert_save(certificateFilePath, p12FilePath, keyFilePath, cert);
+//    mkcert_free(cert);
+//    fd = fopen(certificateFilePath, "r");
+//  }
+//
+//  if (fd == NULL) {
+//    gs_error = "Can't open certificate file";
+//    return GS_FAILED;
+//  }
+//
+//  if (!(cert = PEM_read_X509(fd, NULL, NULL, NULL))) {
+//    gs_error = "Error loading cert into memory";
+//    return GS_FAILED;
+//  }
+//
+//  rewind(fd);
+//
+//  int c;
+//  int length = 0;
+//  while ((c = fgetc(fd)) != EOF) {
+//    sprintf(cert_hex + length, "%02x", c);
+//    length += 2;
+//  }
+//  cert_hex[length] = 0;
+//
+//  fclose(fd);
+//
+//  fd = fopen(keyFilePath, "r");
+//  if (fd == NULL) {
+//    gs_error = "Error loading key into memory";
+//    return GS_FAILED;
+//  }
+//
+//  PEM_read_PrivateKey(fd, &privateKey, NULL, NULL);
+//  fclose(fd);
+//
+//  return GS_OK;
+//}
+//
+//static int load_server_status(PSERVER_DATA server) {
+//
+//  uuid_t uuid;
+//  char uuid_str[37];
+//
+//  int ret;
+//  char url[4096];
+//  int i;
+//
+//  i = 0;
+//  do {
+//    char *pairedText = NULL;
+//    char *currentGameText = NULL;
+//    char *stateText = NULL;
+//    char *serverCodecModeSupportText = NULL;
+//
+//    ret = GS_INVALID;
+//
+//    uuid_generate_random(uuid);
+//    uuid_unparse(uuid, uuid_str);
+//
+//    // Modern GFE versions don't allow serverinfo to be fetched over HTTPS if the client
+//    // is not already paired. Since we can't pair without knowing the server version, we
+//    // make another request over HTTP if the HTTPS request fails. We can't just use HTTP
+//    // for everything because it doesn't accurately tell us if we're paired.
+//
+//    printf("server->serverInfo.address: %s\n", server->serverInfo.address);
+//    printf("unique_id: %s\n", unique_id);
+//    printf("uuid_str: %s\n", uuid_str);
+//
+//    snprintf(url, sizeof(url), "%s://%s:%d/serverinfo?uniqueid=%s&uuid=%s",
+//      i == 0 ? "https" : "http", server->serverInfo.address, i == 0 ? 47984 : 47989, unique_id, uuid_str);
+//
+//    PHTTP_DATA data = http_create_data();
+//    if (data == NULL) {
+//      ret = GS_OUT_OF_MEMORY;
+//      goto cleanup;
+//    }
+//    if (http_request(url, data) != GS_OK) {
+//      ret = GS_IO_ERROR;
+//      goto cleanup;
+//    }
+//
+//    if (xml_status(data->memory, data->size) == GS_ERROR) {
+//      ret = GS_ERROR;
+//      goto cleanup;
+//    }
+//
+//    if (xml_search(data->memory, data->size, "currentgame", &currentGameText) != GS_OK) {
+//      goto cleanup;
+//    }
+//
+//    if (xml_search(data->memory, data->size, "PairStatus", &pairedText) != GS_OK)
+//      goto cleanup;
+//
+//    if (xml_search(data->memory, data->size, "appversion", (char**) &server->serverInfo.serverInfoAppVersion) != GS_OK)
+//      goto cleanup;
+//
+//    if (xml_search(data->memory, data->size, "state", &stateText) != GS_OK)
+//      goto cleanup;
+//
+//    if (xml_search(data->memory, data->size, "ServerCodecModeSupport", &serverCodecModeSupportText) != GS_OK)
+//      goto cleanup;
+//
+//    if (xml_search(data->memory, data->size, "gputype", &server->gpuType) != GS_OK)
+//      goto cleanup;
+//
+//    if (xml_search(data->memory, data->size, "GsVersion", &server->gsVersion) != GS_OK)
+//      goto cleanup;
+//
+//    if (xml_search(data->memory, data->size, "hostname", &server->hostname) != GS_OK)
+//      goto cleanup;
+//
+//    if (xml_search(data->memory, data->size, "GfeVersion", (char**) &server->serverInfo.serverInfoGfeVersion) != GS_OK)
+//      goto cleanup;
+//
+//    if (xml_modelist(data->memory, data->size, &server->modes) != GS_OK)
+//      goto cleanup;
+//
+//    // These fields are present on all version of GFE that this client supports
+//    if (!strlen(currentGameText) || !strlen(pairedText) || !strlen(server->serverInfo.serverInfoAppVersion) || !strlen(stateText))
+//      goto cleanup;
+//
+//    server->paired = pairedText != NULL && strcmp(pairedText, "1") == 0;
+//    server->currentGame = currentGameText == NULL ? 0 : atoi(currentGameText);
+//    server->supports4K = serverCodecModeSupportText != NULL;
+//    server->serverMajorVersion = atoi(server->serverInfo.serverInfoAppVersion);
+//
+//    if (strstr(stateText, "_SERVER_BUSY") == NULL) {
+//      // After GFE 2.8, current game remains set even after streaming
+//      // has ended. We emulate the old behavior by forcing it to zero
+//      // if streaming is not active.
+//      server->currentGame = 0;
+//    }
+//    ret = GS_OK;
+//
+//    cleanup:
+//    if (data != NULL)
+//      http_free_data(data);
+//
+//    if (pairedText != NULL)
+//      free(pairedText);
+//
+//    if (currentGameText != NULL)
+//      free(currentGameText);
+//
+//    if (serverCodecModeSupportText != NULL)
+//      free(serverCodecModeSupportText);
+//
+//    i++;
+//  } while (ret != GS_OK && i < 2);
+//
+//  if (ret == GS_OK && !server->unsupported) {
+//    if (server->serverMajorVersion > MAX_SUPPORTED_GFE_VERSION) {
+//      gs_error = "Ensure you're running the latest version of Moonlight Embedded or downgrade GeForce Experience and try again";
+//      ret = GS_UNSUPPORTED_VERSION;
+//    } else if (server->serverMajorVersion < MIN_SUPPORTED_GFE_VERSION) {
+//      gs_error = "Moonlight Embedded requires a newer version of GeForce Experience. Please upgrade GFE on your PC and try again.";
+//      ret = GS_UNSUPPORTED_VERSION;
+//    }
+//  }
+//
+//  return ret;
+//}
 
 static void bytes_to_hex(unsigned char *in, char *out, size_t len) {
   for (int i = 0; i < len; i++) {
@@ -300,46 +329,50 @@ static void bytes_to_hex(unsigned char *in, char *out, size_t len) {
 }
 
 static int sign_it(const char *msg, size_t mlen, unsigned char **sig, size_t *slen, EVP_PKEY *pkey) {
+    LOG_FMT("mlen = %i\n", mlen);
   int result = GS_FAILED;
 
   *sig = NULL;
   *slen = 0;
 
-  EVP_MD_CTX *ctx = EVP_MD_CTX_create();
+  EVP_MD_CTX *ctx = EVP_MD_CTX_create(); DEBUG_EMPTY_LOG
   if (ctx == NULL)
     return GS_FAILED;
 
-  const EVP_MD *md = EVP_get_digestbyname("SHA256");
+  const EVP_MD *md = EVP_get_digestbyname("SHA256");DEBUG_EMPTY_LOG
   if (md == NULL)
     goto cleanup;
 
-  int rc = EVP_DigestInit_ex(ctx, md, NULL);
+  int rc = EVP_DigestInit_ex(ctx, md, NULL);DEBUG_EMPTY_LOG
   if (rc != 1)
     goto cleanup;
 
-  rc = EVP_DigestSignInit(ctx, NULL, md, NULL, pkey);
+  rc = EVP_DigestSignInit(ctx, NULL, md, NULL, pkey);DEBUG_EMPTY_LOG
   if (rc != 1)
     goto cleanup;
 
-  rc = EVP_DigestSignUpdate(ctx, msg, mlen);
+  rc = EVP_DigestSignUpdate(ctx, msg, mlen);DEBUG_EMPTY_LOG
   if (rc != 1)
     goto cleanup;
 
   size_t req = 0;
-  rc = EVP_DigestSignFinal(ctx, NULL, &req);
+  rc = EVP_DigestSignFinal(ctx, NULL, &req);DEBUG_EMPTY_LOG
   if (rc != 1 || !(req > 0))
     goto cleanup;
 
-  *sig = OPENSSL_malloc(req);
+  *sig = OPENSSL_malloc(req);DEBUG_EMPTY_LOG
   if (*sig == NULL)
     goto cleanup;
 
   *slen = req;
-  rc = EVP_DigestSignFinal(ctx, *sig, slen);
+  rc = EVP_DigestSignFinal(ctx, *sig, slen);DEBUG_EMPTY_LOG
+    //LOG_FMT("msg = %s\n", msg);
+    LOG_FMT("rc = %i\n", rc);
   if (rc != 1 || req != *slen)
     goto cleanup;
 
   result = GS_OK;
+    DEBUG_EMPTY_LOG
 
   cleanup:
   EVP_MD_CTX_destroy(ctx);
@@ -499,8 +532,8 @@ int gs_pair(PSERVER_DATA server, char* pin) {
     goto cleanup;
   }
 
-  char challenge_response_data_enc[48];
-  char challenge_response_data[48];
+  char challenge_response_data_enc[64];
+  char challenge_response_data[64];
   for (int count = 0; count < strlen(result); count += 2) {
     sscanf(&result[count], "%2hhx", &challenge_response_data_enc[count / 2]);
   }
@@ -791,19 +824,19 @@ int gs_quit_app(PSERVER_DATA server) {
   http_free_data(data);
   return ret;
 }
-
-int gs_init(PSERVER_DATA server, char *address, const char *keyDirectory, int log_level, bool unsupported) {
-  mkdirtree(keyDirectory);
-  if (load_unique_id(keyDirectory) != GS_OK)
-    return GS_FAILED;
-
-  if (load_cert(keyDirectory))
-    return GS_FAILED;
-
-  http_init(keyDirectory, log_level);
-
-  LiInitializeServerInformation(&server->serverInfo);
-  server->serverInfo.address = address;
-  server->unsupported = unsupported;
-  return load_server_status(server);
-}
+//
+//int gs_init(PSERVER_DATA server, char *address, const char *keyDirectory, int log_level, bool unsupported) {
+//  mkdirtree(keyDirectory);
+//  if (load_unique_id(keyDirectory) != GS_OK)
+//    return GS_FAILED;
+//
+//  if (load_cert(keyDirectory))
+//    return GS_FAILED;
+//
+//  http_init(keyDirectory, log_level);
+//
+//  LiInitializeServerInformation(&server->serverInfo);
+//  server->serverInfo.address = address;
+//  server->unsupported = unsupported;
+//  return load_server_status(server);
+//}

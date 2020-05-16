@@ -206,7 +206,7 @@ DEFINES += -DNANOGUI_USE_OPENGL -DNVG_STB_IMAGE_IMPLEMENTATION -DNANOGUI_NO_GLFW
 	-DHAS_SOCKLEN_T -DHAS_POLL -DHAS_FCNTL -D_GNU_SOURCE -D__LIBRETRO__
 
 CFLAGS += -Wall -pedantic $(fpic) -std=gnu11 $(DEFINES)
-CXXFLAGS += -std=gnu++17 -fno-permissive $(DEFINES)
+CXXFLAGS += -std=gnu++17 $(DEFINES)
 
 LIBS += -lcrypto -lssl -lcurl -lz -lexpat -lopus \
 	-lavcodec -lavformat -lavutil -lavdevice -lstdc++ -lswresample

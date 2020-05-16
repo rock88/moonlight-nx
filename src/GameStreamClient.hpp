@@ -13,13 +13,13 @@ extern "C" {
 extern void perform_async(std::function<void()> task);
 
 template <typename T>
-struct Result {
+struct GSResult {
 public:
-    static Result success(T value) {
+    static GSResult success(T value) {
         return result(value, "", true);
     }
     
-    static Result failure(std::string error) {
+    static GSResult failure(std::string error) {
         return result(T(), error, false);
     }
     
@@ -36,8 +36,8 @@ public:
     }
     
 private:
-    static Result result(T value, std::string error, bool isSuccess) {
-        Result result;
+    static GSResult result(T value, std::string error, bool isSuccess) {
+        GSResult result;
         result._value = value;
         result._error = error;
         result._isSuccess = isSuccess;
@@ -49,7 +49,7 @@ private:
     bool _isSuccess = false;
 };
 
-template<class T> using ServerCallback = const std::function<void(Result<T>)>;
+template<class T> using ServerCallback = const std::function<void(GSResult<T>)>;
 
 class GameStreamClient {
 public:

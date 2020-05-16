@@ -1,6 +1,7 @@
 #include "HostButton.hpp"
 #include "GameStreamClient.hpp"
 #include "nanovg.h"
+#include "Log.h"
 #include <memory>
 
 using namespace nanogui;
@@ -22,6 +23,7 @@ HostButton::HostButton(Widget* parent, const std::string &address): Button(paren
             m_is_paired = result.value().paired;
             m_host_status_icon = m_is_paired ? FA_CHECK : FA_QUESTION;
         } else {
+            LOG_FMT("Error: %s\n", result.error().c_str());
             m_is_paired = false;
             m_is_active = false;
             m_host_status_icon = FA_POWER_OFF;
