@@ -26,5 +26,8 @@ DerivedData/
 *.o
 *.dylib
 *.so
+*.elf
+*.nacp
+*.nro
 third_party/opus
 third_party/ffmpeg

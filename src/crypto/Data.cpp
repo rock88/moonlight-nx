@@ -3,17 +3,18 @@
 #include <cstdlib>
 #include "Log.h"
 
-Data::Data(char* bytes, size_t size) {
+Data::Data(unsigned char* bytes, size_t size) {
     if (bytes && size > 0) {
-        m_bytes = (char *)malloc(sizeof(char) * size);
-        memcpy(m_bytes, bytes, sizeof(char) * size);
+        m_bytes = (unsigned char *)malloc(size);
+        memcpy(m_bytes, bytes, size);
         m_size = size;
     }
 }
 
 Data::Data(size_t capacity) {
     if (capacity > 0) {
-        m_bytes = (char *)malloc(sizeof(char) * capacity);
+        m_bytes = (unsigned char *)malloc(capacity + 1);
+        m_bytes[capacity] = '\0';
         m_size = capacity;
     }
 }
@@ -24,15 +25,30 @@ Data::~Data() {
     }
 }
 
-Data Data::subdata(size_t size) {
-    if (size > m_size) {
+Data Data::subdata(size_t start, size_t size) {
+    if (start + size > m_size) {
         LOG("Invalid data length...\n");
         exit(-1);
     }
-    return Data(m_bytes, size);
+    return Data(&m_bytes[start], size);
 }
 
-Data::Data(const Data& that): Data(that.m_bytes, that.m_size) {}
+Data Data::append(Data other) {
+    if (is_empty()) {
+        return other;
+    }
+    
+    Data data(m_size + other.m_size);
+    memcpy(data.m_bytes, m_bytes, m_size);
+    memcpy(&data.m_bytes[m_size], other.m_bytes, other.m_size);
+    return data;
+}
+
+Data::Data(const Data& that): Data(0) {
+    m_bytes = (unsigned char *)malloc(that.size());
+    memcpy(m_bytes, that.bytes(), that.size());
+    m_size = that.size();
+}
 
 Data& Data::operator=(const Data& that) {
     if (this != &that) {
@@ -40,17 +56,18 @@ Data& Data::operator=(const Data& that) {
             free(m_bytes);
         }
         
-        m_bytes = (char *)malloc(sizeof(char) * that.m_size);
-        memcpy(m_bytes, that.m_bytes, sizeof(char) * that.m_size);
+        m_bytes = (unsigned char *)malloc(that.m_size);
+        memcpy(m_bytes, that.m_bytes, that.m_size);
         m_size = that.m_size;
     }
     return *this;
 }
 
 Data Data::random_bytes(size_t size) {
-    char* bytes = (char*)malloc(sizeof(char) * size);
+    unsigned char* bytes = (unsigned char*)malloc(sizeof(char) * size);
     arc4random_buf(bytes, size);
-    Data random_data(bytes, size);
+    Data random_data(size);
+    memcpy(random_data.m_bytes, bytes, size);
     free(bytes);
     return random_data;
 }
@@ -87,7 +104,7 @@ Data Data::hex_to_bytes() const {
     return data;
 }
 
-Data Data::bytes_to_hex() const {
+Data Data::hex() const {
     int counter = 0;
     Data hex(m_size * 2);
     char fmt[3] = {'\0','\0','\0'};
@@ -96,6 +113,7 @@ Data Data::bytes_to_hex() const {
         hex.m_bytes[counter++] = fmt[0];
         hex.m_bytes[counter++] = fmt[1];
     }
+    hex.m_bytes[m_size * 2] = '\0';
     return hex;
 }
 

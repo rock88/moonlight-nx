@@ -1,5 +1,4 @@
 #include "GameStreamClient.hpp"
-#include "ServerInfoRequest.hpp"
 #include "Settings.hpp"
 #include <thread>
 #include <mutex>
@@ -79,10 +78,11 @@ void GameStreamClient::connect(const std::string &address, ServerCallback<SERVER
     
     perform_async([this, address, callback] {
         // TODO: mem leak here :(
-        int status = ServerInfoRequest::request(address, &m_server_data[address]);
+        std::string key_dir = Settings::settings()->working_dir() + "/key";
+        int status = gs_init(&m_server_data[address], (char *)(new std::string(address))->c_str(), key_dir.c_str(), 0, false);
         
         nanogui::async([this, address, callback, status] {
-            if (status == NetworkClientOK) {
+            if (status == GS_OK) {
                 Settings::settings()->add_host(address);
                 callback(GSResult<SERVER_DATA>::success(m_server_data[address]));
             } else {

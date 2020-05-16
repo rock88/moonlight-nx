@@ -5,13 +5,13 @@
 class Data {
 public:
     Data(): Data(0) {};
-    Data(char* bytes, size_t size);
-    Data(unsigned char* bytes, size_t size): Data((char *)bytes, size) {};
+    Data(unsigned char* bytes, size_t size);
+    Data(char* bytes, size_t size): Data((unsigned char *)bytes, size) {};
     Data(size_t capacity);
     
     ~Data();
     
-    char* bytes() const {
+    unsigned char* bytes() const {
         return m_bytes;
     }
     
@@ -19,7 +19,8 @@ public:
         return m_size;
     }
     
-    Data subdata(size_t size);
+    Data subdata(size_t start, size_t size);
+    Data append(Data other);
     
     Data(const Data& that);
     Data& operator=(const Data& that);
@@ -28,7 +29,7 @@ public:
     static Data read_from_file(std::string path);
     
     Data hex_to_bytes() const;
-    Data bytes_to_hex() const;
+    Data hex() const;
     
     bool is_empty() const {
         return m_size == 0;
@@ -37,6 +38,6 @@ public:
     void write_to_file(std::string path);
     
 private:
-    char* m_bytes = nullptr;
+    unsigned char* m_bytes = nullptr;
     size_t m_size = 0;
 };

@@ -1,9 +1,9 @@
 #include <stdio.h>
 #include "Data.hpp"
+#include "client.h"
 
 extern "C" {
-    #include "mkcert.h"
-    #include "client.h"
+    #include "mkcert.h"    
 }
 
 #pragma once
@@ -17,6 +17,11 @@ public:
     static bool certs_exists();
     static bool load_certs();
     static bool generate_certs();
+    
+    static Data read_cert_from_file();
+    static Data read_p12_from_file();
+    static Data read_key_from_file();
+    
     static Data SHA1_hash_data(Data data);
     static Data SHA256_hash_data(Data data);
     static Data create_AES_key_from_salt_SHA1(Data salted_pin);

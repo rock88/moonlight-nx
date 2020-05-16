@@ -2,11 +2,8 @@
 #include <vector>
 #include <functional>
 #include <map>
-
-extern "C" {
-    #include "client.h"
-    #include "errors.h"
-}
+#include "client.h"
+#include "errors.h"
 
 #pragma once
 

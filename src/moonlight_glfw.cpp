@@ -17,10 +17,6 @@
 
 #include <GLFW/glfw3.h>
 
-#include "Data.hpp"
-#include "NetworkClient.hpp"
-#include "ServerInfoRequest.hpp"
-
 extern retro_input_state_t input_state_cb;
 
 static int mouse_x = 0, mouse_y = 0;
@@ -116,10 +112,6 @@ int main(int argc, const char * argv[]) {
     #else
     Settings::settings()->set_working_dir("/Users/rock88/Documents/RetroArch/system/moonlight");
     #endif
-    
-//    SERVER_DATA d5;
-//    std::string a = "www.google.ru";
-//    ServerInfoRequest::request(a, &d5);
     
     nanogui::init();
     nanogui::ref<Application> app = new Application(Size(width, height), Size(fb_width, fb_height));

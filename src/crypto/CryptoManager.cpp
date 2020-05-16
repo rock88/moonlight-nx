@@ -13,9 +13,9 @@
 static const int SHA1_HASH_LENGTH = 20;
 static const int SHA256_HASH_LENGTH = 32;
 
-static Data* m_cert = nullptr;
-static Data* m_p12 = nullptr;
-static Data* m_key = nullptr;
+static Data m_cert;
+static Data m_p12;
+static Data m_key;
 
 bool CryptoManager::certs_exists() {
     if (load_certs()) {
@@ -25,7 +25,7 @@ bool CryptoManager::certs_exists() {
 }
 
 bool CryptoManager::load_certs() {
-    if (m_key == nullptr || m_cert == nullptr || m_p12 == nullptr) {
+    if (m_key.is_empty() || m_cert.is_empty() || m_p12.is_empty()) {
         auto key_dir = Settings::settings()->working_dir() + "/key/";
         mkdirtree(key_dir.c_str());
         
@@ -34,9 +34,9 @@ bool CryptoManager::load_certs() {
         Data key = Data::read_from_file(key_dir + KEY_FILE_NAME);
         
         if (!cert.is_empty() && !p12.is_empty() && !key.is_empty()) {
-            m_cert = &cert;
-            m_p12 = &p12;
-            m_key = &key;
+            m_cert = cert;
+            m_p12 = p12;
+            m_key = key;
             return true;
         }
         
@@ -59,32 +59,44 @@ bool CryptoManager::generate_certs() {
         cert.write_to_file(key_dir + CERTIFICATE_FILE_NAME);
         p12.write_to_file(key_dir + P12_FILE_NAME);
         key.write_to_file(key_dir + KEY_FILE_NAME);
-        m_cert = &cert;
-        m_p12 = &p12;
-        m_key = &key;
+        m_cert = cert;
+        m_p12 = p12;
+        m_key = key;
         return true;
     }
     return false;
 }
 
+Data CryptoManager::read_cert_from_file() {
+    return m_cert;
+}
+
+Data CryptoManager::read_p12_from_file() {
+    return m_p12;
+}
+
+Data CryptoManager::read_key_from_file() {
+    return m_key;
+}
+
 Data CryptoManager::SHA1_hash_data(Data data) {
-    char sha1[SHA1_HASH_LENGTH];
-    SHA1((unsigned char*)data.bytes(), data.size(), (unsigned char*)sha1);
+    unsigned char sha1[SHA1_HASH_LENGTH];
+    SHA1(data.bytes(), data.size(), sha1);
     return Data(sha1, sizeof(sha1));
 }
 
 Data CryptoManager::SHA256_hash_data(Data data) {
-    char sha256[SHA256_HASH_LENGTH];
-    SHA256((unsigned char*)data.bytes(), data.size(), (unsigned char*)sha256);
+    unsigned char sha256[SHA256_HASH_LENGTH];
+    SHA256(data.bytes(), data.size(), sha256);
     return Data(sha256, sizeof(sha256));
 }
 
 Data CryptoManager::create_AES_key_from_salt_SHA1(Data salted_pin) {
-    return SHA1_hash_data(salted_pin).subdata(16);
+    return SHA1_hash_data(salted_pin).subdata(0, 16);
 }
 
 Data CryptoManager::create_AES_key_from_salt_SHA256(Data salted_pin) {
-    return SHA256_hash_data(salted_pin).subdata(16);
+    return SHA256_hash_data(salted_pin).subdata(0, 16);
 }
 
 static int get_encrypt_size(Data data) {
@@ -115,13 +127,13 @@ Data CryptoManager::aes_encrypt(Data data, Data key) {
 
 Data CryptoManager::aes_decrypt(Data data, Data key) {
     AES_KEY aes_key;
-    AES_set_decrypt_key((unsigned char*)key.bytes(), 128, &aes_key);
+    AES_set_decrypt_key(key.bytes(), 128, &aes_key);
     unsigned char* buffer = (unsigned char*)malloc(data.size());
     
     // AES_decrypt only decrypts the first 16 bytes so iterate the entire buffer
     int block_offset = 0;
     while (block_offset < data.size()) {
-        AES_decrypt((unsigned char*)data.bytes() + block_offset, buffer + block_offset, &aes_key);
+        AES_decrypt(data.bytes() + block_offset, buffer + block_offset, &aes_key);
         block_offset += 16;
     }
     
@@ -133,7 +145,7 @@ Data CryptoManager::aes_decrypt(Data data, Data key) {
 Data CryptoManager::pem_to_der(Data pem_cert_bytes) {
     X509* x509;
     
-    BIO* bio = BIO_new_mem_buf((unsigned char*)pem_cert_bytes.bytes(), pem_cert_bytes.size());
+    BIO* bio = BIO_new_mem_buf(pem_cert_bytes.bytes(), pem_cert_bytes.size());
     x509 = PEM_read_bio_X509(bio, NULL, NULL, NULL);
     BIO_free(bio);
     
@@ -149,9 +161,8 @@ Data CryptoManager::pem_to_der(Data pem_cert_bytes) {
 }
 
 bool CryptoManager::verify_signature(Data data, Data signature, Data cert) {
-    X509* x509;
     BIO* bio = BIO_new_mem_buf(cert.bytes(), cert.size());
-    x509 = PEM_read_bio_X509(bio, NULL, NULL, NULL);
+    X509* x509 = PEM_read_bio_X509(bio, NULL, NULL, NULL);
     
     BIO_free(bio);
     
@@ -165,7 +176,7 @@ bool CryptoManager::verify_signature(Data data, Data signature, Data cert) {
     mdctx = EVP_MD_CTX_create();
     EVP_DigestVerifyInit(mdctx, NULL, EVP_sha256(), NULL, pub_key);
     EVP_DigestVerifyUpdate(mdctx, data.bytes(), data.size());
-    int result = EVP_DigestVerifyFinal(mdctx, (unsigned char*)signature.bytes(), signature.size());
+    int result = EVP_DigestVerifyFinal(mdctx, signature.bytes(), signature.size());
     
     X509_free(x509);
     EVP_PKEY_free(pub_key);
@@ -175,19 +186,16 @@ bool CryptoManager::verify_signature(Data data, Data signature, Data cert) {
 
 Data CryptoManager::sign_data(Data data, Data key) {
     BIO* bio = BIO_new_mem_buf(key.bytes(), key.size());
-    
-    EVP_PKEY* pkey;
-    pkey = PEM_read_bio_PrivateKey(bio, NULL, NULL, NULL);
+    EVP_PKEY* pkey = PEM_read_bio_PrivateKey(bio, NULL, NULL, NULL);
     
     BIO_free(bio);
     
     if (!pkey) {
         LOG("Unable to parse private key in memory!");
-        exit(-1);
+        return Data();
     }
     
-    EVP_MD_CTX *mdctx = NULL;
-    mdctx = EVP_MD_CTX_create();
+    EVP_MD_CTX *mdctx = EVP_MD_CTX_create();
     EVP_DigestSignInit(mdctx, NULL, EVP_sha256(), NULL, pkey);
     EVP_DigestSignUpdate(mdctx, data.bytes(), data.size());
     size_t slen;

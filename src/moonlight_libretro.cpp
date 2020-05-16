@@ -11,10 +11,7 @@
 #include "Application.hpp"
 #include "InputController.hpp"
 #include "Settings.hpp"
-
-extern "C" {
-    #include "client.h"
-}
+#include "client.h"
 
 struct retro_hw_render_callback hw_render;
 

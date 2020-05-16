@@ -139,7 +139,7 @@ static void XMLCALL _xml_write_data(void *userData, const XML_Char *s, int len) 
   }
 }
 
-int xml_search(char* data, size_t len, char* node, char** result) {
+int xml_search(unsigned char* data, size_t len, char* node, char** result) {
   struct xml_query search;
   search.data = node;
   search.start = 0;
@@ -166,7 +166,7 @@ int xml_search(char* data, size_t len, char* node, char** result) {
   return GS_OK;
 }
 
-int xml_applist(char* data, size_t len, PAPP_LIST *app_list) {
+int xml_applist(unsigned char* data, size_t len, PAPP_LIST *app_list) {
   struct xml_query query;
   query.memory = calloc(1, 1);
   query.size = 0;
@@ -189,7 +189,7 @@ int xml_applist(char* data, size_t len, PAPP_LIST *app_list) {
   return GS_OK;
 }
 
-int xml_modelist(char* data, size_t len, PDISPLAY_MODE *mode_list) {
+int xml_modelist(unsigned char* data, size_t len, PDISPLAY_MODE *mode_list) {
   struct xml_query query = {0};
   query.memory = calloc(1, 1);
   XML_Parser parser = XML_ParserCreate("UTF-8");
@@ -210,7 +210,7 @@ int xml_modelist(char* data, size_t len, PDISPLAY_MODE *mode_list) {
 
 }
 
-int xml_status(char* data, size_t len) {
+int xml_status(unsigned char* data, size_t len) {
   int status = 0;
   XML_Parser parser = XML_ParserCreate("UTF-8");
   XML_SetUserData(parser, &status);
