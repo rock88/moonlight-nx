@@ -7,6 +7,3 @@
 [submodule "third_party/json"]
 	path = third_party/json
 	url = https://github.com/nlohmann/json.git
-[submodule "third_party/libuuid"]
-	path = third_party/libuuid
-	url = https://github.com/fadedreamz/libuuid.git
