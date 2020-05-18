@@ -106,7 +106,7 @@ void InputController::handle_game_pad() {
 }
 
 void InputController::send_to_stream() {
-#if defined(__LAKKA_SWITCH__)
+#if defined(__SWITCH__) || defined(__LAKKA_SWITCH__)
     static bool pressed = false;
     static int mouse_x = mouse_state.x, mouse_y = mouse_state.y;
     static int last_mouse_x = 0, last_mouse_y = 0;

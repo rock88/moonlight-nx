@@ -9,6 +9,8 @@
 #include "Settings.hpp"
 #include "nanovg.h"
 
+extern int moonlight_exit;
+
 using namespace nanogui;
 
 MainWindow::MainWindow(Widget *parent): ContentWindow(parent, "Moonlight ") {
@@ -72,4 +74,11 @@ void MainWindow::draw(NVGcontext *ctx) {
     nvgText(ctx, width() - 40, height() - 8, MOONLIGHT_LIBRETRO_VERSION, NULL);
     
     nvgRestore(ctx);
+}
+
+bool MainWindow::keyboard_event(int key, int scancode, int action, int modifiers) {
+    if (key == 256 && action == 1) {
+        moonlight_exit = 1;
+    }
+    return true;
 }

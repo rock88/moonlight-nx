@@ -44,6 +44,7 @@ void Application::push_widget(Widget* widget) {
         w->window_appear();
     }
     
+    update_focus(widget);
     perform_layout();
 }
 
@@ -59,6 +60,7 @@ void Application::pop_window() {
         
         remove_child(last);
         m_windows.back()->set_visible(true);
+        update_focus(m_windows.back());
         perform_layout();
     }
     

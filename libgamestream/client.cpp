@@ -516,7 +516,7 @@ int gs_init(PSERVER_DATA server, char *address, const char *keyDirectory, int lo
         }
     }
     
-    http_init(keyDirectory, 2);
+    http_init(keyDirectory, log_level);
     
     LiInitializeServerInformation(&server->serverInfo);
     server->serverInfo.address = address;

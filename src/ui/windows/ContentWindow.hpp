@@ -49,6 +49,10 @@ public:
         m_container->set_layout(new nanogui::BoxLayout(orientation, alignment, margin, spacing));
     }
     
+    bool keyboard_event(int key, int scancode, int action, int modifiers) override {
+        return true;
+    };
+    
 private:
     Application* application() {
         auto application = static_cast<Application *>(screen());

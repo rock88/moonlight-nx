@@ -21,9 +21,14 @@ static int mouse_x = 0, mouse_y = 0;
 static int mouse_l = 0, mouse_r = 0;
 
 static int glfw_keyboard_state[GLFW_KEY_LAST];
+static GLFWgamepadstate glfw_gamepad_state;
+int moonlight_exit = 0;
 
 #define GLFW_KEY_TO_RETRO(RETRO, KEY) \
     if (id == RETRO) return glfw_keyboard_state[KEY];
+
+#define GLFW_GAMEPAD_TO_RETRO(RETRO, KEY) \
+    if (id == RETRO) return glfw_gamepad_state.buttons[KEY];
 
 static int16_t glfw_input_state_cb(unsigned port, unsigned device, unsigned index, unsigned id) {
     if (device == RETRO_DEVICE_MOUSE) {
@@ -37,6 +42,29 @@ static int16_t glfw_input_state_cb(unsigned port, unsigned device, unsigned inde
             return mouse_r;
         }
     } else if (device == RETRO_DEVICE_JOYPAD) {
+        #if defined(__SWITCH__)
+        GLFW_GAMEPAD_TO_RETRO(RETRO_DEVICE_ID_JOYPAD_UP, GLFW_GAMEPAD_BUTTON_DPAD_UP);
+        GLFW_GAMEPAD_TO_RETRO(RETRO_DEVICE_ID_JOYPAD_DOWN, GLFW_GAMEPAD_BUTTON_DPAD_DOWN);
+        GLFW_GAMEPAD_TO_RETRO(RETRO_DEVICE_ID_JOYPAD_LEFT, GLFW_GAMEPAD_BUTTON_DPAD_LEFT);
+        GLFW_GAMEPAD_TO_RETRO(RETRO_DEVICE_ID_JOYPAD_RIGHT, GLFW_GAMEPAD_BUTTON_DPAD_RIGHT);
+        GLFW_GAMEPAD_TO_RETRO(RETRO_DEVICE_ID_JOYPAD_L, GLFW_GAMEPAD_BUTTON_LEFT_BUMPER);
+        GLFW_GAMEPAD_TO_RETRO(RETRO_DEVICE_ID_JOYPAD_R, GLFW_GAMEPAD_BUTTON_RIGHT_BUMPER);
+        GLFW_GAMEPAD_TO_RETRO(RETRO_DEVICE_ID_JOYPAD_L3, GLFW_GAMEPAD_BUTTON_LEFT_THUMB);
+        GLFW_GAMEPAD_TO_RETRO(RETRO_DEVICE_ID_JOYPAD_R3, GLFW_GAMEPAD_BUTTON_RIGHT_THUMB);
+        GLFW_GAMEPAD_TO_RETRO(RETRO_DEVICE_ID_JOYPAD_A, GLFW_GAMEPAD_BUTTON_A);
+        GLFW_GAMEPAD_TO_RETRO(RETRO_DEVICE_ID_JOYPAD_B, GLFW_GAMEPAD_BUTTON_B);
+        GLFW_GAMEPAD_TO_RETRO(RETRO_DEVICE_ID_JOYPAD_X, GLFW_GAMEPAD_BUTTON_X);
+        GLFW_GAMEPAD_TO_RETRO(RETRO_DEVICE_ID_JOYPAD_Y, GLFW_GAMEPAD_BUTTON_Y);
+        GLFW_GAMEPAD_TO_RETRO(RETRO_DEVICE_ID_JOYPAD_SELECT, GLFW_GAMEPAD_BUTTON_BACK);
+        GLFW_GAMEPAD_TO_RETRO(RETRO_DEVICE_ID_JOYPAD_START, GLFW_GAMEPAD_BUTTON_START);
+        
+        if (id == RETRO_DEVICE_ID_JOYPAD_L2) {
+            return (glfw_gamepad_state.axes[GLFW_GAMEPAD_AXIS_LEFT_TRIGGER] + 1) / 2;
+        }
+        if (id == RETRO_DEVICE_ID_JOYPAD_R2) {
+            return (glfw_gamepad_state.axes[GLFW_GAMEPAD_AXIS_RIGHT_TRIGGER] + 1) / 2;
+        }
+        #else
         GLFW_KEY_TO_RETRO(RETRO_DEVICE_ID_JOYPAD_UP, GLFW_KEY_UP);
         GLFW_KEY_TO_RETRO(RETRO_DEVICE_ID_JOYPAD_DOWN, GLFW_KEY_DOWN);
         GLFW_KEY_TO_RETRO(RETRO_DEVICE_ID_JOYPAD_LEFT, GLFW_KEY_LEFT);
@@ -49,6 +77,15 @@ static int16_t glfw_input_state_cb(unsigned port, unsigned device, unsigned inde
         GLFW_KEY_TO_RETRO(RETRO_DEVICE_ID_JOYPAD_B, GLFW_KEY_B);
         GLFW_KEY_TO_RETRO(RETRO_DEVICE_ID_JOYPAD_X, GLFW_KEY_X);
         GLFW_KEY_TO_RETRO(RETRO_DEVICE_ID_JOYPAD_Y, GLFW_KEY_Y);
+        #endif
+    } else if (device == RETRO_DEVICE_ANALOG && index == RETRO_DEVICE_INDEX_ANALOG_LEFT && id == RETRO_DEVICE_ID_ANALOG_X) {
+        return glfw_gamepad_state.axes[GLFW_GAMEPAD_AXIS_LEFT_X] * 0xFFFF / 2;
+    } else if (device == RETRO_DEVICE_ANALOG && index == RETRO_DEVICE_INDEX_ANALOG_LEFT && id == RETRO_DEVICE_ID_ANALOG_Y) {
+        return glfw_gamepad_state.axes[GLFW_GAMEPAD_AXIS_LEFT_Y] * 0xFFFF / 2;
+    } else if (device == RETRO_DEVICE_ANALOG && index == RETRO_DEVICE_INDEX_ANALOG_RIGHT && id == RETRO_DEVICE_ID_ANALOG_X) {
+        return glfw_gamepad_state.axes[GLFW_GAMEPAD_AXIS_RIGHT_X] * 0xFFFF / 2;
+    } else if (device == RETRO_DEVICE_ANALOG && index == RETRO_DEVICE_INDEX_ANALOG_RIGHT && id == RETRO_DEVICE_ID_ANALOG_Y) {
+        return glfw_gamepad_state.axes[GLFW_GAMEPAD_AXIS_RIGHT_Y] * 0xFFFF / 2;
     }
     return 0;
 }
@@ -98,6 +135,7 @@ int main(int argc, const char * argv[]) {
     
     glfwSetKeyCallback(window, [](GLFWwindow *w, int key, int scancode, int action, int mods) {
         glfw_keyboard_state[key] = action != GLFW_RELEASE;
+        nanogui::keyboard_event(key, scancode, action, mods);
     });
     
     int width, height, fb_width, fb_height;
@@ -115,17 +153,16 @@ int main(int argc, const char * argv[]) {
     
     nanogui::setup(1.0 / 15.0);
     
-    while (!glfwWindowShouldClose(window)) {
+    while (!glfwWindowShouldClose(window) && !moonlight_exit) {
         #ifdef __SWITCH__
         hidScanInput();
-        u32 kDown = hidKeysDown(CONTROLLER_P1_AUTO);
-        if (kDown & KEY_PLUS) {
-            printf("Exit...\n");
-            break;
+        if (hidKeysDown(CONTROLLER_P1_AUTO) & KEY_PLUS) {
+            nanogui::keyboard_event(GLFW_KEY_ESCAPE, 0, 1, 0);
         }
         #endif
         
         glfwPollEvents();
+        glfwGetGamepadState(GLFW_JOYSTICK_1, &glfw_gamepad_state);
         
         InputController::controller()->handle_input(width, height);
         
@@ -142,7 +179,8 @@ int main(int argc, const char * argv[]) {
     extern void terminate_gamestream_thread();
     terminate_gamestream_thread();
     #endif
-    //nanogui::shutdown();
+    nanogui::leave();
+    nanogui::shutdown();
     glfwTerminate();
     return 0;
 }
