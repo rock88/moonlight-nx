@@ -21,8 +21,5 @@
 
 #include "Data.hpp"
 
-#define CERTIFICATE_FILE_NAME "client.pem"
-#define KEY_FILE_NAME "key.pem"
-
 int http_init(const char* key_directory, int log_level);
 int http_request(char* url, Data* data);

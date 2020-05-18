@@ -11,6 +11,8 @@
 		3602C3BA245DB3C800368900 /* AppListWindow.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3602C3B8245DB3C800368900 /* AppListWindow.cpp */; };
 		3602C3BD245DBA9100368900 /* AppButton.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3602C3BB245DBA9100368900 /* AppButton.cpp */; };
 		3603E93C246316400051287D /* InputController.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3603E93A246316400051287D /* InputController.cpp */; };
+		363898332471B7C500F99920 /* OpenSSLCryptoManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 363898302471B7C500F99920 /* OpenSSLCryptoManager.cpp */; };
+		363898342471B7C500F99920 /* MbedTLSCryptoManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 363898312471B7C500F99920 /* MbedTLSCryptoManager.cpp */; };
 		3652EFCD245B3B00001FABF3 /* widget.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3652EF0F245B3B00001FABF3 /* widget.cpp */; };
 		3652EFCE245B3B00001FABF3 /* common.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3652EF10245B3B00001FABF3 /* common.cpp */; };
 		3652EFCF245B3B00001FABF3 /* checkbox.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3652EF11245B3B00001FABF3 /* checkbox.cpp */; };
@@ -50,7 +52,6 @@
 		3652F005245C28C6001FABF3 /* GameStreamClient.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3652F003245C28C6001FABF3 /* GameStreamClient.cpp */; };
 		3652F010245C2919001FABF3 /* xml.c in Sources */ = {isa = PBXBuildFile; fileRef = 3652F008245C2918001FABF3 /* xml.c */; };
 		3652F011245C2919001FABF3 /* client.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3652F00C245C2918001FABF3 /* client.cpp */; };
-		3652F012245C2919001FABF3 /* mkcert.c in Sources */ = {isa = PBXBuildFile; fileRef = 3652F00D245C2918001FABF3 /* mkcert.c */; };
 		3652F013245C2919001FABF3 /* http.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3652F00F245C2918001FABF3 /* http.cpp */; };
 		3652F065245C292B001FABF3 /* list.c in Sources */ = {isa = PBXBuildFile; fileRef = 3652F017245C292B001FABF3 /* list.c */; };
 		3652F066245C292B001FABF3 /* compress.c in Sources */ = {isa = PBXBuildFile; fileRef = 3652F01B245C292B001FABF3 /* compress.c */; };
@@ -100,7 +101,6 @@
 		36DFE0CE2459FAB100FC51CE /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 36DBDEA22450C2640057C8D3 /* OpenGL.framework */; };
 		36DFE217245A278700FC51CE /* glsym_gl.c in Sources */ = {isa = PBXBuildFile; fileRef = 36DFE0DB245A1FEC00FC51CE /* glsym_gl.c */; };
 		36DFE218245A278900FC51CE /* rglgen.c in Sources */ = {isa = PBXBuildFile; fileRef = 36DFE0DE245A1FEC00FC51CE /* rglgen.c */; };
-		36E6378C246FFFF30032F5FB /* CryptoManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 36E6378A246FFFF30032F5FB /* CryptoManager.cpp */; };
 		36E63790247010C70032F5FB /* Data.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 36E6378E247010C70032F5FB /* Data.cpp */; };
 /* End PBXBuildFile section */
 
@@ -126,6 +126,10 @@
 		3602C3C0245DC7E300368900 /* Makefile */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.make; path = Makefile; sourceTree = "<group>"; };
 		3603E93A246316400051287D /* InputController.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = InputController.cpp; sourceTree = "<group>"; };
 		3603E93B246316400051287D /* InputController.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = InputController.hpp; sourceTree = "<group>"; };
+		3638982F2471B7C500F99920 /* MbedTLSCryptoManager.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = MbedTLSCryptoManager.hpp; sourceTree = "<group>"; };
+		363898302471B7C500F99920 /* OpenSSLCryptoManager.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = OpenSSLCryptoManager.cpp; sourceTree = "<group>"; };
+		363898312471B7C500F99920 /* MbedTLSCryptoManager.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MbedTLSCryptoManager.cpp; sourceTree = "<group>"; };
+		363898322471B7C500F99920 /* OpenSSLCryptoManager.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = OpenSSLCryptoManager.hpp; sourceTree = "<group>"; };
 		3652ECE8245B3AFF001FABF3 /* colorpicker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = colorpicker.h; sourceTree = "<group>"; };
 		3652ECE9245B3AFF001FABF3 /* renderpass.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = renderpass.h; sourceTree = "<group>"; };
 		3652ECEA245B3AFF001FABF3 /* theme.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = theme.h; sourceTree = "<group>"; };
@@ -212,13 +216,11 @@
 		3652F001245B6961001FABF3 /* AddHostWindow.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = AddHostWindow.hpp; sourceTree = "<group>"; };
 		3652F003245C28C6001FABF3 /* GameStreamClient.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = GameStreamClient.cpp; sourceTree = "<group>"; };
 		3652F004245C28C6001FABF3 /* GameStreamClient.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = GameStreamClient.hpp; sourceTree = "<group>"; };
-		3652F007245C2918001FABF3 /* mkcert.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = mkcert.h; sourceTree = "<group>"; };
 		3652F008245C2918001FABF3 /* xml.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = xml.c; sourceTree = "<group>"; };
 		3652F009245C2918001FABF3 /* client.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = client.h; sourceTree = "<group>"; };
 		3652F00A245C2918001FABF3 /* http.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = http.h; sourceTree = "<group>"; };
 		3652F00B245C2918001FABF3 /* errors.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = errors.h; sourceTree = "<group>"; };
 		3652F00C245C2918001FABF3 /* client.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = client.cpp; sourceTree = "<group>"; };
-		3652F00D245C2918001FABF3 /* mkcert.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = mkcert.c; sourceTree = "<group>"; };
 		3652F00E245C2918001FABF3 /* xml.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = xml.h; sourceTree = "<group>"; };
 		3652F00F245C2918001FABF3 /* http.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = http.cpp; sourceTree = "<group>"; };
 		3652F017245C292B001FABF3 /* list.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = list.c; sourceTree = "<group>"; };
@@ -301,6 +303,7 @@
 		36D3F8432469B5C400CDEF9B /* MoonlightSession.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = MoonlightSession.hpp; sourceTree = "<group>"; };
 		36D3F8452469C6BC00CDEF9B /* Log.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Log.h; sourceTree = "<group>"; };
 		36D3F8492469CC2600CDEF9B /* IAudioRenderer.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = IAudioRenderer.hpp; sourceTree = "<group>"; };
+		36D461BE24709B8F00A543B4 /* build.sh */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; name = build.sh; path = "../../../../Downloads/openssl-1.1.1g/build.sh"; sourceTree = "<group>"; };
 		36DBDE8E2450BB7E0057C8D3 /* moonlight */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = moonlight; sourceTree = BUILT_PRODUCTS_DIR; };
 		36DBDE992450BCD50057C8D3 /* CoreFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreFoundation.framework; path = System/Library/Frameworks/CoreFoundation.framework; sourceTree = SDKROOT; };
 		36DBDE9B2450BCD90057C8D3 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -320,7 +323,6 @@
 		36DFE0DF245A1FEC00FC51CE /* rglgen_headers.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = rglgen_headers.h; sourceTree = "<group>"; };
 		36DFE0E1245A1FEC00FC51CE /* glsym_es3.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = glsym_es3.h; sourceTree = "<group>"; };
 		36DFE0E3245A1FEC00FC51CE /* glsym_gl.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = glsym_gl.h; sourceTree = "<group>"; };
-		36E6378A246FFFF30032F5FB /* CryptoManager.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = CryptoManager.cpp; sourceTree = "<group>"; };
 		36E6378B246FFFF30032F5FB /* CryptoManager.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = CryptoManager.hpp; sourceTree = "<group>"; };
 		36E6378E247010C70032F5FB /* Data.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Data.cpp; sourceTree = "<group>"; };
 		36E6378F247010C70032F5FB /* Data.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Data.hpp; sourceTree = "<group>"; };
@@ -515,8 +517,6 @@
 				3652F009245C2918001FABF3 /* client.h */,
 				3652F00F245C2918001FABF3 /* http.cpp */,
 				3652F00A245C2918001FABF3 /* http.h */,
-				3652F00D245C2918001FABF3 /* mkcert.c */,
-				3652F007245C2918001FABF3 /* mkcert.h */,
 				3652F008245C2918001FABF3 /* xml.c */,
 				3652F00E245C2918001FABF3 /* xml.h */,
 				3652F00B245C2918001FABF3 /* errors.h */,
@@ -689,6 +689,7 @@
 		36DBDE852450BB7E0057C8D3 = {
 			isa = PBXGroup;
 			children = (
+				36D461BE24709B8F00A543B4 /* build.sh */,
 				3602C3C0245DC7E300368900 /* Makefile */,
 				369445A82466CE2700786D0A /* Makefile.libnx */,
 				36A0C03E2461FFF10083289C /* build_opus_lakka_switch.sh */,
@@ -771,10 +772,13 @@
 		36E63789246FFFDC0032F5FB /* crypto */ = {
 			isa = PBXGroup;
 			children = (
+				36E6378B246FFFF30032F5FB /* CryptoManager.hpp */,
+				363898312471B7C500F99920 /* MbedTLSCryptoManager.cpp */,
+				3638982F2471B7C500F99920 /* MbedTLSCryptoManager.hpp */,
+				363898302471B7C500F99920 /* OpenSSLCryptoManager.cpp */,
+				363898322471B7C500F99920 /* OpenSSLCryptoManager.hpp */,
 				36E6378E247010C70032F5FB /* Data.cpp */,
 				36E6378F247010C70032F5FB /* Data.hpp */,
-				36E6378A246FFFF30032F5FB /* CryptoManager.cpp */,
-				36E6378B246FFFF30032F5FB /* CryptoManager.hpp */,
 			);
 			path = crypto;
 			sourceTree = "<group>";
@@ -867,6 +871,7 @@
 				36DFE0CD2459FA3F00FC51CE /* nanogui_resources.cpp in Sources */,
 				36DFE217245A278700FC51CE /* glsym_gl.c in Sources */,
 				3652F06A245C292B001FABF3 /* protocol.c in Sources */,
+				363898332471B7C500F99920 /* OpenSSLCryptoManager.cpp in Sources */,
 				3652EFFC245B6434001FABF3 /* MainWindow.cpp in Sources */,
 				3652F086245C6CFC001FABF3 /* moonlight_libretro.cpp in Sources */,
 				3652EFD3245B3B00001FABF3 /* button.cpp in Sources */,
@@ -892,6 +897,7 @@
 				3652EFF6245B3CF2001FABF3 /* nanovg.c in Sources */,
 				3652F067245C292B001FABF3 /* packet.c in Sources */,
 				3661D2F92469D1940060EE24 /* FFmpegVideoDecoder.cpp in Sources */,
+				363898342471B7C500F99920 /* MbedTLSCryptoManager.cpp in Sources */,
 				3652F072245C292B001FABF3 /* RtspConnection.c in Sources */,
 				3652F005245C28C6001FABF3 /* GameStreamClient.cpp in Sources */,
 				3652EFE8245B3B00001FABF3 /* opengl.cpp in Sources */,
@@ -900,7 +906,6 @@
 				3652EFF5245B3B00001FABF3 /* popupbutton.cpp in Sources */,
 				3652EFF0245B3B00001FABF3 /* colorwheel.cpp in Sources */,
 				3652F068245C292B001FABF3 /* unix.c in Sources */,
-				36E6378C246FFFF30032F5FB /* CryptoManager.cpp in Sources */,
 				3652F07B245C292B001FABF3 /* RtspParser.c in Sources */,
 				3652EFCF245B3B00001FABF3 /* checkbox.cpp in Sources */,
 				36A0C03A2461E4C00083289C /* SettingsWindow.cpp in Sources */,
@@ -925,7 +930,6 @@
 				3602C3B7245D903000368900 /* HostButton.cpp in Sources */,
 				3652EFD0245B3B00001FABF3 /* vscrollpanel.cpp in Sources */,
 				3652F06D245C292B001FABF3 /* win32.c in Sources */,
-				3652F012245C2919001FABF3 /* mkcert.c in Sources */,
 				3652F002245B6961001FABF3 /* AddHostWindow.cpp in Sources */,
 				3652EFF8245B4EE2001FABF3 /* Application.cpp in Sources */,
 				3652F07E245C292B001FABF3 /* AudioStream.c in Sources */,
@@ -1031,6 +1035,7 @@
 					"-DHAS_POLL",
 					"-DHAS_FCNTL",
 					"-DHAVE_PULSE",
+					"-DUSE_MBEDTLS_CRYPTO",
 				);
 				OTHER_LDFLAGS = (
 					"-lglfw3",
@@ -1044,6 +1049,9 @@
 					"-lavdevice",
 					"-lz",
 					"-lopus",
+					"-lmbedtls",
+					"-lmbedx509",
+					"-lmbedcrypto",
 				);
 				SDKROOT = macosx;
 			};
@@ -1120,6 +1128,7 @@
 					"-DHAS_POLL",
 					"-DHAS_FCNTL",
 					"-DHAVE_PULSE",
+					"-DUSE_MBEDTLS_CRYPTO",
 				);
 				OTHER_LDFLAGS = (
 					"-lglfw3",
@@ -1133,6 +1142,9 @@
 					"-lavdevice",
 					"-lz",
 					"-lopus",
+					"-lmbedtls",
+					"-lmbedx509",
+					"-lmbedcrypto",
 				);
 				SDKROOT = macosx;
 			};

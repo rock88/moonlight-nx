@@ -19,6 +19,8 @@
 
 #include "http.h"
 #include "errors.h"
+#include "CryptoManager.hpp"
+#include "Log.h"
 
 #include <stdbool.h>
 #include <string.h>
@@ -47,6 +49,13 @@ static size_t _write_curl(void *contents, size_t size, size_t nmemb, void *userp
 }
 
 int http_init(const char* key_directory, int log_level) {
+    if (!curl) {
+        curl_global_init(CURL_GLOBAL_ALL);
+        LOG_FMT("Curl version: %s\n", curl_version());
+    } else {
+        return GS_OK;
+    }
+    
     curl = curl_easy_init();
     debug = log_level >= 2;
     
@@ -59,9 +68,12 @@ int http_init(const char* key_directory, int log_level) {
     char keyFilePath[4096];
     sprintf(&keyFilePath[0], "%s/%s", key_directory, KEY_FILE_NAME);
     
+    LOG_FMT("certificateFilePath: %s\n", certificateFilePath);
+    LOG_FMT("keyFilePath: %s\n", keyFilePath);
+    
     curl_easy_setopt(curl, CURLOPT_SSL_VERIFYHOST, 0L);
     curl_easy_setopt(curl, CURLOPT_SSLENGINE_DEFAULT, 1L);
-    curl_easy_setopt(curl, CURLOPT_SSLCERTTYPE,"PEM");
+    curl_easy_setopt(curl, CURLOPT_SSLCERTTYPE, "PEM");
     curl_easy_setopt(curl, CURLOPT_SSLCERT, certificateFilePath);
     curl_easy_setopt(curl, CURLOPT_SSLKEYTYPE, "PEM");
     curl_easy_setopt(curl, CURLOPT_SSLKEY, keyFilePath);
@@ -75,7 +87,7 @@ int http_init(const char* key_directory, int log_level) {
 
 int http_request(char* url, Data* data) {
     if (debug)
-        printf("Request %s\n", url);
+        LOG_FMT("Request %s\n", url);
     
     HTTP_DATA* http_data = (HTTP_DATA*)malloc(sizeof(HTTP_DATA));
     http_data->memory = (char*)malloc(1);
@@ -88,19 +100,20 @@ int http_request(char* url, Data* data) {
     
     if (res != CURLE_OK) {
         gs_error = curl_easy_strerror(res);
+        LOG_FMT("Curl error: %s\n", gs_error);
         return GS_FAILED;
     } else if (http_data->memory == NULL) {
+        LOG("Curl error: memory = NULL\n");
         return GS_OUT_OF_MEMORY;
     }
     
     *data = Data(http_data->memory, http_data->size);
     
+    if (debug)
+        LOG_FMT("Response:\n%s\n\n", http_data->memory);
+    
     free(http_data->memory);
     free(http_data);
-    
-    if (debug)
-        printf("Response:\n%s\n\n", http_data->memory);
-    
     return GS_OK;
 }
 

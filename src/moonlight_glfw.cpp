@@ -5,8 +5,6 @@
 #include "Limelight.h"
 #include "libretro.h"
 #include "InputController.hpp"
-#include <curl/curl.h>
-#include <openssl/ssl.h>
 
 #ifdef __SWITCH__
 #include <glad/glad.h>
@@ -55,11 +53,10 @@ static int16_t glfw_input_state_cb(unsigned port, unsigned device, unsigned inde
     return 0;
 }
 
+#include "CryptoManager.hpp"
+
 int main(int argc, const char * argv[]) {
     input_state_cb = glfw_input_state_cb;
-    
-    OpenSSL_add_all_algorithms();
-    curl_global_init(CURL_GLOBAL_ALL);
     
     glfwInit();
     
@@ -140,6 +137,12 @@ int main(int argc, const char * argv[]) {
         
         glfwSwapBuffers(window);
     }
+    
+    #ifdef __SWITCH__
+    extern void terminate_gamestream_thread();
+    terminate_gamestream_thread();
+    #endif
+    //nanogui::shutdown();
     glfwTerminate();
     return 0;
 }

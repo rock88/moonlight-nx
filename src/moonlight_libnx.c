@@ -22,6 +22,22 @@ uint16_t ntohs(uint16_t netshort) {
     return __builtin_bswap16(netshort);
 }
 
+uid_t getuid() {
+    return 1;
+}
+
+uid_t geteuid() {
+    return 1;
+}
+
+gid_t getgid(void) {
+    return 1;
+}
+
+gid_t getegid(void) {
+    return 1;
+}
+
 int sigaction(int a, const struct sigaction* b, struct sigaction* c) {
     return 0;
 }

@@ -27,6 +27,7 @@ public:
     
     static Data random_bytes(size_t size);
     static Data read_from_file(std::string path);
+    void write_to_file(std::string path);
     
     Data hex_to_bytes() const;
     Data hex() const;
@@ -34,8 +35,6 @@ public:
     bool is_empty() const {
         return m_size == 0;
     }
-    
-    void write_to_file(std::string path);
     
 private:
     unsigned char* m_bytes = nullptr;

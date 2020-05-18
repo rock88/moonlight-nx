@@ -5,18 +5,18 @@
 
 Data::Data(unsigned char* bytes, size_t size) {
     if (bytes && size > 0) {
-        m_bytes = (unsigned char *)malloc(size);
+        m_bytes = (unsigned char *)malloc(size + 1);
+        m_bytes[size] = '\0';
         memcpy(m_bytes, bytes, size);
         m_size = size;
     }
 }
 
 Data::Data(size_t capacity) {
-    if (capacity > 0) {
-        m_bytes = (unsigned char *)malloc(capacity + 1);
-        m_bytes[capacity] = '\0';
-        m_size = capacity;
-    }
+    m_bytes = (unsigned char *)malloc(capacity + 1);
+    memset(m_bytes, 0, capacity + 1);
+    m_bytes[capacity] = '\0';
+    m_size = capacity;
 }
 
 Data::~Data() {
@@ -45,9 +45,14 @@ Data Data::append(Data other) {
 }
 
 Data::Data(const Data& that): Data(0) {
-    m_bytes = (unsigned char *)malloc(that.size());
-    memcpy(m_bytes, that.bytes(), that.size());
-    m_size = that.size();
+    if (m_bytes) {
+        free(m_bytes);
+    }
+    
+    m_bytes = (unsigned char *)malloc(that.size() + 1);
+    memcpy(m_bytes, that.m_bytes, that.m_size);
+    m_bytes[that.m_size] = '\0';
+    m_size = that.m_size;
 }
 
 Data& Data::operator=(const Data& that) {
@@ -56,8 +61,9 @@ Data& Data::operator=(const Data& that) {
             free(m_bytes);
         }
         
-        m_bytes = (unsigned char *)malloc(that.m_size);
+        m_bytes = (unsigned char *)malloc(that.m_size + 1);
         memcpy(m_bytes, that.m_bytes, that.m_size);
+        m_bytes[that.m_size] = '\0';
         m_size = that.m_size;
     }
     return *this;
@@ -65,7 +71,12 @@ Data& Data::operator=(const Data& that) {
 
 Data Data::random_bytes(size_t size) {
     unsigned char* bytes = (unsigned char*)malloc(sizeof(char) * size);
-    arc4random_buf(bytes, size);
+    srand(time(NULL));
+    
+    for (int i = 0; i < size; i++) {
+        bytes[i] = rand() % 255;
+    }
+    
     Data random_data(size);
     memcpy(random_data.m_bytes, bytes, size);
     free(bytes);
@@ -81,12 +92,23 @@ Data Data::read_from_file(std::string path) {
         
         char* buffer = (char*)malloc(size);
         fread(buffer, 1, size, f);
+        
         Data data(buffer, size);
         free(buffer);
         fclose(f);
         return data;
     }
     return Data();
+}
+
+void Data::write_to_file(std::string path) {
+    FILE *f = fopen(path.c_str(), "w");
+    if (f) {
+        fwrite(m_bytes, m_size, 1, f);
+        fclose(f);
+    } else {
+        LOG_FMT("Path not found: %s\n", path.c_str());
+    }
 }
 
 Data Data::hex_to_bytes() const {
@@ -105,6 +127,11 @@ Data Data::hex_to_bytes() const {
 }
 
 Data Data::hex() const {
+    if (!m_size) {
+        char end = '\n';
+        return Data(&end, 1);
+    }
+    
     int counter = 0;
     Data hex(m_size * 2);
     char fmt[3] = {'\0','\0','\0'};
@@ -115,10 +142,4 @@ Data Data::hex() const {
     }
     hex.m_bytes[m_size * 2] = '\0';
     return hex;
-}
-
-void Data::write_to_file(std::string path) {
-    FILE *f = fopen(path.c_str(), "w");
-    fwrite(m_bytes, m_size, 1, f);
-    fclose(f);
 }

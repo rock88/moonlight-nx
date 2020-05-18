@@ -39,7 +39,8 @@ include $(DEVKITPRO)/libnx/switch_rules
 #---------------------------------------------------------------------------------
 TARGET		:=	moonlight
 BUILD		:=	build
-SOURCES		:=	libgamestream src/nanogui_resources src src/streaming src/streaming/ffmpeg src/streaming/video src/ui/windows src/ui/buttons src/ui \
+SOURCES		:=	libgamestream src/nanogui_resources src src/streaming src/streaming/ffmpeg \
+	src/crypto src/streaming/video src/ui/windows src/ui/buttons src/ui \
 	third_party/moonlight-common-c/enet third_party/moonlight-common-c/reedsolomon third_party/moonlight-common-c/src \
 	third_party/nanogui/ext/nanovg/src third_party/nanogui/src
 DATA		:=	data
@@ -52,7 +53,7 @@ INCLUDES	:=	include
 ARCH	:=	-march=armv8-a+crc+crypto -mtune=cortex-a57 -mtp=soft -fPIE
 
 M_INCLUDES := \
-	-I$(TOPDIR)/src -I$(TOPDIR)/src/streaming \
+	-I$(TOPDIR)/src -I$(TOPDIR)/src/streaming -I$(TOPDIR)/src/crypto -I$(TOPDIR)/src/crypto/keys \
 	-I$(TOPDIR)/src/streaming/ffmpeg -I$(TOPDIR)/src/streaming/video -I$(TOPDIR)/src/streaming/audio \
 	-I$(TOPDIR)/src/nanogui_resources \
 	-I$(TOPDIR)/src/ui -I$(TOPDIR)/src/ui/buttons -I$(TOPDIR)/src/ui/windows \
@@ -62,10 +63,11 @@ M_INCLUDES := \
 	-I$(TOPDIR)/third_party/moonlight-common-c/enet/include \
 	-I$(TOPDIR)/third_party/nanogui/include \
 	-I$(TOPDIR)/third_party/nanogui/ext/nanovg/src \
-	-I$(TOPDIR)/third_party/json/single_include/nlohmann
+	-I$(TOPDIR)/third_party/json/single_include/nlohmann \
+	-I/Users/rock88/Downloads/moonlight-switch-master/dependencies/include
 
 DEFINES := -DNANOGUI_USE_OPENGL -DNVG_STB_IMAGE_IMPLEMENTATION -DNANOGUI_NO_GLFW \
-	-DHAS_SOCKLEN_T -DHAS_POLL -DHAS_FCNTL -D_GNU_SOURCE
+	-DHAS_SOCKLEN_T -DHAS_POLL -DHAS_FCNTL -D_GNU_SOURCE -DUSE_MBEDTLS_CRYPTO
 
 CFLAGS	:=	-g -Wall -O0 -ffunction-sections \
 			$(ARCH) $(DEFINES)
@@ -81,13 +83,14 @@ LIBS	:= -lcurl -lmbedtls -lmbedx509 -lmbedcrypto \
 	-lavcodec -lavutil -lopus -lssl -lcrypto -lbz2 -lz -lexpat -lm \
 	-lglad -lEGL -lglapi -ldrm_nouveau -lglfw3 \
 	-lnx -lwebp -lswresample -lavformat -lvpx \
-	-L/Users/rock88/Documents/Projects/Switch/moonlight-switch-new/deps/lib
+	-L/Users/rock88/Downloads/moonlight-switch-master/dependencies/lib
 
-LIBGAMESTREAM_SOURCES = \
-	client.c \
-	http.c \
-	mkcert.c \
+LIBGAMESTREAM_C_SOURCES = \
 	xml.c
+
+LIBGAMESTREAM_CPP_SOURCES = \
+	client.cpp \
+	http.cpp
 
 MOONLIGHT_LIBRETRO_C_SOURCES = \
 	nanogui_resources.c \
@@ -111,7 +114,9 @@ MOONLIGHT_LIBRETRO_CXX_SOURCES = \
 	InputController.cpp \
 	MoonlightSession.cpp \
 	FFmpegVideoDecoder.cpp \
-	GLVideoRenderer.cpp
+	GLVideoRenderer.cpp \
+	Data.cpp \
+	MbedTLSCryptoManager.cpp
 
 MOONLIGHT_COMMON_C_SOURCES = \
 	callbacks.c \
@@ -202,8 +207,8 @@ export VPATH	:=	$(foreach dir,$(SOURCES),$(CURDIR)/$(dir)) \
 
 export DEPSDIR	:=	$(CURDIR)/$(BUILD)
 
-CFILES		:=	$(LIBGAMESTREAM_SOURCES) $(MOONLIGHT_LIBRETRO_C_SOURCES) $(MOONLIGHT_COMMON_C_SOURCES) $(NANOGUI_C_SOURCES)
-CPPFILES	:=	$(MOONLIGHT_LIBRETRO_CXX_SOURCES) $(NANOGUI_CXX_SOURCES)
+CFILES		:=	$(LIBGAMESTREAM_C_SOURCES) $(MOONLIGHT_LIBRETRO_C_SOURCES) $(MOONLIGHT_COMMON_C_SOURCES) $(NANOGUI_C_SOURCES)
+CPPFILES	:=	$(LIBGAMESTREAM_CPP_SOURCES) $(MOONLIGHT_LIBRETRO_CXX_SOURCES) $(NANOGUI_CXX_SOURCES)
 SFILES		:=	$(foreach dir,$(SOURCES),$(notdir $(wildcard $(dir)/*.s)))
 BINFILES	:=	$(foreach dir,$(DATA),$(notdir $(wildcard $(dir)/*.*)))
 
