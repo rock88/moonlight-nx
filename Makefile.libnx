@@ -39,7 +39,7 @@ include $(DEVKITPRO)/libnx/switch_rules
 #---------------------------------------------------------------------------------
 TARGET		:=	moonlight
 BUILD		:=	build
-SOURCES		:=	libgamestream src/nanogui_resources src src/streaming src/streaming/ffmpeg \
+SOURCES		:=	libgamestream src src/switch src/nanogui_resources src/streaming src/streaming/ffmpeg \
 	src/crypto src/streaming/video src/ui/windows src/ui/buttons src/ui \
 	third_party/moonlight-common-c/enet third_party/moonlight-common-c/reedsolomon third_party/moonlight-common-c/src \
 	third_party/nanogui/ext/nanovg/src third_party/nanogui/src
@@ -53,7 +53,7 @@ INCLUDES	:=	include
 ARCH	:=	-march=armv8-a+crc+crypto -mtune=cortex-a57 -mtp=soft -fPIE
 
 M_INCLUDES := \
-	-I$(TOPDIR)/src -I$(TOPDIR)/src/streaming -I$(TOPDIR)/src/crypto -I$(TOPDIR)/src/crypto/keys \
+	-I$(TOPDIR)/src -I$(TOPDIR)/src/switch -I$(TOPDIR)/src/streaming -I$(TOPDIR)/src/crypto -I$(TOPDIR)/src/crypto/keys \
 	-I$(TOPDIR)/src/streaming/ffmpeg -I$(TOPDIR)/src/streaming/video -I$(TOPDIR)/src/streaming/audio \
 	-I$(TOPDIR)/src/nanogui_resources \
 	-I$(TOPDIR)/src/ui -I$(TOPDIR)/src/ui/buttons -I$(TOPDIR)/src/ui/windows \
@@ -63,8 +63,7 @@ M_INCLUDES := \
 	-I$(TOPDIR)/third_party/moonlight-common-c/enet/include \
 	-I$(TOPDIR)/third_party/nanogui/include \
 	-I$(TOPDIR)/third_party/nanogui/ext/nanovg/src \
-	-I$(TOPDIR)/third_party/json/single_include/nlohmann \
-	-I/Users/rock88/Downloads/moonlight-switch-master/dependencies/include
+	-I$(TOPDIR)/third_party/json/single_include/nlohmann
 
 DEFINES := -DNANOGUI_USE_OPENGL -DNVG_STB_IMAGE_IMPLEMENTATION -DNANOGUI_NO_GLFW \
 	-DHAS_SOCKLEN_T -DHAS_POLL -DHAS_FCNTL -D_GNU_SOURCE -DUSE_MBEDTLS_CRYPTO
@@ -80,10 +79,9 @@ ASFLAGS	:=	-g $(ARCH)
 LDFLAGS	=	-specs=$(DEVKITPRO)/libnx/switch.specs -g $(ARCH) -Wl,-Map,$(notdir $*.map)
 
 LIBS	:= -lcurl -lmbedtls -lmbedx509 -lmbedcrypto \
-	-lavcodec -lavutil -lopus -lssl -lcrypto -lbz2 -lz -lexpat -lm \
+	-lavcodec -lavutil -lopus -lbz2 -lz -lexpat -lm \
 	-lglad -lEGL -lglapi -ldrm_nouveau -lglfw3 \
-	-lnx -lwebp -lswresample -lavformat -lvpx \
-	-L/Users/rock88/Downloads/moonlight-switch-master/dependencies/lib
+	-lnx -lwebp -lswresample -lavformat -lvpx
 
 LIBGAMESTREAM_C_SOURCES = \
 	xml.c
@@ -94,8 +92,8 @@ LIBGAMESTREAM_CPP_SOURCES = \
 
 MOONLIGHT_LIBRETRO_C_SOURCES = \
 	nanogui_resources.c \
-	moonlight_libnx.c \
-	moonlight_glfw.c
+	moonlight_glfw.c \
+	switch_wrapper.c
 
 MOONLIGHT_LIBRETRO_CXX_SOURCES = \
 	AddHostWindow.cpp \
@@ -116,7 +114,8 @@ MOONLIGHT_LIBRETRO_CXX_SOURCES = \
 	FFmpegVideoDecoder.cpp \
 	GLVideoRenderer.cpp \
 	Data.cpp \
-	MbedTLSCryptoManager.cpp
+	MbedTLSCryptoManager.cpp \
+	mbedtls_to_openssl_wrapper.cpp
 
 MOONLIGHT_COMMON_C_SOURCES = \
 	callbacks.c \

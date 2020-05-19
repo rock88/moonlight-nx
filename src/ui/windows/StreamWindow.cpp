@@ -23,6 +23,7 @@ StreamWindow::StreamWindow(Widget *parent, const std::string &address, int app_i
     
     m_loader = add<LoadingOverlay>();
     
+    inc_ref();
     m_session->start([this](auto result) {
         if (m_loader) {
             m_loader->dispose();
@@ -35,6 +36,8 @@ StreamWindow::StreamWindow(Widget *parent, const std::string &address, int app_i
             auto app = static_cast<Application *>(screen());
             app->pop_window();
         }
+        
+        dec_ref();
     });
 }
 

@@ -15,7 +15,11 @@
 
 #include <GLFW/glfw3.h>
 
+#ifdef __SWITCH__
+retro_input_state_t input_state_cb;
+#else
 extern retro_input_state_t input_state_cb;
+#endif
 
 static int mouse_x = 0, mouse_y = 0;
 static int mouse_l = 0, mouse_r = 0;

@@ -1,10 +1,6 @@
 #include <netinet/in.h>
 #include <stdint.h>
 #include <switch.h>
-#include "libretro.h"
-
-retro_audio_sample_batch_t audio_batch_cb = NULL;
-retro_input_state_t input_state_cb = NULL;
 
 uint32_t htonl(uint32_t hostlong) {
     return __builtin_bswap32(hostlong);
@@ -22,22 +18,6 @@ uint16_t ntohs(uint16_t netshort) {
     return __builtin_bswap16(netshort);
 }
 
-uid_t getuid() {
-    return 1;
-}
-
-uid_t geteuid() {
-    return 1;
-}
-
-gid_t getgid(void) {
-    return 1;
-}
-
-gid_t getegid(void) {
-    return 1;
-}
-
 int sigaction(int a, const struct sigaction* b, struct sigaction* c) {
     return 0;
 }
@@ -46,11 +26,9 @@ static int nxlink_sock = -1;
 
 void userAppInit() {
     socketInitializeDefault();
-    nxlink_sock = nxlinkStdio();
+    nxlinkStdio();
 }
 
 void userAppExit() {
-    if (nxlink_sock != -1)
-        close(nxlink_sock);
     socketExit();
 }

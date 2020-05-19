@@ -11,7 +11,6 @@
 		3602C3BA245DB3C800368900 /* AppListWindow.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3602C3B8245DB3C800368900 /* AppListWindow.cpp */; };
 		3602C3BD245DBA9100368900 /* AppButton.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3602C3BB245DBA9100368900 /* AppButton.cpp */; };
 		3603E93C246316400051287D /* InputController.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3603E93A246316400051287D /* InputController.cpp */; };
-		363898332471B7C500F99920 /* OpenSSLCryptoManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 363898302471B7C500F99920 /* OpenSSLCryptoManager.cpp */; };
 		363898342471B7C500F99920 /* MbedTLSCryptoManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 363898312471B7C500F99920 /* MbedTLSCryptoManager.cpp */; };
 		3652EFCD245B3B00001FABF3 /* widget.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3652EF0F245B3B00001FABF3 /* widget.cpp */; };
 		3652EFCE245B3B00001FABF3 /* common.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3652EF10245B3B00001FABF3 /* common.cpp */; };
@@ -102,6 +101,7 @@
 		36DFE217245A278700FC51CE /* glsym_gl.c in Sources */ = {isa = PBXBuildFile; fileRef = 36DFE0DB245A1FEC00FC51CE /* glsym_gl.c */; };
 		36DFE218245A278900FC51CE /* rglgen.c in Sources */ = {isa = PBXBuildFile; fileRef = 36DFE0DE245A1FEC00FC51CE /* rglgen.c */; };
 		36E63790247010C70032F5FB /* Data.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 36E6378E247010C70032F5FB /* Data.cpp */; };
+		36F16475247473A300D70AD9 /* mbedtls_to_openssl_wrapper.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 36F16474247473A300D70AD9 /* mbedtls_to_openssl_wrapper.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -290,7 +290,6 @@
 		367CD958245DE25F00A95738 /* StreamWindow.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = StreamWindow.cpp; sourceTree = "<group>"; };
 		367CD959245DE25F00A95738 /* StreamWindow.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = StreamWindow.hpp; sourceTree = "<group>"; };
 		369445A82466CE2700786D0A /* Makefile.libnx */ = {isa = PBXFileReference; explicitFileType = sourcecode.make; path = Makefile.libnx; sourceTree = "<group>"; };
-		369445A92466E2B000786D0A /* moonlight_libnx.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = moonlight_libnx.c; sourceTree = "<group>"; };
 		36A0C0352461DBA30083289C /* AddHostButton.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = AddHostButton.cpp; sourceTree = "<group>"; };
 		36A0C0362461DBA30083289C /* AddHostButton.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = AddHostButton.hpp; sourceTree = "<group>"; };
 		36A0C0382461E4C00083289C /* SettingsWindow.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = SettingsWindow.cpp; sourceTree = "<group>"; };
@@ -303,7 +302,6 @@
 		36D3F8432469B5C400CDEF9B /* MoonlightSession.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = MoonlightSession.hpp; sourceTree = "<group>"; };
 		36D3F8452469C6BC00CDEF9B /* Log.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Log.h; sourceTree = "<group>"; };
 		36D3F8492469CC2600CDEF9B /* IAudioRenderer.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = IAudioRenderer.hpp; sourceTree = "<group>"; };
-		36D461BE24709B8F00A543B4 /* build.sh */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; name = build.sh; path = "../../../../Downloads/openssl-1.1.1g/build.sh"; sourceTree = "<group>"; };
 		36DBDE8E2450BB7E0057C8D3 /* moonlight */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = moonlight; sourceTree = BUILT_PRODUCTS_DIR; };
 		36DBDE992450BCD50057C8D3 /* CoreFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreFoundation.framework; path = System/Library/Frameworks/CoreFoundation.framework; sourceTree = SDKROOT; };
 		36DBDE9B2450BCD90057C8D3 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -326,6 +324,10 @@
 		36E6378B246FFFF30032F5FB /* CryptoManager.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = CryptoManager.hpp; sourceTree = "<group>"; };
 		36E6378E247010C70032F5FB /* Data.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Data.cpp; sourceTree = "<group>"; };
 		36E6378F247010C70032F5FB /* Data.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Data.hpp; sourceTree = "<group>"; };
+		36F1646F2474736E00D70AD9 /* switch_wrapper.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = switch_wrapper.c; sourceTree = "<group>"; };
+		36F164712474736E00D70AD9 /* evp.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = evp.h; sourceTree = "<group>"; };
+		36F164722474736E00D70AD9 /* rand.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = rand.h; sourceTree = "<group>"; };
+		36F16474247473A300D70AD9 /* mbedtls_to_openssl_wrapper.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = mbedtls_to_openssl_wrapper.cpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -639,6 +641,7 @@
 				36DFE0CA2459FA3F00FC51CE /* nanogui_resources */,
 				36DFDCF12459F79000FC51CE /* ui */,
 				36D3F8462469C8DD00CDEF9B /* streaming */,
+				36F1646E2474736E00D70AD9 /* switch */,
 				3652F003245C28C6001FABF3 /* GameStreamClient.cpp */,
 				3652F004245C28C6001FABF3 /* GameStreamClient.hpp */,
 				36A0C03B2461F03C0083289C /* Settings.cpp */,
@@ -649,7 +652,6 @@
 				3652F084245C6CFC001FABF3 /* libretro.h */,
 				3652F085245C6CFC001FABF3 /* moonlight_libretro.cpp */,
 				36B406962459F460005BD903 /* moonlight_glfw.cpp */,
-				369445A92466E2B000786D0A /* moonlight_libnx.c */,
 			);
 			path = src;
 			sourceTree = "<group>";
@@ -689,7 +691,6 @@
 		36DBDE852450BB7E0057C8D3 = {
 			isa = PBXGroup;
 			children = (
-				36D461BE24709B8F00A543B4 /* build.sh */,
 				3602C3C0245DC7E300368900 /* Makefile */,
 				369445A82466CE2700786D0A /* Makefile.libnx */,
 				36A0C03E2461FFF10083289C /* build_opus_lakka_switch.sh */,
@@ -783,6 +784,25 @@
 			path = crypto;
 			sourceTree = "<group>";
 		};
+		36F1646E2474736E00D70AD9 /* switch */ = {
+			isa = PBXGroup;
+			children = (
+				36F164702474736E00D70AD9 /* openssl */,
+				36F1646F2474736E00D70AD9 /* switch_wrapper.c */,
+				36F16474247473A300D70AD9 /* mbedtls_to_openssl_wrapper.cpp */,
+			);
+			path = switch;
+			sourceTree = "<group>";
+		};
+		36F164702474736E00D70AD9 /* openssl */ = {
+			isa = PBXGroup;
+			children = (
+				36F164712474736E00D70AD9 /* evp.h */,
+				36F164722474736E00D70AD9 /* rand.h */,
+			);
+			path = openssl;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -871,7 +891,6 @@
 				36DFE0CD2459FA3F00FC51CE /* nanogui_resources.cpp in Sources */,
 				36DFE217245A278700FC51CE /* glsym_gl.c in Sources */,
 				3652F06A245C292B001FABF3 /* protocol.c in Sources */,
-				363898332471B7C500F99920 /* OpenSSLCryptoManager.cpp in Sources */,
 				3652EFFC245B6434001FABF3 /* MainWindow.cpp in Sources */,
 				3652F086245C6CFC001FABF3 /* moonlight_libretro.cpp in Sources */,
 				3652EFD3245B3B00001FABF3 /* button.cpp in Sources */,
@@ -919,6 +938,7 @@
 				3652EFCE245B3B00001FABF3 /* common.cpp in Sources */,
 				3652F077245C292B001FABF3 /* VideoDepacketizer.c in Sources */,
 				3652EFF1245B3B00001FABF3 /* messagedialog.cpp in Sources */,
+				36F16475247473A300D70AD9 /* mbedtls_to_openssl_wrapper.cpp in Sources */,
 				36B406982459F5CB005BD903 /* moonlight_glfw.cpp in Sources */,
 				3652F06F245C292B001FABF3 /* ControlStream.c in Sources */,
 				3652EFD6245B3B00001FABF3 /* window.cpp in Sources */,
@@ -1009,18 +1029,15 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				HEADER_SEARCH_PATHS = (
 					/usr/local/include,
-					"\"/usr/local/Cellar/openssl@1.0/1.0.2t/include\"",
 					"\"$(SRCROOT)/third_party/nanogui/include\"",
 					"\"$(SRCROOT)/third_party/nanogui/ext/nanovg/src\"",
 					"\"$(SRCROOT)/src/nanogui_resources\"",
 					"\"$(SRCROOT)/third_party/moonlight-common-c/enet/include\"",
 					"\"$(SRCROOT)/third_party/moonlight-common-c/src\"",
 					"\"$(SRCROOT)/third_party/json/single_include/nlohmann\"",
+					"\"$(SRCROOT)/src/switch\"",
 				);
-				LIBRARY_SEARCH_PATHS = (
-					/usr/local/lib,
-					"\"/usr/local/Cellar/openssl@1.0/1.0.2t/lib\"",
-				);
+				LIBRARY_SEARCH_PATHS = /usr/local/lib;
 				MACOSX_DEPLOYMENT_TARGET = 10.15;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
@@ -1039,8 +1056,6 @@
 				);
 				OTHER_LDFLAGS = (
 					"-lglfw3",
-					"-lssl",
-					"-lcrypto",
 					"-lcurl",
 					"-lexpat",
 					"-lavcodec",
@@ -1103,18 +1118,15 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				HEADER_SEARCH_PATHS = (
 					/usr/local/include,
-					"\"/usr/local/Cellar/openssl@1.0/1.0.2t/include\"",
 					"\"$(SRCROOT)/third_party/nanogui/include\"",
 					"\"$(SRCROOT)/third_party/nanogui/ext/nanovg/src\"",
 					"\"$(SRCROOT)/src/nanogui_resources\"",
 					"\"$(SRCROOT)/third_party/moonlight-common-c/enet/include\"",
 					"\"$(SRCROOT)/third_party/moonlight-common-c/src\"",
 					"\"$(SRCROOT)/third_party/json/single_include/nlohmann\"",
+					"\"$(SRCROOT)/src/switch\"",
 				);
-				LIBRARY_SEARCH_PATHS = (
-					/usr/local/lib,
-					"\"/usr/local/Cellar/openssl@1.0/1.0.2t/lib\"",
-				);
+				LIBRARY_SEARCH_PATHS = /usr/local/lib;
 				MACOSX_DEPLOYMENT_TARGET = 10.15;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
@@ -1132,8 +1144,6 @@
 				);
 				OTHER_LDFLAGS = (
 					"-lglfw3",
-					"-lssl",
-					"-lcrypto",
 					"-lcurl",
 					"-lexpat",
 					"-lavcodec",

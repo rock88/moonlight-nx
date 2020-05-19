@@ -4,7 +4,6 @@
 #include <string.h>
 #include <math.h>
 #include <curl/curl.h>
-#include <openssl/ssl.h>
 
 #include "glsym/glsym.h"
 #include "libretro.h"
@@ -66,7 +65,7 @@ void retro_init(void) {
     Settings::settings()->set_working_dir("/storage/system/moonlight");
     #endif
     
-    OpenSSL_add_all_algorithms();
+    //OpenSSL_add_all_algorithms();
     curl_global_init(CURL_GLOBAL_ALL);
 }
 
