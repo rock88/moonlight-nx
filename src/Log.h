@@ -1,4 +1,5 @@
 #include <stdint.h>
+#include <stdio.h>
 
 #define LOG(x) fprintf(stderr, x);
 

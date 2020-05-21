@@ -85,6 +85,7 @@
 		3652F08A245C8569001FABF3 /* ContentWindow.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3652F089245C8569001FABF3 /* ContentWindow.cpp */; };
 		3661D2F92469D1940060EE24 /* FFmpegVideoDecoder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3661D2F72469D1940060EE24 /* FFmpegVideoDecoder.cpp */; };
 		3661D2FF2469E0C00060EE24 /* GLVideoRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3661D2FD2469E0C00060EE24 /* GLVideoRenderer.cpp */; };
+		3678EF732476D9DA0097345D /* DebugFileRecorderAudioRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3678EF712476D9DA0097345D /* DebugFileRecorderAudioRenderer.cpp */; };
 		367CD95A245DE25F00A95738 /* StreamWindow.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 367CD958245DE25F00A95738 /* StreamWindow.cpp */; };
 		36A0C0372461DBA30083289C /* AddHostButton.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 36A0C0352461DBA30083289C /* AddHostButton.cpp */; };
 		36A0C03A2461E4C00083289C /* SettingsWindow.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 36A0C0382461E4C00083289C /* SettingsWindow.cpp */; };
@@ -287,6 +288,8 @@
 		3661D3002469EFFA0060EE24 /* RetroAudioRenderer.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = RetroAudioRenderer.cpp; sourceTree = "<group>"; };
 		3661D3012469EFFA0060EE24 /* RetroAudioRenderer.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = RetroAudioRenderer.hpp; sourceTree = "<group>"; };
 		3661D30B246B1C680060EE24 /* build_ffmpeg_lakka_switch.sh */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = build_ffmpeg_lakka_switch.sh; sourceTree = "<group>"; };
+		3678EF712476D9DA0097345D /* DebugFileRecorderAudioRenderer.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = DebugFileRecorderAudioRenderer.cpp; sourceTree = "<group>"; };
+		3678EF722476D9DA0097345D /* DebugFileRecorderAudioRenderer.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = DebugFileRecorderAudioRenderer.hpp; sourceTree = "<group>"; };
 		367CD958245DE25F00A95738 /* StreamWindow.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = StreamWindow.cpp; sourceTree = "<group>"; };
 		367CD959245DE25F00A95738 /* StreamWindow.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = StreamWindow.hpp; sourceTree = "<group>"; };
 		369445A82466CE2700786D0A /* Makefile.libnx */ = {isa = PBXFileReference; explicitFileType = sourcecode.make; path = Makefile.libnx; sourceTree = "<group>"; };
@@ -328,6 +331,8 @@
 		36F164712474736E00D70AD9 /* evp.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = evp.h; sourceTree = "<group>"; };
 		36F164722474736E00D70AD9 /* rand.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = rand.h; sourceTree = "<group>"; };
 		36F16474247473A300D70AD9 /* mbedtls_to_openssl_wrapper.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = mbedtls_to_openssl_wrapper.cpp; sourceTree = "<group>"; };
+		36F16476247481F200D70AD9 /* AudrenAudioRenderer.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = AudrenAudioRenderer.cpp; sourceTree = "<group>"; };
+		36F16477247481F200D70AD9 /* AudrenAudioRenderer.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = AudrenAudioRenderer.hpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -681,6 +686,10 @@
 		36D3F8482469CC0400CDEF9B /* audio */ = {
 			isa = PBXGroup;
 			children = (
+				3678EF712476D9DA0097345D /* DebugFileRecorderAudioRenderer.cpp */,
+				3678EF722476D9DA0097345D /* DebugFileRecorderAudioRenderer.hpp */,
+				36F16476247481F200D70AD9 /* AudrenAudioRenderer.cpp */,
+				36F16477247481F200D70AD9 /* AudrenAudioRenderer.hpp */,
 				3661D3002469EFFA0060EE24 /* RetroAudioRenderer.cpp */,
 				3661D3012469EFFA0060EE24 /* RetroAudioRenderer.hpp */,
 				36D3F8492469CC2600CDEF9B /* IAudioRenderer.hpp */,
@@ -919,6 +928,7 @@
 				363898342471B7C500F99920 /* MbedTLSCryptoManager.cpp in Sources */,
 				3652F072245C292B001FABF3 /* RtspConnection.c in Sources */,
 				3652F005245C28C6001FABF3 /* GameStreamClient.cpp in Sources */,
+				3678EF732476D9DA0097345D /* DebugFileRecorderAudioRenderer.cpp in Sources */,
 				3652EFE8245B3B00001FABF3 /* opengl.cpp in Sources */,
 				3652EFD7245B3B00001FABF3 /* screen.cpp in Sources */,
 				3652EFE1245B3B00001FABF3 /* progressbar.cpp in Sources */,
@@ -1036,6 +1046,7 @@
 					"\"$(SRCROOT)/third_party/moonlight-common-c/src\"",
 					"\"$(SRCROOT)/third_party/json/single_include/nlohmann\"",
 					"\"$(SRCROOT)/src/switch\"",
+					/opt/devkitpro/libnx/include2,
 				);
 				LIBRARY_SEARCH_PATHS = /usr/local/lib;
 				MACOSX_DEPLOYMENT_TARGET = 10.15;
@@ -1125,6 +1136,7 @@
 					"\"$(SRCROOT)/third_party/moonlight-common-c/src\"",
 					"\"$(SRCROOT)/third_party/json/single_include/nlohmann\"",
 					"\"$(SRCROOT)/src/switch\"",
+					/opt/devkitpro/libnx/include2,
 				);
 				LIBRARY_SEARCH_PATHS = /usr/local/lib;
 				MACOSX_DEPLOYMENT_TARGET = 10.15;

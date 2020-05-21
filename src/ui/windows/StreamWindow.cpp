@@ -4,6 +4,10 @@
 #include "FFmpegVideoDecoder.hpp"
 #include "GLVideoRenderer.hpp"
 #include "RetroAudioRenderer.hpp"
+#ifdef __SWITCH__
+#include "AudrenAudioRenderer.hpp"
+#endif
+#include "DebugFileRecorderAudioRenderer.hpp"
 #include "nanovg.h"
 #include <algorithm>
 #include <memory>
@@ -19,6 +23,10 @@ StreamWindow::StreamWindow(Widget *parent, const std::string &address, int app_i
     
     #ifdef __LIBRETRO__
     m_session->set_audio_renderer(new RetroAudioRenderer());
+    #elif __SWITCH__
+    m_session->set_audio_renderer(new AudrenAudioRenderer());
+    #else
+    m_session->set_audio_renderer(new DebugFileRecorderAudioRenderer());
     #endif
     
     m_loader = add<LoadingOverlay>();

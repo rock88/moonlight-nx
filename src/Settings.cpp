@@ -35,6 +35,8 @@ void Settings::load() {
         JSON_GET_VALUE(m_bitrate, json["settings"]["bitrate"], is_number_integer, int);
         JSON_GET_VALUE(m_swap_ab_xy, json["settings"]["swap_ab_xy"], is_number_integer, bool);
         JSON_GET_VALUE(m_decoder_threads, json["settings"]["decoder_threads"], is_number_integer, int);
+        
+        //stream.close();
     } catch (const std::exception &e) {
         LOG_FMT("Load settings error: %s\n", e.what());
     }
@@ -56,6 +58,7 @@ void Settings::save() {
         
         std::ofstream stream(m_working_dir + "/settings.json");
         stream << std::setw(4) << json << std::endl;
+        //stream.close();
     } catch (const std::exception &e) {
         LOG_FMT("Save settings error: %s\n", e.what());
     }

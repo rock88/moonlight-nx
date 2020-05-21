@@ -68,9 +68,6 @@ int http_init(const char* key_directory, int log_level) {
     char keyFilePath[4096];
     sprintf(&keyFilePath[0], "%s/%s", key_directory, KEY_FILE_NAME);
     
-    LOG_FMT("certificateFilePath: %s\n", certificateFilePath);
-    LOG_FMT("keyFilePath: %s\n", keyFilePath);
-    
     curl_easy_setopt(curl, CURLOPT_SSL_VERIFYHOST, 0L);
     curl_easy_setopt(curl, CURLOPT_SSLENGINE_DEFAULT, 1L);
     curl_easy_setopt(curl, CURLOPT_SSLCERTTYPE, "PEM");
