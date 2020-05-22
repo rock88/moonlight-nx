@@ -179,12 +179,9 @@ int main(int argc, const char * argv[]) {
         glfwSwapBuffers(window);
     }
     
-    #ifdef __SWITCH__
-    extern void terminate_gamestream_thread();
-    terminate_gamestream_thread();
-    #endif
     nanogui::leave();
     nanogui::shutdown();
+    glfwDestroyWindow(window);
     glfwTerminate();
     return 0;
 }

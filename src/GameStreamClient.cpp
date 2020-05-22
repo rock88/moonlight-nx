@@ -15,18 +15,14 @@ static std::vector<std::function<void()>> m_tasks;
 
 #ifdef __SWITCH__
 #include <switch.h>
-static Thread thread;
-static bool run = true;
-void terminate_gamestream_thread() {
-    run = false;
-    threadWaitForExit(&thread);
-}
+extern int moonlight_exit;
 
 static void task_loop() {
+    Thread thread;
     threadCreate(
         &thread,
         [](void* a) {
-            while (run) {
+            while (!moonlight_exit) {
                 std::vector<std::function<void()>> m_tasks_copy; {
                     std::lock_guard<std::mutex> guard(m_async_mutex);
                     m_tasks_copy = m_tasks;

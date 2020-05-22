@@ -113,6 +113,8 @@ void AudrenAudioRenderer::decode_and_play_sample(char *data, int length) {
             return;
         }
         
+        LOG_FMT("audrvVoiceIsPlaying: %i\n", audrvVoiceIsPlaying(&m_driver, 0));
+        
         audrvVoiceStop(&m_driver, 0);
         
         memcpy(mempool_ptr, m_decoded_buffer, m_samples_datasize);
