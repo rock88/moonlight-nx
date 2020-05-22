@@ -22,8 +22,6 @@ int sigaction(int a, const struct sigaction* b, struct sigaction* c) {
     return 0;
 }
 
-static int nxlink_sock = -1;
-
 void userAppInit() {
     socketInitializeDefault();
     nxlinkStdio();
