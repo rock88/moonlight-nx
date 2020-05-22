@@ -81,9 +81,9 @@ ASFLAGS	:=	-g $(ARCH)
 LDFLAGS	=	-specs=$(DEVKITPRO)/libnx/switch.specs -g $(ARCH) -Wl,-Map,$(notdir $*.map)
 
 LIBS	:= -lcurl -lmbedtls -lmbedx509 -lmbedcrypto \
-	-lavcodec -lavutil -lopus -lbz2 -lz -lexpat -lm \
+	-lavcodec -lavutil -lopus -lz -lexpat \
 	-lglad -lEGL -lglapi -ldrm_nouveau -lglfw3 \
-	-lnx -lwebp -lswresample -lavformat -lvpx -ljansson
+	-lnx -lswresample -lvpx -ljansson
 
 LIBGAMESTREAM_C_SOURCES = \
 	xml.c
