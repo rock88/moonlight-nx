@@ -4,6 +4,3 @@
 [submodule "third_party/nanogui"]
 	path = third_party/nanogui
 	url=https://github.com/rock88/nanogui.git
-[submodule "third_party/json"]
-	path = third_party/json
-	url = https://github.com/nlohmann/json.git

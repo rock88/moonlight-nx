@@ -20,9 +20,7 @@
 #include "http.h"
 #include "client.h"
 #include "errors.h"
-#include "limits.h"
 #include <errno.h>
-#include <sys/stat.h>
 #include <stdbool.h>
 #include <stdio.h>
 #include <string.h>
@@ -38,35 +36,6 @@
 
 static char* unique_id = "0123456789ABCDEF";
 const char* gs_error;
-
-int mkdirtree(const char* directory) {
-    char buffer[PATH_MAX];
-    char* p = buffer;
-    
-    // The passed in string could be a string literal
-    // so we must copy it first
-    strncpy(p, directory, PATH_MAX - 1);
-    buffer[PATH_MAX - 1] = '\0';
-    
-    while (*p != 0) {
-        // Find the end of the path element
-        do {
-            p++;
-        } while (*p != 0 && *p != '/');
-        
-        char oldChar = *p;
-        *p = 0;
-        
-        // Create the directory if it doesn't exist already
-        if (mkdir(buffer, 0775) == -1 && errno != EEXIST) {
-            return -1;
-        }
-        
-        *p = oldChar;
-    }
-    
-    return 0;
-}
 
 static int load_server_status(PSERVER_DATA server) {
     int ret;

@@ -1044,7 +1044,6 @@
 					"\"$(SRCROOT)/src/nanogui_resources\"",
 					"\"$(SRCROOT)/third_party/moonlight-common-c/enet/include\"",
 					"\"$(SRCROOT)/third_party/moonlight-common-c/src\"",
-					"\"$(SRCROOT)/third_party/json/single_include/nlohmann\"",
 					"\"$(SRCROOT)/src/switch\"",
 					/opt/devkitpro/libnx/include2,
 				);
@@ -1078,6 +1077,7 @@
 					"-lmbedtls",
 					"-lmbedx509",
 					"-lmbedcrypto",
+					"-ljansson",
 				);
 				SDKROOT = macosx;
 			};
@@ -1134,7 +1134,6 @@
 					"\"$(SRCROOT)/src/nanogui_resources\"",
 					"\"$(SRCROOT)/third_party/moonlight-common-c/enet/include\"",
 					"\"$(SRCROOT)/third_party/moonlight-common-c/src\"",
-					"\"$(SRCROOT)/third_party/json/single_include/nlohmann\"",
 					"\"$(SRCROOT)/src/switch\"",
 					/opt/devkitpro/libnx/include2,
 				);
@@ -1167,6 +1166,7 @@
 					"-lmbedtls",
 					"-lmbedx509",
 					"-lmbedcrypto",
+					"-ljansson",
 				);
 				SDKROOT = macosx;
 			};

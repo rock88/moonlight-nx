@@ -10,7 +10,6 @@
 #include "Application.hpp"
 #include "InputController.hpp"
 #include "Settings.hpp"
-#include "client.h"
 
 struct retro_hw_render_callback hw_render;
 
@@ -61,7 +60,6 @@ void moonlight_init(int width, int height) {
 
 void retro_init(void) {
     #ifdef __LAKKA_SWITCH__
-    mkdirtree("/storage/system/moonlight");
     Settings::settings()->set_working_dir("/storage/system/moonlight");
     #endif
     

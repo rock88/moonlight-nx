@@ -79,8 +79,7 @@ void GameStreamClient::connect(const std::string &address, ServerCallback<SERVER
     
     perform_async([this, address, callback] {
         // TODO: mem leak here :(
-        std::string key_dir = Settings::settings()->working_dir() + "/key";
-        int status = gs_init(&m_server_data[address], (char *)(new std::string(address))->c_str(), key_dir.c_str(), 0, false);
+        int status = gs_init(&m_server_data[address], (char *)(new std::string(address))->c_str(), Settings::settings()->key_dir().c_str(), 0, false);
         
         nanogui::async([this, address, callback, status] {
             if (status == GS_OK) {

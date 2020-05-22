@@ -17,13 +17,14 @@ public:
         return &settings;
     }
     
-    std::string working_dir() const {
-        return m_working_dir;
+    void set_working_dir(std::string working_dir);
+    
+    std::string key_dir() const {
+        return m_key_dir;
     }
     
-    void set_working_dir(std::string working_dir) {
-        m_working_dir = std::string(working_dir);
-        load();
+    std::string boxart_dir() const {
+        return m_boxart_dir;
     }
     
     std::vector<std::string> hosts() const {
@@ -87,6 +88,9 @@ private:
     Settings() {};
     
     std::string m_working_dir;
+    std::string m_key_dir;
+    std::string m_boxart_dir;
+    
     std::vector<std::string> m_hosts;
     int m_resolution = 720;
     int m_fps = 30;
