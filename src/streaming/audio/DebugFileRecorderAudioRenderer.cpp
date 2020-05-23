@@ -26,12 +26,14 @@ void DebugFileRecorderAudioRenderer::cleanup() {
         m_buffer = nullptr;
     }
 
-    m_data.write_to_file("/Users/rock88/Documents/Projects/RetroArch/audio.raw");
+    if (m_enable) {
+        m_data.write_to_file("/Users/rock88/Documents/Projects/RetroArch/audio.raw");
+    }
 }
 
 void DebugFileRecorderAudioRenderer::decode_and_play_sample(char *data, int length) {
     int decode_len = opus_multistream_decode(m_decoder, (const unsigned char *)data, length, m_buffer, FRAME_SIZE, 0);
-    if (decode_len > 0) {
+    if (decode_len > 0 && m_enable) {
         m_data = m_data.append(Data((char *)m_buffer, FRAME_SIZE * 2 * sizeof(short)));
     }
 }

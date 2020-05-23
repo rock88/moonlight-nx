@@ -1,9 +1,5 @@
 #include "IVideoRenderer.hpp"
-#ifdef __SWITCH__
 #include <glad/glad.h>
-#else
-#include "glsym.h"
-#endif
 #pragma once
 
 class GLVideoRenderer: public IVideoRenderer {

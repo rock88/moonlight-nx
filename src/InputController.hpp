@@ -2,16 +2,7 @@
 #include <stdint.h>
 #pragma once
 
-extern int16_t keyboard_state[];
-
-struct MouseState {
-    int x;
-    int y;
-    bool l_press;
-    bool r_press;
-};
-
-extern struct MouseState mouse_state;
+struct GLFWgamepadstate;
 
 struct GamePadState {
     short buttonFlags;
@@ -38,18 +29,13 @@ public:
         return &controller;
     }
     
-    void handle_input(int width, int height) {
-        handle_mouse(width, height);
-        handle_keyboard();
-        handle_game_pad();
-    };
+    void handle_cursor_event(int width, int height, int x, int y);
+    void handle_mouse_event(int button, int action, int modifiers);
+    void handle_keyboard_event(int key, int scancode, int action, int modifiers);
+    void handle_gamepad_event(GLFWgamepadstate* gamepad);
     
     void send_to_stream();
     
 private:
     InputController() {};
-    
-    void handle_mouse(int width, int height);
-    void handle_keyboard();
-    void handle_game_pad();
 };

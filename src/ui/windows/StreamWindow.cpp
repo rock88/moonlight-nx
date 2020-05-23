@@ -3,7 +3,6 @@
 #include "InputController.hpp"
 #include "FFmpegVideoDecoder.hpp"
 #include "GLVideoRenderer.hpp"
-#include "RetroAudioRenderer.hpp"
 #ifdef __SWITCH__
 #include "AudrenAudioRenderer.hpp"
 #endif
@@ -21,12 +20,10 @@ StreamWindow::StreamWindow(Widget *parent, const std::string &address, int app_i
     m_session->set_video_decoder(new FFmpegVideoDecoder());
     m_session->set_video_renderer(new GLVideoRenderer());
     
-    #ifdef __LIBRETRO__
-    m_session->set_audio_renderer(new RetroAudioRenderer());
-    #elif __SWITCH__
+    #ifdef __SWITCH__
     m_session->set_audio_renderer(new AudrenAudioRenderer());
     #else
-    m_session->set_audio_renderer(new DebugFileRecorderAudioRenderer());
+    m_session->set_audio_renderer(new DebugFileRecorderAudioRenderer(false));
     #endif
     
     m_loader = add<LoadingOverlay>();

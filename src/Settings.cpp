@@ -50,8 +50,8 @@ void Settings::set_working_dir(std::string working_dir) {
 void Settings::add_host(const std::string address) {
     if (std::find(m_hosts.begin(), m_hosts.end(), address) == m_hosts.end()) {
         m_hosts.push_back(address);
+        save();
     }
-    save();
 }
 
 void Settings::load() {
@@ -125,21 +125,22 @@ void Settings::save() {
         }
         
         if (json_t* settings = json_object()) {
-            json_object_set(root, "resolution", json_integer(m_resolution));
-            json_object_set(root, "fps", json_integer(m_fps));
-            json_object_set(root, "video_codec", json_integer(m_video_codec));
-            json_object_set(root, "bitrate", json_integer(m_bitrate));
-            json_object_set(root, "decoder_threads", json_integer(m_decoder_threads));
+            json_object_set(settings, "resolution", json_integer(m_resolution));
+            json_object_set(settings, "fps", json_integer(m_fps));
+            json_object_set(settings, "video_codec", json_integer(m_video_codec));
+            json_object_set(settings, "bitrate", json_integer(m_bitrate));
+            json_object_set(settings, "decoder_threads", json_integer(m_decoder_threads));
             
             if (m_swap_ab_xy) {
-                json_object_set(root, "swap_ab_xy", json_true());
+                json_object_set(settings, "swap_ab_xy", json_true());
             } else {
-                json_object_set(root, "swap_ab_xy", json_false());
+                json_object_set(settings, "swap_ab_xy", json_false());
             }
+            
+            json_object_set(root, "settings", settings);
         }
         
         json_dump_file(root, (m_working_dir + "/settings.json").c_str(), JSON_INDENT(4));
-        
         json_decref(root);
     }
 }

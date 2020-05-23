@@ -5,7 +5,7 @@
 
 class DebugFileRecorderAudioRenderer: public IAudioRenderer {
 public:
-    DebugFileRecorderAudioRenderer() {};
+    DebugFileRecorderAudioRenderer(bool enable): m_enable(enable) {};
     ~DebugFileRecorderAudioRenderer();
     
     int init(int audio_configuration, const POPUS_MULTISTREAM_CONFIGURATION opus_config, void *context, int ar_flags) override;
@@ -16,5 +16,6 @@ public:
 private:
     OpusMSDecoder* m_decoder = nullptr;
     short* m_buffer = nullptr;
+    bool m_enable;
     Data m_data;
 };
