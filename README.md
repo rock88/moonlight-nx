@@ -1,15 +1,14 @@
-# Moonlight-libretro
+# Moonlight-NX
 
-Moonlight-libretro is a port of [Moonlight Game Streaming Project](https://github.com/moonlight-stream "Moonlight Game Streaming Project") for [RetroArch](https://www.retroarch.com "RetroArch") platform.
-In the first place it's development for use on a Nintendo Switch, for use with [Lakka on the Nintendo Switch](https://lakka-switch.github.io/documentation/ "Lakka on the Nintendo Switch"), but can be ported on other platform (currently can run on macOS, for example).
+Moonlight-NX is a port of [Moonlight Game Streaming Project](https://github.com/moonlight-stream "Moonlight Game Streaming Project") for Nintendo Switch.
 
-# Installing (Lakka-Switch)
-1. Install [Lakka](https://lakka-switch.github.io/documentation/installation.html "Lakka")
-2. Download latest Moonlight-libretro [release](https://github.com/rock88/moonlight-libretro/releases "release")
-3. Put moonlight_libretro.so to lakka/storage/cores directory on your SD card (create dir if it not exist).
-4. Choose Load Core and select moonlight_libretro.so, then push Start Core.
+# Installing
+1. Download latest Moonlight-NX [release](https://github.com/rock88/moonlight-nx/releases "release");
+2. Put moonlight.nro to sdcard:/switch/moonlight;
+3. Launch hbmenu in Applet Mode;
+4. Launch moonlight.
 
-# Controls (Lakka-Switch)
+# Controls
 1. Move cursor with move finger on touch screen;
 2. L/R + tap on screen - Left/Right mouse click (allow to move cursor);
 3. ZL/ZR + tap on screen - Left/Right mouse click (without move cursor);
@@ -20,11 +19,9 @@ In the first place it's development for use on a Nintendo Switch, for use with [
 8. ZL+ZR+Left - show video decoder/render stats;
 9. ZL+ZR+Right - hide video decoder/render stats;
 
-# Building (Lakka-Switch)
-1. Firstly needs build toolchain from [Lakka on the Nintendo Switch](https://github.com/lakka-switch/Lakka-LibreELEC)
-2. Clone this repo `git clone --recursive https://github.com/rock88/moonlight-libretro.git`
-3. `cd moonlight-libretro`
-4. Fix `TOOLCHAIN` path in Makefile, build_opus_lakka_switch.sh and build_ffmpeg_lakka_switch.sh
-5. `./build_opus_lakka_switch.sh`
-6. (Optional - build latest ffmeg libs) `./build_ffmpeg_lakka_switch.sh`
-7. `make platform=lakka-switch`
+# Build Moonlight-NX
+1. Setup [Development Environment](https://switchbrew.org/wiki/Setting_up_Development_Environment "Development Environment");
+2. Install deps (See [Makefile](https://github.com/rock88/moonlight-nx/blob/master/Makefile#L80 "Makefile")). Please note - you should use [libcurl 7.69.1](https://github.com/devkitPro/pacman-packages/commit/1582ad85914b14497fae32a9fe9074c0374f99f7 "libcurl 7.69.1")!
+3. Clone this repo: `git clone --recursive https://github.com/rock88/moonlight-nx.git`;
+4. `cd moonlight-nx`;
+5. `make`.
