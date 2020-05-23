@@ -363,7 +363,7 @@ int gs_applist(PSERVER_DATA server, PAPP_LIST *list) {
     return ret;
 }
 
-int gs_app_boxart(PSERVER_DATA server, int app_id, char **art_data, size_t *art_data_size) {
+int gs_app_boxart(PSERVER_DATA server, int app_id, Data* out) {
     int ret = GS_OK;
     char url[4096];
     Data data;
@@ -372,13 +372,9 @@ int gs_app_boxart(PSERVER_DATA server, int app_id, char **art_data, size_t *art_
     
     if (http_request(url, &data) != GS_OK) {
         ret = GS_IO_ERROR;
-        *art_data_size = 0;
-        *art_data = NULL;
     }
     else {
-        *art_data_size = data.size();
-        *art_data = (char *)malloc(*art_data_size);
-        memcpy(*art_data, data.bytes(), *art_data_size);
+        *out = data;
     }
     
     return ret;

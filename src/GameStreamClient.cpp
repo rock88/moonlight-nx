@@ -132,23 +132,21 @@ void GameStreamClient::applist(const std::string &address, ServerCallback<PAPP_L
     });
 }
 
-void GameStreamClient::app_boxart(const std::string &address, int app_id, ServerCallback<std::pair<char*, size_t>> callback) {
+void GameStreamClient::app_boxart(const std::string &address, int app_id, ServerCallback<Data> callback) {
     if (m_server_data.count(address) == 0) {
-        callback(GSResult<std::pair<char*, size_t>>::failure("Firstly call connect() & pair()..."));
+        callback(GSResult<Data>::failure("Firstly call connect() & pair()..."));
         return;
     }
     
     perform_async([this, address, app_id, callback] {
-        char* data;
-        size_t size;
+        Data data;
+        int status = gs_app_boxart(&m_server_data[address], app_id, &data);
         
-        int status = gs_app_boxart(&m_server_data[address], app_id, &data, &size);
-        
-        nanogui::async([this, callback, data, size, status] {
+        nanogui::async([this, callback, data, status] {
             if (status == GS_OK) {
-                callback(GSResult<std::pair<char*, size_t>>::success(std::make_pair(data, size)));
+                callback(GSResult<Data>::success(data));
             } else {
-                callback(GSResult<std::pair<char*, size_t>>::failure(gs_error != NULL ? gs_error : "Unknown error..."));
+                callback(GSResult<Data>::failure(gs_error != NULL ? gs_error : "Unknown error..."));
             }
         });
     });

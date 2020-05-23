@@ -24,7 +24,7 @@ extern "C" {
 }
 
 #include <Limelight.h>
-
+#include "Data.hpp"
 #include <stdbool.h>
 
 #define MIN_SUPPORTED_GFE_VERSION 3
@@ -45,7 +45,7 @@ typedef struct _SERVER_DATA {
 } SERVER_DATA, *PSERVER_DATA;
 
 int gs_init(PSERVER_DATA server, char* address, const char *keyDirectory, int logLevel, bool unsupported);
-int gs_app_boxart(PSERVER_DATA server, int app_id, char **art_data, size_t *art_data_size);
+int gs_app_boxart(PSERVER_DATA server, int app_id, Data* out);
 int gs_start_app(PSERVER_DATA server, PSTREAM_CONFIGURATION config, int appId, bool sops, bool localaudio, int gamepad_mask);
 int gs_applist(PSERVER_DATA server, PAPP_LIST *app_list);
 int gs_unpair(PSERVER_DATA server);

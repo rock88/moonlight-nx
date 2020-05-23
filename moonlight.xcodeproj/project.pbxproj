@@ -12,6 +12,7 @@
 		3602C3BD245DBA9100368900 /* AppButton.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3602C3BB245DBA9100368900 /* AppButton.cpp */; };
 		3603E93C246316400051287D /* InputController.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3603E93A246316400051287D /* InputController.cpp */; };
 		363898342471B7C500F99920 /* MbedTLSCryptoManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 363898312471B7C500F99920 /* MbedTLSCryptoManager.cpp */; };
+		364A6A8F24786E2200460028 /* BoxArtManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 364A6A8D24786E2200460028 /* BoxArtManager.cpp */; };
 		3652EFCD245B3B00001FABF3 /* widget.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3652EF0F245B3B00001FABF3 /* widget.cpp */; };
 		3652EFCE245B3B00001FABF3 /* common.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3652EF10245B3B00001FABF3 /* common.cpp */; };
 		3652EFCF245B3B00001FABF3 /* checkbox.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3652EF11245B3B00001FABF3 /* checkbox.cpp */; };
@@ -131,6 +132,8 @@
 		363898302471B7C500F99920 /* OpenSSLCryptoManager.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = OpenSSLCryptoManager.cpp; sourceTree = "<group>"; };
 		363898312471B7C500F99920 /* MbedTLSCryptoManager.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MbedTLSCryptoManager.cpp; sourceTree = "<group>"; };
 		363898322471B7C500F99920 /* OpenSSLCryptoManager.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = OpenSSLCryptoManager.hpp; sourceTree = "<group>"; };
+		364A6A8D24786E2200460028 /* BoxArtManager.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = BoxArtManager.cpp; sourceTree = "<group>"; };
+		364A6A8E24786E2200460028 /* BoxArtManager.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = BoxArtManager.hpp; sourceTree = "<group>"; };
 		3652ECE8245B3AFF001FABF3 /* colorpicker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = colorpicker.h; sourceTree = "<group>"; };
 		3652ECE9245B3AFF001FABF3 /* renderpass.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = renderpass.h; sourceTree = "<group>"; };
 		3652ECEA245B3AFF001FABF3 /* theme.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = theme.h; sourceTree = "<group>"; };
@@ -649,6 +652,8 @@
 				36F1646E2474736E00D70AD9 /* switch */,
 				3652F003245C28C6001FABF3 /* GameStreamClient.cpp */,
 				3652F004245C28C6001FABF3 /* GameStreamClient.hpp */,
+				364A6A8D24786E2200460028 /* BoxArtManager.cpp */,
+				364A6A8E24786E2200460028 /* BoxArtManager.hpp */,
 				36A0C03B2461F03C0083289C /* Settings.cpp */,
 				36A0C03C2461F03C0083289C /* Settings.hpp */,
 				3603E93A246316400051287D /* InputController.cpp */,
@@ -943,6 +948,7 @@
 				36D3F8442469B5C400CDEF9B /* MoonlightSession.cpp in Sources */,
 				3652EFE7245B3B00001FABF3 /* label.cpp in Sources */,
 				3652EFDA245B3B00001FABF3 /* layout.cpp in Sources */,
+				364A6A8F24786E2200460028 /* BoxArtManager.cpp in Sources */,
 				3652F080245C292B001FABF3 /* ByteBuffer.c in Sources */,
 				3652EFF3245B3B00001FABF3 /* slider.cpp in Sources */,
 				3652EFCE245B3B00001FABF3 /* common.cpp in Sources */,

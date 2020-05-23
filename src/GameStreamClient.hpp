@@ -4,6 +4,7 @@
 #include <map>
 #include "client.h"
 #include "errors.h"
+#include "Data.hpp"
 
 #pragma once
 
@@ -62,7 +63,7 @@ public:
     void connect(const std::string &address, ServerCallback<SERVER_DATA> callback);
     void pair(const std::string &address, const std::string &pin, ServerCallback<bool> callback);
     void applist(const std::string &address, ServerCallback<PAPP_LIST> callback);
-    void app_boxart(const std::string &address, int app_id, ServerCallback<std::pair<char*, size_t>> callback);
+    void app_boxart(const std::string &address, int app_id, ServerCallback<Data> callback);
     void start(const std::string &address, STREAM_CONFIGURATION config, int app_id, ServerCallback<STREAM_CONFIGURATION> callback);
     void quit(const std::string &address, ServerCallback<bool> callback);
     

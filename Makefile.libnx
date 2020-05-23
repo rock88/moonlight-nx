@@ -70,15 +70,11 @@ M_INCLUDES := \
 DEFINES := -DNANOGUI_USE_OPENGL -DNVG_STB_IMAGE_IMPLEMENTATION -DNANOGUI_NO_GLFW \
 	-DHAS_SOCKLEN_T -DHAS_POLL -DHAS_FCNTL -D_GNU_SOURCE -DUSE_MBEDTLS_CRYPTO
 
-CFLAGS	:=	-g -Wall -O0 -ffunction-sections \
-			$(ARCH) $(DEFINES)
-
-CFLAGS	+=	$(INCLUDE) $(M_INCLUDES) -D__SWITCH__
-
+CFLAGS	:=	-Wall -O3 -ffunction-sections $(ARCH) $(DEFINES) $(INCLUDE) $(M_INCLUDES) -D__SWITCH__
 CXXFLAGS	:= $(CFLAGS) -std=gnu++17
 
-ASFLAGS	:=	-g $(ARCH)
-LDFLAGS	=	-specs=$(DEVKITPRO)/libnx/switch.specs -g $(ARCH) -Wl,-Map,$(notdir $*.map)
+ASFLAGS	:=	$(ARCH)
+LDFLAGS	=	-specs=$(DEVKITPRO)/libnx/switch.specs $(ARCH) -Wl,-Map,$(notdir $*.map)
 
 LIBS	:= -lcurl -lmbedtls -lmbedx509 -lmbedcrypto \
 	-lavcodec -lavutil -lopus -lz -lexpat \
@@ -94,10 +90,10 @@ LIBGAMESTREAM_CPP_SOURCES = \
 
 MOONLIGHT_LIBRETRO_C_SOURCES = \
 	nanogui_resources.c \
-	moonlight_glfw.c \
 	switch_wrapper.c
 
 MOONLIGHT_LIBRETRO_CXX_SOURCES = \
+	moonlight_glfw.cpp \
 	AddHostWindow.cpp \
 	ContentWindow.cpp \
 	MainWindow.cpp \
@@ -118,7 +114,8 @@ MOONLIGHT_LIBRETRO_CXX_SOURCES = \
 	Data.cpp \
 	MbedTLSCryptoManager.cpp \
 	mbedtls_to_openssl_wrapper.cpp \
-	AudrenAudioRenderer.cpp
+	AudrenAudioRenderer.cpp \
+	BoxArtManager.cpp
 
 MOONLIGHT_COMMON_C_SOURCES = \
 	callbacks.c \
