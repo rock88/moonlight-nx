@@ -25,3 +25,6 @@ Moonlight-NX is a port of [Moonlight Game Streaming Project](https://github.com/
 3. Clone this repo: `git clone --recursive https://github.com/rock88/moonlight-nx.git`;
 4. `cd moonlight-nx`;
 5. `make`.
+
+# Assets
+Icon - [moonlight-stream](https://github.com/moonlight-stream "moonlight-stream") project logo.
