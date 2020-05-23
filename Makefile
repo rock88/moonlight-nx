@@ -39,6 +39,7 @@ include $(DEVKITPRO)/libnx/switch_rules
 #---------------------------------------------------------------------------------
 TARGET		:=	moonlight
 APP_TITLE	:= Moonlight
+ICON		:= icon.jpg
 APP_AUTHOR	:= port by rock88
 APP_VERSION	:= 1.0.3
 BUILD		:=	build
