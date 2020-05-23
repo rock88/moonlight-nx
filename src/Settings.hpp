@@ -93,9 +93,9 @@ private:
     
     std::vector<std::string> m_hosts;
     int m_resolution = 720;
-    int m_fps = 30;
+    int m_fps = 60;
     VideoCodec m_video_codec = H264;
-    int m_bitrate = 500;
+    int m_bitrate = 1000;
     bool m_swap_ab_xy = true;
-    int m_decoder_threads = 2;
+    int m_decoder_threads = 4;
 };
