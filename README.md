@@ -5,7 +5,7 @@ Moonlight-NX is a port of [Moonlight Game Streaming Project](https://github.com/
 # Installing
 1. Download latest Moonlight-NX [release](https://github.com/rock88/moonlight-nx/releases "release");
 2. Put moonlight.nro to sdcard:/switch/moonlight;
-3. Launch hbmenu with [FULL RAM access](https://gbatemp.net/threads/use-atmosphere-to-access-full-ram-with-homebrews-without-nsp.521240/ "FULL RAM access");
+3. Launch hbmenu over *Title Redirection* (for FULL RAM access);
 4. Launch moonlight.
 
 # Controls
