@@ -48,23 +48,23 @@ static const char* stages[] = {
 };
 
 void MoonlightSession::connection_stage_starting(int stage) {
-    //LOG_FMT("Starting: %s\n", stages[stage]);
+    LOG_FMT("Starting: %s\n", stages[stage]);
 }
 
 void MoonlightSession::connection_stage_complete(int stage) {
-    //LOG_FMT("Complete: %s\n", stages[stage]);
+    LOG_FMT("Complete: %s\n", stages[stage]);
 }
 
 void MoonlightSession::connection_stage_failed(int stage, int error_code) {
-    //LOG_FMT("Failed: %s\n", stages[stage]);
+    LOG_FMT("Failed: %s\n", stages[stage]);
 }
 
 void MoonlightSession::connection_started() {
-    //LOG("Connection started\n");
+    LOG("Connection started\n");
 }
 
 void MoonlightSession::connection_terminated(int error_code) {
-    //LOG("Connection terminated...\n");
+    LOG("Connection terminated...\n");
     
     if (m_active_session) {
         m_active_session->m_is_active = false;
@@ -72,10 +72,10 @@ void MoonlightSession::connection_terminated(int error_code) {
 }
 
 void MoonlightSession::connection_log_message(const char* format, ...) {
-    va_list list;
-    va_start(list, format);
-    vprintf(format, list);
-    va_end(list);
+//    va_list list;
+//    va_start(list, format);
+//    vprintf(format, list);
+//    va_end(list);
 }
 
 void MoonlightSession::connection_rumble(unsigned short controller, unsigned short low_freq_motor, unsigned short high_freq_motor) {
