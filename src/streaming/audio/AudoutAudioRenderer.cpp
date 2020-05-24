@@ -23,7 +23,7 @@ int AudoutAudioRenderer::init(int audio_configuration, const POPUS_MULTISTREAM_C
     mempool_ptr = memalign(0x1000, m_mempool_size);
     
     if (m_decoded_buffer == NULL || mempool_ptr == NULL) {
-        LOG_FMT("Failed to allocate buffers\n");
+        LOG("Failed to allocate buffers\n");
         return -1;
     }
     

@@ -34,7 +34,7 @@ int AudrenAudioRenderer::init(int audio_configuration, const POPUS_MULTISTREAM_C
     mempool_ptr = memalign(0x1000, mempool_size);
     
     if (m_decoded_buffer == NULL || mempool_ptr == NULL) {
-        LOG_FMT("Failed to allocate buffers\n");
+        LOG("Failed to allocate buffers\n");
         return -1;
     }
     
@@ -77,7 +77,6 @@ int AudrenAudioRenderer::init(int audio_configuration, const POPUS_MULTISTREAM_C
     audrvVoiceSetMixFactor(&m_driver, 0, 0.0f, 0, 1);
     audrvVoiceSetMixFactor(&m_driver, 0, 0.0f, 1, 0);
     audrvVoiceSetMixFactor(&m_driver, 0, 1.0f, 1, 1);
-    audrvVoiceStart(&m_driver, 0);
     
     return DR_OK;
 }

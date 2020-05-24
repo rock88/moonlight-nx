@@ -23,7 +23,7 @@ private:
     
     int m_channel_count = 0;
     int m_samples_per_frame = AUDREN_SAMPLES_PER_FRAME_48KHZ;
-    const int m_decoded_buffers_before_play = 20; // Small value for lower delay...
+    const int m_decoded_buffers_before_play = 40; // Small value for lower delay...
     int m_mempool_size = 0, m_samples_datasize = 0;
     
     int m_current_frame = 0;
