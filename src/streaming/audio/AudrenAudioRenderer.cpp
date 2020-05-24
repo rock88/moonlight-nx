@@ -16,8 +16,8 @@ static const AudioRendererConfig m_ar_config =
     .num_mix_buffers = 2,
 };
 
-AudrenAudioRenderer::AudrenAudioRenderer() {
-
+AudrenAudioRenderer::AudrenAudioRenderer(int audio_delay) {
+    m_audio_delay = audio_delay;
 }
 
 AudrenAudioRenderer::~AudrenAudioRenderer() {
@@ -26,7 +26,7 @@ AudrenAudioRenderer::~AudrenAudioRenderer() {
 
 int AudrenAudioRenderer::init(int audio_configuration, const POPUS_MULTISTREAM_CONFIGURATION opus_config, void *context, int ar_flags) {
     m_channel_count = opus_config->channelCount;
-    m_samples_datasize = m_channel_count * m_decoded_buffers_before_play * m_samples_per_frame * sizeof(s16);
+    m_samples_datasize = m_channel_count * m_audio_delay * m_samples_per_frame * sizeof(s16);
     
     int mempool_size = (m_samples_datasize + 0xFFF) &~ 0xFFF;
     
@@ -56,7 +56,7 @@ int AudrenAudioRenderer::init(int audio_configuration, const POPUS_MULTISTREAM_C
     m_wavebuf.data_raw = mempool_ptr;
     m_wavebuf.size = m_samples_datasize;
     m_wavebuf.start_sample_offset = 0;
-    m_wavebuf.end_sample_offset = m_decoded_buffers_before_play * m_samples_per_frame;
+    m_wavebuf.end_sample_offset = m_audio_delay * m_samples_per_frame;
     
     int mpid = audrvMemPoolAdd(&m_driver, mempool_ptr, mempool_size);
     audrvMemPoolAttach(&m_driver, mpid);
@@ -113,7 +113,7 @@ void AudrenAudioRenderer::decode_and_play_sample(char *data, int length) {
         m_current_frame++;
         m_total_decoded_samples += decoded_samples;
         
-        if (m_current_frame < m_decoded_buffers_before_play) {
+        if (m_current_frame < m_audio_delay) {
             return;
         }
         

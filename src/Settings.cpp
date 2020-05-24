@@ -78,13 +78,13 @@ void Settings::load() {
             
             if (json_t* fps = json_object_get(settings, "fps")) {
                 if (json_typeof(fps) == JSON_INTEGER) {
-                    m_fps = (VideoCodec)json_integer_value(fps);
+                    m_fps = (int)json_integer_value(fps);
                 }
             }
             
             if (json_t* video_codec = json_object_get(settings, "video_codec")) {
                 if (json_typeof(video_codec) == JSON_INTEGER) {
-                    m_video_codec = (VideoCodec)json_integer_value(video_codec);
+                    m_video_codec = (MVideoCodec)json_integer_value(video_codec);
                 }
             }
             
@@ -105,6 +105,18 @@ void Settings::load() {
             if (json_t* decoder_threads = json_object_get(settings, "decoder_threads")) {
                 if (json_typeof(decoder_threads) == JSON_INTEGER) {
                     m_decoder_threads = (int)json_integer_value(decoder_threads);
+                }
+            }
+            
+            if (json_t* audio_driver = json_object_get(settings, "audio_driver")) {
+                if (json_typeof(audio_driver) == JSON_INTEGER) {
+                    m_audio_driver = (MAudioDriver)json_integer_value(audio_driver);
+                }
+            }
+            
+            if (json_t* audio_delay = json_object_get(settings, "audio_delay")) {
+                if (json_typeof(audio_delay) == JSON_INTEGER) {
+                    m_audio_delay = (int)json_integer_value(audio_delay);
                 }
             }
         }
@@ -136,6 +148,9 @@ void Settings::save() {
             } else {
                 json_object_set(settings, "swap_ab_xy", json_false());
             }
+            
+            json_object_set(settings, "audio_driver", json_integer(m_audio_driver));
+            json_object_set(settings, "audio_delay", json_integer(m_audio_delay));
             
             json_object_set(root, "settings", settings);
         }

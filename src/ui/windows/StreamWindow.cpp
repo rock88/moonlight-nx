@@ -8,6 +8,7 @@
 #include "AudoutAudioRenderer.hpp"
 #endif
 #include "DebugFileRecorderAudioRenderer.hpp"
+#include "Settings.hpp"
 #include "nanovg.h"
 #include <algorithm>
 #include <memory>
@@ -22,7 +23,15 @@ StreamWindow::StreamWindow(Widget *parent, const std::string &address, int app_i
     m_session->set_video_renderer(new GLVideoRenderer());
     
     #ifdef __SWITCH__
-    m_session->set_audio_renderer(new AudrenAudioRenderer());
+    switch (Settings::settings()->audio_driver()) {
+        case Audren:
+            m_session->set_audio_renderer(new AudrenAudioRenderer(Settings::settings()->audio_delay()));
+            break;
+        case Audout:
+            m_session->set_audio_renderer(new AudoutAudioRenderer(Settings::settings()->audio_delay()));
+        default:
+            break;
+    }
     #else
     m_session->set_audio_renderer(new DebugFileRecorderAudioRenderer(false));
     #endif

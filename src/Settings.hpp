@@ -5,9 +5,15 @@
 
 #define MOONLIGHT_LIBRETRO_VERSION "1.0.4"
 
-enum VideoCodec: int {
+enum MVideoCodec: int {
     H264,
     H265
+};
+
+enum MAudioDriver: int {
+    NoAudio,
+    Audren,
+    Audout
 };
 
 class Settings {
@@ -49,11 +55,11 @@ public:
         m_fps = fps;
     }
     
-    VideoCodec video_codec() const {
+    MVideoCodec video_codec() const {
         return m_video_codec;
     }
     
-    void set_video_codec(VideoCodec video_codec) {
+    void set_video_codec(MVideoCodec video_codec) {
         m_video_codec = video_codec;
     }
     
@@ -81,6 +87,22 @@ public:
         return m_decoder_threads;
     }
     
+    void set_audio_driver(MAudioDriver audio_driver) {
+        m_audio_driver = audio_driver;
+    }
+    
+    MAudioDriver audio_driver() const {
+        return m_audio_driver;
+    }
+    
+    void set_audio_delay(int audio_delay) {
+        m_audio_delay = audio_delay;
+    }
+    
+    int audio_delay() const {
+        return m_audio_delay;
+    }
+    
     void load();
     void save();
 
@@ -94,8 +116,10 @@ private:
     std::vector<std::string> m_hosts;
     int m_resolution = 720;
     int m_fps = 60;
-    VideoCodec m_video_codec = H264;
+    MVideoCodec m_video_codec = H264;
     int m_bitrate = 10000;
     bool m_swap_ab_xy = true;
     int m_decoder_threads = 4;
+    MAudioDriver m_audio_driver = Audren;
+    int m_audio_delay = 50;
 };

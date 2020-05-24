@@ -91,8 +91,6 @@
 		36BFCCF32479723E00245D40 /* http.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 36BFCCF02479723E00245D40 /* http.cpp */; };
 		36BFCCF62479724A00245D40 /* GameStreamClient.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 36BFCCF52479724900245D40 /* GameStreamClient.cpp */; };
 		36BFCCF82479725900245D40 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 36BFCCF72479725900245D40 /* main.cpp */; };
-		36BFCCFC247AAF9B00245D40 /* AudoutAudioRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 36BFCCFA247AAF9B00245D40 /* AudoutAudioRenderer.cpp */; };
-		36BFCCFD247ABB6100245D40 /* AudrenAudioRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 36F16476247481F200D70AD9 /* AudrenAudioRenderer.cpp */; };
 		36D3F8442469B5C400CDEF9B /* MoonlightSession.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 36D3F8422469B5C400CDEF9B /* MoonlightSession.cpp */; };
 		36DBDE9A2450BCD50057C8D3 /* CoreFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 36DBDE992450BCD50057C8D3 /* CoreFoundation.framework */; };
 		36DBDE9C2450BCD90057C8D3 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 36DBDE9B2450BCD90057C8D3 /* CoreGraphics.framework */; };
@@ -879,7 +877,6 @@
 				36A0C0372461DBA30083289C /* AddHostButton.cpp in Sources */,
 				3652F06E245C292B001FABF3 /* rs.c in Sources */,
 				3652EFD1245B3B00001FABF3 /* colorpicker.cpp in Sources */,
-				36BFCCFC247AAF9B00245D40 /* AudoutAudioRenderer.cpp in Sources */,
 				3652F066245C292B001FABF3 /* compress.c in Sources */,
 				3652F07D245C292B001FABF3 /* Misc.c in Sources */,
 				3652F070245C292B001FABF3 /* SimpleStun.c in Sources */,
@@ -943,7 +940,6 @@
 				3652EFE5245B3B00001FABF3 /* theme.cpp in Sources */,
 				367CD95A245DE25F00A95738 /* StreamWindow.cpp in Sources */,
 				3652F07F245C292B001FABF3 /* LinkedBlockingQueue.c in Sources */,
-				36BFCCFD247ABB6100245D40 /* AudrenAudioRenderer.cpp in Sources */,
 				3652EFD2245B3B00001FABF3 /* textarea.cpp in Sources */,
 				3652EFD5245B3B00001FABF3 /* canvas.cpp in Sources */,
 				3652F078245C292B001FABF3 /* FakeCallbacks.c in Sources */,
@@ -1013,7 +1009,7 @@
 					"\"$(SRCROOT)/third_party/moonlight-common-c/enet/include\"",
 					"\"$(SRCROOT)/third_party/moonlight-common-c/src\"",
 					"\"$(SRCROOT)/src/switch\"",
-					/opt/devkitpro/libnx/include,
+					/opt/devkitpro/libnx/include2,
 				);
 				LIBRARY_SEARCH_PATHS = /usr/local/lib;
 				MACOSX_DEPLOYMENT_TARGET = 10.15;
@@ -1104,7 +1100,7 @@
 					"\"$(SRCROOT)/third_party/moonlight-common-c/enet/include\"",
 					"\"$(SRCROOT)/third_party/moonlight-common-c/src\"",
 					"\"$(SRCROOT)/src/switch\"",
-					/opt/devkitpro/libnx/include,
+					/opt/devkitpro/libnx/include2,
 				);
 				LIBRARY_SEARCH_PATHS = /usr/local/lib;
 				MACOSX_DEPLOYMENT_TARGET = 10.15;

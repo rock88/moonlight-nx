@@ -6,8 +6,8 @@
 #include <inttypes.h>
 #include "Log.h"
 
-AudoutAudioRenderer::AudoutAudioRenderer() {
-
+AudoutAudioRenderer::AudoutAudioRenderer(int audio_delay) {
+    m_audio_delay = audio_delay;
 }
 
 AudoutAudioRenderer::~AudoutAudioRenderer() {
@@ -16,7 +16,7 @@ AudoutAudioRenderer::~AudoutAudioRenderer() {
 
 int AudoutAudioRenderer::init(int audio_configuration, const POPUS_MULTISTREAM_CONFIGURATION opus_config, void *context, int ar_flags) {
     m_channel_count = opus_config->channelCount;
-    m_samples_datasize = m_channel_count * m_decoded_buffers_before_play * m_samples_per_frame * sizeof(s16);
+    m_samples_datasize = m_channel_count * m_audio_delay * m_samples_per_frame * sizeof(s16);
     m_mempool_size = (m_samples_datasize + 0xFFF) &~ 0xFFF;
     
     m_decoded_buffer = (s16 *)malloc(m_samples_datasize);
@@ -64,7 +64,7 @@ void AudoutAudioRenderer::decode_and_play_sample(char *data, int length) {
         m_current_frame++;
         m_total_decoded_samples += decoded_samples;
         
-        if (m_current_frame < m_decoded_buffers_before_play) {
+        if (m_current_frame < m_audio_delay) {
             return;
         }
         
