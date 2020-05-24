@@ -41,7 +41,7 @@ TARGET		:=	moonlight
 APP_TITLE	:= Moonlight
 ICON		:= icon.jpg
 APP_AUTHOR	:= port by rock88
-APP_VERSION	:= 1.0.3
+APP_VERSION	:= 1.0.4
 BUILD		:=	build
 SOURCES		:=	src src/libgamestream src/switch src/nanogui_resources src/streaming src/streaming/ffmpeg \
 	src/crypto src/streaming/video src/crypto src/streaming/audio src/ui/windows src/ui/buttons src/ui \
