@@ -132,6 +132,8 @@ bool StreamWindow::mouse_motion_event(const Vector2i &p, const Vector2i &rel, in
 }
 
 void StreamWindow::terminate(bool close_app) {
+    InputController::controller()->stop_rumple();
+    
     if (m_loader) {
         m_loader->dispose();
         m_loader = NULL;

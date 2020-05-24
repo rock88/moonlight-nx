@@ -10,6 +10,7 @@
 #include <switch.h>
 static u32 VibrationDeviceHandles[2][2];
 static HidVibrationValue VibrationValues[2];
+static HidVibrationValue VibrationValue_stop;
 #endif
 
 struct MouseState {
@@ -28,6 +29,9 @@ InputController::InputController() {
     #ifdef __SWITCH__
     hidInitializeVibrationDevices(VibrationDeviceHandles[0], 2, CONTROLLER_HANDHELD, TYPE_HANDHELD);
     hidInitializeVibrationDevices(VibrationDeviceHandles[1], 2, CONTROLLER_PLAYER_1, TYPE_JOYCON_PAIR);
+    
+    VibrationValue_stop.freq_low  = 160.0f;
+    VibrationValue_stop.freq_high = 320.0f;
     #endif
 }
 
@@ -142,6 +146,19 @@ void InputController::handle_rumple(unsigned short low_freq_motor, unsigned shor
     VibrationValues[1].freq_low  = low * 50;
     VibrationValues[1].amp_high  = high;
     VibrationValues[1].freq_high = high * 50;
+    
+    int target_device = 0;
+    if (!hidGetHandheldMode())
+        target_device = 1;
+    
+    hidSendVibrationValues(VibrationDeviceHandles[target_device], VibrationValues, 2);
+    #endif
+}
+
+void InputController::stop_rumple() {
+    #ifdef __SWITCH__
+    memcpy(&VibrationValues[0], &VibrationValue_stop, sizeof(HidVibrationValue));
+    memcpy(&VibrationValues[1], &VibrationValue_stop, sizeof(HidVibrationValue));
     
     int target_device = 0;
     if (!hidGetHandheldMode())
