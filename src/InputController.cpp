@@ -6,6 +6,12 @@
 #include <nanogui/opengl.h>
 #include <GLFW/glfw3.h>
 
+#ifdef __SWITCH__
+#include <switch.h>
+static u32 VibrationDeviceHandles[2][2];
+static HidVibrationValue VibrationValues[2];
+#endif
+
 struct MouseState {
     int x;
     int y;
@@ -17,6 +23,13 @@ struct MouseState mouse_state;
 struct GamePadState game_pad_state;
 
 static int m_width = 1, m_height = 1;
+
+InputController::InputController() {
+    #ifdef __SWITCH__
+    hidInitializeVibrationDevices(VibrationDeviceHandles[0], 2, CONTROLLER_HANDHELD, TYPE_HANDHELD);
+    hidInitializeVibrationDevices(VibrationDeviceHandles[1], 2, CONTROLLER_PLAYER_1, TYPE_JOYCON_PAIR);
+    #endif
+}
 
 void InputController::handle_cursor_event(int width, int height, int x, int y) {
     m_width = width;
@@ -113,6 +126,29 @@ void InputController::handle_gamepad_event(GLFWgamepadstate* gamepad) {
         SET_GAME_PAD_STATE(X_FLAG, GLFW_GAMEPAD_BUTTON_X);
         SET_GAME_PAD_STATE(Y_FLAG, GLFW_GAMEPAD_BUTTON_Y);
     }
+}
+
+void InputController::handle_rumple(unsigned short low_freq_motor, unsigned short high_freq_motor) {
+    #ifdef __SWITCH__
+    float low = (float)low_freq_motor / 0xFFFF;
+    float high = (float)high_freq_motor / 0xFFFF;
+    
+    VibrationValues[0].amp_low   = low;
+    VibrationValues[0].freq_low  = low * 50;
+    VibrationValues[0].amp_high  = high;
+    VibrationValues[0].freq_high = high * 50;
+    
+    VibrationValues[1].amp_low   = low;
+    VibrationValues[1].freq_low  = low * 50;
+    VibrationValues[1].amp_high  = high;
+    VibrationValues[1].freq_high = high * 50;
+    
+    int target_device = 0;
+    if (!hidGetHandheldMode())
+        target_device = 1;
+    
+    hidSendVibrationValues(VibrationDeviceHandles[target_device], VibrationValues, 2);
+    #endif
 }
 
 void InputController::send_to_stream() {

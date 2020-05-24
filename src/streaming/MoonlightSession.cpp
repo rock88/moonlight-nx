@@ -1,6 +1,7 @@
 #include "MoonlightSession.hpp"
 #include "GameStreamClient.hpp"
 #include "Settings.hpp"
+#include "InputController.hpp"
 #include "Log.h"
 #include <nanogui/nanogui.h>
 
@@ -78,7 +79,7 @@ void MoonlightSession::connection_log_message(const char* format, ...) {
 }
 
 void MoonlightSession::connection_rumble(unsigned short controller, unsigned short low_freq_motor, unsigned short high_freq_motor) {
-    
+    InputController::controller()->handle_rumple(low_freq_motor, high_freq_motor);
 }
 
 void MoonlightSession::connection_status_update(int connection_status) {
