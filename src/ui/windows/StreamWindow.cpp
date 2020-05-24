@@ -5,6 +5,7 @@
 #include "GLVideoRenderer.hpp"
 #ifdef __SWITCH__
 #include "AudrenAudioRenderer.hpp"
+#include "AudoutAudioRenderer.hpp"
 #endif
 #include "DebugFileRecorderAudioRenderer.hpp"
 #include "nanovg.h"
@@ -21,7 +22,7 @@ StreamWindow::StreamWindow(Widget *parent, const std::string &address, int app_i
     m_session->set_video_renderer(new GLVideoRenderer());
     
     #ifdef __SWITCH__
-    m_session->set_audio_renderer(new AudrenAudioRenderer());
+    m_session->set_audio_renderer(new AudoutAudioRenderer());
     #else
     m_session->set_audio_renderer(new DebugFileRecorderAudioRenderer(false));
     #endif

@@ -33,6 +33,11 @@ int AudrenAudioRenderer::init(int audio_configuration, const POPUS_MULTISTREAM_C
     m_decoded_buffer = (s16 *)malloc(m_samples_datasize);
     mempool_ptr = memalign(0x1000, mempool_size);
     
+    if (m_decoded_buffer == NULL || mempool_ptr == NULL) {
+        LOG_FMT("Failed to allocate buffers\n");
+        return -1;
+    }
+    
     int error;
     m_decoder = opus_multistream_decoder_create(opus_config->sampleRate, opus_config->channelCount, opus_config->streams, opus_config->coupledStreams, opus_config->mapping, &error);
     
