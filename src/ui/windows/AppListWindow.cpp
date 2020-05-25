@@ -5,7 +5,7 @@
 
 using namespace nanogui;
 
-AppListWindow::AppListWindow(Widget *parent, const std::string &address): ContentWindow(parent, "Appications"), m_address(address) {
+AppListWindow::AppListWindow(Widget *parent, const std::string &address): ContentWindow(parent, "Applications"), m_address(address) {
     set_left_pop_button();
     
     auto loader = add<LoadingOverlay>();
