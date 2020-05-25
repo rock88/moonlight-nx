@@ -157,7 +157,7 @@ void MoonlightSession::audio_renderer_decode_and_play_sample(char* sample_data, 
 
 // MARK: MoonlightSession
 
-void MoonlightSession::start(std::function<void(bool)> callback) {
+void MoonlightSession::start(ServerCallback<bool> callback) {
     LiInitializeStreamConfiguration(&m_config);
     
     int h = Settings::settings()->resolution();
@@ -218,17 +218,18 @@ void MoonlightSession::start(std::function<void(bool)> callback) {
         if (result.isSuccess()) {
             m_config = result.value();
             
-            perform_async([this, callback] {
-                auto m_data = GameStreamClient::client()->server_data(m_address);
-                LiStartConnection(&m_data.serverInfo, &m_config, &m_connection_callbacks, &m_video_callbacks, &m_audio_callbacks, NULL, 0, NULL, 0);
-                
-                nanogui::async([this, callback] {
-                    callback(true);
-                });
-            });
+            auto m_data = GameStreamClient::client()->server_data(m_address);
+            int result = LiStartConnection(&m_data.serverInfo, &m_config, &m_connection_callbacks, &m_video_callbacks, &m_audio_callbacks, NULL, 0, NULL, 0);
+            
+            if (result != 0) {
+                LiStopConnection();
+                callback(GSResult<bool>::failure("Failed to start stream..."));
+            } else {
+                callback(GSResult<bool>::success(true));
+            }
         } else {
             LOG_FMT("Failed to start stream: %s\n", result.error().c_str());
-            callback(false);
+            callback(GSResult<bool>::failure(result.error()));
         }
     });
 }

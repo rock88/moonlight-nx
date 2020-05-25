@@ -26,7 +26,7 @@ public:
         m_audio_renderer = audio_renderer;
     }
     
-    void start(std::function<void(bool)> callback);
+    void start(ServerCallback<bool> callback);
     void stop(int terminate_app);
     
     void draw();

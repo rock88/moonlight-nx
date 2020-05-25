@@ -8,8 +8,6 @@
 
 #pragma once
 
-extern void perform_async(std::function<void()> task);
-
 template <typename T>
 struct GSResult {
 public:
