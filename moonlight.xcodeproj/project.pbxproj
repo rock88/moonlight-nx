@@ -1117,6 +1117,7 @@
 					"-DHAS_FCNTL",
 					"-DHAVE_PULSE",
 					"-DUSE_MBEDTLS_CRYPTO",
+					"-Dmemalign=calloc",
 				);
 				OTHER_LDFLAGS = (
 					"-lglfw3",

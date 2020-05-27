@@ -25,7 +25,7 @@ StreamWindow::StreamWindow(Widget *parent, const std::string &address, int app_i
     #ifdef __SWITCH__
     switch (Settings::settings()->audio_driver()) {
         case Audren:
-            m_session->set_audio_renderer(new AudrenAudioRenderer(Settings::settings()->audio_delay()));
+            m_session->set_audio_renderer(new AudrenAudioRenderer());
             break;
         case Audout:
             m_session->set_audio_renderer(new AudoutAudioRenderer(Settings::settings()->audio_delay()));

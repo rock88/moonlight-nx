@@ -3,9 +3,11 @@
 #include <switch.h>
 #pragma once
 
+#define BUFFER_COUNT 5
+
 class AudrenAudioRenderer: public IAudioRenderer {
 public:
-    AudrenAudioRenderer(int audio_delay);
+    AudrenAudioRenderer() {};
     ~AudrenAudioRenderer();
     
     int init(int audio_configuration, const POPUS_MULTISTREAM_CONFIGURATION opus_config, void *context, int ar_flags) override;
@@ -14,19 +16,27 @@ public:
     int capabilities() override;
     
 private:
+    ssize_t free_wavebuf_index();
+    size_t append_audio(const void *buf, size_t size);
+    void write_audio(const void *buf, size_t size);
+    
     OpusMSDecoder* m_decoder = nullptr;
     s16* m_decoded_buffer = nullptr;
     void* mempool_ptr = nullptr;
+    void* current_pool_ptr = nullptr;
     
     AudioDriver m_driver;
-    AudioDriverWaveBuf m_wavebuf;
+    AudioDriverWaveBuf m_wavebufs[BUFFER_COUNT];
+    AudioDriverWaveBuf* m_current_wavebuf;
+    Mutex m_update_lock;
+    
     bool m_inited_driver = false;
-    
     int m_channel_count = 0;
-    int m_samples_per_frame = AUDREN_SAMPLES_PER_FRAME_48KHZ;
-    int m_audio_delay;
-    int m_samples_datasize = 0;
+    int m_sample_rate = 0;
+    int m_buffer_size = 0;
+    int m_samples = 0;
+    ssize_t m_current_size = 0;
     
-    int m_current_frame = 0;
-    s32 m_total_decoded_samples = 0;
+    const int m_samples_per_frame = AUDREN_SAMPLES_PER_FRAME_48KHZ;
+    const int m_latency = 5;
 };
