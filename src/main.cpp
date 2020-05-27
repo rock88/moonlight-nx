@@ -55,6 +55,15 @@ int main(int argc, const char * argv[]) {
     });
     
     #ifdef __SWITCH__
+    appletSetFocusHandlingMode(AppletFocusHandlingMode_NoSuspend);
+    
+    bool recording_supported = false;
+    appletIsGamePlayRecordingSupported(&recording_supported);
+    
+    if (recording_supported) {
+        appletInitializeGamePlayRecording();
+    }
+    
     Settings::settings()->set_working_dir("sdmc:/switch/moonlight");
     #else
     Settings::settings()->set_working_dir("/Users/rock88/Documents/RetroArch/system/moonlight");
