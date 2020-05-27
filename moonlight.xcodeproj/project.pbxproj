@@ -293,8 +293,6 @@
 		36BFCCF42479724900245D40 /* GameStreamClient.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = GameStreamClient.hpp; sourceTree = "<group>"; };
 		36BFCCF52479724900245D40 /* GameStreamClient.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GameStreamClient.cpp; sourceTree = "<group>"; };
 		36BFCCF72479725900245D40 /* main.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
-		36BFCCFA247AAF9B00245D40 /* AudoutAudioRenderer.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = AudoutAudioRenderer.cpp; sourceTree = "<group>"; };
-		36BFCCFB247AAF9B00245D40 /* AudoutAudioRenderer.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = AudoutAudioRenderer.hpp; sourceTree = "<group>"; };
 		36D3F8422469B5C400CDEF9B /* MoonlightSession.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = MoonlightSession.cpp; sourceTree = "<group>"; };
 		36D3F8432469B5C400CDEF9B /* MoonlightSession.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = MoonlightSession.hpp; sourceTree = "<group>"; };
 		36D3F8452469C6BC00CDEF9B /* Log.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Log.h; sourceTree = "<group>"; };
@@ -676,8 +674,6 @@
 				3678EF722476D9DA0097345D /* DebugFileRecorderAudioRenderer.hpp */,
 				36F16476247481F200D70AD9 /* AudrenAudioRenderer.cpp */,
 				36F16477247481F200D70AD9 /* AudrenAudioRenderer.hpp */,
-				36BFCCFA247AAF9B00245D40 /* AudoutAudioRenderer.cpp */,
-				36BFCCFB247AAF9B00245D40 /* AudoutAudioRenderer.hpp */,
 				36D3F8492469CC2600CDEF9B /* IAudioRenderer.hpp */,
 			);
 			path = audio;

@@ -5,10 +5,8 @@
 #include "GLVideoRenderer.hpp"
 #ifdef __SWITCH__
 #include "AudrenAudioRenderer.hpp"
-#include "AudoutAudioRenderer.hpp"
 #endif
 #include "DebugFileRecorderAudioRenderer.hpp"
-#include "Settings.hpp"
 #include "nanovg.h"
 #include <algorithm>
 #include <memory>
@@ -23,15 +21,7 @@ StreamWindow::StreamWindow(Widget *parent, const std::string &address, int app_i
     m_session->set_video_renderer(new GLVideoRenderer());
     
     #ifdef __SWITCH__
-    switch (Settings::settings()->audio_driver()) {
-        case Audren:
-            m_session->set_audio_renderer(new AudrenAudioRenderer());
-            break;
-        case Audout:
-            m_session->set_audio_renderer(new AudoutAudioRenderer(Settings::settings()->audio_delay()));
-        default:
-            break;
-    }
+    m_session->set_audio_renderer(new AudrenAudioRenderer());
     #else
     m_session->set_audio_renderer(new DebugFileRecorderAudioRenderer(false));
     #endif

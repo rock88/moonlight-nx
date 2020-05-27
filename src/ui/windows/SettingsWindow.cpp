@@ -138,62 +138,6 @@ SettingsWindow::SettingsWindow(nanogui::Widget* parent): ContentWindow(parent, "
         GET_SETTINGS(decoder_threads_combo_box, 4, 3);
         DEFAULT;
     }
-    
-    right_container->add<Label>("Audio Driver");
-    std::vector<std::string> audio_drivers = { "No Audio", "Audren", "Audout" };
-    auto audio_drivers_combo_box = right_container->add<ComboBox>(audio_drivers);
-    audio_drivers_combo_box->set_fixed_width(component_width);
-    audio_drivers_combo_box->popup()->set_fixed_width(component_width);
-    audio_drivers_combo_box->set_callback([](auto value) {
-        switch (value) {
-            SET_SETTING(0, set_audio_driver(NoAudio));
-            SET_SETTING(1, set_audio_driver(Audren));
-            SET_SETTING(2, set_audio_driver(Audout));
-            DEFAULT;
-        }
-    });
-    
-    switch (Settings::settings()->audio_driver()) {
-        GET_SETTINGS(audio_drivers_combo_box, NoAudio, 0);
-        GET_SETTINGS(audio_drivers_combo_box, Audren, 1);
-        GET_SETTINGS(audio_drivers_combo_box, Audout, 2);
-        DEFAULT;
-    }
-    
-    right_container->add<Label>("Audio Delay (low value = low delay, but sound may be flickered)");
-    std::vector<std::string> audio_delays = { "10", "20", "30", "40", "50", "60", "70", "80", "90", "100" };
-    auto audio_delays_combo_box = right_container->add<ComboBox>(audio_delays);
-    audio_delays_combo_box->set_fixed_width(component_width);
-    audio_delays_combo_box->popup()->set_fixed_width(component_width);
-    audio_delays_combo_box->set_callback([](auto value) {
-        switch (value) {
-            SET_SETTING(0, set_audio_delay(10));
-            SET_SETTING(1, set_audio_delay(20));
-            SET_SETTING(2, set_audio_delay(30));
-            SET_SETTING(3, set_audio_delay(40));
-            SET_SETTING(4, set_audio_delay(50));
-            SET_SETTING(5, set_audio_delay(60));
-            SET_SETTING(6, set_audio_delay(70));
-            SET_SETTING(7, set_audio_delay(80));
-            SET_SETTING(8, set_audio_delay(90));
-            SET_SETTING(9, set_audio_delay(100));
-            DEFAULT;
-        }
-    });
-    
-    switch (Settings::settings()->audio_delay()) {
-        GET_SETTINGS(audio_delays_combo_box, 10, 0);
-        GET_SETTINGS(audio_delays_combo_box, 20, 1);
-        GET_SETTINGS(audio_delays_combo_box, 30, 2);
-        GET_SETTINGS(audio_delays_combo_box, 40, 3);
-        GET_SETTINGS(audio_delays_combo_box, 50, 4);
-        GET_SETTINGS(audio_delays_combo_box, 60, 5);
-        GET_SETTINGS(audio_delays_combo_box, 70, 6);
-        GET_SETTINGS(audio_delays_combo_box, 80, 7);
-        GET_SETTINGS(audio_delays_combo_box, 90, 8);
-        GET_SETTINGS(audio_delays_combo_box, 100, 9);
-        DEFAULT;
-    }
 }
 
 void SettingsWindow::window_disappear() {

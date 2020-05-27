@@ -116,7 +116,6 @@ MOONLIGHT_LIBRETRO_CXX_SOURCES = \
 	MbedTLSCryptoManager.cpp \
 	mbedtls_to_openssl_wrapper.cpp \
 	AudrenAudioRenderer.cpp \
-	AudoutAudioRenderer.cpp \
 	BoxArtManager.cpp
 
 MOONLIGHT_COMMON_C_SOURCES = \
