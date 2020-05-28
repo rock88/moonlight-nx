@@ -23,7 +23,7 @@ SettingsWindow::SettingsWindow(nanogui::Widget* parent): ContentWindow(parent, "
     set_box_layout(Orientation::Horizontal, Alignment::Minimum);
     
     int container_width = 380;
-    int component_width = 200;
+    int component_width = 280;
     
     auto left_container = container()->add<Widget>();
     left_container->set_layout(new GroupLayout(30, 10, 40, 10));
@@ -68,7 +68,7 @@ SettingsWindow::SettingsWindow(nanogui::Widget* parent): ContentWindow(parent, "
     }
     
     left_container->add<Label>("Video codec");
-    std::vector<std::string> video_codec = { "H.264", "HEVC (H.265)" };
+    std::vector<std::string> video_codec = { "H.264", "HEVC (H.265, Experimental)" };
     auto video_codec_combo_box = left_container->add<ComboBox>(video_codec);
     video_codec_combo_box->set_fixed_width(component_width);
     video_codec_combo_box->popup()->set_fixed_width(component_width);
