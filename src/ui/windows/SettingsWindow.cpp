@@ -23,7 +23,7 @@ SettingsWindow::SettingsWindow(nanogui::Widget* parent): ContentWindow(parent, "
     set_box_layout(Orientation::Horizontal, Alignment::Minimum);
     
     int container_width = 380;
-    int component_width = 280;
+    int component_width = 290;
     
     auto left_container = container()->add<Widget>();
     left_container->set_layout(new GroupLayout(30, 10, 40, 10));
@@ -113,7 +113,7 @@ SettingsWindow::SettingsWindow(nanogui::Widget* parent): ContentWindow(parent, "
     });
     
     auto right_container = container()->add<Widget>();
-    right_container->set_layout(new GroupLayout(30, 10));
+    right_container->set_layout(new GroupLayout(30, 10, 40, 10));
     right_container->set_fixed_width(580);
     
     right_container->add<Label>("Decoder Threads");
@@ -138,6 +138,19 @@ SettingsWindow::SettingsWindow(nanogui::Widget* parent): ContentWindow(parent, "
         GET_SETTINGS(decoder_threads_combo_box, 4, 3);
         DEFAULT;
     }
+    
+    right_container->add<Label>("Stream Settings");
+    auto sops = right_container->add<CheckBox>("Use Streaming Optimal Playable Settings");
+    sops->set_checked(Settings::settings()->sops());
+    sops->set_callback([](auto value) {
+        Settings::settings()->set_sops(value);
+    });
+    
+    auto play_audio = right_container->add<CheckBox>("Play Audio on PC");
+    play_audio->set_checked(Settings::settings()->play_audio());
+    play_audio->set_callback([](auto value) {
+        Settings::settings()->set_play_audio(value);
+    });
 }
 
 void SettingsWindow::window_disappear() {

@@ -81,6 +81,22 @@ public:
         return m_decoder_threads;
     }
     
+    void set_sops(int sops) {
+        m_sops = sops;
+    }
+    
+    bool sops() const {
+        return m_sops;
+    }
+    
+    void set_play_audio(int play_audio) {
+        m_play_audio = play_audio;
+    }
+    
+    bool play_audio() const {
+        return m_play_audio;
+    }
+    
     void load();
     void save();
 
@@ -98,4 +114,6 @@ private:
     int m_bitrate = 10000;
     bool m_swap_ab_xy = true;
     int m_decoder_threads = 4;
+    bool m_sops = true;
+    bool m_play_audio = false;
 };

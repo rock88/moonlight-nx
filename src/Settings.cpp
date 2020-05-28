@@ -95,17 +95,21 @@ void Settings::load() {
             }
             
             if (json_t* swap_ab_xy = json_object_get(settings, "swap_ab_xy")) {
-                if (json_typeof(swap_ab_xy) == JSON_TRUE) {
-                    m_swap_ab_xy = true;
-                } else if (json_typeof(swap_ab_xy) == JSON_FALSE) {
-                    m_swap_ab_xy = false;
-                }
+                m_swap_ab_xy = json_typeof(swap_ab_xy) == JSON_TRUE;
             }
             
             if (json_t* decoder_threads = json_object_get(settings, "decoder_threads")) {
                 if (json_typeof(decoder_threads) == JSON_INTEGER) {
                     m_decoder_threads = (int)json_integer_value(decoder_threads);
                 }
+            }
+            
+            if (json_t* sops = json_object_get(settings, "sops")) {
+                m_sops = json_typeof(sops) == JSON_TRUE;
+            }
+            
+            if (json_t* play_audio = json_object_get(settings, "play_audio")) {
+                m_play_audio = json_typeof(play_audio) == JSON_TRUE;
             }
         }
         
@@ -130,13 +134,9 @@ void Settings::save() {
             json_object_set(settings, "video_codec", json_integer(m_video_codec));
             json_object_set(settings, "bitrate", json_integer(m_bitrate));
             json_object_set(settings, "decoder_threads", json_integer(m_decoder_threads));
-            
-            if (m_swap_ab_xy) {
-                json_object_set(settings, "swap_ab_xy", json_true());
-            } else {
-                json_object_set(settings, "swap_ab_xy", json_false());
-            }
-            
+            json_object_set(settings, "swap_ab_xy", m_swap_ab_xy ? json_true() : json_false());
+            json_object_set(settings, "sops", m_sops ? json_true() : json_false());
+            json_object_set(settings, "play_audio", m_play_audio ? json_true() : json_false());
             json_object_set(root, "settings", settings);
         }
         
