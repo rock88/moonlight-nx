@@ -63,7 +63,7 @@ void Application::pop_window() {
         update_focus(m_windows.back());
         perform_layout();
         
-        if (auto w = static_cast<ContentWindow *>(m_windows.front())) {
+        if (auto w = static_cast<ContentWindow *>(m_windows.back())) {
             w->window_appear();
         }
     }
