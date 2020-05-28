@@ -58,6 +58,7 @@ public:
         return m_server_data[address];
     }
     
+    void stop();
     void connect(const std::string &address, ServerCallback<SERVER_DATA> callback);
     void pair(const std::string &address, const std::string &pin, ServerCallback<bool> callback);
     void applist(const std::string &address, ServerCallback<PAPP_LIST> callback);

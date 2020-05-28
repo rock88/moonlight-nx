@@ -4,6 +4,7 @@
 #include "Settings.hpp"
 #include "Limelight.h"
 #include "InputController.hpp"
+#include "GameStreamClient.hpp"
 #include <glad/glad.h>
 
 #ifdef __SWITCH__
@@ -13,7 +14,7 @@
 #include <GLFW/glfw3.h>
 
 GLFWgamepadstate glfw_gamepad_state;
-volatile int moonlight_exit = 0;
+int moonlight_exit = 0;
 
 int width, height, fb_width, fb_height;
 
@@ -98,8 +99,9 @@ int main(int argc, const char * argv[]) {
         glfwSwapBuffers(window);
     }
     
+    GameStreamClient::client()->stop();
     nanogui::leave();
-    //nanogui::shutdown();
+    nanogui::shutdown();
     glfwDestroyWindow(window);
     glfwTerminate();
     return 0;
