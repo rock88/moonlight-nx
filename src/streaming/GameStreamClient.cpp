@@ -180,8 +180,10 @@ void GameStreamClient::quit(const std::string &address, ServerCallback<bool> cal
         return;
     }
     
-    perform_async([this, address, callback] {
-        int status = gs_quit_app(&m_server_data[address]);
+    auto server_data = m_server_data[address];
+    
+    perform_async([this, server_data, callback] {
+        int status = gs_quit_app((PSERVER_DATA)&server_data);
         
         nanogui::async([this, callback, status] {
             if (status == GS_OK) {
