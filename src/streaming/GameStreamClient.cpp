@@ -162,7 +162,7 @@ void GameStreamClient::start(const std::string &address, STREAM_CONFIGURATION co
     m_config = config;
     
     perform_async([this, address, app_id, callback] {
-        int status = gs_start_app(&m_server_data[address], &m_config, app_id, Settings::settings()->sops(), Settings::settings()->play_audio(), 0);
+        int status = gs_start_app(&m_server_data[address], &m_config, app_id, Settings::settings()->sops(), Settings::settings()->play_audio(), 0x1);
         
         nanogui::async([this, callback, status] {
             if (status == GS_OK) {
