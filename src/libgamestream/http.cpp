@@ -82,7 +82,7 @@ int http_init(const char* key_directory, int log_level) {
     return GS_OK;
 }
 
-int http_request(char* url, Data* data) {
+int http_request(char* url, Data* data, HTTPRequestTimeout timeout) {
     if (debug)
         LOG_FMT("Request %s\n", url);
     
@@ -92,6 +92,7 @@ int http_request(char* url, Data* data) {
     
     curl_easy_setopt(curl, CURLOPT_WRITEDATA, http_data);
     curl_easy_setopt(curl, CURLOPT_URL, url);
+    curl_easy_setopt(curl, CURLOPT_TIMEOUT, timeout);
     
     CURLcode res = curl_easy_perform(curl);
     

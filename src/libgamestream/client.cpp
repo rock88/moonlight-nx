@@ -63,7 +63,7 @@ static int load_server_status(PSERVER_DATA server) {
         
         Data data;
         
-        if (http_request(url, &data) != GS_OK) {
+        if (http_request(url, &data, HTTPRequestTimeoutLow) != GS_OK) {
             ret = GS_IO_ERROR;
             goto cleanup;
         }
@@ -154,7 +154,7 @@ int gs_unpair(PSERVER_DATA server) {
     Data data;
     
     snprintf(url, sizeof(url), "http://%s:47989/unpair?uniqueid=%s", server->serverInfo.address, unique_id);
-    ret = http_request(url, &data);
+    ret = http_request(url, &data, HTTPRequestTimeoutLow);
     return ret;
 }
 
@@ -218,7 +218,7 @@ int gs_pair(PSERVER_DATA server, char* pin) {
     
     snprintf(url, sizeof(url), "http://%s:47989/pair?uniqueid=%s&devicename=roth&updateState=1&phrase=getservercert&salt=%s&clientcert=%s", server->serverInfo.address, unique_id, salt.hex().bytes(), CryptoManager::cert_data().hex().bytes());
     
-    if ((ret = http_request(url, &data)) != GS_OK) {
+    if ((ret = http_request(url, &data, HTTPRequestTimeoutLong)) != GS_OK) {
         return gs_pair_cleanup(ret, server, &result);
     }
     
@@ -251,7 +251,7 @@ int gs_pair(PSERVER_DATA server, char* pin) {
     
     snprintf(url, sizeof(url), "http://%s:47989/pair?uniqueid=%s&devicename=roth&updateState=1&clientchallenge=%s", server->serverInfo.address, unique_id, encryptedChallenge.hex().bytes());
     
-    if ((ret = http_request(url, &data)) != GS_OK) {
+    if ((ret = http_request(url, &data, HTTPRequestTimeoutLong)) != GS_OK) {
         return gs_pair_cleanup(ret, server, &result);
     }
     
@@ -286,7 +286,7 @@ int gs_pair(PSERVER_DATA server, char* pin) {
     
     snprintf(url, sizeof(url), "http://%s:47989/pair?uniqueid=%s&devicename=roth&updateState=1&serverchallengeresp=%s", server->serverInfo.address, unique_id, challengeRespEncrypted.hex().bytes());
     
-    if ((ret = http_request(url, &data)) != GS_OK) {
+    if ((ret = http_request(url, &data, HTTPRequestTimeoutLong)) != GS_OK) {
         return gs_pair_cleanup(ret, server, &result);
     }
     
@@ -323,7 +323,7 @@ int gs_pair(PSERVER_DATA server, char* pin) {
     Data clientPairingSecret = clientSecret.append(CryptoManager::sign_data(clientSecret, CryptoManager::key_data()));
     
     snprintf(url, sizeof(url), "http://%s:47989/pair?uniqueid=%s&devicename=roth&updateState=1&clientpairingsecret=%s", server->serverInfo.address, unique_id, clientPairingSecret.hex().bytes());
-    if ((ret = http_request(url, &data)) != GS_OK) {
+    if ((ret = http_request(url, &data, HTTPRequestTimeoutLong)) != GS_OK) {
         return gs_pair_cleanup(ret, server, &result);
     }
     
@@ -334,7 +334,7 @@ int gs_pair(PSERVER_DATA server, char* pin) {
     LOG("Start pairing stage #5\n");
     
     snprintf(url, sizeof(url), "https://%s:47984/pair?uniqueid=%s&devicename=roth&updateState=1&phrase=pairchallenge", server->serverInfo.address, unique_id);
-    if ((ret = http_request(url, &data)) != GS_OK) {
+    if ((ret = http_request(url, &data, HTTPRequestTimeoutLong)) != GS_OK) {
         return gs_pair_cleanup(ret, server, &result);
     }
     
@@ -354,7 +354,7 @@ int gs_applist(PSERVER_DATA server, PAPP_LIST *list) {
     
     snprintf(url, sizeof(url), "https://%s:47984/applist?uniqueid=%s", server->serverInfo.address, unique_id);
     
-    if (http_request(url, &data) != GS_OK)
+    if (http_request(url, &data, HTTPRequestTimeoutMedium) != GS_OK)
         ret = GS_IO_ERROR;
     else if (xml_status(data.bytes(), data.size()) == GS_ERROR)
         ret = GS_ERROR;
@@ -370,7 +370,7 @@ int gs_app_boxart(PSERVER_DATA server, int app_id, Data* out) {
     
     snprintf(url, sizeof(url), "https://%s:47984/appasset?uniqueid=%s&appid=%d&AssetType=2&AssetIdx=0", server->serverInfo.address, unique_id, app_id);
     
-    if (http_request(url, &data) != GS_OK) {
+    if (http_request(url, &data, HTTPRequestTimeoutMedium) != GS_OK) {
         ret = GS_IO_ERROR;
     }
     else {
@@ -421,7 +421,7 @@ int gs_start_app(PSERVER_DATA server, STREAM_CONFIGURATION *config, int appId, b
     } else
         snprintf(url, sizeof(url), "https://%s:47984/resume?uniqueid=%s&rikey=%s&rikeyid=%d", server->serverInfo.address, unique_id, rand.hex().bytes(), rikeyid);
 
-    if ((ret = http_request(url, &data)) == GS_OK)
+    if ((ret = http_request(url, &data, HTTPRequestTimeoutLong)) == GS_OK)
         server->currentGame = appId;
     else
         goto cleanup;
@@ -451,7 +451,7 @@ int gs_quit_app(PSERVER_DATA server) {
     Data data;
     
     snprintf(url, sizeof(url), "https://%s:47984/cancel?uniqueid=%s", server->serverInfo.address, unique_id);
-    if ((ret = http_request(url, &data)) != GS_OK)
+    if ((ret = http_request(url, &data, HTTPRequestTimeoutMedium)) != GS_OK)
         goto cleanup;
     
     if ((ret = xml_status(data.bytes(), data.size()) != GS_OK))
