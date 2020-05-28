@@ -22,6 +22,7 @@ struct MouseState {
 
 struct MouseState mouse_state;
 struct GamePadState game_pad_state;
+static GLFWgamepadstate last_glfw_gamepad_state;
 
 static int m_width = 1, m_height = 1;
 
@@ -130,6 +131,30 @@ void InputController::handle_gamepad_event(GLFWgamepadstate* gamepad) {
         SET_GAME_PAD_STATE(X_FLAG, GLFW_GAMEPAD_BUTTON_X);
         SET_GAME_PAD_STATE(Y_FLAG, GLFW_GAMEPAD_BUTTON_Y);
     }
+    
+    // Send to nanogui
+    if (gamepad->buttons != last_glfw_gamepad_state.buttons) {
+        for (int j = 0; j <= GLFW_GAMEPAD_BUTTON_LAST; j++) {
+            if (gamepad->buttons[j] == last_glfw_gamepad_state.buttons[j]) {
+                continue;
+            }
+            
+            nanogui::gamepad_button_callback_event(0, j, gamepad->buttons[j]);
+        }
+    }
+    
+    if (gamepad->axes != last_glfw_gamepad_state.axes) {
+        for (int j = 0; j <= GLFW_GAMEPAD_AXIS_LAST; j++) {
+            if (gamepad->axes[j] == last_glfw_gamepad_state.axes[j]) {
+                continue;
+            }
+            
+            nanogui::gamepad_analog_callback_event(0, j, gamepad->axes[j]);
+        }
+    }
+    
+    last_glfw_gamepad_state = *gamepad;
+
 }
 
 void InputController::handle_rumple(unsigned short low_freq_motor, unsigned short high_freq_motor) {

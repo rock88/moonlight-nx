@@ -53,6 +53,8 @@ public:
         return true;
     };
     
+    bool gamepad_button_event(int jid, int button, int action) override;
+    
 private:
     Application* application() {
         auto application = static_cast<Application *>(screen());

@@ -62,9 +62,21 @@ void Application::pop_window() {
         m_windows.back()->set_visible(true);
         update_focus(m_windows.back());
         perform_layout();
+        
+        if (auto w = static_cast<ContentWindow *>(m_windows.front())) {
+            w->window_appear();
+        }
     }
-    
-    if (auto w = static_cast<ContentWindow *>(m_windows.front())) {
-        w->window_appear();
+}
+
+void Application::gamepad_button_callback_event(int jid, int button, int action) {
+    if (!m_windows.empty()) {
+        m_windows.back()->gamepad_button_event(jid, button, action);
+    }
+}
+
+void Application::gamepad_analog_callback_event(int jid, int axis, float value) {
+    if (!m_windows.empty()) {
+        m_windows.back()->gamepad_analog_event(jid, axis, value);
     }
 }
