@@ -14,11 +14,7 @@ AppButton::AppButton(Widget* parent, const std::string &address, APP_LIST app, i
     set_layout(new BoxLayout(Orientation::Vertical, Alignment::Middle));
     
     m_label = add<Label>(m_app.name);
-    m_label->set_fixed_width(fixed_width());
-    
-    if (BoxArtManager::manager()->has_boxart(app.id) && !BoxArtManager::manager()->is_blank(m_app.id)) {
-        m_label->set_visible(false);
-    }
+    m_label->set_fixed_width(fixed_width() - 12);
     
     if (m_app.id == current_game) {
         m_label->set_caption(m_label->caption() + " (Running)");
@@ -29,7 +25,6 @@ AppButton::AppButton(Widget* parent, const std::string &address, APP_LIST app, i
         GameStreamClient::client()->app_boxart(m_address, m_app.id, [this](auto result) {
             if (result.isSuccess()) {
                 BoxArtManager::manager()->set_data(result.value(), m_app.id);
-                m_label->set_visible(BoxArtManager::manager()->is_blank(m_app.id));
             }
             
             dec_ref();
@@ -63,9 +58,9 @@ void AppButton::draw(NVGcontext *ctx) {
     
     if (m_label->visible()) {
         nvgSave(ctx);
-        nvgFillColor(ctx, Color(0, 0, 0, 100));
+        nvgFillColor(ctx, Color(0, 0, 0, 200));
         nvgBeginPath(ctx);
-        nvgRect(ctx, m_pos.x(), m_pos.y(), m_label->width(), m_label->height());
+        nvgRect(ctx, m_pos.x(), m_pos.y(), width(), m_label->height());
         nvgFill(ctx);
         nvgRestore(ctx);
         
