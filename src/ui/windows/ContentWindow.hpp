@@ -41,6 +41,8 @@ public:
         application()->pop_window();
     }
     
+    void perform_layout(NVGcontext *ctx) override;
+    
     void perform_layout() {
         screen()->perform_layout();
     }
@@ -61,6 +63,7 @@ private:
         return application;
     }
     
+    nanogui::Widget* m_title_container;
     nanogui::Widget* m_left_title_button_container;
     nanogui::Widget* m_right_title_button_container;
     nanogui::Label* m_title_label;

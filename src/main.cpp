@@ -39,6 +39,11 @@ int main(int argc, const char * argv[]) {
     glfwGetWindowSize(window, &width, &height);
     glfwGetFramebufferSize(window, &fb_width, &fb_height);
     
+    glfwSetWindowSizeCallback(window, [](GLFWwindow* window, int width, int height) {
+        glfwGetFramebufferSize(window, &fb_width, &fb_height);
+        nanogui::window_resize_callback_event(width, height, fb_width, fb_height);
+    });
+    
     glfwSetCursorPosCallback(window, [](GLFWwindow *w, double x, double y) {
         InputController::controller()->handle_cursor_event(width, height, x, y);
     });

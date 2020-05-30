@@ -69,6 +69,15 @@ void Application::pop_window() {
     }
 }
 
+void Application::resize_callback_event(int width, int height, int fb_width, int fb_height) {
+    for (auto window: m_windows) {
+        window->set_size(Size(width, height));
+        window->set_fixed_size(Size(width, height));
+    }
+    Screen::resize_callback_event(width, height, fb_width, fb_height);
+    perform_layout();
+}
+
 void Application::gamepad_button_callback_event(int jid, int button, int action) {
     if (!m_windows.empty()) {
         m_windows.back()->gamepad_button_event(jid, button, action);

@@ -18,6 +18,7 @@ public:
     
     void pop_window();
     
+    void resize_callback_event(int width, int height, int fb_width, int fb_height) override;
     void gamepad_button_callback_event(int jid, int button, int action) override;
     void gamepad_analog_callback_event(int jid, int axis, float value) override;
     

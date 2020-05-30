@@ -11,22 +11,19 @@ ContentWindow::ContentWindow(Widget *parent, const std::string& title): Widget(p
     set_size(parent->size());
     set_fixed_size(parent->size());
     
-    auto title_container = add<Widget>();
-    title_container->set_fixed_size(Size(parent->width() - 40, 80));
-    title_container->set_layout(new BoxLayout(Orientation::Horizontal, Alignment::Middle, 0, 10));
+    m_title_container = add<Widget>();
+    m_title_container->set_layout(new BoxLayout(Orientation::Horizontal, Alignment::Middle, 0, 10));
     
-    m_left_title_button_container = title_container->add<Widget>();
-    m_left_title_button_container->set_layout(new BoxLayout(Orientation::Horizontal));
+    m_left_title_button_container = m_title_container->add<Widget>();
+    m_left_title_button_container->set_layout(new BoxLayout(Orientation::Horizontal, Alignment::Middle, 0, 10));
     
-    m_title_label = title_container->add<Label>(title);
-    m_title_label->set_fixed_width(parent->width() - 140);
+    m_title_label = m_title_container->add<Label>(title);
     m_title_label->set_font_size(40);
     
-    m_right_title_button_container = title_container->add<Widget>();
-    m_right_title_button_container->set_layout(new BoxLayout(Orientation::Horizontal));
+    m_right_title_button_container = m_title_container->add<Widget>();
+    m_right_title_button_container->set_layout(new BoxLayout(Orientation::Horizontal, Alignment::Middle, 0, 10));
     
     m_scroll = add<VScrollPanel>();
-    m_scroll->set_fixed_size(Size(parent->width() - 60, parent->height() - 80));
     m_container = m_scroll->add<Widget>();
 }
 
@@ -75,6 +72,15 @@ void ContentWindow::set_right_title_button(int icon, const std::function<void()>
         callback();
     });
     perform_layout();
+}
+
+void ContentWindow::perform_layout(NVGcontext *ctx) {
+    int button_count = (int)m_left_title_button_container->children().size() + (int)m_right_title_button_container->children().size();
+    int space = (2 + button_count) * 10;
+    m_title_container->set_fixed_size(Size(width() - 40, 80));
+    m_title_label->set_fixed_width(m_title_container->width() - button_count * 60 - space);
+    m_scroll->set_fixed_size(Size(width() - 60, height() - 80));
+    Widget::perform_layout(ctx);
 }
 
 static inline std::vector<Widget *> selectables_child_recursive(Widget *widget) {

@@ -66,7 +66,7 @@ void InputController::handle_mouse_event(int button, int action, int modifiers) 
 }
 
 void InputController::handle_keyboard_event(int key, int scancode, int action, int modifiers) {
-    nanogui::keyboard_event(key, scancode, action, modifiers);
+    nanogui::keyboard_callback_event(key, scancode, action, modifiers);
     
     #ifndef __SWITCH__
     // Translate keyboard keys to gamepad
