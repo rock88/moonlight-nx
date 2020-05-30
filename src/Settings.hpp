@@ -36,6 +36,7 @@ public:
     }
     
     void add_host(const std::string address);
+    void remove_host(const std::string address);
     
     int resolution() const {
         return m_resolution;

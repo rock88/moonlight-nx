@@ -81,7 +81,7 @@ int http_init(const char* key_directory) {
 }
 
 int http_request(char* url, Data* data, HTTPRequestTimeout timeout) {
-    Logger::info("Curl", "Request %s", url);
+    Logger::info("Curl", "Request:\n%s", url);
     
     HTTP_DATA* http_data = (HTTP_DATA*)malloc(sizeof(HTTP_DATA));
     http_data->memory = (char*)malloc(1);

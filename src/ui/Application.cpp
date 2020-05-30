@@ -86,7 +86,7 @@ void Application::gamepad_button_callback_event(int jid, int button, int action)
         m_windows.back()->gamepad_button_event(jid, button, action);
     }
     
-    if (action && button == NANOGUI_GAMEPAD_BUTTON_START) {
+    if (action && button == NANOGUI_GAMEPAD_BUTTON_START && m_windows.size() == 1) {
         moonlight_exit = 1;
     }
 }

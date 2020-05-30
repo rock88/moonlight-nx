@@ -143,7 +143,6 @@ ssize_t AudrenAudioRenderer::free_wavebuf_index() {
             return i;
         }
     }
-    Logger::error("Audren", "No free wavebuf");
     return -1;
 }
 
@@ -189,14 +188,14 @@ size_t AudrenAudioRenderer::append_audio(const void *buf, size_t size) {
 }
 
 void AudrenAudioRenderer::write_audio(const void *buf, size_t size) {
-    if (m_inited_driver) {
+    if (!m_inited_driver) {
         Logger::fatal("Audren", "Call write_audio without init driver!");
         return;
     }
     
     size_t written = 0;
     
-    while(written < size) {
+    while (written < size) {
         written += append_audio(buf + written, size - written);
         
         if (written != size) {

@@ -54,6 +54,13 @@ void Settings::add_host(const std::string address) {
     }
 }
 
+void Settings::remove_host(const std::string address) {
+    if (std::find(m_hosts.begin(), m_hosts.end(), address) != m_hosts.end()) {
+        m_hosts.erase(std::remove(m_hosts.begin(), m_hosts.end(), address), m_hosts.end());
+        save();
+    }
+}
+
 void Settings::load() {
     json_t* root = json_load_file((m_working_dir + "/settings.json").c_str(), 0, NULL);
     

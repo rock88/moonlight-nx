@@ -15,6 +15,9 @@ using namespace nanogui;
 MainWindow::MainWindow(Widget *parent): ContentWindow(parent, "Moonlight") {
     set_box_layout(Orientation::Horizontal, Alignment::Minimum);
     
+    set_right_title_button(FA_SYNC, [this] {
+        this->reload();
+    });
     set_right_title_button(FA_COG, [this] {
         push<SettingsWindow>();
     });
@@ -51,7 +54,13 @@ void MainWindow::reload() {
                     });
                 }
             } else {
-                screen()->add<MessageDialog>(MessageDialog::Type::Information, "Error", "Innactive host...");
+                auto alert = screen()->add<MessageDialog>(MessageDialog::Type::Information, "Error", "Innactive host...", "OK", "Delete", true);
+                alert->set_callback([this, button](int action) {
+                    if (action) {
+                        Settings::settings()->remove_host(button->address());
+                        reload();
+                    }
+                });
             }
         });
     }

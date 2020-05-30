@@ -27,13 +27,28 @@ void LogsWindow::reload() {
     
     if (data.is_empty()) {
         auto label = container()->add<Label>("No logs...");
+        label->set_fixed_width(container()->width());
         m_labels.push_back(label);
     } else {
         std::stringstream stream((char *)data.bytes());
         std::string string;
+        std::vector<std::string> logs;
         
         while (std::getline(stream, string, '\n')) {
-            auto label = container()->add<Label>(string);
+            if (string.size() > 100) {
+                string = string.substr(0, 100) + "...";
+            }
+            
+            logs.push_back(string);
+        }
+        
+        if (logs.size() > 100) {
+            logs = std::vector<std::string>(logs.end() - 100, logs.end());
+            logs.insert(logs.begin(), "* Show last 100 lines");
+        }
+        
+        for (auto log: logs) {
+            auto label = container()->add<Label>(log);
             label->set_selectable(true);
             m_labels.push_back(label);
         }

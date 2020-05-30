@@ -87,6 +87,7 @@ void InputController::handle_keyboard_event(int key, int scancode, int action, i
     GLFW_KEYBOARD_TO_GAMEPAD(GLFW_KEY_B, GLFW_GAMEPAD_BUTTON_B);
     GLFW_KEYBOARD_TO_GAMEPAD(GLFW_KEY_X, GLFW_GAMEPAD_BUTTON_X);
     GLFW_KEYBOARD_TO_GAMEPAD(GLFW_KEY_Y, GLFW_GAMEPAD_BUTTON_Y);
+    GLFW_KEYBOARD_TO_GAMEPAD(GLFW_KEY_ESCAPE, GLFW_GAMEPAD_BUTTON_START);
     
     glfw_gamepad_state.axes[GLFW_GAMEPAD_AXIS_LEFT_TRIGGER] = glfw_keyboard_state[GLFW_KEY_Z] ? 1 : -1;
     glfw_gamepad_state.axes[GLFW_GAMEPAD_AXIS_RIGHT_TRIGGER] = glfw_keyboard_state[GLFW_KEY_C] ? 1 : -1;
