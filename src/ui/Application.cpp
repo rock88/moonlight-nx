@@ -2,8 +2,11 @@
 #include "MainWindow.hpp"
 #include "AddHostWindow.hpp"
 #include "StreamWindow.hpp"
+#include <nanogui/opengl.h>
 
 using namespace nanogui;
+
+extern int moonlight_exit;
 
 Application::Application(Vector2f size, Vector2f framebuffer_size): Screen(size, framebuffer_size) {
     theme()->m_standard_font_size = 24;
@@ -81,6 +84,10 @@ void Application::resize_callback_event(int width, int height, int fb_width, int
 void Application::gamepad_button_callback_event(int jid, int button, int action) {
     if (!m_windows.empty()) {
         m_windows.back()->gamepad_button_event(jid, button, action);
+    }
+    
+    if (action && button == NANOGUI_GAMEPAD_BUTTON_START) {
+        moonlight_exit = 1;
     }
 }
 

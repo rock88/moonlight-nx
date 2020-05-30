@@ -5,6 +5,7 @@
 #include "Limelight.h"
 #include "InputController.hpp"
 #include "GameStreamClient.hpp"
+#include "Logger.hpp"
 #include <glad/glad.h>
 
 #ifdef __SWITCH__
@@ -16,49 +17,10 @@
 GLFWgamepadstate glfw_gamepad_state;
 int moonlight_exit = 0;
 
-int width, height, fb_width, fb_height;
+int m_width, m_height, m_fb_width, m_fb_height;
 
 int main(int argc, const char * argv[]) {
     glfwInit();
-    
-    glfwSetErrorCallback([](int i, const char *error) {
-        printf("GLFW error: %s\n", error);
-    });
-    
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 2);
-    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-    glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
-    
-    GLFWwindow* window = glfwCreateWindow(1280, 720, "Test", NULL, NULL);
-    glfwMakeContextCurrent(window);
-    glfwSwapInterval(1);
-    
-    gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
-    
-    glfwGetWindowSize(window, &width, &height);
-    glfwGetFramebufferSize(window, &fb_width, &fb_height);
-    
-    glfwSetWindowSizeCallback(window, [](GLFWwindow* window, int width, int height) {
-        glfwGetFramebufferSize(window, &fb_width, &fb_height);
-        nanogui::window_resize_callback_event(width, height, fb_width, fb_height);
-    });
-    
-    glfwSetCursorPosCallback(window, [](GLFWwindow *w, double x, double y) {
-        InputController::controller()->handle_cursor_event(width, height, x, y);
-    });
-    
-    glfwSetMouseButtonCallback(window, [](GLFWwindow *w, int button, int action, int modifiers) {
-        InputController::controller()->handle_mouse_event(button, action, modifiers);
-    });
-    
-    glfwSetScrollCallback(window, [](GLFWwindow *w, double x, double y) {
-        nanogui::scroll_callback_event(x, y);
-    });
-    
-    glfwSetKeyCallback(window, [](GLFWwindow *w, int key, int scancode, int action, int mods) {
-        InputController::controller()->handle_keyboard_event(key, scancode, action, mods);
-    });
     
     #ifdef __SWITCH__
     appletSetFocusHandlingMode(AppletFocusHandlingMode_NoSuspend);
@@ -75,19 +37,55 @@ int main(int argc, const char * argv[]) {
     Settings::settings()->set_working_dir("/Users/rock88/Documents/RetroArch/system/moonlight");
     #endif
     
+    Logger::info("Moonlight", "Starting...");
+    
+    glfwSetErrorCallback([](int i, const char *error) {
+        Logger::error("GLFW", "error: %s", error);
+    });
+    
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 2);
+    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+    glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
+    
+    GLFWwindow* window = glfwCreateWindow(1280, 720, "Test", NULL, NULL);
+    glfwMakeContextCurrent(window);
+    glfwSwapInterval(1);
+    
+    gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
+    
+    glfwGetWindowSize(window, &m_width, &m_height);
+    glfwGetFramebufferSize(window, &m_fb_width, &m_fb_height);
+    
+    glfwSetWindowSizeCallback(window, [](GLFWwindow* window, int width, int height) {
+        m_width = width;
+        m_height = height;
+        glfwGetFramebufferSize(window, &m_fb_width, &m_fb_height);
+        nanogui::window_resize_callback_event(width, height, m_fb_width, m_fb_height);
+    });
+    
+    glfwSetCursorPosCallback(window, [](GLFWwindow *w, double x, double y) {
+        InputController::controller()->handle_cursor_event(m_width, m_height, x, y);
+    });
+    
+    glfwSetMouseButtonCallback(window, [](GLFWwindow *w, int button, int action, int modifiers) {
+        InputController::controller()->handle_mouse_event(button, action, modifiers);
+    });
+    
+    glfwSetScrollCallback(window, [](GLFWwindow *w, double x, double y) {
+        nanogui::scroll_callback_event(x, y);
+    });
+    
+    glfwSetKeyCallback(window, [](GLFWwindow *w, int key, int scancode, int action, int mods) {
+        InputController::controller()->handle_keyboard_event(key, scancode, action, mods);
+    });
+    
     nanogui::init();
-    nanogui::ref<Application> app = new Application(Size(width, height), Size(fb_width, fb_height));
+    nanogui::ref<Application> app = new Application(Size(m_width, m_height), Size(m_fb_width, m_fb_height));
     
     nanogui::setup(1.0 / 15.0);
     
     while (!glfwWindowShouldClose(window) && !moonlight_exit) {
-        #ifdef __SWITCH__
-        hidScanInput();
-        if (hidKeysDown(CONTROLLER_P1_AUTO) & KEY_PLUS) {
-            nanogui::keyboard_event(GLFW_KEY_ESCAPE, 0, 1, 0);
-        }
-        #endif
-        
         glfwPollEvents();
         
         #ifdef __SWITCH__

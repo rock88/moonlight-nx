@@ -15,7 +15,7 @@ public:
     void set_right_title_button(int icon, const std::function<void()> &callback);
     
     void set_left_pop_button() {
-        set_left_title_button(FA_ARROW_LEFT, [this]() {
+        set_left_title_button(FA_CHEVRON_LEFT, [this]() {
             this->pop();
         });
     }

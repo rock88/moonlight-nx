@@ -1,5 +1,4 @@
 #include "Settings.hpp"
-#include "Log.h"
 #include <jansson.h>
 #include <algorithm>
 #include <string.h>
@@ -39,6 +38,7 @@ void Settings::set_working_dir(std::string working_dir) {
     m_working_dir = working_dir;
     m_key_dir = working_dir + "/key";
     m_boxart_dir = working_dir + "/boxart";
+    m_log_path = working_dir + "/log.txt";
     
     mkdirtree(m_working_dir.c_str());
     mkdirtree(m_key_dir.c_str());
@@ -111,6 +111,10 @@ void Settings::load() {
             if (json_t* play_audio = json_object_get(settings, "play_audio")) {
                 m_play_audio = json_typeof(play_audio) == JSON_TRUE;
             }
+            
+            if (json_t* write_log = json_object_get(settings, "write_log")) {
+                m_write_log = json_typeof(write_log) == JSON_TRUE;
+            }
         }
         
         json_decref(root);
@@ -137,6 +141,7 @@ void Settings::save() {
             json_object_set(settings, "swap_ab_xy", m_swap_ab_xy ? json_true() : json_false());
             json_object_set(settings, "sops", m_sops ? json_true() : json_false());
             json_object_set(settings, "play_audio", m_play_audio ? json_true() : json_false());
+            json_object_set(settings, "write_log", m_write_log ? json_true() : json_false());
             json_object_set(root, "settings", settings);
         }
         

@@ -26,7 +26,7 @@
 #include <string.h>
 #include <Limelight.h>
 #include "CryptoManager.hpp"
-#include "Log.h"
+#include "Logger.hpp"
 
 #define CHANNEL_COUNT_STEREO 2
 #define CHANNEL_COUNT_51_SURROUND 6
@@ -55,8 +55,6 @@ static int load_server_status(PSERVER_DATA server) {
         // is not already paired. Since we can't pair without knowing the server version, we
         // make another request over HTTP if the HTTPS request fails. We can't just use HTTP
         // for everything because it doesn't accurately tell us if we're paired.
-        
-        printf("server->serverInfo.address: %s\n", server->serverInfo.address);
         
         snprintf(url, sizeof(url), "%s://%s:%d/serverinfo?uniqueid=%s",
                  i == 0 ? "https" : "http", server->serverInfo.address, i == 0 ? 47984 : 47989, unique_id);
@@ -209,12 +207,12 @@ int gs_pair(PSERVER_DATA server, char* pin) {
         return GS_WRONG_STATE;
     }
     
-    LOG_FMT("Pairing with generation %d server\n", server->serverMajorVersion);
-    LOG("Start pairing stage #1\n");
+    Logger::info("Client", "Pairing with generation %d server", server->serverMajorVersion);
+    Logger::info("Client", "Start pairing stage #1");
     
     Data salt = Data::random_bytes(16);
     Data salted_pin = salt.append(Data(pin, strlen(pin)));
-    LOG_FMT("PIN: %s, salt %s\n", pin, salt.hex().bytes());
+    Logger::info("Client", "PIN: %s, salt %s", pin, salt.hex().bytes());
     
     snprintf(url, sizeof(url), "http://%s:47989/pair?uniqueid=%s&devicename=roth&updateState=1&phrase=getservercert&salt=%s&clientcert=%s", server->serverInfo.address, unique_id, salt.hex().bytes(), CryptoManager::cert_data().hex().bytes());
     
@@ -230,7 +228,7 @@ int gs_pair(PSERVER_DATA server, char* pin) {
         return gs_pair_cleanup(ret, server, &result);
     }
     
-    LOG("Start pairing stage #2\n");
+    Logger::info("Client", "Start pairing stage #2");
     
     Data plainCert = Data(result, strlen(result));
     Data aesKey;
@@ -264,7 +262,7 @@ int gs_pair(PSERVER_DATA server, char* pin) {
         return gs_pair_cleanup(ret, server, &result);
     }
     
-    LOG("Start pairing stage #3\n");
+    Logger::info("Client", "Start pairing stage #3");
     
     Data encServerChallengeResp = Data(result, strlen(result)).hex_to_bytes();
     Data decServerChallengeResp = CryptoManager::aes_decrypt(encServerChallengeResp, aesKey);
@@ -299,7 +297,7 @@ int gs_pair(PSERVER_DATA server, char* pin) {
         return gs_pair_cleanup(ret, server, &result);
     }
     
-    LOG("Start pairing stage #4\n");
+    Logger::info("Client", "Start pairing stage #4");
     
     Data serverSecretResp = Data(result, strlen(result)).hex_to_bytes();
     Data serverSecret = serverSecretResp.subdata(0, 16);
@@ -331,7 +329,7 @@ int gs_pair(PSERVER_DATA server, char* pin) {
         return gs_pair_cleanup(ret, server, &result);
     }
     
-    LOG("Start pairing stage #5\n");
+    Logger::info("Client", "Start pairing stage #5");
     
     snprintf(url, sizeof(url), "https://%s:47984/pair?uniqueid=%s&devicename=roth&updateState=1&phrase=pairchallenge", server->serverInfo.address, unique_id);
     if ((ret = http_request(url, &data, HTTPRequestTimeoutLong)) != GS_OK) {
@@ -471,17 +469,17 @@ cleanup:
     return ret;
 }
 
-int gs_init(PSERVER_DATA server, char *address, const char *keyDirectory, int log_level, bool unsupported) {
+int gs_init(PSERVER_DATA server, char *address, const char *keyDirectory, bool unsupported) {
     if (!CryptoManager::load_cert_key_pair()) {
-        LOG("No certs, generate new...\n");
+        Logger::info("Client", "No certs, generate new...");
         
         if (!CryptoManager::generate_new_cert_key_pair()) {
-            LOG("Failed to generate certs...\n");
+            Logger::info("Client", "Failed to generate certs...");
             return GS_FAILED;
         }
     }
     
-    http_init(keyDirectory, log_level);
+    http_init(keyDirectory);
     
     LiInitializeServerInformation(&server->serverInfo);
     server->serverInfo.address = address;

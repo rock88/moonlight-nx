@@ -8,7 +8,7 @@
 class AudrenAudioRenderer: public IAudioRenderer {
 public:
     AudrenAudioRenderer() {};
-    ~AudrenAudioRenderer();
+    ~AudrenAudioRenderer() {};
     
     int init(int audio_configuration, const POPUS_MULTISTREAM_CONFIGURATION opus_config, void *context, int ar_flags) override;
     void cleanup() override;

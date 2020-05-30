@@ -2,7 +2,7 @@
 #include "GameStreamClient.hpp"
 #include "Settings.hpp"
 #include "InputController.hpp"
-#include "Log.h"
+#include "Logger.hpp"
 #include <nanogui/nanogui.h>
 
 static MoonlightSession* m_active_session = nullptr;
@@ -48,23 +48,23 @@ static const char* stages[] = {
 };
 
 void MoonlightSession::connection_stage_starting(int stage) {
-    LOG_FMT("Starting: %s\n", stages[stage]);
+    Logger::info("MoonlightSession", "Starting: %s", stages[stage]);
 }
 
 void MoonlightSession::connection_stage_complete(int stage) {
-    LOG_FMT("Complete: %s\n", stages[stage]);
+    Logger::info("MoonlightSession", "Complete: %s", stages[stage]);
 }
 
 void MoonlightSession::connection_stage_failed(int stage, int error_code) {
-    LOG_FMT("Failed: %s\n", stages[stage]);
+    Logger::error("MoonlightSession", "Failed: %s", stages[stage]);
 }
 
 void MoonlightSession::connection_started() {
-    LOG("Connection started\n");
+    Logger::info("MoonlightSession", "Connection started");
 }
 
 void MoonlightSession::connection_terminated(int error_code) {
-    LOG("Connection terminated...\n");
+    Logger::info("MoonlightSession", "Connection terminated...");
     
     if (m_active_session) {
         m_active_session->m_is_active = false;
@@ -228,7 +228,7 @@ void MoonlightSession::start(ServerCallback<bool> callback) {
                 callback(GSResult<bool>::success(true));
             }
         } else {
-            LOG_FMT("Failed to start stream: %s\n", result.error().c_str());
+            Logger::error("MoonlightSession", "Failed to start stream: %s", result.error().c_str());
             callback(GSResult<bool>::failure(result.error()));
         }
     });

@@ -1,7 +1,7 @@
 #include "Data.hpp"
 #include <string.h>
 #include <cstdlib>
-#include "Log.h"
+#include "Logger.hpp"
 
 Data::Data(unsigned char* bytes, size_t size) {
     if (bytes && size > 0) {
@@ -27,7 +27,7 @@ Data::~Data() {
 
 Data Data::subdata(size_t start, size_t size) {
     if (start + size > m_size) {
-        LOG("Invalid data length...\n");
+        Logger::error("Data", "Invalid data length...");
         exit(-1);
     }
     return Data(&m_bytes[start], size);
@@ -107,7 +107,7 @@ void Data::write_to_file(std::string path) {
         fwrite(m_bytes, m_size, 1, f);
         fclose(f);
     } else {
-        LOG_FMT("Path not found: %s\n", path.c_str());
+        Logger::error("Data", "Path not found: %s", path.c_str());
     }
 }
 

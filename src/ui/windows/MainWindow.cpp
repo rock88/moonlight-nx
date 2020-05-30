@@ -6,18 +6,20 @@
 #include "LoadingOverlay.hpp"
 #include "AppListWindow.hpp"
 #include "SettingsWindow.hpp"
+#include "LogsWindow.hpp"
 #include "Settings.hpp"
 #include "nanovg.h"
 
-extern int moonlight_exit;
-
 using namespace nanogui;
 
-MainWindow::MainWindow(Widget *parent): ContentWindow(parent, "Moonlight ") {
+MainWindow::MainWindow(Widget *parent): ContentWindow(parent, "Moonlight") {
     set_box_layout(Orientation::Horizontal, Alignment::Minimum);
     
     set_right_title_button(FA_COG, [this] {
         push<SettingsWindow>();
+    });
+    set_right_title_button(FA_FILE_ALT, [this] {
+        push<LogsWindow>();
     });
 }
 
@@ -74,11 +76,4 @@ void MainWindow::draw(NVGcontext *ctx) {
     nvgText(ctx, width() - 40, height() - 12, MOONLIGHT_NX_VERSION, NULL);
     
     nvgRestore(ctx);
-}
-
-bool MainWindow::keyboard_event(int key, int scancode, int action, int modifiers) {
-    if (key == 256 && action == 1) {
-        moonlight_exit = 1;
-    }
-    return true;
 }

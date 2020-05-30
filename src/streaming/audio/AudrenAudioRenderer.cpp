@@ -1,10 +1,10 @@
 #include "AudrenAudioRenderer.hpp"
+#include "Logger.hpp"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <malloc.h>
 #include <inttypes.h>
-#include "Log.h"
 
 static const uint8_t m_sink_channels[] = { 0, 1 };
 
@@ -18,16 +18,14 @@ static const AudioRendererConfig m_ar_config =
     .num_mix_buffers = 2,
 };
 
-AudrenAudioRenderer::~AudrenAudioRenderer() {
-    cleanup();
-}
-
 int AudrenAudioRenderer::init(int audio_configuration, const POPUS_MULTISTREAM_CONFIGURATION opus_config, void *context, int ar_flags) {
     m_channel_count = opus_config->channelCount;
     m_sample_rate = opus_config->sampleRate;
     m_buffer_size = m_latency * m_samples_per_frame * sizeof(s16);
     m_samples = m_buffer_size / m_channel_count / sizeof(s16);
     m_current_size = 0;
+    
+    Logger::info("Audren", "Init with channels: %i, sample rate: %i", m_channel_count, m_sample_rate);
     
     mutexInit(&m_update_lock);
     
@@ -43,19 +41,19 @@ int AudrenAudioRenderer::init(int audio_configuration, const POPUS_MULTISTREAM_C
     mempool_ptr = memalign(AUDREN_MEMPOOL_ALIGNMENT, mempool_size);
     
     if (!mempool_ptr) {
-        LOG("mempool alloc failed\n");
+        Logger::error("Audren", "mempool alloc failed");
         return -1;
     }
     
     Result rc = audrenInitialize(&m_ar_config);
     if (R_FAILED(rc)) {
-        LOG_FMT("audrenInitialize: %x\n", rc);
+        Logger::error("Audren", "audrenInitialize: %x", rc);
         return -1;
     }
     
     rc = audrvCreate(&m_driver, &m_ar_config, m_channel_count);
     if (R_FAILED(rc)) {
-        LOG_FMT("audrvCreate: %x\n", rc);
+        Logger::error("Audren", "audrvCreate: %x", rc);
         return -1;
     }
     
@@ -75,7 +73,7 @@ int AudrenAudioRenderer::init(int audio_configuration, const POPUS_MULTISTREAM_C
     
     rc = audrenStartAudioRenderer();
     if (R_FAILED(rc)) {
-        LOG_FMT("audrenStartAudioRenderer: %x\n", rc);
+        Logger::error("Audren", "audrenStartAudioRenderer: %x", rc);
     }
     
     audrvVoiceInit(&m_driver, 0, m_channel_count, PcmFormat_Int16, m_sample_rate);
@@ -91,10 +89,14 @@ int AudrenAudioRenderer::init(int audio_configuration, const POPUS_MULTISTREAM_C
     
     m_inited_driver = true;
     
+    Logger::info("Audren", "Init done!");
+    
     return DR_OK;
 }
 
 void AudrenAudioRenderer::cleanup() {
+    Logger::info("Audren", "Cleanup...");
+    
     if (m_decoder) {
         opus_multistream_decoder_destroy(m_decoder);
         m_decoder = nullptr;
@@ -116,12 +118,18 @@ void AudrenAudioRenderer::cleanup() {
         audrvClose(&m_driver);
         audrenExit();
     }
+    
+    Logger::info("Audren", "Cleanup done!");
 }
 
 void AudrenAudioRenderer::decode_and_play_sample(char *data, int length) {
-    int decoded_samples = opus_multistream_decode(m_decoder, (const unsigned char *)data, length, m_decoded_buffer, m_samples_per_frame, 0);
-    if (decoded_samples > 0) {
-        write_audio(m_decoded_buffer, decoded_samples * m_channel_count * sizeof(s16));
+    if (m_decoder && m_decoded_buffer) {
+        int decoded_samples = opus_multistream_decode(m_decoder, (const unsigned char *)data, length, m_decoded_buffer, m_samples_per_frame, 0);
+        if (decoded_samples > 0) {
+            write_audio(m_decoded_buffer, decoded_samples * m_channel_count * sizeof(s16));
+        }
+    } else {
+        Logger::fatal("Audren", "Invalid call of decode_and_play_sample");
     }
 }
 
@@ -135,6 +143,7 @@ ssize_t AudrenAudioRenderer::free_wavebuf_index() {
             return i;
         }
     }
+    Logger::error("Audren", "No free wavebuf");
     return -1;
 }
 
@@ -180,6 +189,11 @@ size_t AudrenAudioRenderer::append_audio(const void *buf, size_t size) {
 }
 
 void AudrenAudioRenderer::write_audio(const void *buf, size_t size) {
+    if (m_inited_driver) {
+        Logger::fatal("Audren", "Call write_audio without init driver!");
+        return;
+    }
+    
     size_t written = 0;
     
     while(written < size) {

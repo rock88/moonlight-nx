@@ -27,6 +27,10 @@ public:
         return m_boxart_dir;
     }
     
+    std::string log_path() const {
+        return m_log_path;
+    }
+    
     std::vector<std::string> hosts() const {
         return m_hosts;
     }
@@ -97,6 +101,14 @@ public:
         return m_play_audio;
     }
     
+    void set_write_log(int write_log) {
+        m_write_log = write_log;
+    }
+    
+    bool write_log() const {
+        return m_write_log;
+    }
+    
     void load();
     void save();
 
@@ -106,6 +118,7 @@ private:
     std::string m_working_dir;
     std::string m_key_dir;
     std::string m_boxart_dir;
+    std::string m_log_path;
     
     std::vector<std::string> m_hosts;
     int m_resolution = 720;
@@ -116,4 +129,5 @@ private:
     int m_decoder_threads = 4;
     bool m_sops = true;
     bool m_play_audio = false;
+    bool m_write_log = false;
 };

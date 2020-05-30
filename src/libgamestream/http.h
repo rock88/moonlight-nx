@@ -27,5 +27,5 @@ enum HTTPRequestTimeout: long {
     HTTPRequestTimeoutLong = 120
 };
 
-int http_init(const char* key_directory, int log_level);
+int http_init(const char* key_directory);
 int http_request(char* url, Data* data, HTTPRequestTimeout timeout);

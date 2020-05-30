@@ -152,6 +152,13 @@ SettingsWindow::SettingsWindow(nanogui::Widget* parent): ContentWindow(parent, "
     play_audio->set_callback([](auto value) {
         Settings::settings()->set_play_audio(value);
     });
+    
+    right_container->add<Label>("Debug");
+    auto write_log = right_container->add<CheckBox>("Write log");
+    write_log->set_checked(Settings::settings()->write_log());
+    write_log->set_callback([](auto value) {
+        Settings::settings()->set_write_log(value);
+    });
 }
 
 void SettingsWindow::window_disappear() {
