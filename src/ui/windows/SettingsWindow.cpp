@@ -91,6 +91,7 @@ SettingsWindow::SettingsWindow(nanogui::Widget* parent): ContentWindow(parent, "
     
     auto video_bitrate_label = left_container->add<Label>(bitrate_str);
     auto video_bitrate_slider = left_container->add<Slider>();
+    video_bitrate_slider->set_step(0.5);
     video_bitrate_slider->set_highlight_color(Color(62, 78, 184, 255));
     video_bitrate_slider->set_range({0.5, 150});
     video_bitrate_slider->set_value(float(Settings::settings()->bitrate()) / 1000);
