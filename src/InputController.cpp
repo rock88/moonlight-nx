@@ -195,10 +195,10 @@ void InputController::stop_rumple() {
 }
 
 void InputController::send_to_stream() {
-#if defined(__SWITCH__)
-    static bool pressed = false;
+    static bool pressed = false, released = false;
     static int mouse_x = mouse_state.x, mouse_y = mouse_state.y;
     static int last_mouse_x = 0, last_mouse_y = 0;
+    static int last_send_mouse_x = 0, last_send_mouse_y = 0;
     
     if (mouse_state.l_press && !pressed) {
         pressed = true;
@@ -208,40 +208,65 @@ void InputController::send_to_stream() {
         pressed = false;
     }
     
-    bool move_mouse = (game_pad_state.leftTrigger == 0) && (game_pad_state.rightTrigger == 0);
-    
-    if (move_mouse) {
-        static int last_send_mouse_x = 0, last_send_mouse_y = 0;
+    if (Settings::settings()->click_by_tap()) {
+        if (last_send_mouse_x != mouse_state.x || last_send_mouse_y != mouse_state.x) {
+            last_send_mouse_x = mouse_state.x;
+            last_send_mouse_y = mouse_state.y;
+            LiSendMousePositionEvent(mouse_state.x, mouse_state.y, m_width, m_height);
+        }
         
-        mouse_x = std::min(std::max(mouse_x + mouse_state.x - last_mouse_x, 0), m_width);
-        mouse_y = std::min(std::max(mouse_y + mouse_state.y - last_mouse_y, 0), m_height);
+        if (((game_pad_state.buttonFlags & RB_FLAG) || game_pad_state.rightTrigger)) {
+            if (mouse_state.l_press) {
+                released = false;
+                LiSendMouseButtonEvent(BUTTON_ACTION_PRESS, BUTTON_RIGHT);
+            } else if (!released) {
+                released = true;
+                LiSendMouseButtonEvent(BUTTON_ACTION_RELEASE, BUTTON_RIGHT);
+            }
+        } else {
+            if (mouse_state.l_press) {
+                released = false;
+                LiSendMouseButtonEvent(BUTTON_ACTION_PRESS, BUTTON_LEFT);
+            } else if (!released) {
+                released = true;
+                LiSendMouseButtonEvent(BUTTON_ACTION_RELEASE, BUTTON_LEFT);
+            }
+        }
+    } else {
+        bool move_mouse = (game_pad_state.leftTrigger == 0) && (game_pad_state.rightTrigger == 0);
         
-        if (mouse_x != last_send_mouse_x || mouse_y != last_send_mouse_y) {
-            LiSendMousePositionEvent(mouse_x, mouse_y, m_width, m_height);
-            last_send_mouse_x = mouse_x;
-            last_send_mouse_y = mouse_y;
+        if (move_mouse) {
+            mouse_x = std::min(std::max(mouse_x + mouse_state.x - last_mouse_x, 0), m_width);
+            mouse_y = std::min(std::max(mouse_y + mouse_state.y - last_mouse_y, 0), m_height);
+            
+            if (mouse_x != last_send_mouse_x || mouse_y != last_send_mouse_y) {
+                LiSendMousePositionEvent(mouse_x, mouse_y, m_width, m_height);
+                last_send_mouse_x = mouse_x;
+                last_send_mouse_y = mouse_y;
+            }
+        }
+        
+        last_mouse_x = mouse_state.x;
+        last_mouse_y = mouse_state.y;
+        
+        if ((game_pad_state.buttonFlags & LB_FLAG) || game_pad_state.leftTrigger) {
+            if (mouse_state.l_press) {
+                released = false;
+                LiSendMouseButtonEvent(BUTTON_ACTION_PRESS, BUTTON_LEFT);
+            } else if (!released) {
+                released = true;
+                LiSendMouseButtonEvent(BUTTON_ACTION_RELEASE, BUTTON_LEFT);
+            }
+        } else if ((game_pad_state.buttonFlags & RB_FLAG) || game_pad_state.rightTrigger) {
+            if (mouse_state.l_press) {
+                released = false;
+                LiSendMouseButtonEvent(BUTTON_ACTION_PRESS, BUTTON_RIGHT);
+            } else if (!released) {
+                released = true;
+                LiSendMouseButtonEvent(BUTTON_ACTION_RELEASE, BUTTON_RIGHT);
+            }
         }
     }
-    
-    last_mouse_x = mouse_state.x;
-    last_mouse_y = mouse_state.y;
-    
-    if (mouse_state.l_press && ((game_pad_state.buttonFlags & LB_FLAG) || game_pad_state.leftTrigger)) {
-        LiSendMouseButtonEvent(BUTTON_ACTION_PRESS, BUTTON_LEFT);
-    } else {
-        LiSendMouseButtonEvent(BUTTON_ACTION_RELEASE, BUTTON_LEFT);
-    }
-    
-    if (mouse_state.l_press && ((game_pad_state.buttonFlags & RB_FLAG) || game_pad_state.rightTrigger)) {
-        LiSendMouseButtonEvent(BUTTON_ACTION_PRESS, BUTTON_RIGHT);
-    } else {
-        LiSendMouseButtonEvent(BUTTON_ACTION_RELEASE, BUTTON_RIGHT);
-    }
-#else
-    LiSendMousePositionEvent(mouse_state.x, mouse_state.y, m_width, m_height);
-    LiSendMouseButtonEvent(mouse_state.l_press ? BUTTON_ACTION_PRESS : BUTTON_ACTION_RELEASE, BUTTON_LEFT);
-    LiSendMouseButtonEvent(mouse_state.r_press ? BUTTON_ACTION_PRESS : BUTTON_ACTION_RELEASE, BUTTON_RIGHT);
-#endif
     
     static bool send_alt_enter = false;
     

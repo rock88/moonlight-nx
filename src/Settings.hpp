@@ -78,6 +78,14 @@ public:
         m_swap_ab_xy = swap_ab_xy;
     }
     
+    bool click_by_tap() const {
+        return m_click_by_tap;
+    }
+    
+    void set_click_by_tap(bool click_by_tap) {
+        m_click_by_tap = click_by_tap;
+    }
+    
     void set_decoder_threads(int decoder_threads) {
         m_decoder_threads = decoder_threads;
     }
@@ -127,6 +135,7 @@ private:
     VideoCodec m_video_codec = H264;
     int m_bitrate = 10000;
     bool m_swap_ab_xy = true;
+    bool m_click_by_tap = false;
     int m_decoder_threads = 4;
     bool m_sops = true;
     bool m_play_audio = false;

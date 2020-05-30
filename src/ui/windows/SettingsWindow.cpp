@@ -26,7 +26,7 @@ SettingsWindow::SettingsWindow(nanogui::Widget* parent): ContentWindow(parent, "
     int component_width = 290;
     
     auto left_container = container()->add<Widget>();
-    left_container->set_layout(new GroupLayout(30, 10, 40, 10));
+    left_container->set_layout(new GroupLayout(30, 10, 30, 10));
     left_container->set_fixed_width(container_width);
     
     left_container->add<Label>("Resolution");
@@ -113,8 +113,14 @@ SettingsWindow::SettingsWindow(nanogui::Widget* parent): ContentWindow(parent, "
         Settings::settings()->set_swap_ab_xy(value);
     });
     
+    auto click_by_tap = left_container->add<CheckBox>("Mouse click by tap on screen");
+    click_by_tap->set_checked(Settings::settings()->click_by_tap());
+    click_by_tap->set_callback([](auto value) {
+        Settings::settings()->set_click_by_tap(value);
+    });
+    
     auto right_container = container()->add<Widget>();
-    right_container->set_layout(new GroupLayout(30, 10, 40, 10));
+    right_container->set_layout(new GroupLayout(30, 10, 30, 10));
     right_container->set_fixed_width(580);
     
     right_container->add<Label>("Decoder Threads");
