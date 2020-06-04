@@ -13,5 +13,4 @@ public:
 private:
     std::string m_address;
     PAPP_LIST m_app_list;
-    std::vector<nanogui::Widget *> m_app_buttons;
 };

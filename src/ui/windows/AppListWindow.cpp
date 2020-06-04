@@ -12,12 +12,7 @@ AppListWindow::AppListWindow(Widget *parent, const std::string &address): Conten
 }
 
 void AppListWindow::window_appear() {
-    for (auto button: m_app_buttons) {
-        if (container()->child_index(button) != -1) {
-            container()->remove_child(button);
-        }
-    }
-    m_app_buttons.clear();
+    clean_container();
     
     auto loader = add<LoadingOverlay>();
     
@@ -30,7 +25,6 @@ void AppListWindow::window_appear() {
             
             while (app != NULL) {
                 auto button = container()->add<AppButton>(m_address, *app, currentGame);
-                m_app_buttons.push_back(button);
                 button->set_callback([this, app] {
                     run_game(app->id);
                 });

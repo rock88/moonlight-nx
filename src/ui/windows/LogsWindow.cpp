@@ -16,19 +16,13 @@ LogsWindow::LogsWindow(Widget *parent): ContentWindow(parent, "Logs") {
 }
 
 void LogsWindow::reload() {
-    for (auto label: m_labels) {
-        if (container()->child_index(label) != -1) {
-            container()->remove_child(label);
-        }
-    }
-    m_labels.clear();
+    clean_container();
     
     Data data = Data::read_from_file(Settings::settings()->log_path());
     
     if (data.is_empty()) {
         auto label = container()->add<Label>("No logs...");
         label->set_fixed_width(container()->width());
-        m_labels.push_back(label);
     } else {
         std::stringstream stream((char *)data.bytes());
         std::string string;
@@ -50,7 +44,6 @@ void LogsWindow::reload() {
         for (auto log: logs) {
             auto label = container()->add<Label>(log);
             label->set_selectable(true);
-            m_labels.push_back(label);
         }
     }
     perform_layout();

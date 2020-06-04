@@ -25,7 +25,8 @@ public:
     }
     
     void clean_container() {
-        for (auto child: m_container->children()) {
+        auto children = m_container->children();
+        for (auto child: children) {
             if (m_container->child_index(child) != -1) {
                 m_container->remove_child(child);
             }
