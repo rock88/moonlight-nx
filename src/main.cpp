@@ -34,7 +34,7 @@ int main(int argc, const char * argv[]) {
     
     Settings::settings()->set_working_dir("sdmc:/switch/moonlight");
     #else
-    Settings::settings()->set_working_dir("/Users/rock88/Documents/RetroArch/system/moonlight");
+    Settings::settings()->set_working_dir("/Users/rock88/Documents/Projects/Switch/moonlight-nx/working_dir");
     #endif
     
     Logger::info("Moonlight", "Starting...");

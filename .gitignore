@@ -31,3 +31,4 @@ DerivedData/
 *.nro
 third_party/opus
 third_party/ffmpeg
+working_dir
