@@ -88,7 +88,7 @@
 		36A0C0372461DBA30083289C /* AddHostButton.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 36A0C0352461DBA30083289C /* AddHostButton.cpp */; };
 		36A0C03A2461E4C00083289C /* SettingsWindow.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 36A0C0382461E4C00083289C /* SettingsWindow.cpp */; };
 		36A0C03D2461F03C0083289C /* Settings.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 36A0C03B2461F03C0083289C /* Settings.cpp */; };
-		36BFCCF12479723E00245D40 /* xml.c in Sources */ = {isa = PBXBuildFile; fileRef = 36BFCCEA2479723E00245D40 /* xml.c */; };
+		36BFCCF12479723E00245D40 /* xml.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 36BFCCEA2479723E00245D40 /* xml.cpp */; };
 		36BFCCF22479723E00245D40 /* client.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 36BFCCEC2479723E00245D40 /* client.cpp */; };
 		36BFCCF32479723E00245D40 /* http.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 36BFCCF02479723E00245D40 /* http.cpp */; };
 		36BFCCF62479724A00245D40 /* GameStreamClient.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 36BFCCF52479724900245D40 /* GameStreamClient.cpp */; };
@@ -289,7 +289,7 @@
 		36A0C0392461E4C00083289C /* SettingsWindow.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = SettingsWindow.hpp; sourceTree = "<group>"; };
 		36A0C03B2461F03C0083289C /* Settings.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Settings.cpp; sourceTree = "<group>"; };
 		36A0C03C2461F03C0083289C /* Settings.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Settings.hpp; sourceTree = "<group>"; };
-		36BFCCEA2479723E00245D40 /* xml.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = xml.c; sourceTree = "<group>"; };
+		36BFCCEA2479723E00245D40 /* xml.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = xml.cpp; sourceTree = "<group>"; };
 		36BFCCEB2479723E00245D40 /* client.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = client.h; sourceTree = "<group>"; };
 		36BFCCEC2479723E00245D40 /* client.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = client.cpp; sourceTree = "<group>"; };
 		36BFCCED2479723E00245D40 /* http.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = http.h; sourceTree = "<group>"; };
@@ -644,7 +644,7 @@
 				36BFCCED2479723E00245D40 /* http.h */,
 				36BFCCEC2479723E00245D40 /* client.cpp */,
 				36BFCCEB2479723E00245D40 /* client.h */,
-				36BFCCEA2479723E00245D40 /* xml.c */,
+				36BFCCEA2479723E00245D40 /* xml.cpp */,
 				36BFCCEF2479723E00245D40 /* xml.h */,
 				36BFCCEE2479723E00245D40 /* errors.h */,
 			);
@@ -867,7 +867,7 @@
 				36A0C03D2461F03C0083289C /* Settings.cpp in Sources */,
 				36BFCCF82479725900245D40 /* main.cpp in Sources */,
 				3652F079245C292B001FABF3 /* RtpReorderQueue.c in Sources */,
-				36BFCCF12479723E00245D40 /* xml.c in Sources */,
+				36BFCCF12479723E00245D40 /* xml.cpp in Sources */,
 				3652F065245C292B001FABF3 /* list.c in Sources */,
 				36DFE0CD2459FA3F00FC51CE /* nanogui_resources.cpp in Sources */,
 				3652F06A245C292B001FABF3 /* protocol.c in Sources */,

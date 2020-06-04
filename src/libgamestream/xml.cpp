@@ -19,6 +19,7 @@
 
 #include "xml.h"
 #include "errors.h"
+#include "client.h"
 
 #include <expat.h>
 #include <string.h>
@@ -28,28 +29,28 @@
 static XML_Parser parser;
 
 struct xml_query {
-  char *memory;
-  size_t size;
-  int start;
-  void* data;
+    char *memory;
+    size_t size;
+    int start;
+    void* data;
 };
 
 static void XMLCALL _xml_start_element(void *userData, const char *name, const char **atts) {
   struct xml_query *search = (struct xml_query*) userData;
-  if (strcmp(search->data, name) == 0)
+  if (strcmp((const char *)search->data, name) == 0)
     search->start++;
 }
 
 static void XMLCALL _xml_end_element(void *userData, const char *name) {
   struct xml_query *search = (struct xml_query*) userData;
-  if (strcmp(search->data, name) == 0)
+  if (strcmp((const char *)search->data, name) == 0)
     search->start--;
 }
 
 static void XMLCALL _xml_start_applist_element(void *userData, const char *name, const char **atts) {
   struct xml_query *search = (struct xml_query*) userData;
   if (strcmp("App", name) == 0) {
-    PAPP_LIST app = malloc(sizeof(APP_LIST));
+    PAPP_LIST app = (PAPP_LIST)malloc(sizeof(APP_LIST));
     if (app == NULL)
       return;
 
@@ -58,7 +59,7 @@ static void XMLCALL _xml_start_applist_element(void *userData, const char *name,
     app->next = (PAPP_LIST) search->data;
     search->data = app;
   } else if (strcmp("ID", name) == 0 || strcmp("AppTitle", name) == 0) {
-    search->memory = malloc(1);
+    search->memory = (char *)malloc(1);
     search->size = 0;
     search->start = 1;
   }
@@ -84,13 +85,13 @@ static void XMLCALL _xml_end_applist_element(void *userData, const char *name) {
 static void XMLCALL _xml_start_mode_element(void *userData, const char *name, const char **atts) {
   struct xml_query *search = (struct xml_query*) userData;
   if (strcmp("DisplayMode", name) == 0) {
-    PDISPLAY_MODE mode = calloc(1, sizeof(DISPLAY_MODE));
+    PDISPLAY_MODE mode = (PDISPLAY_MODE)calloc(1, sizeof(DISPLAY_MODE));
     if (mode != NULL) {
       mode->next = (PDISPLAY_MODE) search->data;
       search->data = mode;
     }
   } else if (search->data != NULL && (strcmp("Height", name) == 0 || strcmp("Width", name) == 0 || strcmp("RefreshRate", name) == 0)) {
-    search->memory = malloc(1);
+    search->memory = (char *)malloc(1);
     search->size = 0;
     search->start = 1;
   }
@@ -119,7 +120,7 @@ static void XMLCALL _xml_start_status_element(void *userData, const char *name, 
       if (strcmp("status_code", atts[i]) == 0)
         *status = atoi(atts[i + 1]);
       else if (*status != STATUS_OK && strcmp("status_message", atts[i]) == 0)
-        gs_error = strdup(atts[i + 1]);
+          gs_set_error(strdup(atts[i + 1]));
     }
   }
 }
@@ -129,7 +130,7 @@ static void XMLCALL _xml_end_status_element(void *userData, const char *name) { 
 static void XMLCALL _xml_write_data(void *userData, const XML_Char *s, int len) {
   struct xml_query *search = (struct xml_query*) userData;
   if (search->start > 0) {
-    search->memory = realloc(search->memory, search->size + len + 1);
+    search->memory = (char *)realloc(search->memory, search->size + len + 1);
     if(search->memory == NULL)
       return;
 
@@ -143,15 +144,15 @@ int xml_search(unsigned char* data, size_t len, char* node, char** result) {
   struct xml_query search;
   search.data = node;
   search.start = 0;
-  search.memory = calloc(1, 1);
+  search.memory = (char *)calloc(1, 1);
   search.size = 0;
   XML_Parser parser = XML_ParserCreate("UTF-8");
   XML_SetUserData(parser, &search);
   XML_SetElementHandler(parser, _xml_start_element, _xml_end_element);
   XML_SetCharacterDataHandler(parser, _xml_write_data);
-  if (! XML_Parse(parser, data, len, 1)) {
-    int code = XML_GetErrorCode(parser);
-    gs_error = XML_ErrorString(code);
+  if (! XML_Parse(parser, (const char *)data, len, 1)) {
+    XML_Error code = XML_GetErrorCode(parser);
+    gs_set_error(XML_ErrorString(code));
     XML_ParserFree(parser);
     free(search.memory);
     return GS_INVALID;
@@ -168,7 +169,7 @@ int xml_search(unsigned char* data, size_t len, char* node, char** result) {
 
 int xml_applist(unsigned char* data, size_t len, PAPP_LIST *app_list) {
   struct xml_query query;
-  query.memory = calloc(1, 1);
+  query.memory = (char *)calloc(1, 1);
   query.size = 0;
   query.start = 0;
   query.data = NULL;
@@ -176,9 +177,9 @@ int xml_applist(unsigned char* data, size_t len, PAPP_LIST *app_list) {
   XML_SetUserData(parser, &query);
   XML_SetElementHandler(parser, _xml_start_applist_element, _xml_end_applist_element);
   XML_SetCharacterDataHandler(parser, _xml_write_data);
-  if (! XML_Parse(parser, data, len, 1)) {
-    int code = XML_GetErrorCode(parser);
-    gs_error = XML_ErrorString(code);
+  if (! XML_Parse(parser, (const char *)data, len, 1)) {
+    XML_Error code = XML_GetErrorCode(parser);
+    gs_set_error(XML_ErrorString(code));
     XML_ParserFree(parser);
     return GS_INVALID;
   }
@@ -191,14 +192,14 @@ int xml_applist(unsigned char* data, size_t len, PAPP_LIST *app_list) {
 
 int xml_modelist(unsigned char* data, size_t len, PDISPLAY_MODE *mode_list) {
   struct xml_query query = {0};
-  query.memory = calloc(1, 1);
+  query.memory = (char *)calloc(1, 1);
   XML_Parser parser = XML_ParserCreate("UTF-8");
   XML_SetUserData(parser, &query);
   XML_SetElementHandler(parser, _xml_start_mode_element, _xml_end_mode_element);
   XML_SetCharacterDataHandler(parser, _xml_write_data);
-  if (! XML_Parse(parser, data, len, 1)) {
-    int code = XML_GetErrorCode(parser);
-    gs_error = XML_ErrorString(code);
+  if (! XML_Parse(parser, (const char *)data, len, 1)) {
+    XML_Error code = XML_GetErrorCode(parser);
+    gs_set_error(XML_ErrorString(code));
     XML_ParserFree(parser);
     return GS_INVALID;
   }
@@ -215,9 +216,9 @@ int xml_status(unsigned char* data, size_t len) {
   XML_Parser parser = XML_ParserCreate("UTF-8");
   XML_SetUserData(parser, &status);
   XML_SetElementHandler(parser, _xml_start_status_element, _xml_end_status_element);
-  if (!XML_Parse(parser, data, len, 1)) {
-    int code = XML_GetErrorCode(parser);
-    gs_error = XML_ErrorString(code);
+  if (!XML_Parse(parser, (const char *)data, len, 1)) {
+    XML_Error code = XML_GetErrorCode(parser);
+    gs_set_error(XML_ErrorString(code));
     XML_ParserFree(parser);
     return GS_INVALID;
   }

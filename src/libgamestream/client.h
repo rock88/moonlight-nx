@@ -19,13 +19,10 @@
 
 #pragma once
 
-extern "C" {
-#include "xml.h"
-}
-
 #include <Limelight.h>
-#include "Data.hpp"
 #include <stdbool.h>
+#include "Data.hpp"
+#include "xml.h"
 
 #define MIN_SUPPORTED_GFE_VERSION 3
 #define MAX_SUPPORTED_GFE_VERSION 7
@@ -43,6 +40,9 @@ typedef struct _SERVER_DATA {
   PDISPLAY_MODE modes;
   SERVER_INFORMATION serverInfo;
 } SERVER_DATA, *PSERVER_DATA;
+
+void gs_set_error(std::string error);
+std::string gs_error();
 
 int gs_init(PSERVER_DATA server, char* address, const char *keyDirectory, bool unsupported);
 int gs_app_boxart(PSERVER_DATA server, int app_id, Data* out);

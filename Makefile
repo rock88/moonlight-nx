@@ -82,12 +82,10 @@ LIBS	:= -lcurl -lmbedtls -lmbedx509 -lmbedcrypto \
 	-lglad -lEGL -lglapi -ldrm_nouveau -lglfw3 \
 	-lnx -lswresample -lvpx -ljansson
 
-LIBGAMESTREAM_C_SOURCES = \
-	xml.c
-
 LIBGAMESTREAM_CPP_SOURCES = \
 	client.cpp \
-	http.cpp
+	http.cpp \
+	xml.cpp
 
 MOONLIGHT_LIBRETRO_C_SOURCES = \
 	nanogui_resources.c \
@@ -209,7 +207,7 @@ export VPATH	:=	$(foreach dir,$(SOURCES),$(CURDIR)/$(dir)) \
 
 export DEPSDIR	:=	$(CURDIR)/$(BUILD)
 
-CFILES		:=	$(LIBGAMESTREAM_C_SOURCES) $(MOONLIGHT_LIBRETRO_C_SOURCES) $(MOONLIGHT_COMMON_C_SOURCES) $(NANOGUI_C_SOURCES)
+CFILES		:=	$(MOONLIGHT_LIBRETRO_C_SOURCES) $(MOONLIGHT_COMMON_C_SOURCES) $(NANOGUI_C_SOURCES)
 CPPFILES	:=	$(LIBGAMESTREAM_CPP_SOURCES) $(MOONLIGHT_LIBRETRO_CXX_SOURCES) $(NANOGUI_CXX_SOURCES)
 SFILES		:=	$(foreach dir,$(SOURCES),$(notdir $(wildcard $(dir)/*.s)))
 BINFILES	:=	$(foreach dir,$(DATA),$(notdir $(wildcard $(dir)/*.*)))

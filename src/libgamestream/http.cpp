@@ -19,6 +19,7 @@
 
 #include "http.h"
 #include "errors.h"
+#include "client.h"
 #include "CryptoManager.hpp"
 #include "Logger.hpp"
 
@@ -94,8 +95,8 @@ int http_request(char* url, Data* data, HTTPRequestTimeout timeout) {
     CURLcode res = curl_easy_perform(curl);
     
     if (res != CURLE_OK) {
-        gs_error = curl_easy_strerror(res);
-        Logger::error("Curl", "error: %s", gs_error);
+        gs_set_error(curl_easy_strerror(res));
+        Logger::error("Curl", "error: %s", gs_error().c_str());
         return GS_FAILED;
     } else if (http_data->memory == NULL) {
         Logger::error("Curl", "memory = NULL");

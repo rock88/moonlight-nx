@@ -87,7 +87,7 @@ void GameStreamClient::connect(const std::string &address, ServerCallback<SERVER
                 Settings::settings()->add_host(address);
                 callback(GSResult<SERVER_DATA>::success(m_server_data[address]));
             } else {
-                callback(GSResult<SERVER_DATA>::failure(gs_error != NULL ? gs_error : "Unknown error..."));
+                callback(GSResult<SERVER_DATA>::failure(gs_error()));
             }
         });
     });
@@ -106,7 +106,7 @@ void GameStreamClient::pair(const std::string &address, const std::string &pin, 
             if (status == GS_OK) {
                 callback(GSResult<bool>::success(true));
             } else {
-                callback(GSResult<bool>::failure(gs_error != NULL ? gs_error : "Unknown error..."));
+                callback(GSResult<bool>::failure(gs_error()));
             }
         });
     });
@@ -127,7 +127,7 @@ void GameStreamClient::applist(const std::string &address, ServerCallback<PAPP_L
             if (status == GS_OK) {
                 callback(GSResult<PAPP_LIST>::success(m_app_list[address]));
             } else {
-                callback(GSResult<PAPP_LIST>::failure(gs_error != NULL ? gs_error : "Unknown error..."));
+                callback(GSResult<PAPP_LIST>::failure(gs_error()));
             }
         });
     });
@@ -147,7 +147,7 @@ void GameStreamClient::app_boxart(const std::string &address, int app_id, Server
             if (status == GS_OK) {
                 callback(GSResult<Data>::success(data));
             } else {
-                callback(GSResult<Data>::failure(gs_error != NULL ? gs_error : "Unknown error..."));
+                callback(GSResult<Data>::failure(gs_error()));
             }
         });
     });
@@ -168,7 +168,7 @@ void GameStreamClient::start(const std::string &address, STREAM_CONFIGURATION co
             if (status == GS_OK) {
                 callback(GSResult<STREAM_CONFIGURATION>::success(m_config));
             } else {
-                callback(GSResult<STREAM_CONFIGURATION>::failure(gs_error != NULL ? gs_error : "Unknown error..."));
+                callback(GSResult<STREAM_CONFIGURATION>::failure(gs_error()));
             }
         });
     });
@@ -189,7 +189,7 @@ void GameStreamClient::quit(const std::string &address, ServerCallback<bool> cal
             if (status == GS_OK) {
                 callback(GSResult<bool>::success(true));
             } else {
-                callback(GSResult<bool>::failure(gs_error != NULL ? gs_error : "Unknown error..."));
+                callback(GSResult<bool>::failure(gs_error()));
             }
         });
     });
