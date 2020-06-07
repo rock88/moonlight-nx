@@ -7,10 +7,12 @@ public:
     AppListWindow(Widget *parent, const std::string &address);
     
     void window_appear() override;
-    
-    void run_game(int app_id);
 
 private:
+    void reload();
+    void run_game(int app_id);
+    void close_game();
+    
     std::string m_address;
     PAPP_LIST m_app_list;
 };

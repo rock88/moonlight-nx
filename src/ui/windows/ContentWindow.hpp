@@ -20,6 +20,16 @@ public:
         });
     }
     
+    void clean_right_title_buttons() {
+        auto children = m_right_title_button_container->children();
+        for (auto child: children) {
+            if (m_right_title_button_container->child_index(child) != -1) {
+                m_right_title_button_container->remove_child(child);
+            }
+        }
+        perform_layout();
+    }
+    
     nanogui::Widget* container() const {
         return m_container;
     }
@@ -31,6 +41,7 @@ public:
                 m_container->remove_child(child);
             }
         }
+        perform_layout();
     }
     
     template<typename WidgetClass, typename... Args>
@@ -46,8 +57,9 @@ public:
     
     void perform_layout() {
         screen()->perform_layout();
+        screen()->update_focus(NULL);
     }
-        
+    
     void set_box_layout(nanogui::Orientation orientation, nanogui::Alignment alignment = nanogui::Alignment::Middle, int margin = 30, int spacing = 10) {
         m_container->set_layout(new nanogui::BoxLayout(orientation, alignment, margin, spacing));
     }

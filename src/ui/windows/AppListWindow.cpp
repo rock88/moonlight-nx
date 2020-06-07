@@ -12,31 +12,64 @@ AppListWindow::AppListWindow(Widget *parent, const std::string &address): Conten
 }
 
 void AppListWindow::window_appear() {
+    reload();
+}
+
+void AppListWindow::reload() {
     clean_container();
+    clean_right_title_buttons();
     
     auto loader = add<LoadingOverlay>();
     
-    GameStreamClient::client()->applist(m_address, [this, loader](auto result) {
-        loader->dispose();
-        
+    GameStreamClient::client()->connect(m_address, [this, loader](auto result) {
         if (result.isSuccess()) {
-            int currentGame = GameStreamClient::client()->server_data(m_address).currentGame;
-            PAPP_LIST app = result.value();
+            auto currentGame = result.value().currentGame;
             
-            while (app != NULL) {
-                auto button = container()->add<AppButton>(m_address, *app, currentGame);
-                button->set_callback([this, app] {
-                    run_game(app->id);
+            if (currentGame != 0) {
+                set_right_title_button(FA_TIMES, [this] {
+                    this->close_game();
                 });
-                app = app->next;
             }
-            perform_layout();
+            
+            GameStreamClient::client()->applist(m_address, [this, loader, currentGame](auto result) {
+                loader->dispose();
+                
+                if (result.isSuccess()) {
+                    PAPP_LIST app = result.value();
+                    
+                    while (app != NULL) {
+                        auto button = container()->add<AppButton>(m_address, *app, currentGame);
+                        button->set_callback([this, app] {
+                            run_game(app->id);
+                        });
+                        app = app->next;
+                    }
+                    perform_layout();
+                } else {
+                    screen()->add<MessageDialog>(MessageDialog::Type::Warning, "Error", result.error());
+                }
+            });
         } else {
-            screen()->add<MessageDialog>(MessageDialog::Type::Information, "Error", result.error());
+            loader->dispose();
+            screen()->add<MessageDialog>(MessageDialog::Type::Warning, "Error", result.error());
         }
     });
 }
 
 void AppListWindow::run_game(int app_id) {
     push<StreamWindow>(m_address, app_id);
+}
+
+void AppListWindow::close_game() {
+    auto loader = add<LoadingOverlay>();
+    
+    GameStreamClient::client()->quit(m_address, [this, loader](auto result) {
+        loader->dispose();
+        
+        if (result.isSuccess()) {
+            reload();
+        } else {
+            screen()->add<MessageDialog>(MessageDialog::Type::Warning, "Error", result.error());
+        }
+    });
 }
