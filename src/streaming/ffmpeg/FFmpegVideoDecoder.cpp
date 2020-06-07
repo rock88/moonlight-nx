@@ -7,7 +7,7 @@
 // Uses the low latency decode flag (disables multithreading)
 #define LOW_LATENCY_DECODE 0x2
 
-#define DECODER_BUFFER_SIZE 92 * 1024
+#define DECODER_BUFFER_SIZE 92 * 1024 * 2
 
 FFmpegVideoDecoder::FFmpegVideoDecoder() {
     pthread_mutex_init(&m_mutex, NULL);
@@ -163,6 +163,10 @@ int FFmpegVideoDecoder::submit_decode_unit(PDECODE_UNIT decode_unit) {
         m_frames_in++;
         
         uint64_t before_decode = LiGetMillis();
+        
+        if (length > DECODER_BUFFER_SIZE) {
+            Logger::error("FFmpeg", "Big buffer to decode...");
+        }
         
         if (decode(m_ffmpeg_buffer, length) == 0) {
             m_frames_out++;
