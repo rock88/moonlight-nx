@@ -27,8 +27,10 @@ HostButton::HostButton(Widget* parent, const std::string &address): Button(paren
             m_host_status_icon = FA_POWER_OFF;
         }
         
-        if (auto scr = screen()) {
-            scr->perform_layout();
+        if (ref_count() > 1) {
+            if (auto scr = screen()) {
+                scr->perform_layout();
+            }
         }
         
         dec_ref();
