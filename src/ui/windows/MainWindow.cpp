@@ -13,7 +13,7 @@
 using namespace nanogui;
 
 MainWindow::MainWindow(Widget *parent): ContentWindow(parent, "Moonlight") {
-    set_box_layout(Orientation::Horizontal, Alignment::Minimum);
+    set_box_layout(Orientation::Vertical, Alignment::Minimum);
     
     set_right_title_button(FA_SYNC, [this] {
         this->reload();
@@ -33,8 +33,14 @@ void MainWindow::window_appear() {
 void MainWindow::reload() {
     clean_container();
     
+    container()->add<Label>("* For better performance use 5GHz WiFi, latest system firmware (10.0.2/10.0.3) and Atmosphère (0.12.0)");
+    container()->add<Widget>()->set_fixed_height(6);
+    
+    auto button_container = container()->add<Widget>();
+    button_container->set_layout(new BoxLayout(Orientation::Horizontal, Alignment::Minimum, 0, 10));
+    
     for (auto host: Settings::settings()->hosts()) {
-        auto button = container()->add<HostButton>(host);
+        auto button = button_container->add<HostButton>(host);
         button->set_fixed_size(Size(200, 200));
         button->set_callback([this, button] {
             if (button->is_active()) {
@@ -65,7 +71,7 @@ void MainWindow::reload() {
         });
     }
     
-    auto button = container()->add<AddHostButton>();
+    auto button = button_container->add<AddHostButton>();
     button->set_fixed_size(Size(200, 200));
     button->set_callback([this] {
         push<AddHostWindow>();
