@@ -38,7 +38,7 @@ StreamWindow::StreamWindow(Widget *parent, const std::string &address, int app_i
         if (result.isSuccess()) {
             //
         } else {
-            screen()->add<MessageDialog>(MessageDialog::Type::Information, "Error", result.error());
+            screen()->add<MessageDialog>(MessageDialog::Type::Warning, "Error", result.error());
             
             auto app = static_cast<Application *>(screen());
             app->pop_window();

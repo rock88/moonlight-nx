@@ -65,7 +65,7 @@ AddHostWindow::AddHostWindow(Widget *parent): ContentWindow(parent, "Add Host") 
                 if (result.isSuccess()) {
                     this->pop();
                 } else {
-                    screen()->add<MessageDialog>(MessageDialog::Type::Information, "Error", result.error());
+                    screen()->add<MessageDialog>(MessageDialog::Type::Warning, "Error", result.error());
                 }
             });
         }

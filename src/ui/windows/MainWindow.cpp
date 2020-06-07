@@ -55,12 +55,12 @@ void MainWindow::reload() {
                         if (result.isSuccess()) {
                             reload();
                         } else {
-                            screen()->add<MessageDialog>(MessageDialog::Type::Information, "Error", result.error());
+                            screen()->add<MessageDialog>(MessageDialog::Type::Warning, "Error", result.error());
                         }
                     });
                 }
             } else {
-                auto alert = screen()->add<MessageDialog>(MessageDialog::Type::Information, "Error", "Innactive host...", "OK", "Delete", true);
+                auto alert = screen()->add<MessageDialog>(MessageDialog::Type::Warning, "Error", "Innactive host...", "OK", "Delete", true);
                 alert->set_callback([this, button](int action) {
                     if (action) {
                         Settings::settings()->remove_host(button->address());
