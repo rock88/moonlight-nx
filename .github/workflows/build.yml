@@ -37,5 +37,5 @@ jobs:
     - name: Upload moonlight.nro
       uses: actions/upload-artifact@v1
       with:
-        name: moonlight.zip
+        name: moonlight
         path: moonlight.nro
