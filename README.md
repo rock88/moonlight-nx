@@ -1,4 +1,4 @@
-![C/C++ CI](https://github.com/rock88/moonlight-nx/workflows/C/C++%20CI/badge.svg)
+![Build](https://github.com/rock88/moonlight-nx/workflows/Build/badge.svg)
 
 # Moonlight-NX
 
