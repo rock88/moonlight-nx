@@ -1,0 +1,25 @@
+name: C/C++ CI
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: setup enviroment
+      run: |
+        wget https://github.com/devkitPro/pacman/releases/download/devkitpro-pacman-1.0.1/devkitpro-pacman.deb
+        sudo dpkg -i devkitpro-pacman.deb
+        sudo dkp-pacman --noconfirm -Syu
+        sudo dkp-pacman --noconfirm -S devkitA64 switch-tools libnx switch-curl switch-ffmpeg switch-glad switch-glfw switch-jansson switch-libdrm_nouveau switch-libexpat switch-libopus switch-libvpx switch-mbedtls switch-mesa switch-zlib switch-ffmpeg
+        export DEVKITPRO=/opt/devkitpro
+        export DEVKITA64=/opt/devkitpro/devkitA64
+    - name: make
+      run: make -j
