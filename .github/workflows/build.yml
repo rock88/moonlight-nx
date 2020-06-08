@@ -34,3 +34,8 @@ jobs:
         export DEVKITPRO=/opt/devkitpro
         export DEVKITA64=/opt/devkitpro/devkitA64
         make -j
+    - name: Upload moonlight.nro
+      uses: actions/upload-artifact@v1
+      with:
+        name: moonlight
+        path: moonlight.nro
