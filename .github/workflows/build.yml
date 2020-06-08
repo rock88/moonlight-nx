@@ -21,5 +21,8 @@ jobs:
         sudo dkp-pacman --noconfirm -S devkitA64 switch-tools libnx switch-curl switch-ffmpeg switch-glad switch-glfw switch-jansson switch-libdrm_nouveau switch-libexpat switch-libopus switch-libvpx switch-mbedtls switch-mesa switch-zlib switch-ffmpeg
         export DEVKITPRO=/opt/devkitpro
         export DEVKITA64=/opt/devkitpro/devkitA64
+        echo $DEVKITPRO
     - name: make
-      run: make -j
+      run: |
+        echo $DEVKITPRO
+        make -j
