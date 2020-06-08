@@ -88,7 +88,9 @@ void MainWindow::draw(NVGcontext *ctx) {
     nvgFillColor(ctx, Color(255, 255, 255, 200));
     nvgFontSize(ctx, 20);
     nvgFontFace(ctx, "sans");
-    nvgText(ctx, width() - 40, height() - 8, MOONLIGHT_NX_VERSION, NULL);
+    
+    int text_width = nvgTextBounds(ctx, 0, 0, MOONLIGHT_VERSION, NULL, NULL);
+    nvgText(ctx, width() - text_width - 8, height() - 8, MOONLIGHT_VERSION, NULL);
     
     nvgRestore(ctx);
 }

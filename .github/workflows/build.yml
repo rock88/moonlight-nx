@@ -33,9 +33,9 @@ jobs:
       run: |
         export DEVKITPRO=/opt/devkitpro
         export DEVKITA64=/opt/devkitpro/devkitA64
-        make -j
+        make -j NIGHTLY_BUILD=`git rev-parse --short "$GITHUB_SHA"`
     - name: Upload moonlight.nro
       uses: actions/upload-artifact@v1
       with:
-        name: moonlight
+        name: moonlight.zip
         path: moonlight.nro

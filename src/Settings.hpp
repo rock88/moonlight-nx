@@ -3,8 +3,6 @@
 #include <vector>
 #pragma once
 
-#define MOONLIGHT_NX_VERSION "1.0.9"
-
 enum VideoCodec: int {
     H264,
     H265

@@ -51,6 +51,12 @@ DATA		:=	data
 INCLUDES	:=	include
 #ROMFS	:=	romfs
 
+ifdef NIGHTLY_BUILD
+	MOONLIGHT_VERSION := "$(APP_VERSION)($(NIGHTLY_BUILD))"
+else
+	MOONLIGHT_VERSION := "$(APP_VERSION)"
+endif
+
 #---------------------------------------------------------------------------------
 # options for code generation
 #---------------------------------------------------------------------------------
@@ -69,7 +75,7 @@ M_INCLUDES := \
 	-I$(TOPDIR)/third_party/nanogui/ext/nanovg/src
 
 DEFINES := -DNANOGUI_USE_OPENGL -DNVG_STB_IMAGE_IMPLEMENTATION -DNANOGUI_NO_GLFW \
-	-DHAS_SOCKLEN_T -DHAS_POLL -DHAS_FCNTL -D_GNU_SOURCE -DUSE_MBEDTLS_CRYPTO
+	-DHAS_SOCKLEN_T -DHAS_POLL -DHAS_FCNTL -D_GNU_SOURCE -DUSE_MBEDTLS_CRYPTO -DMOONLIGHT_VERSION=\"$(MOONLIGHT_VERSION)\"
 
 CFLAGS	:=	-Wall -O3 -ffunction-sections $(ARCH) $(DEFINES) $(INCLUDE) $(M_INCLUDES) -D__SWITCH__
 CXXFLAGS	:= $(CFLAGS) -std=gnu++17

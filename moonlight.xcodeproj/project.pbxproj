@@ -283,6 +283,7 @@
 		367CD959245DE25F00A95738 /* StreamWindow.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = StreamWindow.hpp; sourceTree = "<group>"; };
 		367D2D7224829A0800A946F4 /* LogsWindow.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = LogsWindow.cpp; sourceTree = "<group>"; };
 		367D2D7324829A0800A946F4 /* LogsWindow.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = LogsWindow.hpp; sourceTree = "<group>"; };
+		3689D6D0248EBEFA0008CB75 /* build.yml */ = {isa = PBXFileReference; lastKnownFileType = text.yaml; name = build.yml; path = .github/workflows/build.yml; sourceTree = "<group>"; };
 		36A0C0352461DBA30083289C /* AddHostButton.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = AddHostButton.cpp; sourceTree = "<group>"; };
 		36A0C0362461DBA30083289C /* AddHostButton.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = AddHostButton.hpp; sourceTree = "<group>"; };
 		36A0C0382461E4C00083289C /* SettingsWindow.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = SettingsWindow.cpp; sourceTree = "<group>"; };
@@ -690,6 +691,7 @@
 		36DBDE852450BB7E0057C8D3 = {
 			isa = PBXGroup;
 			children = (
+				3689D6D0248EBEFA0008CB75 /* build.yml */,
 				3602C3C0245DC7E300368900 /* Makefile */,
 				36B406932459F41E005BD903 /* src */,
 				36DFDCF62459F80600FC51CE /* third_party */,
@@ -1033,6 +1035,7 @@
 					"-DHAS_FCNTL",
 					"-DHAVE_PULSE",
 					"-DUSE_MBEDTLS_CRYPTO",
+					"-DMOONLIGHT_VERSION=\\\"1.0.9\\\"",
 				);
 				OTHER_LDFLAGS = (
 					"-lglfw3",
@@ -1123,7 +1126,7 @@
 					"-DHAS_FCNTL",
 					"-DHAVE_PULSE",
 					"-DUSE_MBEDTLS_CRYPTO",
-					"-Dmemalign=calloc",
+					"-DMOONLIGHT_VERSION=\\\"1.0.9\\\"",
 				);
 				OTHER_LDFLAGS = (
 					"-lglfw3",
