@@ -28,7 +28,7 @@ jobs:
       run: |
         wget https://github.com/devkitPro/pacman-packages/raw/1582ad85914b14497fae32a9fe9074c0374f99f7/switch/curl/PKGBUILD
         dkp-makepkg
-        sudo cp pkg/switch-curl/opt/devkitpro/portlibs/switch /opt/devkitpro/portlibs/switch
+        sudo cp -r pkg/switch-curl/opt/devkitpro/portlibs/switch/* /opt/devkitpro/portlibs/switch
     - name: Build
       run: |
         export DEVKITPRO=/opt/devkitpro
