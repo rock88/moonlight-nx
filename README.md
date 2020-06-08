@@ -1,3 +1,5 @@
+![C/C++ CI](https://github.com/rock88/moonlight-nx/workflows/C/C++%20CI/badge.svg)
+
 # Moonlight-NX
 
 Moonlight-NX is a port of [Moonlight Game Streaming Project](https://github.com/moonlight-stream "Moonlight Game Streaming Project") for Nintendo Switch.
