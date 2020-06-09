@@ -31,8 +31,18 @@ int AudrenAudioRenderer::init(int audio_configuration, const POPUS_MULTISTREAM_C
     
     m_decoded_buffer = (s16 *)malloc(m_channel_count * m_samples_per_frame * sizeof(s16));
     
+    Result rc = 0;
+    
+#if USE_HW_DECODER
+    rc = hwopusDecoderMultistreamInitialize(&hw_decoder, m_sample_rate, m_channel_count, opus_config->streams, opus_config->coupledStreams, opus_config->mapping);
+    if (R_FAILED(rc)) {
+        Logger::error("Audren", "hwopusDecoderMultistreamInitialize failed: %x", rc);
+        return -1;
+    }
+#else
     int error;
     m_decoder = opus_multistream_decoder_create(opus_config->sampleRate, opus_config->channelCount, opus_config->streams, opus_config->coupledStreams, opus_config->mapping, &error);
+#endif
     
     memset(&m_driver, 0, sizeof(m_driver));
     memset(m_wavebufs, 0, sizeof(m_wavebufs));
@@ -45,7 +55,7 @@ int AudrenAudioRenderer::init(int audio_configuration, const POPUS_MULTISTREAM_C
         return -1;
     }
     
-    Result rc = audrenInitialize(&m_ar_config);
+    rc = audrenInitialize(&m_ar_config);
     if (R_FAILED(rc)) {
         Logger::error("Audren", "audrenInitialize: %x", rc);
         return -1;
@@ -97,10 +107,14 @@ int AudrenAudioRenderer::init(int audio_configuration, const POPUS_MULTISTREAM_C
 void AudrenAudioRenderer::cleanup() {
     Logger::info("Audren", "Cleanup...");
     
+#if USE_HW_DECODER
+    hwopusDecoderExit(&hw_decoder);
+#else
     if (m_decoder) {
         opus_multistream_decoder_destroy(m_decoder);
         m_decoder = nullptr;
     }
+#endif
     
     if (m_decoded_buffer) {
         free(m_decoded_buffer);
@@ -123,6 +137,25 @@ void AudrenAudioRenderer::cleanup() {
 }
 
 void AudrenAudioRenderer::decode_and_play_sample(char *data, int length) {
+#if USE_HW_DECODER
+    s32 DecodedDataSize = 0;
+    s32 DecodedSampleCount = 0;
+    
+    printf("Start decoding...\n");
+    
+    const void* opusin = (const void*)m_decoded_buffer;
+    size_t opusin_size = length * m_channel_count * sizeof(s16);
+    s16 *pcmbuf = (s16 *)data;
+    size_t pcmbuf_size = length * m_channel_count * sizeof(s16);
+    
+    Result rc = hwopusDecodeInterleaved(&hw_decoder, &DecodedDataSize, &DecodedSampleCount, opusin, opusin_size, pcmbuf, pcmbuf_size);
+    
+    if (R_SUCCEEDED(rc)) {
+        printf("Ok, play sound!\n");
+    } else {
+        printf("Fail...%x\n", rc);
+    }
+#else
     if (m_decoder && m_decoded_buffer) {
         int decoded_samples = opus_multistream_decode(m_decoder, (const unsigned char *)data, length, m_decoded_buffer, m_samples_per_frame, 0);
         if (decoded_samples > 0) {
@@ -131,6 +164,7 @@ void AudrenAudioRenderer::decode_and_play_sample(char *data, int length) {
     } else {
         Logger::fatal("Audren", "Invalid call of decode_and_play_sample");
     }
+#endif
 }
 
 int AudrenAudioRenderer::capabilities() {

@@ -5,6 +5,8 @@
 
 #define BUFFER_COUNT 5
 
+#define USE_HW_DECODER 1
+
 class AudrenAudioRenderer: public IAudioRenderer {
 public:
     AudrenAudioRenderer() {};
@@ -20,7 +22,11 @@ private:
     size_t append_audio(const void *buf, size_t size);
     void write_audio(const void *buf, size_t size);
     
+#if USE_HW_DECODER
+    HwopusDecoder hw_decoder = {0};
+#else
     OpusMSDecoder* m_decoder = nullptr;
+#endif
     s16* m_decoded_buffer = nullptr;
     void* mempool_ptr = nullptr;
     void* current_pool_ptr = nullptr;
