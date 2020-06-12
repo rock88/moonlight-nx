@@ -16,13 +16,13 @@ void AppListWindow::window_appear() {
     reload();
 }
 
-void AppListWindow::reload() {
+void AppListWindow::reload(std::function<void()> callback) {
     clean_container();
     clean_right_title_buttons();
     
     auto loader = add<LoadingOverlay>();
     
-    GameStreamClient::client()->connect(m_address, [this, loader](auto result) {
+    GameStreamClient::client()->connect(m_address, [this, loader, callback](auto result) {
         if (result.isSuccess()) {
             auto currentGame = result.value().currentGame;
             
@@ -32,7 +32,7 @@ void AppListWindow::reload() {
                 });
             }
             
-            GameStreamClient::client()->applist(m_address, [this, loader, currentGame](auto result) {
+            GameStreamClient::client()->applist(m_address, [this, loader, currentGame, callback](auto result) {
                 loader->dispose();
                 
                 if (result.isSuccess()) {
@@ -52,6 +52,10 @@ void AppListWindow::reload() {
                         app = app->next;
                     }
                     perform_layout();
+                    
+                    if (callback) {
+                        callback();
+                    }
                 } else {
                     screen()->add<MessageDialog>(MessageDialog::Type::Warning, "Error", result.error());
                 }
@@ -64,18 +68,35 @@ void AppListWindow::reload() {
 }
 
 void AppListWindow::run_game(int app_id) {
-    GamepadMapper::mapper()->load_gamepad_map(app_id);
-    push<StreamWindow>(m_address, app_id);
+    int current_app_id = GameStreamClient::client()->server_data(m_address).currentGame;
+    
+    if (current_app_id == 0 || current_app_id == app_id) {
+        GamepadMapper::mapper()->load_gamepad_map(app_id);
+        push<StreamWindow>(m_address, app_id);
+    } else {
+        auto dialog = screen()->add<MessageDialog>(MessageDialog::Type::Information, "Info", "Another game already running", "Resume", "Close", true);
+        dialog->set_callback([this, app_id, current_app_id](auto result) {
+            if (result == 0) {
+                GamepadMapper::mapper()->load_gamepad_map(current_app_id);
+                push<StreamWindow>(m_address, current_app_id);
+            } else {
+                close_game([this, app_id] {
+                    GamepadMapper::mapper()->load_gamepad_map(app_id);
+                    push<StreamWindow>(m_address, app_id);
+                });
+            }
+        });
+    }
 }
 
-void AppListWindow::close_game() {
+void AppListWindow::close_game(std::function<void()> callback) {
     auto loader = add<LoadingOverlay>();
     
-    GameStreamClient::client()->quit(m_address, [this, loader](auto result) {
+    GameStreamClient::client()->quit(m_address, [this, loader, callback](auto result) {
         loader->dispose();
         
         if (result.isSuccess()) {
-            reload();
+            reload(callback);
         } else {
             screen()->add<MessageDialog>(MessageDialog::Type::Warning, "Error", result.error());
         }
