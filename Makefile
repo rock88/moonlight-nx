@@ -122,7 +122,9 @@ MOONLIGHT_LIBRETRO_CXX_SOURCES = \
 	AudrenAudioRenderer.cpp \
 	BoxArtManager.cpp \
 	Logger.cpp \
-	LogsWindow.cpp
+	LogsWindow.cpp \
+	GamepadMapper.cpp \
+	InputSettingsWindow.cpp
 
 MOONLIGHT_COMMON_C_SOURCES = \
 	callbacks.c \

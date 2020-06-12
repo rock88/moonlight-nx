@@ -1,8 +1,8 @@
 #include "GamepadMapper.hpp"
 #include "Settings.hpp"
 #include <jansson.h>
-#include <GLFW/glfw3.h>
 #include <nanogui/opengl.h>
+#include <GLFW/glfw3.h>
 #include <vector>
 
 static int gamepad_button_to_nanogui_button(GamepadButtons button) {
