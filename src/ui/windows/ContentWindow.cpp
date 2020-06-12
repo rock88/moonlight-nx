@@ -201,6 +201,38 @@ static inline Widget *most_closed_widget(Widget *target, std::vector<Widget *> w
     return nullptr;
 }
 
+static inline Widget* find_new_selectable(std::vector<Widget *> selectables, int jid, int button, int action) {
+    auto current = std::find_if(selectables.begin(), selectables.end(), [](auto c) { return c->selected(); });
+     
+     if (current != selectables.end() && (*current)->gamepad_button_event(jid, button, action)) {
+         return NULL;
+     }
+     
+     if (button >= NANOGUI_GAMEPAD_BUTTON_DPAD_UP && button <= NANOGUI_GAMEPAD_BUTTON_DPAD_LEFT) {
+         if (current == selectables.end()) {
+             selectables.front()->set_selected(true);
+             return NULL;
+         }
+         
+         auto current_selectable = *current;
+         auto new_selectable = most_closed_widget(
+             current_selectable,
+             selectables,
+             button == NANOGUI_GAMEPAD_BUTTON_DPAD_LEFT,
+             button == NANOGUI_GAMEPAD_BUTTON_DPAD_RIGHT,
+             button == NANOGUI_GAMEPAD_BUTTON_DPAD_UP,
+             button == NANOGUI_GAMEPAD_BUTTON_DPAD_DOWN
+             );
+         
+         if (new_selectable) {
+             current_selectable->set_selected(false);
+             new_selectable->set_selected(true);
+             return new_selectable;
+         }
+     }
+    return NULL;
+}
+
 bool ContentWindow::gamepad_button_event(int jid, int button, int action) {
     if (!action) {
         return false;
@@ -234,42 +266,22 @@ bool ContentWindow::gamepad_button_event(int jid, int button, int action) {
         
         pop();
         return false;
+    } else if (!messages.empty()) {
+        find_new_selectable(selectables_child_recursive(messages.front()), jid, button, action);
+    }
+    
+    if (!handle_button) {
+        return false;
     }
     
     auto selectables = selectables_child_recursive(m_container);
     selectables.insert(selectables.end(), m_left_title_button_container->children().begin(), m_left_title_button_container->children().end());
     selectables.insert(selectables.end(), m_right_title_button_container->children().begin(), m_right_title_button_container->children().end());
     
-    auto current = std::find_if(selectables.begin(), selectables.end(), [](auto c) { return c->selected(); });
-    
-    if (handle_button && current != selectables.end() && (*current)->gamepad_button_event(jid, button, action)) {
-        return false;
-    }
-    
-    if (handle_button && button >= NANOGUI_GAMEPAD_BUTTON_DPAD_UP && button <= NANOGUI_GAMEPAD_BUTTON_DPAD_LEFT) {
-        if (current == selectables.end()) {
-            selectables.front()->set_selected(true);
-            return false;
-        }
-        
-        auto current_selectable = *current;
-        auto new_selectable = most_closed_widget(
-            current_selectable,
-            selectables,
-            button == NANOGUI_GAMEPAD_BUTTON_DPAD_LEFT,
-            button == NANOGUI_GAMEPAD_BUTTON_DPAD_RIGHT,
-            button == NANOGUI_GAMEPAD_BUTTON_DPAD_UP,
-            button == NANOGUI_GAMEPAD_BUTTON_DPAD_DOWN
-            );
-        
-        if (new_selectable) {
-            current_selectable->set_selected(false);
-            new_selectable->set_selected(true);
-            
-            auto pos = new_selectable->absolute_position().y() - container()->absolute_position().y();
-            float offset = (pos + new_selectable->height() - m_scroll->height() / 2) / (float)(m_container->height() - m_scroll->height());
-            m_scroll->set_scroll(fmin(fmax(offset, 0), 1));
-        }
+    if (auto new_selectable = find_new_selectable(selectables, jid, button, action)) {
+        auto pos = new_selectable->absolute_position().y() - container()->absolute_position().y();
+        float offset = (pos + new_selectable->height() - m_scroll->height() / 1.5) / (float)(m_container->height() - m_scroll->height());
+        m_scroll->set_scroll(fmin(fmax(offset, 0), 1));
     }
     return false;
 }
