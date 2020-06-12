@@ -102,10 +102,6 @@ void Settings::load() {
                 }
             }
             
-            if (json_t* swap_ab_xy = json_object_get(settings, "swap_ab_xy")) {
-                m_swap_ab_xy = json_typeof(swap_ab_xy) == JSON_TRUE;
-            }
-            
             if (json_t* click_by_tap = json_object_get(settings, "click_by_tap")) {
                 m_click_by_tap = json_typeof(click_by_tap) == JSON_TRUE;
             }
@@ -150,7 +146,6 @@ void Settings::save() {
             json_object_set(settings, "video_codec", json_integer(m_video_codec));
             json_object_set(settings, "bitrate", json_integer(m_bitrate));
             json_object_set(settings, "decoder_threads", json_integer(m_decoder_threads));
-            json_object_set(settings, "swap_ab_xy", m_swap_ab_xy ? json_true() : json_false());
             json_object_set(settings, "click_by_tap", m_click_by_tap ? json_true() : json_false());
             json_object_set(settings, "sops", m_sops ? json_true() : json_false());
             json_object_set(settings, "play_audio", m_play_audio ? json_true() : json_false());

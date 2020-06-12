@@ -72,14 +72,6 @@ public:
         m_bitrate = bitrate;
     }
     
-    bool swap_ab_xy() const {
-        return m_swap_ab_xy;
-    }
-    
-    void set_swap_ab_xy(bool swap_ab_xy) {
-        m_swap_ab_xy = swap_ab_xy;
-    }
-    
     bool click_by_tap() const {
         return m_click_by_tap;
     }
@@ -137,7 +129,6 @@ private:
     int m_fps = 60;
     VideoCodec m_video_codec = H264;
     int m_bitrate = 10000;
-    bool m_swap_ab_xy = true;
     bool m_click_by_tap = false;
     int m_decoder_threads = 4;
     bool m_sops = true;

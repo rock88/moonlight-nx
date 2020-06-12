@@ -107,12 +107,6 @@ SettingsWindow::SettingsWindow(nanogui::Widget* parent): ContentWindow(parent, "
     });
     
     left_container->add<Label>("Input Settings");
-    auto swap_input = left_container->add<CheckBox>("Swap A/B and X/Y");
-    swap_input->set_checked(Settings::settings()->swap_ab_xy());
-    swap_input->set_callback([](auto value) {
-        Settings::settings()->set_swap_ab_xy(value);
-    });
-    
     auto click_by_tap = left_container->add<CheckBox>("Mouse click by tap on screen");
     click_by_tap->set_checked(Settings::settings()->click_by_tap());
     click_by_tap->set_callback([](auto value) {
