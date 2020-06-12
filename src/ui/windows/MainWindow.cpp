@@ -6,7 +6,6 @@
 #include "LoadingOverlay.hpp"
 #include "AppListWindow.hpp"
 #include "SettingsWindow.hpp"
-#include "LogsWindow.hpp"
 #include "Settings.hpp"
 #include "InputSettingsWindow.hpp"
 #include "nanovg.h"
@@ -24,9 +23,6 @@ MainWindow::MainWindow(Widget *parent): ContentWindow(parent, "Moonlight") {
     });
     set_right_title_button(FA_COG, [this] {
         push<SettingsWindow>();
-    });
-    set_right_title_button(FA_FILE_ALT, [this] {
-        push<LogsWindow>();
     });
 }
 

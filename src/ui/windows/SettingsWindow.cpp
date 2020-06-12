@@ -1,5 +1,6 @@
 #include "SettingsWindow.hpp"
 #include "Settings.hpp"
+#include "LogsWindow.hpp"
 
 using namespace nanogui;
 
@@ -115,7 +116,7 @@ SettingsWindow::SettingsWindow(nanogui::Widget* parent): ContentWindow(parent, "
     
     auto right_container = container()->add<Widget>();
     right_container->set_layout(new GroupLayout(30, 10, 30, 10));
-    right_container->set_fixed_width(580);
+    right_container->set_fixed_width(container_width + 90);
     
     right_container->add<Label>("Decoder Threads");
     std::vector<std::string> decoder_threads = { "0 (No use threads)", "2", "3", "4" };
@@ -158,6 +159,12 @@ SettingsWindow::SettingsWindow(nanogui::Widget* parent): ContentWindow(parent, "
     write_log->set_checked(Settings::settings()->write_log());
     write_log->set_callback([](auto value) {
         Settings::settings()->set_write_log(value);
+    });
+    
+    auto log_button = right_container->add<Button>("Show logs");
+    log_button->set_fixed_width(component_width);
+    log_button->set_callback([this] {
+        push<LogsWindow>();
     });
 }
 
