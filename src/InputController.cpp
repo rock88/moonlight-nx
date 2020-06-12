@@ -266,6 +266,10 @@ void InputController::send_to_stream() {
     unsigned char rightStickX = mapped_gamepad.axes[GLFW_GAMEPAD_AXIS_RIGHT_X] * 0x7FFF;
     unsigned char rightStickY = 0xFFFF - mapped_gamepad.axes[GLFW_GAMEPAD_AXIS_RIGHT_Y] * 0x7FFF;
     
+    if (GamepadMapper::mapper()->gamepad_combo_is_enabled(glfw_gamepad_state, GamepadComboGuide)) {
+        buttonFlags |= SPECIAL_FLAG;
+    }
+    
     #define SET_GAME_PAD_STATE(LIMELIGHT_KEY, GLFW_GAMEPAD_BUTTON) \
         mapped_gamepad.buttons[GLFW_GAMEPAD_BUTTON] ? (buttonFlags |= LIMELIGHT_KEY) : (buttonFlags &= ~LIMELIGHT_KEY);
     
