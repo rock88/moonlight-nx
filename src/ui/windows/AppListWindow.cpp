@@ -2,13 +2,14 @@
 #include "LoadingOverlay.hpp"
 #include "AppButton.hpp"
 #include "StreamWindow.hpp"
+#include "GamepadMapper.hpp"
 
 using namespace nanogui;
 
 AppListWindow::AppListWindow(Widget *parent, const std::string &address): ContentWindow(parent, "Applications"), m_address(address) {
     set_left_pop_button();
     
-    container()->set_layout(new GridLayout(Orientation::Horizontal, 5, Alignment::Minimum, 30, 18));
+    set_box_layout(Orientation::Vertical, Alignment::Minimum, 30, 10);
 }
 
 void AppListWindow::window_appear() {
@@ -35,10 +36,16 @@ void AppListWindow::reload() {
                 loader->dispose();
                 
                 if (result.isSuccess()) {
+                    container()->add<Label>("* For adjust Gamepad buttons and Combo keys for a specific game, select this game by a Dpad and press Y");
+                    container()->add<Widget>()->set_fixed_height(6);
+                    
+                    auto button_container = container()->add<Widget>();
+                    button_container->set_layout(new GridLayout(Orientation::Horizontal, 5, Alignment::Minimum, 0, 18));
+                    
                     PAPP_LIST app = result.value();
                     
                     while (app != NULL) {
-                        auto button = container()->add<AppButton>(m_address, *app, currentGame);
+                        auto button = button_container->add<AppButton>(m_address, *app, currentGame);
                         button->set_callback([this, app] {
                             run_game(app->id);
                         });
@@ -57,6 +64,7 @@ void AppListWindow::reload() {
 }
 
 void AppListWindow::run_game(int app_id) {
+    GamepadMapper::mapper()->load_gamepad_map(app_id);
     push<StreamWindow>(m_address, app_id);
 }
 

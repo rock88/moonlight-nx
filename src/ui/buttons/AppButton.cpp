@@ -2,7 +2,9 @@
 #include "Application.hpp"
 #include "GameStreamClient.hpp"
 #include "BoxArtManager.hpp"
+#include "InputSettingsWindow.hpp"
 #include "nanovg.h"
+#include <nanogui/opengl.h>
 
 using namespace nanogui;
 
@@ -30,6 +32,16 @@ AppButton::AppButton(Widget* parent, const std::string &address, APP_LIST app, i
             dec_ref();
         });
     }
+}
+
+bool AppButton::gamepad_button_event(int jid, int button, int action) {
+    if (action && button == NANOGUI_GAMEPAD_BUTTON_Y) {
+        if (auto application = dynamic_cast<Application *>(screen())) {
+            application->push_window<InputSettingsWindow>(m_app.id, m_app.name);
+        }
+        return true;
+    }
+    return Button::gamepad_button_event(jid, button, action);
 }
 
 void AppButton::draw(NVGcontext *ctx) {

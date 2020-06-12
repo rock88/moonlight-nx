@@ -6,6 +6,8 @@ class AppButton: public nanogui::Button {
 public:
     AppButton(Widget* parent, const std::string &address, APP_LIST app, int current_game);
     
+    bool gamepad_button_event(int jid, int button, int action) override;
+    
     void draw(NVGcontext *ctx) override;
     
 private:
