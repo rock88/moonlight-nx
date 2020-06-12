@@ -1,7 +1,8 @@
 #include "GamepadMapper.hpp"
+#include "Settings.hpp"
+#include <jansson.h>
 #include <GLFW/glfw3.h>
 #include <nanogui/opengl.h>
-#include <map>
 #include <vector>
 
 static int gamepad_button_to_nanogui_button(GamepadButtons button) {
@@ -25,31 +26,7 @@ static int gamepad_button_to_nanogui_button(GamepadButtons button) {
 }
 
 GamepadMapper::GamepadMapper() {
-    load_defaults();
-}
-
-bool GamepadMapper::gamepad_combo_is_enabled(GLFWgamepadstate& gamepad, GamepadCombo combo) {
-    if (m_combo.find(combo) != m_combo.end()) {
-        bool result = true;
-        
-        for (int i = 0; i < 3; i++) {
-            GamepadButtons button = m_combo[combo][i];
-            
-            if (button == GamepadButtonUnknown) {
-                continue;
-            }
-            
-            if (button < GamepadButtonZL) {
-                result = result && gamepad.buttons[gamepad_button_to_nanogui_button(button)];
-            } else if (button == GamepadButtonZL) {
-                result = result && (gamepad.axes[NANOGUI_GAMEPAD_AXIS_LEFT_TRIGGER] == 1);
-            } else if (button == GamepadButtonZL) {
-                result = result && (gamepad.axes[NANOGUI_GAMEPAD_AXIS_RIGHT_TRIGGER] == 1);
-            }
-        }
-        return result;
-    }
-    return false;
+    load_defaults_gamepad_map();
 }
 
 GLFWgamepadstate GamepadMapper::map(GLFWgamepadstate &gamepad) {
@@ -108,7 +85,7 @@ GamepadButtons GamepadMapper::convert_nanogui_analog_axis(int axis) {
     }
 }
 
-void GamepadMapper::map_button(GamepadButtons origin_button, GamepadButtons new_button) {
+void GamepadMapper::set_mapped_button(GamepadButtons origin_button, GamepadButtons new_button) {
     m_gamepad_map[origin_button] = new_button;
 }
 
@@ -122,6 +99,30 @@ void GamepadMapper::set_combo_buttons(std::array<GamepadButtons, 3> buttons, Gam
 
 std::array<GamepadButtons, 3> GamepadMapper::combo_buttons(GamepadCombo combo) {
     return m_combo[combo];
+}
+
+bool GamepadMapper::gamepad_combo_is_enabled(GLFWgamepadstate& gamepad, GamepadCombo combo) {
+    if (m_combo.find(combo) != m_combo.end()) {
+        bool result = true;
+        
+        for (int i = 0; i < 3; i++) {
+            GamepadButtons button = m_combo[combo][i];
+            
+            if (button == GamepadButtonUnknown) {
+                continue;
+            }
+            
+            if (button < GamepadButtonZL) {
+                result = result && gamepad.buttons[gamepad_button_to_nanogui_button(button)];
+            } else if (button == GamepadButtonZL) {
+                result = result && (gamepad.axes[NANOGUI_GAMEPAD_AXIS_LEFT_TRIGGER] == 1);
+            } else if (button == GamepadButtonZL) {
+                result = result && (gamepad.axes[NANOGUI_GAMEPAD_AXIS_RIGHT_TRIGGER] == 1);
+            }
+        }
+        return result;
+    }
+    return false;
 }
 
 std::string GamepadMapper::button_label(GamepadButtons button, bool use_switch_label) {
@@ -167,15 +168,7 @@ std::string GamepadMapper::combo_label(GamepadCombo combo) {
     return "N/A";
 }
 
-void GamepadMapper::load_gamepad_map(int app_id) {
-    // TODO: Load from JSON
-}
-
-void GamepadMapper::save_gamepad_map(int app_id) {
-    // TODO: Save to JSON
-}
-
-void GamepadMapper::load_defaults() {
+void GamepadMapper::load_defaults_gamepad_map() {
     for (int i = 0; i < GamepadButtonLast; i++) {
         m_gamepad_map[i] = (GamepadButtons)i;
     }
@@ -188,4 +181,79 @@ void GamepadMapper::load_defaults() {
     m_combo[GamepadComboEscape] = {GamepadButtonL, GamepadButtonR, GamepadButtonRight};
     m_combo[GamepadComboShowStats] = {GamepadButtonZL, GamepadButtonZR, GamepadButtonLeft};
     m_combo[GamepadComboHideStats] = {GamepadButtonZL, GamepadButtonZR, GamepadButtonRight};
+}
+
+void GamepadMapper::load_gamepad_map(int app_id) {
+    load_defaults_gamepad_map();
+    
+    json_t* root = json_load_file(Settings::settings()->gamepad_mapping_path().c_str(), 0, NULL);
+    
+    if (root != NULL) {
+        if (json_t* mapping = json_object_get(root, std::to_string(app_id).c_str())) {
+            if (json_t* buttons = json_object_get(mapping, "buttons")) {
+                size_t size = std::min(json_array_size(buttons), (size_t)GamepadButtonLast);
+                
+                for (size_t i = 0; i < size; i++) {
+                    if (json_t* button = json_array_get(buttons, i)) {
+                        if (json_typeof(button) == JSON_INTEGER) {
+                            m_gamepad_map[i] = (GamepadButtons)json_integer_value(button);
+                        }
+                    }
+                }
+            }
+            
+            if (json_t* combo = json_object_get(mapping, "combo")) {
+                for (int i = 0; i < combo_count(); i++) {
+                    if (json_t* buttons = json_object_get(combo, combo_label((GamepadCombo)i).c_str())) {
+                        size_t size = std::min(json_array_size(buttons), (size_t)3);
+                        
+                        for (int j = 0; j < size; j++) {
+                            if (json_t* button = json_array_get(buttons, j)) {
+                                if (json_typeof(button) == JSON_INTEGER) {
+                                    m_combo[(GamepadCombo)i][(GamepadButtons)j] = (GamepadButtons)json_integer_value(button);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        
+        json_decref(root);
+    }
+}
+
+void GamepadMapper::save_gamepad_map(int app_id) {
+    json_t* root = json_load_file(Settings::settings()->gamepad_mapping_path().c_str(), 0, NULL);
+    
+    if (root == NULL) {
+        root = json_object();
+    }
+    
+    if (root) {
+        if (json_t* mapping = json_object()) {
+            if (json_t* buttons = json_array()) {
+                for (int i = 0; i < GamepadButtonLast; i++) {
+                    json_array_append(buttons, json_integer(m_gamepad_map[i]));
+                }
+                json_object_set(mapping, "buttons", buttons);
+            }
+            json_object_set(root, std::to_string(app_id).c_str(), mapping);
+            
+            if (json_t* combo = json_object()) {
+                for (int i = 0; i < combo_count(); i++) {
+                    if (json_t* buttons = json_array()) {
+                        for (auto button: combo_buttons((GamepadCombo)i)) {
+                            json_array_append(buttons, json_integer(button));
+                        }
+                        json_object_set(combo, combo_label((GamepadCombo)i).c_str(), buttons);
+                    }
+                }
+                json_object_set(mapping, "combo", combo);
+            }
+        }
+        
+        json_dump_file(root, Settings::settings()->gamepad_mapping_path().c_str(), JSON_INDENT(4));
+        json_decref(root);
+    }
 }

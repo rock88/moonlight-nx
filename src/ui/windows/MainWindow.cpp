@@ -20,7 +20,7 @@ MainWindow::MainWindow(Widget *parent): ContentWindow(parent, "Moonlight") {
         this->reload();
     });
     set_right_title_button(FA_GAMEPAD, [this] {
-        push<InputSettingsWindow>();
+        push<InputSettingsWindow>(0, "Default");
     });
     set_right_title_button(FA_COG, [this] {
         push<SettingsWindow>();

@@ -29,6 +29,10 @@ public:
         return m_log_path;
     }
     
+    std::string gamepad_mapping_path() const {
+        return m_gamepad_mapping_path;
+    }
+    
     std::vector<std::string> hosts() const {
         return m_hosts;
     }
@@ -126,6 +130,7 @@ private:
     std::string m_key_dir;
     std::string m_boxart_dir;
     std::string m_log_path;
+    std::string m_gamepad_mapping_path;
     
     std::vector<std::string> m_hosts;
     int m_resolution = 720;

@@ -125,11 +125,12 @@ private:
 
 static GamepadInputOverlay* overlay = nullptr;
 
-InputSettingsWindow::InputSettingsWindow(Widget* parent): ContentWindow(parent, "Input Settings") {
+InputSettingsWindow::InputSettingsWindow(Widget* parent, int app_id, std::string app_name): ContentWindow(parent, "Input Settings (" + app_name + ")") {
+    m_app_id = app_id;
+    GamepadMapper::mapper()->load_gamepad_map(m_app_id);
+    
     set_left_pop_button();
-    
     set_box_layout(Orientation::Vertical, Alignment::Minimum);
-    
     reload_gamepad_input_settings();
 }
 
@@ -144,11 +145,15 @@ void InputSettingsWindow::reload_gamepad_input_settings() {
     clean_container();
     clean_right_title_buttons();
     
+    set_right_title_button(FA_UNDO, [this] {
+        reset();
+        reload_gamepad_input_settings();
+    });
     set_right_title_button(FA_KEYBOARD, [this] {
         reload_combo_settings();
     });
     
-    container()->add<Label>("Gamepad mapping (X360 -> Switch)");
+    container()->add<Label>("Gamepad mapping (Switch -> X360)");
     
     auto content = container()->add<Widget>();
     content->set_layout(new BoxLayout(Orientation::Horizontal, Alignment::Minimum, 30, 10));
@@ -180,6 +185,10 @@ void InputSettingsWindow::reload_combo_settings() {
     clean_container();
     clean_right_title_buttons();
     
+    set_right_title_button(FA_UNDO, [this] {
+        reset();
+        reload_combo_settings();
+    });
     set_right_title_button(FA_GAMEPAD, [this] {
         reload_gamepad_input_settings();
     });
@@ -219,6 +228,11 @@ void InputSettingsWindow::reload_combo_settings() {
     perform_layout();
 }
 
+void InputSettingsWindow::reset() {
+    GamepadMapper::mapper()->load_defaults_gamepad_map();
+    GamepadMapper::mapper()->save_gamepad_map(m_app_id);
+}
+
 bool InputSettingsWindow::mouse_button_event(const Vector2i &p, int button, bool down, int modifiers) {
     if (overlay) {
         return false;
@@ -240,13 +254,17 @@ bool InputSettingsWindow::gamepad_analog_event(int jid, int axis, float value) {
     return ContentWindow::gamepad_button_event(jid, axis, value);
 }
 
+void InputSettingsWindow::window_disappear() {
+    GamepadMapper::mapper()->save_gamepad_map(m_app_id);
+}
+
 void InputSettingsWindow::assign_button(GamepadButtons button) {
     overlay = screen()->add<GamepadInputOverlay>("Press button for reassign \"" + GamepadMapper::mapper()->button_label(button, false) + "\"");
     overlay->set_completion([this, button](auto result) {
         overlay->dispose();
         overlay = NULL;
         
-        GamepadMapper::mapper()->map_button(button, result[0]);
+        GamepadMapper::mapper()->set_mapped_button(button, result[0]);
         reload_gamepad_input_settings();
     });
 }

@@ -39,6 +39,7 @@ void Settings::set_working_dir(std::string working_dir) {
     m_key_dir = working_dir + "/key";
     m_boxart_dir = working_dir + "/boxart";
     m_log_path = working_dir + "/log.txt";
+    m_gamepad_mapping_path = working_dir + "/gamepad_mapping.json";
     
     mkdirtree(m_working_dir.c_str());
     mkdirtree(m_key_dir.c_str());

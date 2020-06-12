@@ -45,21 +45,22 @@ public:
         return &mapper;
     }
     
+    void load_defaults_gamepad_map();
     void load_gamepad_map(int app_id);
     void save_gamepad_map(int app_id);
-    
-    bool gamepad_combo_is_enabled(GLFWgamepadstate& gamepad, GamepadCombo combo);
     
     GLFWgamepadstate map(GLFWgamepadstate& gamepad);
     
     GamepadButtons convert_nanogui_gamepad_button(int button);
     GamepadButtons convert_nanogui_analog_axis(int axis);
     
-    void map_button(GamepadButtons origin_button, GamepadButtons new_button);
+    void set_mapped_button(GamepadButtons origin_button, GamepadButtons new_button);
     GamepadButtons mapped_button(int origin_button);
     
     void set_combo_buttons(std::array<GamepadButtons, 3> buttons, GamepadCombo combo);
     std::array<GamepadButtons, 3> combo_buttons(GamepadCombo combo);
+    
+    bool gamepad_combo_is_enabled(GLFWgamepadstate& gamepad, GamepadCombo combo);
     
     int button_count() const {
         return m_button_count;
@@ -74,8 +75,6 @@ public:
     
 private:
     GamepadMapper();
-    
-    void load_defaults();
     
     const int m_button_count = GamepadButtonLast;
     const int m_combo_count = GamepadComboLast;
