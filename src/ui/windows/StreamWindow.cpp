@@ -26,7 +26,7 @@ StreamWindow::StreamWindow(Widget *parent, const std::string &address, int app_i
     m_session->set_audio_renderer(new DebugFileRecorderAudioRenderer(false));
     #endif
     
-    m_loader = add<LoadingOverlay>();
+    m_loader = add<LoadingOverlay>("Starting...");
     
     inc_ref();
     m_session->start([this](auto result) {
@@ -124,15 +124,15 @@ void StreamWindow::draw(NVGcontext *ctx) {
     }
     
     // TODO: Get out of here...
-    if (GAME_PAD_COMBO(DOWN_FLAG)) {
+    if (InputController::controller()->gamepad_combo_is_enabled(GamepadComboExitAndClose)) {
         async([this] { this->terminate(true); });
-    } else if (GAME_PAD_COMBO(UP_FLAG)) {
+    } else if (InputController::controller()->gamepad_combo_is_enabled(GamepadComboExit)) {
         async([this] { this->terminate(false); });
     }
     
-    if (!m_draw_stats && GAME_PAD_COMBO_R(LEFT_FLAG)) {
+    if (!m_draw_stats && InputController::controller()->gamepad_combo_is_enabled(GamepadComboShowStats)) {
         m_draw_stats = true;
-    } else if (m_draw_stats && GAME_PAD_COMBO_R(RIGHT_FLAG)) {
+    } else if (m_draw_stats && InputController::controller()->gamepad_combo_is_enabled(GamepadComboHideStats)) {
         m_draw_stats = false;
     }
     

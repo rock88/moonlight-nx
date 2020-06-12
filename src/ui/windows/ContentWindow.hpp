@@ -56,8 +56,8 @@ public:
     void perform_layout(NVGcontext *ctx) override;
     
     void perform_layout() {
-        screen()->perform_layout();
-        screen()->update_focus(NULL);
+        application()->perform_layout();
+        application()->update_focus(NULL);
     }
     
     void set_box_layout(nanogui::Orientation orientation, nanogui::Alignment alignment = nanogui::Alignment::Middle, int margin = 30, int spacing = 10) {

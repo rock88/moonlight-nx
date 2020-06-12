@@ -90,7 +90,7 @@ int main(int argc, const char * argv[]) {
         
         #ifdef __SWITCH__
         glfwGetGamepadState(GLFW_JOYSTICK_1, &glfw_gamepad_state);
-        InputController::controller()->handle_gamepad_event(&glfw_gamepad_state);
+        InputController::controller()->handle_gamepad_event(glfw_gamepad_state);
         #endif
         
         int width, height;

@@ -1,26 +1,7 @@
-#include <stdio.h>
-#include <stdint.h>
+#include "GamepadMapper.hpp"
 #pragma once
 
 struct GLFWgamepadstate;
-
-struct GamePadState {
-    short buttonFlags;
-    unsigned char leftTrigger;
-    unsigned char rightTrigger;
-    short leftStickX;
-    short leftStickY;
-    short rightStickX;
-    short rightStickY;
-};
-
-extern struct GamePadState game_pad_state;
-
-#define GAME_PAD_COMBO(KEY) \
-    ((game_pad_state.buttonFlags & LB_FLAG) && (game_pad_state.buttonFlags & RB_FLAG) && (game_pad_state.buttonFlags & KEY))
-
-#define GAME_PAD_COMBO_R(KEY) \
-    (game_pad_state.leftTrigger && game_pad_state.rightTrigger && (game_pad_state.buttonFlags & KEY))
 
 class InputController {
 public:
@@ -32,12 +13,17 @@ public:
     void handle_cursor_event(int width, int height, int x, int y);
     void handle_mouse_event(int button, int action, int modifiers);
     void handle_keyboard_event(int key, int scancode, int action, int modifiers);
-    void handle_gamepad_event(GLFWgamepadstate* gamepad);
+    void handle_gamepad_event(GLFWgamepadstate& gamepad);
     void handle_rumple(unsigned short low_freq_motor, unsigned short high_freq_motor);
     void stop_rumple();
+    
+    bool gamepad_combo_is_enabled(GamepadCombo combo);
     
     void send_to_stream();
     
 private:
     InputController();
+    
+    bool gamepad_button_is_enabled(int button);
+    bool gamepad_trigger_is_enabled(int trigger);
 };

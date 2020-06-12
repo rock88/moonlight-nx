@@ -85,6 +85,7 @@
 		3678EF732476D9DA0097345D /* DebugFileRecorderAudioRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3678EF712476D9DA0097345D /* DebugFileRecorderAudioRenderer.cpp */; };
 		367CD95A245DE25F00A95738 /* StreamWindow.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 367CD958245DE25F00A95738 /* StreamWindow.cpp */; };
 		367D2D7424829A0800A946F4 /* LogsWindow.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 367D2D7224829A0800A946F4 /* LogsWindow.cpp */; };
+		3689D6DD249154F90008CB75 /* GamepadMapper.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3689D6DB249154F90008CB75 /* GamepadMapper.cpp */; };
 		36A0C0372461DBA30083289C /* AddHostButton.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 36A0C0352461DBA30083289C /* AddHostButton.cpp */; };
 		36A0C03A2461E4C00083289C /* SettingsWindow.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 36A0C0382461E4C00083289C /* SettingsWindow.cpp */; };
 		36A0C03D2461F03C0083289C /* Settings.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 36A0C03B2461F03C0083289C /* Settings.cpp */; };
@@ -98,6 +99,7 @@
 		36DBDE9C2450BCD90057C8D3 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 36DBDE9B2450BCD90057C8D3 /* CoreGraphics.framework */; };
 		36DBDE9E2450BCF00057C8D3 /* IOKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 36DBDE9D2450BCF00057C8D3 /* IOKit.framework */; };
 		36DBDEA02450BCF80057C8D3 /* AppKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 36DBDE9F2450BCF70057C8D3 /* AppKit.framework */; };
+		36DDACF824929919001133D1 /* InputSettingsWindow.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 36DDACF624929919001133D1 /* InputSettingsWindow.cpp */; };
 		36DFE0CD2459FA3F00FC51CE /* nanogui_resources.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 36DFE0CB2459FA3F00FC51CE /* nanogui_resources.cpp */; };
 		36DFE0CE2459FAB100FC51CE /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 36DBDEA22450C2640057C8D3 /* OpenGL.framework */; };
 		36E63790247010C70032F5FB /* Data.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 36E6378E247010C70032F5FB /* Data.cpp */; };
@@ -284,6 +286,8 @@
 		367D2D7224829A0800A946F4 /* LogsWindow.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = LogsWindow.cpp; sourceTree = "<group>"; };
 		367D2D7324829A0800A946F4 /* LogsWindow.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = LogsWindow.hpp; sourceTree = "<group>"; };
 		3689D6D0248EBEFA0008CB75 /* build.yml */ = {isa = PBXFileReference; lastKnownFileType = text.yaml; name = build.yml; path = .github/workflows/build.yml; sourceTree = "<group>"; };
+		3689D6DB249154F90008CB75 /* GamepadMapper.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = GamepadMapper.cpp; sourceTree = "<group>"; };
+		3689D6DC249154F90008CB75 /* GamepadMapper.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = GamepadMapper.hpp; sourceTree = "<group>"; };
 		36A0C0352461DBA30083289C /* AddHostButton.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = AddHostButton.cpp; sourceTree = "<group>"; };
 		36A0C0362461DBA30083289C /* AddHostButton.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = AddHostButton.hpp; sourceTree = "<group>"; };
 		36A0C0382461E4C00083289C /* SettingsWindow.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = SettingsWindow.cpp; sourceTree = "<group>"; };
@@ -310,6 +314,8 @@
 		36DBDE9F2450BCF70057C8D3 /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = System/Library/Frameworks/AppKit.framework; sourceTree = SDKROOT; };
 		36DBDEA22450C2640057C8D3 /* OpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = System/Library/Frameworks/OpenGL.framework; sourceTree = SDKROOT; };
 		36DBDEA42450C2850057C8D3 /* Metal.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Metal.framework; path = System/Library/Frameworks/Metal.framework; sourceTree = SDKROOT; };
+		36DDACF624929919001133D1 /* InputSettingsWindow.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = InputSettingsWindow.cpp; sourceTree = "<group>"; };
+		36DDACF724929919001133D1 /* InputSettingsWindow.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = InputSettingsWindow.hpp; sourceTree = "<group>"; };
 		36DFDCF22459F7A200FC51CE /* Application.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Application.cpp; sourceTree = "<group>"; };
 		36DFDCF32459F7A200FC51CE /* Application.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Application.hpp; sourceTree = "<group>"; };
 		36DFE0CB2459FA3F00FC51CE /* nanogui_resources.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = nanogui_resources.cpp; sourceTree = "<group>"; };
@@ -369,6 +375,8 @@
 				367CD959245DE25F00A95738 /* StreamWindow.hpp */,
 				36A0C0382461E4C00083289C /* SettingsWindow.cpp */,
 				36A0C0392461E4C00083289C /* SettingsWindow.hpp */,
+				36DDACF624929919001133D1 /* InputSettingsWindow.cpp */,
+				36DDACF724929919001133D1 /* InputSettingsWindow.hpp */,
 				367D2D7224829A0800A946F4 /* LogsWindow.cpp */,
 				367D2D7324829A0800A946F4 /* LogsWindow.hpp */,
 			);
@@ -631,6 +639,8 @@
 				36A0C03C2461F03C0083289C /* Settings.hpp */,
 				3603E93A246316400051287D /* InputController.cpp */,
 				3603E93B246316400051287D /* InputController.hpp */,
+				3689D6DB249154F90008CB75 /* GamepadMapper.cpp */,
+				3689D6DC249154F90008CB75 /* GamepadMapper.hpp */,
 				3658241124819E56008B8758 /* Logger.cpp */,
 				3658241224819E56008B8758 /* Logger.hpp */,
 				36BFCCF72479725900245D40 /* main.cpp */,
@@ -872,6 +882,7 @@
 				36BFCCF12479723E00245D40 /* xml.cpp in Sources */,
 				3652F065245C292B001FABF3 /* list.c in Sources */,
 				36DFE0CD2459FA3F00FC51CE /* nanogui_resources.cpp in Sources */,
+				36DDACF824929919001133D1 /* InputSettingsWindow.cpp in Sources */,
 				3652F06A245C292B001FABF3 /* protocol.c in Sources */,
 				3652EFFC245B6434001FABF3 /* MainWindow.cpp in Sources */,
 				3652EFD3245B3B00001FABF3 /* button.cpp in Sources */,
@@ -883,6 +894,7 @@
 				36A0C0372461DBA30083289C /* AddHostButton.cpp in Sources */,
 				3652F06E245C292B001FABF3 /* rs.c in Sources */,
 				3652EFD1245B3B00001FABF3 /* colorpicker.cpp in Sources */,
+				3689D6DD249154F90008CB75 /* GamepadMapper.cpp in Sources */,
 				3652F066245C292B001FABF3 /* compress.c in Sources */,
 				3652F07D245C292B001FABF3 /* Misc.c in Sources */,
 				3652F070245C292B001FABF3 /* SimpleStun.c in Sources */,

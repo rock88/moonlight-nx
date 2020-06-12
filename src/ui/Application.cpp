@@ -96,3 +96,8 @@ void Application::gamepad_analog_callback_event(int jid, int axis, float value) 
         m_windows.back()->gamepad_analog_event(jid, axis, value);
     }
 }
+
+void Application::perform_layout() {
+    m_focus_path.clear();
+    Screen::perform_layout();
+}

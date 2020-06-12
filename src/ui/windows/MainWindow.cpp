@@ -8,6 +8,7 @@
 #include "SettingsWindow.hpp"
 #include "LogsWindow.hpp"
 #include "Settings.hpp"
+#include "InputSettingsWindow.hpp"
 #include "nanovg.h"
 
 using namespace nanogui;
@@ -17,6 +18,9 @@ MainWindow::MainWindow(Widget *parent): ContentWindow(parent, "Moonlight") {
     
     set_right_title_button(FA_SYNC, [this] {
         this->reload();
+    });
+    set_right_title_button(FA_GAMEPAD, [this] {
+        push<InputSettingsWindow>();
     });
     set_right_title_button(FA_COG, [this] {
         push<SettingsWindow>();
