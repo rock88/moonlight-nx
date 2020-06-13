@@ -1049,7 +1049,7 @@
 					"-DHAS_FCNTL",
 					"-DHAVE_PULSE",
 					"-DUSE_MBEDTLS_CRYPTO",
-					"-DMOONLIGHT_VERSION=\\\"1.0.9\\\"",
+					"-DMOONLIGHT_VERSION=\\\"1.1.0\\\"",
 				);
 				OTHER_LDFLAGS = (
 					"-lglfw3",
@@ -1140,7 +1140,7 @@
 					"-DHAS_FCNTL",
 					"-DHAVE_PULSE",
 					"-DUSE_MBEDTLS_CRYPTO",
-					"-DMOONLIGHT_VERSION=\\\"1.0.9\\\"",
+					"-DMOONLIGHT_VERSION=\\\"1.1.0\\\"",
 				);
 				OTHER_LDFLAGS = (
 					"-lglfw3",
