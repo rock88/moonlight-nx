@@ -163,7 +163,6 @@ bool InputController::gamepad_trigger_is_enabled(int trigger) {
 void InputController::send_to_stream() {
     // Mouse
     static bool is_pressed = false, is_released = false;
-    static int mouse_x = mouse_state.x, mouse_y = mouse_state.y;
     static int last_mouse_x = 0, last_mouse_y = 0;
     static int last_send_mouse_x = 0, last_send_mouse_y = 0;
     
@@ -176,10 +175,10 @@ void InputController::send_to_stream() {
     }
     
     if (Settings::settings()->click_by_tap()) {
-        if (last_send_mouse_x != mouse_state.x || last_send_mouse_y != mouse_state.x) {
+        if (last_send_mouse_x != mouse_state.x || last_send_mouse_y != mouse_state.y) {
+            LiSendMousePositionEvent(mouse_state.x, mouse_state.y, m_width, m_height);
             last_send_mouse_x = mouse_state.x;
             last_send_mouse_y = mouse_state.y;
-            LiSendMousePositionEvent(mouse_state.x, mouse_state.y, m_width, m_height);
         }
         
         if (gamepad_button_is_enabled(NANOGUI_GAMEPAD_BUTTON_RIGHT_BUMPER) || gamepad_trigger_is_enabled(NANOGUI_GAMEPAD_AXIS_RIGHT_TRIGGER)) {
@@ -203,13 +202,13 @@ void InputController::send_to_stream() {
         bool move_mouse = !gamepad_trigger_is_enabled(NANOGUI_GAMEPAD_AXIS_LEFT_TRIGGER) && !gamepad_trigger_is_enabled(NANOGUI_GAMEPAD_AXIS_RIGHT_TRIGGER);
         
         if (move_mouse) {
-            mouse_x = std::min(std::max(mouse_x + mouse_state.x - last_mouse_x, 0), m_width);
-            mouse_y = std::min(std::max(mouse_y + mouse_state.y - last_mouse_y, 0), m_height);
+            int relative_mouse_x = mouse_state.x - last_mouse_x;
+            int relative_mouse_y = mouse_state.y - last_mouse_y;
             
-            if (mouse_x != last_send_mouse_x || mouse_y != last_send_mouse_y) {
-                LiSendMousePositionEvent(mouse_x, mouse_y, m_width, m_height);
-                last_send_mouse_x = mouse_x;
-                last_send_mouse_y = mouse_y;
+            if (relative_mouse_x != last_send_mouse_x || relative_mouse_y != last_send_mouse_y) {
+                LiSendMouseMoveEvent(relative_mouse_x, relative_mouse_y);
+                last_send_mouse_x = relative_mouse_x;
+                last_send_mouse_y = relative_mouse_y;
             }
         }
         
