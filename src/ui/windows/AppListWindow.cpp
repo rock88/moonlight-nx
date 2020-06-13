@@ -36,7 +36,7 @@ void AppListWindow::reload(std::function<void()> callback) {
                 loader->dispose();
                 
                 if (result.isSuccess()) {
-                    container()->add<Label>("* For adjust Gamepad buttons and Combo keys for a specific game, select this game by a Dpad and press Y");
+                    container()->add<Label>("* For adjust Gamepad buttons and Combo keys for a specific game, select this game with a Dpad and press Y");
                     container()->add<Widget>()->set_fixed_height(6);
                     
                     auto button_container = container()->add<Widget>();
