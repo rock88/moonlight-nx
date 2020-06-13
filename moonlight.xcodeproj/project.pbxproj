@@ -323,6 +323,7 @@
 		36E6378B246FFFF30032F5FB /* CryptoManager.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = CryptoManager.hpp; sourceTree = "<group>"; };
 		36E6378E247010C70032F5FB /* Data.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Data.cpp; sourceTree = "<group>"; };
 		36E6378F247010C70032F5FB /* Data.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Data.hpp; sourceTree = "<group>"; };
+		36EB490A24954B5B0059EDB7 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		36F1646F2474736E00D70AD9 /* switch_wrapper.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = switch_wrapper.c; sourceTree = "<group>"; };
 		36F164712474736E00D70AD9 /* evp.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = evp.h; sourceTree = "<group>"; };
 		36F164722474736E00D70AD9 /* rand.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = rand.h; sourceTree = "<group>"; };
@@ -703,6 +704,7 @@
 			children = (
 				3689D6D0248EBEFA0008CB75 /* build.yml */,
 				3602C3C0245DC7E300368900 /* Makefile */,
+				36EB490A24954B5B0059EDB7 /* README.md */,
 				36B406932459F41E005BD903 /* src */,
 				36DFDCF62459F80600FC51CE /* third_party */,
 				36DBDE8F2450BB7E0057C8D3 /* Products */,
