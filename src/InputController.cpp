@@ -261,10 +261,10 @@ void InputController::send_to_stream() {
     short buttonFlags = 0;
     unsigned char leftTrigger = 0xFFFF * (mapped_gamepad.axes[GLFW_GAMEPAD_AXIS_LEFT_TRIGGER] + 1) / 2;
     unsigned char rightTrigger = 0xFFFF * (mapped_gamepad.axes[GLFW_GAMEPAD_AXIS_RIGHT_TRIGGER] + 1) / 2;
-    unsigned char leftStickX = mapped_gamepad.axes[GLFW_GAMEPAD_AXIS_LEFT_X] * 0x7FFF;
-    unsigned char leftStickY = 0xFFFF - mapped_gamepad.axes[GLFW_GAMEPAD_AXIS_LEFT_Y] * 0x7FFF;
-    unsigned char rightStickX = mapped_gamepad.axes[GLFW_GAMEPAD_AXIS_RIGHT_X] * 0x7FFF;
-    unsigned char rightStickY = 0xFFFF - mapped_gamepad.axes[GLFW_GAMEPAD_AXIS_RIGHT_Y] * 0x7FFF;
+    short leftStickX = mapped_gamepad.axes[GLFW_GAMEPAD_AXIS_LEFT_X] * 0x7FFF;
+    short leftStickY = 0xFFFF - mapped_gamepad.axes[GLFW_GAMEPAD_AXIS_LEFT_Y] * 0x7FFF;
+    short rightStickX = mapped_gamepad.axes[GLFW_GAMEPAD_AXIS_RIGHT_X] * 0x7FFF;
+    short rightStickY = 0xFFFF - mapped_gamepad.axes[GLFW_GAMEPAD_AXIS_RIGHT_Y] * 0x7FFF;
     
     if (GamepadMapper::mapper()->gamepad_combo_is_enabled(glfw_gamepad_state, GamepadComboGuide)) {
         buttonFlags |= SPECIAL_FLAG;
