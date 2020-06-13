@@ -229,7 +229,12 @@ void InputSettingsWindow::reload_combo_settings() {
 }
 
 void InputSettingsWindow::reset() {
-    GamepadMapper::mapper()->load_defaults_gamepad_map();
+    if (m_app_id == 0) {
+        GamepadMapper::mapper()->load_defaults_gamepad_map();
+    } else {
+        GamepadMapper::mapper()->load_gamepad_map(0);
+    }
+    
     GamepadMapper::mapper()->save_gamepad_map(m_app_id);
 }
 
