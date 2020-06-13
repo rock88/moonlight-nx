@@ -22,6 +22,7 @@ struct MouseState mouse_state;
 static GLFWgamepadstate glfw_gamepad_state;
 
 static int m_width = 1, m_height = 1;
+static double m_scroll_x = 0, m_scroll_y = 0;
 
 InputController::InputController() {
     #ifdef __SWITCH__
@@ -51,6 +52,12 @@ void InputController::handle_mouse_event(int button, int action, int modifiers) 
         mouse_state.is_pressed = false;
         nanogui::mouse_button_callback_event(NANOGUI_MOUSE_BUTTON_1, NANOGUI_RELEASE, 0);
     }
+}
+
+void InputController::handle_scroll(double x, double y) {
+    m_scroll_x = x;
+    m_scroll_y = y;
+    nanogui::scroll_callback_event(x, y);
 }
 
 void InputController::handle_keyboard_event(int key, int scancode, int action, int modifiers) {
@@ -232,6 +239,12 @@ void InputController::send_to_stream() {
                 LiSendMouseButtonEvent(BUTTON_ACTION_RELEASE, BUTTON_RIGHT);
             }
         }
+    }
+    
+    // Scroll
+    if (m_scroll_y != 0) {
+        LiSendHighResScrollEvent(m_scroll_y > 0 ? fmax(m_scroll_y, 1) : fmin(m_scroll_y, -1));
+        m_scroll_y = 0;
     }
     
     // Keyboard

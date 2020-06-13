@@ -12,6 +12,7 @@ public:
     
     void handle_cursor_event(int width, int height, int x, int y);
     void handle_mouse_event(int button, int action, int modifiers);
+    void handle_scroll(double x, double y);
     void handle_keyboard_event(int key, int scancode, int action, int modifiers);
     void handle_gamepad_event(GLFWgamepadstate& gamepad);
     void handle_rumple(unsigned short low_freq_motor, unsigned short high_freq_motor);

@@ -73,7 +73,7 @@ int main(int argc, const char * argv[]) {
     });
     
     glfwSetScrollCallback(window, [](GLFWwindow *w, double x, double y) {
-        nanogui::scroll_callback_event(x, y);
+        InputController::controller()->handle_scroll(x, y);
     });
     
     glfwSetKeyCallback(window, [](GLFWwindow *w, int key, int scancode, int action, int mods) {
@@ -91,6 +91,31 @@ int main(int argc, const char * argv[]) {
         #ifdef __SWITCH__
         glfwGetGamepadState(GLFW_JOYSTICK_1, &glfw_gamepad_state);
         InputController::controller()->handle_gamepad_event(glfw_gamepad_state);
+        
+        static double scroll_x = -1, scroll_y = -1;
+        
+        hidScanInput();
+        u32 touch_count = hidTouchCount();
+        
+        if (touch_count == 2) {
+            touchPosition touch1, touch2;
+            hidTouchRead(&touch1, 0);
+            hidTouchRead(&touch2, 1);
+            
+            double x = (double)(touch1.px + touch2.px) / 2;
+            double y = (double)(touch1.py + touch2.py) / 2;
+            
+            if (scroll_x != -1 && scroll_y != -1 && (scroll_x != x || scroll_y != y)) {
+                InputController::controller()->handle_scroll((scroll_x - x) / 10, (scroll_y - y) / 10);
+            }
+            
+            scroll_x = x;
+            scroll_y = y;
+        } else {
+            scroll_x = -1;
+            scroll_y = -1;
+        }
+        
         #endif
         
         int width, height;
