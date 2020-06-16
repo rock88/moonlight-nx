@@ -116,7 +116,7 @@ bool GamepadMapper::gamepad_combo_is_enabled(GLFWgamepadstate& gamepad, GamepadC
                 result = result && gamepad.buttons[gamepad_button_to_nanogui_button(button)];
             } else if (button == GamepadButtonZL) {
                 result = result && (gamepad.axes[NANOGUI_GAMEPAD_AXIS_LEFT_TRIGGER] == 1);
-            } else if (button == GamepadButtonZL) {
+            } else if (button == GamepadButtonZR) {
                 result = result && (gamepad.axes[NANOGUI_GAMEPAD_AXIS_RIGHT_TRIGGER] == 1);
             }
         }
