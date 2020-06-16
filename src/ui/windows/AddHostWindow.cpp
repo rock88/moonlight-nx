@@ -1,6 +1,7 @@
 #include "AddHostWindow.hpp"
 #include "GameStreamClient.hpp"
 #include "LoadingOverlay.hpp"
+#include "Alert.hpp"
 
 using namespace nanogui;
 
@@ -65,7 +66,7 @@ AddHostWindow::AddHostWindow(Widget *parent): ContentWindow(parent, "Add Host") 
                 if (result.isSuccess()) {
                     this->pop();
                 } else {
-                    screen()->add<MessageDialog>(MessageDialog::Type::Warning, "Error", result.error());
+                    screen()->add<Alert>("Error", result.error());
                 }
             });
         }

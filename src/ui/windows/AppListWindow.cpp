@@ -3,6 +3,7 @@
 #include "AppButton.hpp"
 #include "StreamWindow.hpp"
 #include "GamepadMapper.hpp"
+#include "Alert.hpp"
 
 using namespace nanogui;
 
@@ -57,12 +58,12 @@ void AppListWindow::reload(std::function<void()> callback) {
                         callback();
                     }
                 } else {
-                    screen()->add<MessageDialog>(MessageDialog::Type::Warning, "Error", result.error());
+                    screen()->add<Alert>("Error", result.error());
                 }
             });
         } else {
             loader->dispose();
-            screen()->add<MessageDialog>(MessageDialog::Type::Warning, "Error", result.error());
+            screen()->add<Alert>("Error", result.error());
         }
     });
 }
@@ -74,17 +75,16 @@ void AppListWindow::run_game(int app_id) {
         GamepadMapper::mapper()->load_gamepad_map(app_id);
         push<StreamWindow>(m_address, app_id);
     } else {
-        auto dialog = screen()->add<MessageDialog>(MessageDialog::Type::Information, "Info", "Another game already running", "Resume", "Close", true);
-        dialog->set_callback([this, app_id, current_app_id](auto result) {
-            if (result == 0) {
-                GamepadMapper::mapper()->load_gamepad_map(current_app_id);
-                push<StreamWindow>(m_address, current_app_id);
-            } else {
-                close_game([this, app_id] {
-                    GamepadMapper::mapper()->load_gamepad_map(app_id);
-                    push<StreamWindow>(m_address, app_id);
-                });
-            }
+        auto alert = screen()->add<Alert>("Info", "Another game already running", false);
+        alert->add_button("Resume", [this, current_app_id] {
+            GamepadMapper::mapper()->load_gamepad_map(current_app_id);
+            push<StreamWindow>(m_address, current_app_id);
+        });
+        alert->add_button("Close", [this, app_id] {
+            close_game([this, app_id] {
+                GamepadMapper::mapper()->load_gamepad_map(app_id);
+                push<StreamWindow>(m_address, app_id);
+            });
         });
     }
 }
@@ -98,7 +98,7 @@ void AppListWindow::close_game(std::function<void()> callback) {
         if (result.isSuccess()) {
             reload(callback);
         } else {
-            screen()->add<MessageDialog>(MessageDialog::Type::Warning, "Error", result.error());
+            screen()->add<Alert>("Error", result.error());
         }
     });
 }

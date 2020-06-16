@@ -124,7 +124,8 @@ MOONLIGHT_LIBRETRO_CXX_SOURCES = \
 	Logger.cpp \
 	LogsWindow.cpp \
 	GamepadMapper.cpp \
-	InputSettingsWindow.cpp
+	InputSettingsWindow.cpp \
+	Alert.cpp
 
 MOONLIGHT_COMMON_C_SOURCES = \
 	callbacks.c \

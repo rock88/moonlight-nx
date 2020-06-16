@@ -1,5 +1,6 @@
 #include "StreamWindow.hpp"
 #include "LoadingOverlay.hpp"
+#include "Alert.hpp"
 #include "InputController.hpp"
 #include "FFmpegVideoDecoder.hpp"
 #include "GLVideoRenderer.hpp"
@@ -38,7 +39,7 @@ StreamWindow::StreamWindow(Widget *parent, const std::string &address, int app_i
         if (result.isSuccess()) {
             //
         } else {
-            screen()->add<MessageDialog>(MessageDialog::Type::Warning, "Error", result.error());
+            screen()->add<Alert>("Error", result.error());
             
             auto app = static_cast<Application *>(screen());
             app->pop_window();

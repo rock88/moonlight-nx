@@ -1,6 +1,7 @@
 #include "ContentWindow.hpp"
 #include "Application.hpp"
 #include "LoadingOverlay.hpp"
+#include "Alert.hpp"
 #include "nanovg.h"
 #include <nanogui/opengl.h>
 #include <math.h>
@@ -238,24 +239,24 @@ bool ContentWindow::gamepad_button_event(int jid, int button, int action) {
         return false;
     }
     
-    std::vector<MessageDialog *> messages;
+    std::vector<Alert *> alerts;
     std::vector<LoadingOverlay *> loaders;
     
     for (auto child: screen()->children()) {
-        if (auto message = dynamic_cast<MessageDialog *>(child)) {
-            messages.push_back(message);
+        if (auto alert = dynamic_cast<Alert *>(child)) {
+            alerts.push_back(alert);
         }
         if (auto loader = dynamic_cast<LoadingOverlay *>(child)) {
             loaders.push_back(loader);
         }
     }
     
-    bool handle_button = messages.empty() && loaders.empty();
+    bool handle_button = alerts.empty() && loaders.empty();
     
     if (button == NANOGUI_GAMEPAD_BUTTON_B) {
-        if (!messages.empty()) {
-            for (auto message: messages) {
-                message->dispose();
+        if (!alerts.empty()) {
+            for (auto alert: alerts) {
+                alert->dispose();
             }
             return false;
         }
@@ -266,8 +267,8 @@ bool ContentWindow::gamepad_button_event(int jid, int button, int action) {
         
         pop();
         return false;
-    } else if (!messages.empty()) {
-        find_new_selectable(selectables_child_recursive(messages.front()), jid, button, action);
+    } else if (!alerts.empty()) {
+        find_new_selectable(selectables_child_recursive(alerts.front()), jid, button, action);
     }
     
     if (!handle_button) {

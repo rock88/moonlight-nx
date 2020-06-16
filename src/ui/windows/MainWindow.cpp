@@ -8,6 +8,7 @@
 #include "SettingsWindow.hpp"
 #include "Settings.hpp"
 #include "InputSettingsWindow.hpp"
+#include "Alert.hpp"
 #include "nanovg.h"
 
 using namespace nanogui;
@@ -55,17 +56,15 @@ void MainWindow::reload() {
                         if (result.isSuccess()) {
                             reload();
                         } else {
-                            screen()->add<MessageDialog>(MessageDialog::Type::Warning, "Error", result.error());
+                            screen()->add<Alert>("Error", result.error());
                         }
                     });
                 }
             } else {
-                auto alert = screen()->add<MessageDialog>(MessageDialog::Type::Warning, "Error", "Innactive host...", "OK", "Delete", true);
-                alert->set_callback([this, button](int action) {
-                    if (action) {
-                        Settings::settings()->remove_host(button->address());
-                        reload();
-                    }
+                auto alert = screen()->add<Alert>("Error", "Innactive host...");
+                alert->add_button("Delete", [this, button] {
+                    Settings::settings()->remove_host(button->address());
+                    reload();
                 });
             }
         });
