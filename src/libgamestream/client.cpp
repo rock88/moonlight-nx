@@ -98,6 +98,9 @@ static int load_server_status(PSERVER_DATA server) {
         if (xml_search(data.bytes(), data.size(), "GfeVersion", (char**) &server->serverInfo.serverInfoGfeVersion) != GS_OK)
             goto cleanup;
         
+        if (xml_search(data.bytes(), data.size(), "mac", &server->mac) != GS_OK)
+            goto cleanup;
+        
         if (xml_modelist(data.bytes(), data.size(), &server->modes) != GS_OK)
             goto cleanup;
         

@@ -8,6 +8,12 @@ enum VideoCodec: int {
     H265
 };
 
+struct Host {
+    std::string address;
+    std::string hostname;
+    std::string mac;
+};
+
 class Settings {
 public:
     static Settings* settings() {
@@ -33,12 +39,12 @@ public:
         return m_gamepad_mapping_path;
     }
     
-    std::vector<std::string> hosts() const {
+    std::vector<Host> hosts() const {
         return m_hosts;
     }
     
-    void add_host(const std::string address);
-    void remove_host(const std::string address);
+    void add_host(const Host& host);
+    void remove_host(const Host& host);
     
     int resolution() const {
         return m_resolution;
@@ -124,7 +130,7 @@ private:
     std::string m_log_path;
     std::string m_gamepad_mapping_path;
     
-    std::vector<std::string> m_hosts;
+    std::vector<Host> m_hosts;
     int m_resolution = 720;
     int m_fps = 60;
     VideoCodec m_video_codec = H264;

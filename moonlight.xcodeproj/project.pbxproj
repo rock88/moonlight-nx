@@ -104,6 +104,7 @@
 		36DFE0CE2459FAB100FC51CE /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 36DBDEA22450C2640057C8D3 /* OpenGL.framework */; };
 		36E63790247010C70032F5FB /* Data.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 36E6378E247010C70032F5FB /* Data.cpp */; };
 		36EB490F249927C60059EDB7 /* Alert.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 36EB490D249927C60059EDB7 /* Alert.cpp */; };
+		36EB491324993A4C0059EDB7 /* WakeOnLanManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 36EB491124993A4C0059EDB7 /* WakeOnLanManager.cpp */; };
 		36F16475247473A300D70AD9 /* mbedtls_to_openssl_wrapper.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 36F16474247473A300D70AD9 /* mbedtls_to_openssl_wrapper.cpp */; };
 /* End PBXBuildFile section */
 
@@ -327,6 +328,8 @@
 		36EB490A24954B5B0059EDB7 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		36EB490D249927C60059EDB7 /* Alert.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Alert.cpp; sourceTree = "<group>"; };
 		36EB490E249927C60059EDB7 /* Alert.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Alert.hpp; sourceTree = "<group>"; };
+		36EB491124993A4C0059EDB7 /* WakeOnLanManager.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = WakeOnLanManager.cpp; sourceTree = "<group>"; };
+		36EB491224993A4C0059EDB7 /* WakeOnLanManager.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = WakeOnLanManager.hpp; sourceTree = "<group>"; };
 		36F1646F2474736E00D70AD9 /* switch_wrapper.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = switch_wrapper.c; sourceTree = "<group>"; };
 		36F164712474736E00D70AD9 /* evp.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = evp.h; sourceTree = "<group>"; };
 		36F164722474736E00D70AD9 /* rand.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = rand.h; sourceTree = "<group>"; };
@@ -676,6 +679,8 @@
 				36D3F8432469B5C400CDEF9B /* MoonlightSession.hpp */,
 				36BFCCF52479724900245D40 /* GameStreamClient.cpp */,
 				36BFCCF42479724900245D40 /* GameStreamClient.hpp */,
+				36EB491124993A4C0059EDB7 /* WakeOnLanManager.cpp */,
+				36EB491224993A4C0059EDB7 /* WakeOnLanManager.hpp */,
 			);
 			path = streaming;
 			sourceTree = "<group>";
@@ -938,6 +943,7 @@
 				36BFCCF62479724A00245D40 /* GameStreamClient.cpp in Sources */,
 				3652EFDA245B3B00001FABF3 /* layout.cpp in Sources */,
 				36EB490F249927C60059EDB7 /* Alert.cpp in Sources */,
+				36EB491324993A4C0059EDB7 /* WakeOnLanManager.cpp in Sources */,
 				364A6A8F24786E2200460028 /* BoxArtManager.cpp in Sources */,
 				3652F080245C292B001FABF3 /* ByteBuffer.c in Sources */,
 				3652EFF3245B3B00001FABF3 /* slider.cpp in Sources */,

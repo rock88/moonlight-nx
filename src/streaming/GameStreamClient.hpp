@@ -47,6 +47,8 @@ private:
 
 template<class T> using ServerCallback = const std::function<void(GSResult<T>)>;
 
+struct Host;
+
 class GameStreamClient {
 public:
     static GameStreamClient* client() {
@@ -59,6 +61,8 @@ public:
     }
     
     void stop();
+    
+    void wake_up_host(const Host &host, ServerCallback<bool> callback);
     void connect(const std::string &address, ServerCallback<SERVER_DATA> callback);
     void pair(const std::string &address, const std::string &pin, ServerCallback<bool> callback);
     void applist(const std::string &address, ServerCallback<PAPP_LIST> callback);

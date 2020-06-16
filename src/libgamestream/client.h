@@ -28,17 +28,18 @@
 #define MAX_SUPPORTED_GFE_VERSION 7
 
 typedef struct _SERVER_DATA {
-  const char* address;
-  char* gpuType;
-  bool paired;
-  bool supports4K;
-  bool unsupported;
-  int currentGame;
-  int serverMajorVersion;
-  char* gsVersion;
-  char* hostname;
-  PDISPLAY_MODE modes;
-  SERVER_INFORMATION serverInfo;
+    const char* address;
+    char *mac;
+    char* gpuType;
+    bool paired;
+    bool supports4K;
+    bool unsupported;
+    int currentGame;
+    int serverMajorVersion;
+    char* gsVersion;
+    char* hostname;
+    PDISPLAY_MODE modes;
+    SERVER_INFORMATION serverInfo;
 } SERVER_DATA, *PSERVER_DATA;
 
 void gs_set_error(std::string error);

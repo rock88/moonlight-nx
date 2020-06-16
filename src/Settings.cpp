@@ -48,16 +48,20 @@ void Settings::set_working_dir(std::string working_dir) {
     load();
 }
 
-void Settings::add_host(const std::string address) {
-    if (std::find(m_hosts.begin(), m_hosts.end(), address) == m_hosts.end()) {
-        m_hosts.push_back(address);
+void Settings::add_host(const Host& host) {
+    auto it = std::find_if(m_hosts.begin(), m_hosts.end(), [host](auto h){ return h.address == host.address; });
+    
+    if (it == m_hosts.end()) {
+        m_hosts.push_back(host);
         save();
     }
 }
 
-void Settings::remove_host(const std::string address) {
-    if (std::find(m_hosts.begin(), m_hosts.end(), address) != m_hosts.end()) {
-        m_hosts.erase(std::remove(m_hosts.begin(), m_hosts.end(), address), m_hosts.end());
+void Settings::remove_host(const Host& host) {
+    auto it = std::find_if(m_hosts.begin(), m_hosts.end(), [host](auto h){ return h.address == host.address; });
+    
+    if (it != m_hosts.end()) {
+        m_hosts.erase(it);
         save();
     }
 }
@@ -69,9 +73,29 @@ void Settings::load() {
         if (json_t* hosts = json_object_get(root, "hosts")) {
             size_t size = json_array_size(hosts);
             for (size_t i = 0; i < size; i++) {
-                if (json_t* host = json_array_get(hosts, i)) {
-                    if (json_typeof(host) == JSON_STRING) {
-                        m_hosts.push_back(json_string_value(host));
+                if (json_t* json = json_array_get(hosts, i)) {
+                    if (json_typeof(json) == JSON_OBJECT) {
+                        Host host;
+                        
+                        if (json_t* address = json_object_get(json, "address")) {
+                            if (json_typeof(address) == JSON_STRING) {
+                                host.address = json_string_value(address);
+                            }
+                        }
+                        
+                        if (json_t* hostname = json_object_get(json, "hostname")) {
+                            if (json_typeof(hostname) == JSON_STRING) {
+                                host.hostname = json_string_value(hostname);
+                            }
+                        }
+                        
+                        if (json_t* mac = json_object_get(json, "mac")) {
+                            if (json_typeof(mac) == JSON_STRING) {
+                                host.mac = json_string_value(mac);
+                            }
+                        }
+                        
+                        m_hosts.push_back(host);
                     }
                 }
             }
@@ -135,7 +159,12 @@ void Settings::save() {
     if (root) {
         if (json_t* hosts = json_array()) {
             for (auto host: m_hosts) {
-                json_array_append(hosts, json_string(host.c_str()));
+                if (json_t* json = json_object()) {
+                    json_object_set(json, "address", json_string(host.address.c_str()));
+                    json_object_set(json, "hostname", json_string(host.hostname.c_str()));
+                    json_object_set(json, "mac", json_string(host.mac.c_str()));
+                    json_array_append(hosts, json);
+                }
             }
             json_object_set(root, "hosts", hosts);
         }

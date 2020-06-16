@@ -22,8 +22,8 @@
 #include "Data.hpp"
 
 enum HTTPRequestTimeout: long {
-    HTTPRequestTimeoutLow = 5,
-    HTTPRequestTimeoutMedium = 15,
+    HTTPRequestTimeoutLow = 2,
+    HTTPRequestTimeoutMedium = 5,
     HTTPRequestTimeoutLong = 120
 };
 

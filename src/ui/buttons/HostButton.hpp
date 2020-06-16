@@ -1,13 +1,14 @@
 #include <nanogui/nanogui.h>
 #include "GameStreamClient.hpp"
+#include "Settings.hpp"
 #pragma once
 
 class HostButton: public nanogui::Button {
 public:
-    HostButton(Widget* parent, const std::string &address);
+    HostButton(Widget* parent, const Host &host);
     
-    std::string address() const {
-        return m_address;
+    Host host() const {
+        return m_host;
     }
     
     bool is_active() const {
@@ -21,7 +22,7 @@ public:
     void draw(NVGcontext *ctx) override;
     
 private:
-    std::string m_address;
+    Host m_host;
     nanogui::Label* m_label;
     int m_host_status_icon;
     bool m_is_active = false;

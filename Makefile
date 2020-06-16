@@ -125,7 +125,8 @@ MOONLIGHT_LIBRETRO_CXX_SOURCES = \
 	LogsWindow.cpp \
 	GamepadMapper.cpp \
 	InputSettingsWindow.cpp \
-	Alert.cpp
+	Alert.cpp \
+	WakeOnLanManager.cpp
 
 MOONLIGHT_COMMON_C_SOURCES = \
 	callbacks.c \

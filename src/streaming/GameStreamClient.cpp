@@ -1,5 +1,6 @@
 #include "GameStreamClient.hpp"
 #include "Settings.hpp"
+#include "WakeOnLanManager.hpp"
 #include <thread>
 #include <mutex>
 #include <algorithm>
@@ -75,6 +76,17 @@ void GameStreamClient::stop() {
     #endif
 }
 
+void GameStreamClient::wake_up_host(const Host &host, ServerCallback<bool> callback) {
+    perform_async([this, host, callback] {
+        if (WakeOnLanManager::manager()->wake_up_host(host)) {
+            usleep(5'000'000);
+            nanogui::async([callback] { callback(GSResult<bool>::success(true)); });
+        } else {
+            nanogui::async([callback] { callback(GSResult<bool>::failure("Wake up failed...")); });
+        }
+    });
+}
+
 void GameStreamClient::connect(const std::string &address, ServerCallback<SERVER_DATA> callback) {
     m_server_data[address] = SERVER_DATA();
     
@@ -84,7 +96,11 @@ void GameStreamClient::connect(const std::string &address, ServerCallback<SERVER
         
         nanogui::async([this, address, callback, status] {
             if (status == GS_OK) {
-                Settings::settings()->add_host(address);
+                Host host;
+                host.address = address;
+                host.hostname = m_server_data[address].hostname ?: "";
+                host.mac = m_server_data[address].mac ?: "";
+                Settings::settings()->add_host(host);
                 callback(GSResult<SERVER_DATA>::success(m_server_data[address]));
             } else {
                 callback(GSResult<SERVER_DATA>::failure(gs_error()));

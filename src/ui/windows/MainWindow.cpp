@@ -46,11 +46,11 @@ void MainWindow::reload() {
         button->set_callback([this, button] {
             if (button->is_active()) {
                 if (button->is_paired()) {
-                    push<AppListWindow>(button->address());
+                    push<AppListWindow>(button->host().address);
                 } else {
                     auto loader = add<LoadingOverlay>("Pairing... (Enter 0000)");
                     
-                    GameStreamClient::client()->pair(button->address(), "0000", [this, loader](auto result){
+                    GameStreamClient::client()->pair(button->host().address, "0000", [this, loader](auto result){
                         loader->dispose();
                         
                         if (result.isSuccess()) {
@@ -62,8 +62,15 @@ void MainWindow::reload() {
                 }
             } else {
                 auto alert = screen()->add<Alert>("Error", "Innactive host...");
+                
+                if (!button->host().mac.empty()) {
+                    alert->add_button("Wake Up", [this, button] {
+                        wake_up_host(button->host());
+                    });
+                }
+                
                 alert->add_button("Delete", [this, button] {
-                    Settings::settings()->remove_host(button->address());
+                    Settings::settings()->remove_host(button->host());
                     reload();
                 });
             }
@@ -92,4 +99,18 @@ void MainWindow::draw(NVGcontext *ctx) {
     nvgText(ctx, width() - text_width - 8, height() - 8, MOONLIGHT_VERSION, NULL);
     
     nvgRestore(ctx);
+}
+
+void MainWindow::wake_up_host(const Host &host) {
+    auto loader = add<LoadingOverlay>("Sending Wake Up...");
+    
+    GameStreamClient::client()->wake_up_host(host, [this, loader](auto result) {
+        loader->dispose();
+        
+        if (result.isSuccess()) {
+            reload();
+        } else {
+            screen()->add<Alert>("Error", result.error());
+        }
+    });
 }
