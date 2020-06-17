@@ -173,7 +173,7 @@ void InputSettingsWindow::reload_gamepad_input_settings() {
         }
         
         button_container->add<Label>(GamepadMapper::mapper()->button_label((GamepadButtons)i, false));
-        auto button = button_container->add<Button>(GamepadMapper::mapper()->button_label(GamepadMapper::mapper()->mapped_button(i), true));
+        auto button = button_container->add<Button>(GamepadMapper::mapper()->button_label(GamepadMapper::mapper()->mapped_button((GamepadButtons)i), true));
         button->set_callback([this, i] {
             assign_button((GamepadButtons)i);
         });
@@ -260,27 +260,39 @@ bool InputSettingsWindow::gamepad_analog_event(int jid, int axis, float value) {
 }
 
 void InputSettingsWindow::window_disappear() {
-    GamepadMapper::mapper()->save_gamepad_map(m_app_id);
+    if (m_has_changes) {
+        GamepadMapper::mapper()->save_gamepad_map(m_app_id);
+    }
 }
 
 void InputSettingsWindow::assign_button(GamepadButtons button) {
+    GamepadButtons current = GamepadMapper::mapper()->mapped_button(button);
+    
     overlay = screen()->add<GamepadInputOverlay>("Press button for reassign \"" + GamepadMapper::mapper()->button_label(button, false) + "\"");
-    overlay->set_completion([this, button](auto result) {
+    overlay->set_completion([this, button, current](auto result) {
         overlay->dispose();
         overlay = NULL;
         
-        GamepadMapper::mapper()->set_mapped_button(button, result[0]);
-        reload_gamepad_input_settings();
+        if (current != result[0]) {
+            m_has_changes = true;
+            GamepadMapper::mapper()->set_mapped_button(button, result[0]);
+            reload_gamepad_input_settings();
+        }
     });
 }
 
 void InputSettingsWindow::assign_combo(GamepadCombo combo, int buttons_count) {
+    auto current = GamepadMapper::mapper()->combo_buttons(combo);
+    
     overlay = screen()->add<GamepadInputOverlay>("Enter combo for reassign \"" + GamepadMapper::mapper()->combo_label(combo) + "\"", buttons_count);
-    overlay->set_completion([this, combo](auto result) {
+    overlay->set_completion([this, combo, current](auto result) {
         overlay->dispose();
         overlay = NULL;
         
-        GamepadMapper::mapper()->set_combo_buttons(result, combo);
-        reload_combo_settings();
+        if (current != result) {
+            m_has_changes = true;
+            GamepadMapper::mapper()->set_combo_buttons(result, combo);
+            reload_combo_settings();
+        }
     });
 }

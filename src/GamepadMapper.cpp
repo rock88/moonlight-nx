@@ -89,7 +89,7 @@ void GamepadMapper::set_mapped_button(GamepadButtons origin_button, GamepadButto
     m_gamepad_map[origin_button] = new_button;
 }
 
-GamepadButtons GamepadMapper::mapped_button(int button) {
+GamepadButtons GamepadMapper::mapped_button(GamepadButtons button) {
     return m_gamepad_map[button];
 }
 

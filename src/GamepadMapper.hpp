@@ -55,7 +55,7 @@ public:
     GamepadButtons convert_nanogui_analog_axis(int axis);
     
     void set_mapped_button(GamepadButtons origin_button, GamepadButtons new_button);
-    GamepadButtons mapped_button(int origin_button);
+    GamepadButtons mapped_button(GamepadButtons origin_button);
     
     void set_combo_buttons(std::array<GamepadButtons, 3> buttons, GamepadCombo combo);
     std::array<GamepadButtons, 3> combo_buttons(GamepadCombo combo);

@@ -24,4 +24,5 @@ private:
     void assign_combo(GamepadCombo combo, int buttons_count);
     
     int m_app_id;
+    bool m_has_changes = false;
 };
