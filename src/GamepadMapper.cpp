@@ -173,6 +173,12 @@ void GamepadMapper::load_defaults_gamepad_map() {
         m_gamepad_map[i] = (GamepadButtons)i;
     }
     
+    // Swap A/B and X/Y
+    m_gamepad_map[GamepadButtonA] = GamepadButtonB;
+    m_gamepad_map[GamepadButtonB] = GamepadButtonA;
+    m_gamepad_map[GamepadButtonX] = GamepadButtonY;
+    m_gamepad_map[GamepadButtonY] = GamepadButtonX;
+    
     m_combo.clear();
     m_combo[GamepadComboGuide] = {GamepadButtonMinus, GamepadButtonPlus, GamepadButtonUnknown};
     m_combo[GamepadComboExit] = {GamepadButtonL, GamepadButtonR, GamepadButtonUp};
