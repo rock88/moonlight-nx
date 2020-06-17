@@ -27,16 +27,15 @@ void Alert::perform_layout(NVGcontext *ctx) {
     
     m_button_container->set_fixed_width(screen()->width() / 2);
     m_container->set_fixed_width(screen()->width() / 2);
-    m_container->perform_layout(ctx);
     
     for (auto child: m_button_container->children()) {
         child->set_fixed_width(m_container->fixed_width() - 20);
     }
     m_button_container->perform_layout(ctx);
-    
-    m_container->set_position(Vector2i(screen()->width() / 4, screen()->height() / 4));
-    
+    m_container->perform_layout(ctx);
     Widget::perform_layout(ctx);
+    
+    m_container->set_position(Vector2i(screen()->width() / 4, screen()->height() / 2 - m_container->height() / 2));
 }
 
 void Alert::draw(NVGcontext *ctx) {
