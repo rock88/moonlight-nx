@@ -24,7 +24,7 @@ jobs:
         sudo dpkg -i devkitpro-pacman.deb
         sudo dkp-pacman --noconfirm -Syu
         sudo dkp-pacman --noconfirm -S devkitA64 switch-tools libnx switch-ffmpeg switch-glad switch-glfw switch-jansson switch-libdrm_nouveau switch-libexpat switch-libopus switch-libvpx switch-mbedtls switch-mesa switch-zlib switch-ffmpeg switch-pkg-config devkitpro-pkgbuild-helpers
-    - name: Build libcurl 7.69.1
+    - name: Build libcurl 7.69.1-1
       run: |
         wget https://github.com/devkitPro/pacman-packages/raw/1582ad85914b14497fae32a9fe9074c0374f99f7/switch/curl/PKGBUILD
         dkp-makepkg
