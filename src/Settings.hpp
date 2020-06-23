@@ -78,6 +78,14 @@ public:
         m_bitrate = bitrate;
     }
     
+    void set_ignore_unsupported_resolutions(bool ignore_unsupported_resolutions) {
+        m_ignore_unsupported_resolutions = ignore_unsupported_resolutions;
+    }
+    
+    bool ignore_unsupported_resolutions() const {
+        return m_ignore_unsupported_resolutions;
+    }
+    
     bool click_by_tap() const {
         return m_click_by_tap;
     }
@@ -135,6 +143,7 @@ private:
     int m_fps = 60;
     VideoCodec m_video_codec = H264;
     int m_bitrate = 10000;
+    bool m_ignore_unsupported_resolutions = false;
     bool m_click_by_tap = false;
     int m_decoder_threads = 4;
     bool m_sops = true;

@@ -126,6 +126,10 @@ void Settings::load() {
                 }
             }
             
+            if (json_t* ignore_unsupported_resolutions = json_object_get(settings, "ignore_unsupported_resolutions")) {
+                m_ignore_unsupported_resolutions = json_typeof(ignore_unsupported_resolutions) == JSON_TRUE;
+            }
+            
             if (json_t* click_by_tap = json_object_get(settings, "click_by_tap")) {
                 m_click_by_tap = json_typeof(click_by_tap) == JSON_TRUE;
             }
@@ -174,6 +178,7 @@ void Settings::save() {
             json_object_set(settings, "fps", json_integer(m_fps));
             json_object_set(settings, "video_codec", json_integer(m_video_codec));
             json_object_set(settings, "bitrate", json_integer(m_bitrate));
+            json_object_set(settings, "ignore_unsupported_resolutions", m_ignore_unsupported_resolutions ? json_true() : json_false());
             json_object_set(settings, "decoder_threads", json_integer(m_decoder_threads));
             json_object_set(settings, "click_by_tap", m_click_by_tap ? json_true() : json_false());
             json_object_set(settings, "sops", m_sops ? json_true() : json_false());

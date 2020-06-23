@@ -49,6 +49,12 @@ SettingsWindow::SettingsWindow(nanogui::Widget* parent): ContentWindow(parent, "
         DEFAULT;
     }
     
+    auto ignore_unsupported_resolutions = left_container->add<CheckBox>("Ignore unsupported resolutions");
+    ignore_unsupported_resolutions->set_checked(Settings::settings()->ignore_unsupported_resolutions());
+    ignore_unsupported_resolutions->set_callback([](auto value) {
+        Settings::settings()->set_ignore_unsupported_resolutions(value);
+    });
+    
     left_container->add<Label>("FPS");
     std::vector<std::string> fps = { "30", "60" };
     auto fps_combo_box = left_container->add<ComboBox>(fps);
