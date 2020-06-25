@@ -39,39 +39,39 @@ static const float vertices[] = {
 
 static const char* texture_mappings[] = { "ymap", "umap", "vmap" };
 
-static const float* gl_color_offset(bool color_full) {
-    static const float limitedOffsets[] = { 16.0f / 255.0f, 128.0f / 255.0f, 128.0f / 255.0f };
-    static const float fullOffsets[] = { 0.0f, 128.0f / 255.0f, 128.0f / 255.0f };
+static const std::vector<float> gl_color_offset(bool color_full) {
+    static const std::vector<float> limitedOffsets = { 16.0f / 255.0f, 128.0f / 255.0f, 128.0f / 255.0f };
+    static const std::vector<float> fullOffsets = { 0.0f, 128.0f / 255.0f, 128.0f / 255.0f };
     return color_full ? fullOffsets : limitedOffsets;
 }
 
-static const float* gl_color_matrix(enum AVColorSpace color_space, bool color_full) {
-    static const float bt601Lim[] = {
+static const std::vector<float> gl_color_matrix(enum AVColorSpace color_space, bool color_full) {
+    static const std::vector<float> bt601Lim = {
         1.1644f, 1.1644f, 1.1644f,
         0.0f, -0.3917f, 2.0172f,
         1.5960f, -0.8129f, 0.0f
     };
-    static const float bt601Full[] = {
+    static const std::vector<float> bt601Full = {
         1.0f, 1.0f, 1.0f,
         0.0f, -0.3441f, 1.7720f,
         1.4020f, -0.7141f, 0.0f
     };
-    static const float bt709Lim[] = {
+    static const std::vector<float> bt709Lim = {
         1.1644f, 1.1644f, 1.1644f,
         0.0f, -0.2132f, 2.1124f,
         1.7927f, -0.5329f, 0.0f
     };
-    static const float bt709Full[] = {
+    static const std::vector<float> bt709Full = {
         1.0f, 1.0f, 1.0f,
         0.0f, -0.1873f, 1.8556f,
         1.5748f, -0.4681f, 0.0f
     };
-    static const float bt2020Lim[] = {
+    static const std::vector<float> bt2020Lim = {
         1.1644f, 1.1644f, 1.1644f,
         0.0f, -0.1874f, 2.1418f,
         1.6781f, -0.6505f, 0.0f
     };
-    static const float bt2020Full[] = {
+    static const std::vector<float> bt2020Full = {
         1.0f, 1.0f, 1.0f,
         0.0f, -0.1646f, 1.8814f,
         1.4746f, -0.5714f, 0.0f
@@ -89,6 +89,11 @@ static const float* gl_color_matrix(enum AVColorSpace color_space, bool color_fu
         default:
             return bt601Lim;
     };
+}
+
+GLVideoRenderer::GLVideoRenderer() {
+    m_gl_color_offset.resize(3);
+    m_gl_color_matrix.resize(9);
 }
 
 GLVideoRenderer::~GLVideoRenderer() {
@@ -149,7 +154,9 @@ void GLVideoRenderer::initialize() {
     m_offset_location = glGetUniformLocation(m_shader_program, "offset");
 }
 
-void GLVideoRenderer::draw(int width, int height, AVFrame *frame) {
+void GLVideoRenderer::draw() {
+    //std::lock_guard<std::mutex> guard(m_mutex);
+    
     if (!m_video_render_stats.rendered_frames) {
         m_video_render_stats.measurement_start_timestamp = LiGetMillis();
     }
@@ -161,24 +168,38 @@ void GLVideoRenderer::draw(int width, int height, AVFrame *frame) {
         m_is_initialized = true;
     }
     
-    if (m_width != frame->width || m_height != frame->height) {
-        m_width = frame->width;
-        m_height = frame->height;
-        
-        for (int i = 0; i < 3; i++) {
-            if (m_texture_id[i]) {
-                glDeleteTextures(1, &m_texture_id[i]);
+    if (m_sync_draw_func) {
+        m_sync_draw_func([this](auto frame) {
+            if (m_width != frame->width || m_height != frame->height) {
+                m_width = frame->width;
+                m_height = frame->height;
+                
+                for (int i = 0; i < 3; i++) {
+                    if (m_texture_id[i]) {
+                        glDeleteTextures(1, &m_texture_id[i]);
+                    }
+                }
+                
+                glGenTextures(3, m_texture_id);
+                
+                for (int i = 0; i < 3; i++) {
+                    glBindTexture(GL_TEXTURE_2D, m_texture_id[i]);
+                    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+                    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+                    glTexImage2D(GL_TEXTURE_2D, 0, GL_RED, i > 0 ? m_width / 2 : m_width, i > 0 ? m_height / 2 : m_height, 0, GL_RED, GL_UNSIGNED_BYTE, NULL);
+                }
             }
-        }
+            
+            m_gl_color_offset = gl_color_offset(frame->color_range == AVCOL_RANGE_JPEG);
+            m_gl_color_matrix = gl_color_matrix(frame->colorspace, frame->color_range == AVCOL_RANGE_JPEG);
+            
+            for (int i = 0; i < 3; i++) {
+                glBindTexture(GL_TEXTURE_2D, m_texture_id[i]);
+                glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, i > 0 ? m_width / 2 : m_width, i > 0 ? m_height / 2 : m_height, GL_RED, GL_UNSIGNED_BYTE, frame->data[i]);
+            }
+        });
         
-        glGenTextures(3, m_texture_id);
-        
-        for (int i = 0; i < 3; i++) {
-            glBindTexture(GL_TEXTURE_2D, m_texture_id[i]);
-            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-            glTexImage2D(GL_TEXTURE_2D, 0, GL_RED, i > 0 ? m_width / 2 : m_width, i > 0 ? m_height / 2 : m_height, 0, GL_RED, GL_UNSIGNED_BYTE, NULL);
-        }
+        m_sync_draw_func = nullptr;
     }
     
     glClearColor(0, 0, 0, 1);
@@ -186,14 +207,12 @@ void GLVideoRenderer::draw(int width, int height, AVFrame *frame) {
     
     glUseProgram(m_shader_program);
     
-    glUniform3fv(m_offset_location, 1, gl_color_offset(frame->color_range == AVCOL_RANGE_JPEG));
-    glUniformMatrix3fv(m_yuvmat_location, 1, GL_FALSE, gl_color_matrix(frame->colorspace, frame->color_range == AVCOL_RANGE_JPEG));
+    glUniform3fv(m_offset_location, 1, m_gl_color_offset.data());
+    glUniformMatrix3fv(m_yuvmat_location, 1, GL_FALSE, m_gl_color_matrix.data());
     
     for (int i = 0; i < 3; i++) {
-        auto image = frame->data[i];
         glActiveTexture(GL_TEXTURE0 + i);
         glBindTexture(GL_TEXTURE_2D, m_texture_id[i]);
-        glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, i > 0 ? m_width / 2 : m_width, i > 0 ? m_height / 2 : m_height, GL_RED, GL_UNSIGNED_BYTE, image);
         glUniform1i(m_texture_uniform[i], i);
         glActiveTexture(GL_TEXTURE0);
     }

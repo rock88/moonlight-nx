@@ -1,13 +1,14 @@
 #include "IVideoRenderer.hpp"
 #include <glad/glad.h>
+#include <vector>
 #pragma once
 
 class GLVideoRenderer: public IVideoRenderer {
 public:
-    GLVideoRenderer() {};
+    GLVideoRenderer();
     ~GLVideoRenderer();
     
-    void draw(int width, int height, AVFrame *frame) override;
+    void draw() override;
     
     VideoRenderStats* video_render_stats() override;
     
@@ -20,5 +21,7 @@ private:
     GLuint m_vbo, m_vao;
     int m_width = 0, m_height = 0;
     int m_yuvmat_location, m_offset_location;
+    std::vector<float> m_gl_color_offset;
+    std::vector<float> m_gl_color_matrix;
     VideoRenderStats m_video_render_stats = {};
 };

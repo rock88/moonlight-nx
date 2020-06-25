@@ -18,8 +18,9 @@ StreamWindow::StreamWindow(Widget *parent, const std::string &address, int app_i
     m_size = parent->size();
     m_session = new MoonlightSession(address, app_id);
     
-    m_session->set_video_decoder(new FFmpegVideoDecoder());
-    m_session->set_video_renderer(new GLVideoRenderer());
+    auto renderer = new GLVideoRenderer();
+    m_session->set_video_decoder(new FFmpegVideoDecoder(renderer));
+    m_session->set_video_renderer(renderer);
     
     #ifdef __SWITCH__
     m_session->set_audio_renderer(new AudrenAudioRenderer());

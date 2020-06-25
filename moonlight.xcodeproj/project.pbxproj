@@ -287,6 +287,7 @@
 		367CD959245DE25F00A95738 /* StreamWindow.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = StreamWindow.hpp; sourceTree = "<group>"; };
 		367D2D7224829A0800A946F4 /* LogsWindow.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = LogsWindow.cpp; sourceTree = "<group>"; };
 		367D2D7324829A0800A946F4 /* LogsWindow.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = LogsWindow.hpp; sourceTree = "<group>"; };
+		367F117624A3EEB30084C632 /* IAVFrameSyncDrawer.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = IAVFrameSyncDrawer.hpp; sourceTree = "<group>"; };
 		3689D6D0248EBEFA0008CB75 /* build.yml */ = {isa = PBXFileReference; lastKnownFileType = text.yaml; name = build.yml; path = .github/workflows/build.yml; sourceTree = "<group>"; };
 		3689D6DB249154F90008CB75 /* GamepadMapper.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = GamepadMapper.cpp; sourceTree = "<group>"; };
 		3689D6DC249154F90008CB75 /* GamepadMapper.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = GamepadMapper.hpp; sourceTree = "<group>"; };
@@ -691,6 +692,7 @@
 				3661D2F72469D1940060EE24 /* FFmpegVideoDecoder.cpp */,
 				3661D2F82469D1940060EE24 /* FFmpegVideoDecoder.hpp */,
 				3661D2FA2469D1E50060EE24 /* IFFmpegVideoDecoder.hpp */,
+				367F117624A3EEB30084C632 /* IAVFrameSyncDrawer.hpp */,
 			);
 			path = ffmpeg;
 			sourceTree = "<group>";

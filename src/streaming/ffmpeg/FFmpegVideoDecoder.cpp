@@ -9,17 +9,12 @@
 
 #define DECODER_BUFFER_SIZE 92 * 1024 * 2
 
-FFmpegVideoDecoder::FFmpegVideoDecoder() {
-    pthread_mutex_init(&m_mutex, NULL);
+FFmpegVideoDecoder::FFmpegVideoDecoder(IAVFrameSyncDrawer* drawer): IFFmpegVideoDecoder(drawer) {
+    
 }
 
 FFmpegVideoDecoder::~FFmpegVideoDecoder() {
-    pthread_mutex_destroy(&m_mutex);
     cleanup();
-    
-    if (m_hardware_video_decoder) {
-        delete m_hardware_video_decoder;
-    }
 }
 
 int FFmpegVideoDecoder::setup(int video_format, int width, int height, int redraw_rate, void *context, int dr_flags) {
@@ -103,11 +98,13 @@ int FFmpegVideoDecoder::setup(int video_format, int width, int height, int redra
         return -1;
     }
     
-    if (m_hardware_video_decoder) {
-        m_hardware_video_decoder->prepare_decoder_context(m_decoder_context, nullptr);
-    }
-    
     return DR_OK;
+}
+
+void FFmpegVideoDecoder::stop() {
+    if (m_semaphore.is_waiting()) {
+        m_semaphore.notify();
+    }
 }
 
 void FFmpegVideoDecoder::cleanup() {
@@ -178,11 +175,14 @@ int FFmpegVideoDecoder::submit_decode_unit(PDECODE_UNIT decode_unit) {
             m_video_decode_stats.total_decode_time += (m_frames_in - m_frames_out) * (1000 / m_stream_fps);
             m_video_decode_stats.decoded_frames++;
             
-            if (pthread_mutex_lock(&m_mutex) == 0) {
-                m_frame = get_frame(true);
-                
-                // Push event!!
-                pthread_mutex_unlock(&m_mutex);
+            AVFrame *frame = get_frame(true);
+            
+            if (frame) {
+                m_drawer->sync_draw([this, frame](auto func) {
+                    func(frame);
+                    m_semaphore.notify();
+                });
+                m_semaphore.wait();
             }
         }
     }
@@ -190,7 +190,7 @@ int FFmpegVideoDecoder::submit_decode_unit(PDECODE_UNIT decode_unit) {
 }
 
 int FFmpegVideoDecoder::capabilities() const {
-    return CAPABILITY_SLICES_PER_FRAME(4) | CAPABILITY_DIRECT_SUBMIT;
+    return CAPABILITY_SLICES_PER_FRAME(4);
 }
 
 int FFmpegVideoDecoder::decode(char* indata, int inlen) {
@@ -221,10 +221,6 @@ AVFrame* FFmpegVideoDecoder::get_frame(bool native_frame) {
         Logger::error("FFmpeg", "Receive failed - %d/%s", err, error);
     }
     return NULL;
-}
-
-AVFrame* FFmpegVideoDecoder::frame() const {
-    return m_frame;
 }
 
 VideoDecodeStats* FFmpegVideoDecoder::video_decode_stats() {

@@ -244,9 +244,7 @@ void MoonlightSession::stop(int terminate_app) {
 
 void MoonlightSession::draw() {
     if (m_video_decoder && m_video_renderer) {
-        if (auto frame = m_video_decoder->frame()) {
-            m_video_renderer->draw(m_config.width, m_config.height, frame);
-        }
+        m_video_renderer->draw();
         
         m_session_stats.video_decode_stats = *m_video_decoder->video_decode_stats();
         m_session_stats.video_render_stats = *m_video_renderer->video_render_stats();
