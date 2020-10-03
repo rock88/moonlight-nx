@@ -25,7 +25,7 @@ jobs:
       run: useradd -m builduser
 
     - name: Install custom libcurl dependencies
-      run: dkp-pacman -S devkitpro-pkgbuild-helpers
+      run: echo "y" | dkp-pacman -S devkitpro-pkgbuild-helpers
 
     - name: Build libcurl 7.69.1-1
       run: |
