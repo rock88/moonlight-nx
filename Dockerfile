@@ -11,6 +11,4 @@ RUN echo "deb http://deb.debian.org/debian stretch-backports main" >> /etc/apt/s
 # Install devkitpro-pkgbuild-helpers
 RUN dkp-pacman -S --noconfirm devkitpro-pkgbuild-helpers
 
-COPY build.sh /home/build/build.sh
-
 ENTRYPOINT ["/bin/bash"]
