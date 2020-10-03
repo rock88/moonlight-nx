@@ -21,6 +21,19 @@ jobs:
         apt-get update
         apt-get -t stretch-backports -y install git
 
+    - name: Add build user
+      run: useradd -m builduser
+
+    - name: Install custom libcurl dependencies
+      run: dkp-pacman -S devkitpro-pkbuild-helpers
+
+    - name: Build libcurl 7.69.1-1
+      run: |
+        sudo -u builduser wget https://github.com/devkitPro/pacman-packages/raw/1582ad85914b14497fae32a9fe9074c0374f99f7/switch/curl/PKGBUILD
+        sudo -u builduser dkp-makepkg
+        cp -r pkg/switch-curl/opt/devkitpro/portlibs/switch/* /opt/devkitpro/portlibs/switch
+      working-directory: /home/builduser
+
     - name: Checkout main repository
       uses: actions/checkout@master
       with:
