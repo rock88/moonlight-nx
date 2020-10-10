@@ -20,7 +20,6 @@ jobs:
     - name: Setup enviroment
       run: |
         sudo apt-get install bsdtar
-        sudo ln -s /proc/self/mounts /etc/mtab
         sudo gdebi devkitpro-pacman.deb
         sudo dkp-pacman --noconfirm -Syu
         sudo dkp-pacman --noconfirm -S devkitA64 switch-tools libnx switch-ffmpeg switch-glad switch-glfw switch-jansson switch-libdrm_nouveau switch-libexpat switch-libopus switch-libvpx switch-mbedtls switch-mesa switch-zlib switch-ffmpeg switch-pkg-config devkitpro-pkgbuild-helpers
