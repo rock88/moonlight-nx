@@ -20,8 +20,8 @@ jobs:
     - name: Setup enviroment
       run: |
         sudo apt-get install bsdtar
-        wget https://github.com/devkitPro/pacman/releases/download/devkitpro-pacman-1.0.1/devkitpro-pacman.deb
-        sudo dpkg -i devkitpro-pacman.deb
+        wget https://github.com/devkitPro/pacman/releases/download/v1.0.2/devkitpro-pacman.arm64.deb
+        sudo dpkg -i devkitpro-pacman.arm64.deb
         sudo dkp-pacman --noconfirm -Syu
         sudo dkp-pacman --noconfirm -S devkitA64 switch-tools libnx switch-ffmpeg switch-glad switch-glfw switch-jansson switch-libdrm_nouveau switch-libexpat switch-libopus switch-libvpx switch-mbedtls switch-mesa switch-zlib switch-ffmpeg switch-pkg-config devkitpro-pkgbuild-helpers
     - name: Build libcurl 7.69.1-1
