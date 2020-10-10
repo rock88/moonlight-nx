@@ -19,6 +19,7 @@ struct MouseState {
 };
 
 struct MouseState mouse_state;
+struct MouseState mouse_state_r;
 static GLFWgamepadstate glfw_gamepad_state;
 
 static int m_width = 1, m_height = 1;
@@ -43,14 +44,33 @@ void InputController::handle_cursor_event(int width, int height, int x, int y) {
 }
 
 void InputController::handle_mouse_event(int button, int action, int modifiers) {
-    bool is_pressed = button == GLFW_MOUSE_BUTTON_1 && action == GLFW_PRESS;
-    
-    if (!mouse_state.is_pressed && is_pressed) {
-        mouse_state.is_pressed = true;
-        nanogui::mouse_button_callback_event(NANOGUI_MOUSE_BUTTON_1, NANOGUI_PRESS, 0);
-    } else if (mouse_state.is_pressed && !is_pressed) {
-        mouse_state.is_pressed = false;
-        nanogui::mouse_button_callback_event(NANOGUI_MOUSE_BUTTON_1, NANOGUI_RELEASE, 0);
+
+    bool is_pressed = action == GLFW_PRESS;
+
+    switch(button)
+    {
+        case GLFW_MOUSE_BUTTON_1:
+            mouse_state_r.is_pressed = false;
+            if (!mouse_state.is_pressed && is_pressed) {
+                mouse_state.is_pressed = true;
+                nanogui::mouse_button_callback_event(NANOGUI_MOUSE_BUTTON_1, NANOGUI_PRESS, 0);
+            } else if (mouse_state.is_pressed && !is_pressed) {
+                mouse_state.is_pressed = false;
+                nanogui::mouse_button_callback_event(NANOGUI_MOUSE_BUTTON_1, NANOGUI_RELEASE, 0);
+            }            
+            break;
+
+        case GLFW_MOUSE_BUTTON_2:
+            mouse_state.is_pressed = false;
+            if(!mouse_state_r.is_pressed && is_pressed){
+                mouse_state_r.is_pressed = true;
+                nanogui::mouse_button_callback_event(NANOGUI_MOUSE_BUTTON_2, NANOGUI_PRESS, 0);
+            } else if (mouse_state_r.is_pressed && !is_pressed) {
+                mouse_state_r.is_pressed = false;
+                nanogui::mouse_button_callback_event(NANOGUI_MOUSE_BUTTON_2, NANOGUI_RELEASE, 0);
+            }            
+            break;
+
     }
 }
 

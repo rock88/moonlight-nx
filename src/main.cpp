@@ -93,6 +93,7 @@ int main(int argc, const char * argv[]) {
         InputController::controller()->handle_gamepad_event(glfw_gamepad_state);
         
         static double scroll_x = -1, scroll_y = -1;
+        static bool mouse_r_pressed = false;
         
         hidScanInput();
         u32 touch_count = hidTouchCount();
@@ -108,12 +109,21 @@ int main(int argc, const char * argv[]) {
             if (scroll_x != -1 && scroll_y != -1 && (scroll_x != x || scroll_y != y)) {
                 InputController::controller()->handle_scroll((scroll_x - x) / 10, (scroll_y - y) / 10);
             }
+            else {
+                mouse_r_pressed = true;
+                InputController::controller()->handle_mouse_event(NANOGUI_MOUSE_BUTTON_2, GLFW_PRESS, 0);
+            }
             
             scroll_x = x;
             scroll_y = y;
         } else {
             scroll_x = -1;
             scroll_y = -1;
+
+            if(mouse_r_pressed){
+                mouse_r_pressed = false;
+                InputController::controller()->handle_mouse_event(NANOGUI_MOUSE_BUTTON_2, GLFW_RELEASE, 0);
+            }
         }
         
         #endif
