@@ -34,7 +34,7 @@ void MainWindow::window_appear() {
 void MainWindow::reload() {
     clean_container();
     
-    container()->add<Label>("* For better performance use 5GHz WiFi, latest system firmware (10.0.2/10.0.3) and Atmosphère (0.12.0)");
+    container()->add<Label>("* For better performance use 5GHz WiFi, latest system firmware (11.0.0/11.0.1) and Atmosphère (0.17.1)");
     container()->add<Widget>()->set_fixed_height(6);
     
     auto button_container = container()->add<Widget>();
