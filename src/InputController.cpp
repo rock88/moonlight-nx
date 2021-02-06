@@ -7,7 +7,7 @@
 
 #ifdef __SWITCH__
 #include <switch.h>
-static u32 VibrationDeviceHandles[2][2];
+static HidVibrationDeviceHandle VibrationDeviceHandles[2][2];
 static HidVibrationValue VibrationValues[2];
 static HidVibrationValue VibrationValue_stop;
 #endif
@@ -26,8 +26,8 @@ static double m_scroll_x = 0, m_scroll_y = 0;
 
 InputController::InputController() {
     #ifdef __SWITCH__
-    hidInitializeVibrationDevices(VibrationDeviceHandles[0], 2, CONTROLLER_HANDHELD, TYPE_HANDHELD);
-    hidInitializeVibrationDevices(VibrationDeviceHandles[1], 2, CONTROLLER_PLAYER_1, TYPE_JOYCON_PAIR);
+    hidInitializeVibrationDevices(VibrationDeviceHandles[0], 2, HidNpadIdType_Handheld, HidNpadStyleTag_NpadHandheld);
+    hidInitializeVibrationDevices(VibrationDeviceHandles[1], 2, HidNpadIdType_No1, HidNpadStyleTag_NpadJoyDual);
     
     VibrationValue_stop.freq_low  = 160.0f;
     VibrationValue_stop.freq_high = 320.0f;
