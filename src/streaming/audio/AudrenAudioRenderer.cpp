@@ -124,9 +124,12 @@ void AudrenAudioRenderer::cleanup() {
 
 void AudrenAudioRenderer::decode_and_play_sample(char *data, int length) {
     if (m_decoder && m_decoded_buffer) {
-        int decoded_samples = opus_multistream_decode(m_decoder, (const unsigned char *)data, length, m_decoded_buffer, m_samples_per_frame, 0);
-        if (decoded_samples > 0) {
-            write_audio(m_decoded_buffer, decoded_samples * m_channel_count * sizeof(s16));
+        if (data != NULL && length > 0) {
+            int decoded_samples = opus_multistream_decode(m_decoder, (const unsigned char *)data, length, m_decoded_buffer, m_samples_per_frame, 0);
+            
+            if (decoded_samples > 0) {
+                write_audio(m_decoded_buffer, decoded_samples * m_channel_count * sizeof(s16));
+            }
         }
     } else {
         Logger::fatal("Audren", "Invalid call of decode_and_play_sample");
