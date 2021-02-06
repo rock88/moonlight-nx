@@ -6,6 +6,20 @@
 	objectVersion = 50;
 	objects = {
 
+/* Begin PBXAggregateTarget section */
+		36CF721025CEBAE100878A8E /* Switch Build */ = {
+			isa = PBXAggregateTarget;
+			buildConfigurationList = 36CF721125CEBAE100878A8E /* Build configuration list for PBXAggregateTarget "Switch Build" */;
+			buildPhases = (
+				36CF721625CEBAE700878A8E /* Build */,
+			);
+			dependencies = (
+			);
+			name = "Switch Build";
+			productName = "Switch Build";
+		};
+/* End PBXAggregateTarget section */
+
 /* Begin PBXBuildFile section */
 		3602C3B7245D903000368900 /* HostButton.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3602C3B5245D903000368900 /* HostButton.cpp */; };
 		3602C3BA245DB3C800368900 /* AppListWindow.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3602C3B8245DB3C800368900 /* AppListWindow.cpp */; };
@@ -287,7 +301,6 @@
 		367CD959245DE25F00A95738 /* StreamWindow.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = StreamWindow.hpp; sourceTree = "<group>"; };
 		367D2D7224829A0800A946F4 /* LogsWindow.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = LogsWindow.cpp; sourceTree = "<group>"; };
 		367D2D7324829A0800A946F4 /* LogsWindow.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = LogsWindow.hpp; sourceTree = "<group>"; };
-		3689D6D0248EBEFA0008CB75 /* build.yml */ = {isa = PBXFileReference; lastKnownFileType = text.yaml; name = build.yml; path = .github/workflows/build.yml; sourceTree = "<group>"; };
 		3689D6DB249154F90008CB75 /* GamepadMapper.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = GamepadMapper.cpp; sourceTree = "<group>"; };
 		3689D6DC249154F90008CB75 /* GamepadMapper.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = GamepadMapper.hpp; sourceTree = "<group>"; };
 		36A0C0352461DBA30083289C /* AddHostButton.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = AddHostButton.cpp; sourceTree = "<group>"; };
@@ -710,7 +723,6 @@
 		36DBDE852450BB7E0057C8D3 = {
 			isa = PBXGroup;
 			children = (
-				3689D6D0248EBEFA0008CB75 /* build.yml */,
 				3602C3C0245DC7E300368900 /* Makefile */,
 				36EB490A24954B5B0059EDB7 /* README.md */,
 				36B406932459F41E005BD903 /* src */,
@@ -837,6 +849,9 @@
 				LastUpgradeCheck = 1140;
 				ORGANIZATIONNAME = rock88dev;
 				TargetAttributes = {
+					36CF721025CEBAE100878A8E = {
+						CreatedOnToolsVersion = 12.2;
+					};
 					36DBDE8D2450BB7E0057C8D3 = {
 						CreatedOnToolsVersion = 11.4;
 					};
@@ -856,6 +871,7 @@
 			projectRoot = "";
 			targets = (
 				36DBDE8D2450BB7E0057C8D3 /* moonlight */,
+				36CF721025CEBAE100878A8E /* Switch Build */,
 			);
 		};
 /* End PBXProject section */
@@ -877,6 +893,24 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\n\n#make DEBUG=1\n";
+		};
+		36CF721625CEBAE700878A8E /* Build */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = Build;
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\n\nexport DEVKITPRO=/opt/devkitpro\nexport DEVKITA64=/opt/devkitpro/devkitA64\nexport DEVKITARM=/opt/devkitpro/devkitARM\n\nrm -fr moonlight.nro moonlight.elf moonlight.nacp\nmake -f Makefile -j4\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -985,6 +1019,22 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin XCBuildConfiguration section */
+		36CF721225CEBAE100878A8E /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		36CF721325CEBAE100878A8E /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
 		36DBDE932450BB7E0057C8D3 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -1193,6 +1243,15 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		36CF721125CEBAE100878A8E /* Build configuration list for PBXAggregateTarget "Switch Build" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				36CF721225CEBAE100878A8E /* Debug */,
+				36CF721325CEBAE100878A8E /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		36DBDE892450BB7E0057C8D3 /* Build configuration list for PBXProject "moonlight" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
