@@ -199,7 +199,7 @@ NANOGUI_CXX_SOURCES = \
 # list of directories containing libraries, this must be the top level containing
 # include and lib
 #---------------------------------------------------------------------------------
-LIBDIRS	:= $(PORTLIBS) $(LIBNX)
+LIBDIRS	:= $(TOPDIR)/curl $(PORTLIBS) $(LIBNX)
 
 
 #---------------------------------------------------------------------------------
