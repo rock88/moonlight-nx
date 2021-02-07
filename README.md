@@ -24,12 +24,55 @@ Moonlight-NX is a port of [Moonlight Game Streaming Project](https://github.com/
 11. Minus+Plus - Guide button;
 
 # Build Moonlight-NX
-1. Build a development environment: `docker build . -t moonlight-nx-build`
-2. Run run the development environment: `docker run -it moonlight-nx-build`
-3. Clone this repo: `git clone --recursive https://github.com/rock88/moonlight-nx.git`;
-4. Set environment variables for the custom libcurl build: `export LIBCURL_PKGBUILD_URL="https://github.com/devkitPro/pacman-packages/raw/1582ad85914b14497fae32a9fe9074c0374f99f7/switch/curl/PKGBUILD"; export LIBCURL_BUILD_USER="build"`
-5. Run the build: `cd moonlight-nx; ./build.sh; exit`.
-6. Copy the .nro out of the container: `docker cp moonlight-nx-build:moonlight-nx/moonlight.nro .`
+## Using Docker
+1. Create a working dir: 
+
+`mkdir moonlight-nx-build; cd moonlight-nx-build`
+
+2. Download a Dockerfile:
+
+`wget https://raw.githubusercontent.com/rock88/moonlight-nx/master/Dockerfile`
+
+3. Build and run a development environment: 
+
+```
+docker build . -t moonlight-nx-build
+docker run -it moonlight-nx-build
+```
+
+4. Clone the repo: 
+
+`git clone --recursive https://github.com/rock88/moonlight-nx.git`
+
+5. Run the build:
+
+`cd moonlight-nx; make; exit`
+
+6. Copy the .nro out of the container: 
+```
+// Find your container ID
+docker ps -a
+
+// Use container ID for copy .nro from container
+docker cp CONTAINER_ID:moonlight-nx/moonlight.nro .
+```
+
+## Build Manually
+1. Setup a [Development Environment](https://switchbrew.org/wiki/Setting_up_Development_Environment "Development Environment")
+2. Install deps (`dkp-pacman` for Linux like arch, `pacman` for MacOS) and update all to latest versions:
+
+```
+sudo (dkp-)pacman --noconfirm -S devkitA64 switch-tools libnx switch-ffmpeg switch-glad switch-glfw switch-jansson switch-libdrm_nouveau switch-libexpat switch-libopus switch-libvpx switch-mbedtls switch-mesa switch-zlib switch-ffmpeg
+sudo (dkp-)pacman --noconfirm -Suy
+```
+
+3. Clone the repo: 
+
+`git clone --recursive https://github.com/rock88/moonlight-nx.git`
+
+4. Run the build:
+
+`cd moonlight-nx; make -j`
 
 # Assets
 Icon - [moonlight-stream](https://github.com/moonlight-stream "moonlight-stream") project logo.
