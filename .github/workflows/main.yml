@@ -12,10 +12,7 @@ jobs:
     runs-on: ubuntu-latest
 
     container:
-      image: docker://florianpiesche/moonlight-nx-build:latest
-      env:
-        # As pkgbuild needs to run unprivileged, this defines the user it will be run as
-        LIBCURL_BUILD_USER: build
+      image: docker://devkitpro/devkita64:latest
 
     steps:
 
@@ -23,6 +20,9 @@ jobs:
       uses: actions/checkout@master
       with:
         submodules: recursive
+
+    - name: Update pacman packages
+      run: dkp-pacman -Suy --noconfirm
 
     - name: Run build
       run: ./build.sh
