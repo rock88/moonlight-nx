@@ -12,7 +12,7 @@ jobs:
     runs-on: ubuntu-latest
 
     container:
-      image: docker://devkitpro/devkita64:latest
+      image: docker://florianpiesche/moonlight-nx-build:latest
 
     steps:
 
