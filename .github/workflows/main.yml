@@ -12,7 +12,7 @@ jobs:
     runs-on: ubuntu-latest
 
     container:
-      image: docker://florianpiesche/moonlight-nx-build:latest
+      image: docker://rock88/moonlight-nx-build:latest
 
     steps:
 
@@ -20,9 +20,6 @@ jobs:
       uses: actions/checkout@master
       with:
         submodules: recursive
-
-    - name: Update pacman packages
-      run: dkp-pacman -Suy --noconfirm
 
     - name: Run build
       run: ./build.sh
