@@ -319,6 +319,7 @@
 		36BFCCF42479724900245D40 /* GameStreamClient.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = GameStreamClient.hpp; sourceTree = "<group>"; };
 		36BFCCF52479724900245D40 /* GameStreamClient.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GameStreamClient.cpp; sourceTree = "<group>"; };
 		36BFCCF72479725900245D40 /* main.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
+		36CF721D25D038C700878A8E /* switch.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = switch.h; sourceTree = "<group>"; };
 		36D3F8422469B5C400CDEF9B /* MoonlightSession.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = MoonlightSession.cpp; sourceTree = "<group>"; };
 		36D3F8432469B5C400CDEF9B /* MoonlightSession.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = MoonlightSession.hpp; sourceTree = "<group>"; };
 		36D3F8492469CC2600CDEF9B /* IAudioRenderer.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = IAudioRenderer.hpp; sourceTree = "<group>"; };
@@ -653,6 +654,7 @@
 				36DFDCF12459F79000FC51CE /* ui */,
 				36D3F8462469C8DD00CDEF9B /* streaming */,
 				36F1646E2474736E00D70AD9 /* switch */,
+				36CF721C25D038C700878A8E /* switch_support */,
 				364A6A8D24786E2200460028 /* BoxArtManager.cpp */,
 				364A6A8E24786E2200460028 /* BoxArtManager.hpp */,
 				36A0C03B2461F03C0083289C /* Settings.cpp */,
@@ -680,6 +682,14 @@
 				36BFCCEE2479723E00245D40 /* errors.h */,
 			);
 			path = libgamestream;
+			sourceTree = "<group>";
+		};
+		36CF721C25D038C700878A8E /* switch_support */ = {
+			isa = PBXGroup;
+			children = (
+				36CF721D25D038C700878A8E /* switch.h */,
+			);
+			path = switch_support;
 			sourceTree = "<group>";
 		};
 		36D3F8462469C8DD00CDEF9B /* streaming */ = {
@@ -1093,6 +1103,7 @@
 					"\"$(SRCROOT)/third_party/moonlight-common-c/enet/include\"",
 					"\"$(SRCROOT)/third_party/moonlight-common-c/src\"",
 					"\"$(SRCROOT)/src/switch\"",
+					"\"$(SRCROOT)/src/switch_support\"",
 					/opt/devkitpro/libnx/include2,
 				);
 				LIBRARY_SEARCH_PATHS = /usr/local/lib;
@@ -1185,6 +1196,7 @@
 					"\"$(SRCROOT)/third_party/moonlight-common-c/enet/include\"",
 					"\"$(SRCROOT)/third_party/moonlight-common-c/src\"",
 					"\"$(SRCROOT)/src/switch\"",
+					"\"$(SRCROOT)/src/switch_support\"",
 					/opt/devkitpro/libnx/include2,
 				);
 				LIBRARY_SEARCH_PATHS = /usr/local/lib;

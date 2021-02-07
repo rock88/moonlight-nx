@@ -20,10 +20,18 @@ public:
     
     bool gamepad_combo_is_enabled(GamepadCombo combo);
     
-    void send_to_stream();
+    void send_to_stream() {
+        send_mouse_to_stream();
+        send_keyboard_to_stream();
+        send_gamepad_to_stream();
+    }
     
 private:
     InputController();
+    
+    void send_mouse_to_stream();
+    void send_keyboard_to_stream();
+    void send_gamepad_to_stream();
     
     bool gamepad_button_is_enabled(int button);
     bool gamepad_trigger_is_enabled(int trigger);

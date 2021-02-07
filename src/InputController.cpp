@@ -4,9 +4,9 @@
 #include <nanogui/nanogui.h>
 #include <nanogui/opengl.h>
 #include <GLFW/glfw3.h>
+#include <switch.h>
 
 #ifdef __SWITCH__
-#include <switch.h>
 static HidVibrationDeviceHandle VibrationDeviceHandles[2][2];
 static HidVibrationValue VibrationValues[2];
 static HidVibrationValue VibrationValue_stop;
@@ -167,87 +167,119 @@ bool InputController::gamepad_trigger_is_enabled(int trigger) {
     return glfw_gamepad_state.axes[trigger] > 0;
 }
 
-void InputController::send_to_stream() {
-    // Mouse
+void InputController::send_mouse_to_stream() {
     static bool is_pressed = false, is_released = false;
+    static bool l_is_pressed = false, r_is_pressed = false;
     static int last_mouse_x = 0, last_mouse_y = 0;
     static int last_send_mouse_x = 0, last_send_mouse_y = 0;
     
-    if (mouse_state.is_pressed && !is_pressed) {
-        is_pressed = true;
-        last_mouse_x = mouse_state.x;
-        last_mouse_y = mouse_state.y;
-    } else if (!mouse_state.is_pressed && is_pressed) {
-        is_pressed = false;
-    }
+    HidMouseState mouseState;
     
-    if (Settings::settings()->click_by_tap()) {
-        if (last_send_mouse_x != mouse_state.x || last_send_mouse_y != mouse_state.y) {
-            LiSendMousePositionEvent(mouse_state.x, mouse_state.y, m_width, m_height);
-            last_send_mouse_x = mouse_state.x;
-            last_send_mouse_y = mouse_state.y;
+    if (hidGetMouseStates(&mouseState, 1) > 0 && (mouseState.attributes & HidMouseAttribute_IsConnected)) {
+        if (last_send_mouse_x != mouseState.x || last_send_mouse_y != mouseState.y) {
+            LiSendMousePositionEvent(mouseState.x, mouseState.y, m_width, m_height);
+            last_send_mouse_x = mouseState.x;
+            last_send_mouse_y = mouseState.y;
         }
         
-        if (gamepad_button_is_enabled(NANOGUI_GAMEPAD_BUTTON_RIGHT_BUMPER) || gamepad_trigger_is_enabled(NANOGUI_GAMEPAD_AXIS_RIGHT_TRIGGER)) {
-            if (mouse_state.is_pressed) {
-                is_released = false;
-                LiSendMouseButtonEvent(BUTTON_ACTION_PRESS, BUTTON_RIGHT);
-            } else if (!is_released) {
-                is_released = true;
-                LiSendMouseButtonEvent(BUTTON_ACTION_RELEASE, BUTTON_RIGHT);
-            }
-        } else {
-            if (mouse_state.is_pressed) {
-                is_released = false;
-                LiSendMouseButtonEvent(BUTTON_ACTION_PRESS, BUTTON_LEFT);
-            } else if (!is_released) {
-                is_released = true;
-                LiSendMouseButtonEvent(BUTTON_ACTION_RELEASE, BUTTON_LEFT);
-            }
+        if ((mouseState.buttons & HidMouseButton_Left) && !l_is_pressed) {
+            l_is_pressed = true;
+            LiSendMouseButtonEvent(BUTTON_ACTION_PRESS, BUTTON_LEFT);
+        } else if (!(mouseState.buttons & HidMouseButton_Left) && l_is_pressed) {
+            l_is_pressed = false;
+            LiSendMouseButtonEvent(BUTTON_ACTION_RELEASE, BUTTON_LEFT);
+        }
+        
+        if ((mouseState.buttons & HidMouseButton_Right) && !r_is_pressed) {
+            r_is_pressed = true;
+            LiSendMouseButtonEvent(BUTTON_ACTION_PRESS, BUTTON_RIGHT);
+        } else if (!(mouseState.buttons & HidMouseButton_Right) && r_is_pressed) {
+            r_is_pressed = false;
+            LiSendMouseButtonEvent(BUTTON_ACTION_RELEASE, BUTTON_RIGHT);
+        }
+        
+        // Why wheel_delta_x?
+        if (mouseState.wheel_delta_x != 0) {
+            LiSendScrollEvent(mouseState.wheel_delta_x);
         }
     } else {
-        bool move_mouse = !gamepad_trigger_is_enabled(NANOGUI_GAMEPAD_AXIS_LEFT_TRIGGER) && !gamepad_trigger_is_enabled(NANOGUI_GAMEPAD_AXIS_RIGHT_TRIGGER);
+        if (mouse_state.is_pressed && !is_pressed) {
+            is_pressed = true;
+            last_mouse_x = mouse_state.x;
+            last_mouse_y = mouse_state.y;
+        } else if (!mouse_state.is_pressed && is_pressed) {
+            is_pressed = false;
+        }
         
-        if (move_mouse) {
-            int relative_mouse_x = mouse_state.x - last_mouse_x;
-            int relative_mouse_y = mouse_state.y - last_mouse_y;
+        if (Settings::settings()->click_by_tap()) {
+            if (last_send_mouse_x != mouse_state.x || last_send_mouse_y != mouse_state.y) {
+                LiSendMousePositionEvent(mouse_state.x, mouse_state.y, m_width, m_height);
+                last_send_mouse_x = mouse_state.x;
+                last_send_mouse_y = mouse_state.y;
+            }
             
-            if (relative_mouse_x != last_send_mouse_x || relative_mouse_y != last_send_mouse_y) {
-                LiSendMouseMoveEvent(relative_mouse_x, relative_mouse_y);
-                last_send_mouse_x = relative_mouse_x;
-                last_send_mouse_y = relative_mouse_y;
+            if (gamepad_button_is_enabled(NANOGUI_GAMEPAD_BUTTON_RIGHT_BUMPER) || gamepad_trigger_is_enabled(NANOGUI_GAMEPAD_AXIS_RIGHT_TRIGGER)) {
+                if (mouse_state.is_pressed) {
+                    is_released = false;
+                    LiSendMouseButtonEvent(BUTTON_ACTION_PRESS, BUTTON_RIGHT);
+                } else if (!is_released) {
+                    is_released = true;
+                    LiSendMouseButtonEvent(BUTTON_ACTION_RELEASE, BUTTON_RIGHT);
+                }
+            } else {
+                if (mouse_state.is_pressed) {
+                    is_released = false;
+                    LiSendMouseButtonEvent(BUTTON_ACTION_PRESS, BUTTON_LEFT);
+                } else if (!is_released) {
+                    is_released = true;
+                    LiSendMouseButtonEvent(BUTTON_ACTION_RELEASE, BUTTON_LEFT);
+                }
+            }
+        } else {
+            bool move_mouse = !gamepad_trigger_is_enabled(NANOGUI_GAMEPAD_AXIS_LEFT_TRIGGER) && !gamepad_trigger_is_enabled(NANOGUI_GAMEPAD_AXIS_RIGHT_TRIGGER);
+            
+            if (move_mouse) {
+                int relative_mouse_x = mouse_state.x - last_mouse_x;
+                int relative_mouse_y = mouse_state.y - last_mouse_y;
+                
+                if (relative_mouse_x != last_send_mouse_x || relative_mouse_y != last_send_mouse_y) {
+                    LiSendMouseMoveEvent(relative_mouse_x, relative_mouse_y);
+                    last_send_mouse_x = relative_mouse_x;
+                    last_send_mouse_y = relative_mouse_y;
+                }
+            }
+            
+            last_mouse_x = mouse_state.x;
+            last_mouse_y = mouse_state.y;
+            
+            if (gamepad_button_is_enabled(NANOGUI_GAMEPAD_BUTTON_LEFT_BUMPER) || gamepad_trigger_is_enabled(NANOGUI_GAMEPAD_AXIS_LEFT_TRIGGER)) {
+                if (mouse_state.is_pressed) {
+                    is_released = false;
+                    LiSendMouseButtonEvent(BUTTON_ACTION_PRESS, BUTTON_LEFT);
+                } else if (!is_released) {
+                    is_released = true;
+                    LiSendMouseButtonEvent(BUTTON_ACTION_RELEASE, BUTTON_LEFT);
+                }
+            } else if (gamepad_button_is_enabled(NANOGUI_GAMEPAD_BUTTON_RIGHT_BUMPER) || gamepad_trigger_is_enabled(NANOGUI_GAMEPAD_AXIS_RIGHT_TRIGGER)) {
+                if (mouse_state.is_pressed) {
+                    is_released = false;
+                    LiSendMouseButtonEvent(BUTTON_ACTION_PRESS, BUTTON_RIGHT);
+                } else if (!is_released) {
+                    is_released = true;
+                    LiSendMouseButtonEvent(BUTTON_ACTION_RELEASE, BUTTON_RIGHT);
+                }
             }
         }
         
-        last_mouse_x = mouse_state.x;
-        last_mouse_y = mouse_state.y;
-        
-        if (gamepad_button_is_enabled(NANOGUI_GAMEPAD_BUTTON_LEFT_BUMPER) || gamepad_trigger_is_enabled(NANOGUI_GAMEPAD_AXIS_LEFT_TRIGGER)) {
-            if (mouse_state.is_pressed) {
-                is_released = false;
-                LiSendMouseButtonEvent(BUTTON_ACTION_PRESS, BUTTON_LEFT);
-            } else if (!is_released) {
-                is_released = true;
-                LiSendMouseButtonEvent(BUTTON_ACTION_RELEASE, BUTTON_LEFT);
-            }
-        } else if (gamepad_button_is_enabled(NANOGUI_GAMEPAD_BUTTON_RIGHT_BUMPER) || gamepad_trigger_is_enabled(NANOGUI_GAMEPAD_AXIS_RIGHT_TRIGGER)) {
-            if (mouse_state.is_pressed) {
-                is_released = false;
-                LiSendMouseButtonEvent(BUTTON_ACTION_PRESS, BUTTON_RIGHT);
-            } else if (!is_released) {
-                is_released = true;
-                LiSendMouseButtonEvent(BUTTON_ACTION_RELEASE, BUTTON_RIGHT);
-            }
+        // Scroll
+        if (m_scroll_y != 0) {
+            LiSendHighResScrollEvent(m_scroll_y > 0 ? fmax(m_scroll_y, 1) : fmin(m_scroll_y, -1));
+            m_scroll_y = 0;
         }
     }
-    
-    // Scroll
-    if (m_scroll_y != 0) {
-        LiSendHighResScrollEvent(m_scroll_y > 0 ? fmax(m_scroll_y, 1) : fmin(m_scroll_y, -1));
-        m_scroll_y = 0;
-    }
-    
-    // Keyboard
+}
+
+void InputController::send_keyboard_to_stream() {
     static bool send_alt_enter = false;
     
     if (!send_alt_enter && gamepad_combo_is_enabled(GamepadComboAltEnter)) {
@@ -267,8 +299,9 @@ void InputController::send_to_stream() {
         send_escape = false;
         LiSendKeyboardEvent(0x1B, KEY_ACTION_UP, 0);
     }
-    
-    // Gamepad
+}
+
+void InputController::send_gamepad_to_stream() {
     auto mapped_gamepad = GamepadMapper::mapper()->map(glfw_gamepad_state);
     short buttonFlags = 0;
     unsigned char leftTrigger = 0xFFFF * (mapped_gamepad.axes[GLFW_GAMEPAD_AXIS_LEFT_TRIGGER] + 1) / 2;

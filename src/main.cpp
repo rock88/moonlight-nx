@@ -7,10 +7,7 @@
 #include "GameStreamClient.hpp"
 #include "Logger.hpp"
 #include <glad/glad.h>
-
-#ifdef __SWITCH__
 #include <switch.h>
-#endif
 
 #include <GLFW/glfw3.h>
 
@@ -79,6 +76,8 @@ int main(int argc, const char * argv[]) {
     glfwSetKeyCallback(window, [](GLFWwindow *w, int key, int scancode, int action, int mods) {
         InputController::controller()->handle_keyboard_event(key, scancode, action, mods);
     });
+    
+    hidInitializeMouse();
     
     nanogui::init();
     nanogui::ref<Application> app = new Application(Size(m_width, m_height), Size(m_fb_width, m_fb_height));
