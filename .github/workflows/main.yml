@@ -14,8 +14,6 @@ jobs:
     container:
       image: docker://florianpiesche/moonlight-nx-build:latest
       env:
-        # Set this to empty to skip building libcurl 7.69.1-1
-        LIBCURL_PKGBUILD_URL: https://github.com/devkitPro/pacman-packages/raw/1582ad85914b14497fae32a9fe9074c0374f99f7/switch/curl/PKGBUILD
         # As pkgbuild needs to run unprivileged, this defines the user it will be run as
         LIBCURL_BUILD_USER: build
 
