@@ -77,11 +77,11 @@ M_INCLUDES := \
 DEFINES := -DNANOGUI_USE_OPENGL -DNVG_STB_IMAGE_IMPLEMENTATION -DNANOGUI_NO_GLFW \
 	-DHAS_SOCKLEN_T -DHAS_POLL -DHAS_FCNTL -D_GNU_SOURCE -DUSE_MBEDTLS_CRYPTO -DMOONLIGHT_VERSION=\"$(MOONLIGHT_VERSION)\"
 
-CFLAGS	:=	-Wall -O3 -ffunction-sections $(ARCH) $(DEFINES) $(INCLUDE) $(M_INCLUDES) -D__SWITCH__
+CFLAGS	:=	-g -Wall -O2 -ffunction-sections $(ARCH) $(DEFINES) $(INCLUDE) $(M_INCLUDES) -D__SWITCH__
 CXXFLAGS	:= $(CFLAGS) -std=gnu++17
 
-ASFLAGS	:=	$(ARCH)
-LDFLAGS	=	-specs=$(DEVKITPRO)/libnx/switch.specs $(ARCH) -Wl,-Map,$(notdir $*.map)
+ASFLAGS	:=	-g $(ARCH)
+LDFLAGS	=	-specs=$(DEVKITPRO)/libnx/switch.specs -g $(ARCH) -Wl,-Map,$(notdir $*.map)
 
 LIBS	:= -lcurl -lmbedtls -lmbedx509 -lmbedcrypto \
 	-lavcodec -lavutil -lopus -lz -lexpat \
