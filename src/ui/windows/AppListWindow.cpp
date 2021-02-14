@@ -4,8 +4,27 @@
 #include "StreamWindow.hpp"
 #include "GamepadMapper.hpp"
 #include "Alert.hpp"
+#include "GameStreamClient.hpp"
 
 using namespace nanogui;
+
+class AppListLayout: public GridLayout {
+public:
+    AppListLayout(): GridLayout(Orientation::Horizontal, 5, Alignment::Minimum, 0, 18) {}
+    
+    Vector2i preferred_size(NVGcontext *ctx, const Widget *widget) const override {
+        auto width = (widget->parent()->width() - spacing(0) * (resolution() - 1)) / resolution() - 10;
+        auto size = Size(width, width * 1.4f);
+        
+        for (auto &child: widget->children()) {
+            if (child->fixed_size() != size) {
+                child->set_fixed_size(size);
+                child->perform_layout(ctx);
+            }
+        }
+        return GridLayout::preferred_size(ctx, widget);
+    }
+};
 
 AppListWindow::AppListWindow(Widget *parent, const std::string &address): ContentWindow(parent, "Applications"), m_address(address) {
     set_left_pop_button();
@@ -23,7 +42,7 @@ void AppListWindow::reload(std::function<void()> callback) {
     
     auto loader = add<LoadingOverlay>();
     
-    GameStreamClient::client()->connect(m_address, [this, loader, callback](auto result) {
+    GameStreamClient::instance().connect(m_address, [this, loader, callback](auto result) {
         if (result.isSuccess()) {
             auto currentGame = result.value().currentGame;
             
@@ -33,7 +52,7 @@ void AppListWindow::reload(std::function<void()> callback) {
                 });
             }
             
-            GameStreamClient::client()->applist(m_address, [this, loader, currentGame, callback](auto result) {
+            GameStreamClient::instance().applist(m_address, [this, loader, currentGame, callback](auto result) {
                 loader->dispose();
                 
                 if (result.isSuccess()) {
@@ -41,17 +60,15 @@ void AppListWindow::reload(std::function<void()> callback) {
                     container()->add<Widget>()->set_fixed_height(6);
                     
                     auto button_container = container()->add<Widget>();
-                    button_container->set_layout(new GridLayout(Orientation::Horizontal, 5, Alignment::Minimum, 0, 18));
+                    button_container->set_layout(new AppListLayout());
                     
-                    PAPP_LIST app = result.value();
-                    
-                    while (app != NULL) {
-                        auto button = button_container->add<AppButton>(m_address, *app, currentGame);
+                    for (auto &app: result.value()) {
+                        auto button = button_container->add<AppButton>(m_address, app, currentGame);
                         button->set_callback([this, app] {
-                            run_game(app->id);
+                            run_game(app.app_id);
                         });
-                        app = app->next;
                     }
+                    
                     perform_layout();
                     
                     if (callback) {
@@ -69,7 +86,7 @@ void AppListWindow::reload(std::function<void()> callback) {
 }
 
 void AppListWindow::run_game(int app_id) {
-    int current_app_id = GameStreamClient::client()->server_data(m_address).currentGame;
+    int current_app_id = GameStreamClient::instance().server_data(m_address).currentGame;
     
     if (current_app_id == 0 || current_app_id == app_id) {
         GamepadMapper::mapper()->load_gamepad_map(app_id);
@@ -92,7 +109,7 @@ void AppListWindow::run_game(int app_id) {
 void AppListWindow::close_game(std::function<void()> callback) {
     auto loader = add<LoadingOverlay>();
     
-    GameStreamClient::client()->quit(m_address, [this, loader, callback](auto result) {
+    GameStreamClient::instance().quit(m_address, [this, loader, callback](auto result) {
         loader->dispose();
         
         if (result.isSuccess()) {

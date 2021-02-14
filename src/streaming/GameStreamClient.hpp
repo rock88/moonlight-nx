@@ -1,3 +1,4 @@
+#include "Singleton.hpp"
 #include <string>
 #include <vector>
 #include <functional>
@@ -49,31 +50,31 @@ template<class T> using ServerCallback = const std::function<void(GSResult<T>)>;
 
 struct Host;
 
-class GameStreamClient {
+struct AppInfo {
+    std::string name;
+    int app_id;
+};
+
+using AppInfoList = std::vector<AppInfo>;
+
+class GameStreamClient: public Singleton<GameStreamClient> {
 public:
-    static GameStreamClient* client() {
-        static GameStreamClient client;
-        return &client;
-    }
-    
     SERVER_DATA server_data(const std::string &address) {
         return m_server_data[address];
     }
     
+    void start();
     void stop();
     
     void wake_up_host(const Host &host, ServerCallback<bool> callback);
     void connect(const std::string &address, ServerCallback<SERVER_DATA> callback);
     void pair(const std::string &address, const std::string &pin, ServerCallback<bool> callback);
-    void applist(const std::string &address, ServerCallback<PAPP_LIST> callback);
+    void applist(const std::string &address, ServerCallback<AppInfoList> callback);
     void app_boxart(const std::string &address, int app_id, ServerCallback<Data> callback);
     void start(const std::string &address, STREAM_CONFIGURATION config, int app_id, ServerCallback<STREAM_CONFIGURATION> callback);
     void quit(const std::string &address, ServerCallback<bool> callback);
     
 private:
-    GameStreamClient();
-    
     std::map<std::string, SERVER_DATA> m_server_data;
-    std::map<std::string, PAPP_LIST> m_app_list;
     STREAM_CONFIGURATION m_config;
 };

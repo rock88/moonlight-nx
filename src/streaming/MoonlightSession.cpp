@@ -215,11 +215,11 @@ void MoonlightSession::start(ServerCallback<bool> callback) {
         m_audio_callbacks.capabilities = m_audio_renderer->capabilities();
     }
     
-    GameStreamClient::client()->start(m_address, m_config, m_app_id, [this, callback](auto result) {
+    GameStreamClient::instance().start(m_address, m_config, m_app_id, [this, callback](auto result) {
         if (result.isSuccess()) {
             m_config = result.value();
             
-            auto m_data = GameStreamClient::client()->server_data(m_address);
+            auto m_data = GameStreamClient::instance().server_data(m_address);
             int result = LiStartConnection(&m_data.serverInfo, &m_config, &m_connection_callbacks, &m_video_callbacks, &m_audio_callbacks, NULL, 0, NULL, 0);
             
             if (result != 0) {
@@ -237,7 +237,7 @@ void MoonlightSession::start(ServerCallback<bool> callback) {
 
 void MoonlightSession::stop(int terminate_app) {
     if (terminate_app) {
-        GameStreamClient::client()->quit(m_address, [](auto _) {});
+        GameStreamClient::instance().quit(m_address, [](auto _) {});
     }
     
     LiStopConnection();
@@ -249,9 +249,6 @@ void MoonlightSession::draw() {
         AVFrameHolder::holder()->get([this](auto frame) {
             m_video_renderer->draw(m_config.width, m_config.height, frame);
         });
-//        if (auto frame = m_video_decoder->frame()) {
-//            m_video_renderer->draw(m_config.width, m_config.height, frame);
-//        }
         
         m_session_stats.video_decode_stats = *m_video_decoder->video_decode_stats();
         m_session_stats.video_render_stats = *m_video_renderer->video_render_stats();

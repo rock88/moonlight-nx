@@ -1,5 +1,6 @@
 #include "BoxArtManager.hpp"
 #include "Settings.hpp"
+#include "Data.hpp"
 #include "nanovg.h"
 #include <algorithm>
 #include <mutex>

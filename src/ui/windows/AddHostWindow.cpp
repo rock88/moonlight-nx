@@ -61,7 +61,7 @@ AddHostWindow::AddHostWindow(Widget *parent): ContentWindow(parent, "Add Host") 
         if (text->value().size() > 0) {
             auto loader = add<LoadingOverlay>();
             
-            GameStreamClient::client()->connect(text->value(), [this, loader](auto result) {
+            GameStreamClient::instance().connect(text->value(), [this, loader](auto result) {
                 loader->dispose();
                 
                 if (result.isSuccess()) {

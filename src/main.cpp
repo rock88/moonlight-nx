@@ -16,7 +16,7 @@
 GLFWgamepadstate glfw_gamepad_state;
 int moonlight_exit = 0;
 
-int m_width, m_height, m_fb_width, m_fb_height;
+static int m_width, m_height, m_fb_width, m_fb_height;
 
 int main(int argc, const char * argv[]) {
     glfwInit();
@@ -63,6 +63,8 @@ int main(int argc, const char * argv[]) {
         nanogui::window_resize_callback_event(width, height, m_fb_width, m_fb_height);
     });
     
+    GameStreamClient::instance().start();
+    
     MouseController::instance().init(window);
     KeyboardController::instance().init(window);
     
@@ -93,7 +95,7 @@ int main(int argc, const char * argv[]) {
         glfwSwapBuffers(window);
     }
     
-    GameStreamClient::client()->stop();
+    GameStreamClient::instance().stop();
     nanogui::leave();
     nanogui::shutdown();
     glfwDestroyWindow(window);

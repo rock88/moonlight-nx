@@ -15,7 +15,7 @@ HostButton::HostButton(Widget* parent, const Host &host): Button(parent, "") {
     m_label->set_font_size(20);
     
     inc_ref();
-    GameStreamClient::client()->connect(m_host.address, [this](auto result) {
+    GameStreamClient::instance().connect(m_host.address, [this](auto result) {
         if (result.isSuccess()) {
             m_is_active = true;
             m_is_paired = result.value().paired;

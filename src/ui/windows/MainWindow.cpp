@@ -50,7 +50,7 @@ void MainWindow::reload() {
                 } else {
                     auto loader = add<LoadingOverlay>("Pairing... (Enter 0000)");
                     
-                    GameStreamClient::client()->pair(button->host().address, "0000", [this, loader](auto result){
+                    GameStreamClient::instance().pair(button->host().address, "0000", [this, loader](auto result){
                         loader->dispose();
                         
                         if (result.isSuccess()) {
@@ -104,7 +104,7 @@ void MainWindow::draw(NVGcontext *ctx) {
 void MainWindow::wake_up_host(const Host &host) {
     auto loader = add<LoadingOverlay>("Sending Wake Up...");
     
-    GameStreamClient::client()->wake_up_host(host, [this, loader](auto result) {
+    GameStreamClient::instance().wake_up_host(host, [this, loader](auto result) {
         loader->dispose();
         
         if (result.isSuccess()) {

@@ -63,7 +63,7 @@ void perform_async(std::function<void()> task) {
     m_tasks.push_back(task);
 }
 
-GameStreamClient::GameStreamClient() {
+void GameStreamClient::start() {
     start_task_loop();
 }
 
@@ -78,7 +78,7 @@ void GameStreamClient::stop() {
 
 void GameStreamClient::wake_up_host(const Host &host, ServerCallback<bool> callback) {
     perform_async([this, host, callback] {
-        if (WakeOnLanManager::manager()->wake_up_host(host)) {
+        if (WakeOnLanManager::instance().wake_up_host(host)) {
             usleep(5'000'000);
             nanogui::async([callback] { callback(GSResult<bool>::success(true)); });
         } else {
@@ -128,22 +128,31 @@ void GameStreamClient::pair(const std::string &address, const std::string &pin, 
     });
 }
 
-void GameStreamClient::applist(const std::string &address, ServerCallback<PAPP_LIST> callback) {
+void GameStreamClient::applist(const std::string &address, ServerCallback<AppInfoList> callback) {
     if (m_server_data.count(address) == 0) {
-        callback(GSResult<PAPP_LIST>::failure("Firstly call connect() & pair()..."));
+        callback(GSResult<AppInfoList>::failure("Firstly call connect() & pair()..."));
         return;
     }
     
-    m_app_list[address] = PAPP_LIST();
-    
     perform_async([this, address, callback] {
-        int status = gs_applist(&m_server_data[address], &m_app_list[address]);
+        PAPP_LIST list;
         
-        nanogui::async([this, address, callback, status] {
+        int status = gs_applist(&m_server_data[address], &list);
+        
+        AppInfoList app_list;
+        
+        while (list) {
+            app_list.push_back({ .name = list->name, .app_id = list->id });
+            list = list->next;
+        }
+        
+        std::sort(app_list.begin(), app_list.end(), [](AppInfo a, AppInfo b) { return a.name < b.name; });
+        
+        nanogui::async([this, app_list, callback, status] {
             if (status == GS_OK) {
-                callback(GSResult<PAPP_LIST>::success(m_app_list[address]));
+                callback(GSResult<AppInfoList>::success(app_list));
             } else {
-                callback(GSResult<PAPP_LIST>::failure(gs_error()));
+                callback(GSResult<AppInfoList>::failure(gs_error()));
             }
         });
     });

@@ -1,5 +1,4 @@
 #include "ContentWindow.hpp"
-#include "GameStreamClient.hpp"
 #pragma once
 
 class AppListWindow: public ContentWindow {
@@ -14,5 +13,4 @@ private:
     void close_game(std::function<void()> callback = NULL);
     
     std::string m_address;
-    PAPP_LIST m_app_list;
 };
