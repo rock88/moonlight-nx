@@ -2,6 +2,7 @@
 #include "LoadingOverlay.hpp"
 #include "Alert.hpp"
 #include "InputController.hpp"
+#include "StreamControlsController.hpp"
 #include "FFmpegVideoDecoder.hpp"
 #include "GLVideoRenderer.hpp"
 #ifdef __SWITCH__
@@ -137,7 +138,8 @@ void StreamWindow::draw(NVGcontext *ctx) {
         m_draw_stats = false;
     }
     
-    InputController::controller()->send_to_stream();
+    //InputController::controller()->send_to_stream();
+    StreamControlsController::instance().send_to_stream(width(), height());
 }
 
 bool StreamWindow::mouse_button_event(const nanogui::Vector2i &p, int button, bool down, int modifiers) {

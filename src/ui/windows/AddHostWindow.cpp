@@ -12,6 +12,7 @@ AddHostWindow::AddHostWindow(Widget *parent): ContentWindow(parent, "Add Host") 
     auto text = container()->add<TextBox>("");
     text->set_placeholder("Enter the IP address of your GameStream PC");
     text->set_fixed_height(60);
+    text->set_editable(true);
     
     std::vector<std::string> keys {"7", "8", "9", "4", "5", "6", "1", "2", "3"};
     

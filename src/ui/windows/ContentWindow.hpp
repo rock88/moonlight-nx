@@ -64,10 +64,6 @@ public:
         m_container->set_layout(new nanogui::BoxLayout(orientation, alignment, margin, spacing));
     }
     
-    bool keyboard_event(int key, int scancode, int action, int modifiers) override {
-        return true;
-    };
-    
     bool gamepad_button_event(int jid, int button, int action) override;
     
 private:

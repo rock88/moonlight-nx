@@ -2,20 +2,10 @@
 #include <pthread.h>
 #pragma once
 
-class IFFmpegHardwareVideoDecoder {
-public:
-    virtual ~IFFmpegHardwareVideoDecoder() {};
-    virtual bool prepare_decoder_context(AVCodecContext* context, AVDictionary** options) = 0;
-};
-
 class FFmpegVideoDecoder: public IFFmpegVideoDecoder {
 public:
     FFmpegVideoDecoder();
     ~FFmpegVideoDecoder();
-    
-    void set_hardware_video_decoder(IFFmpegHardwareVideoDecoder* hardware_video_decoder) {
-        m_hardware_video_decoder = hardware_video_decoder;
-    }
     
     int setup(int video_format, int width, int height, int redraw_rate, void *context, int dr_flags) override;
     void cleanup() override;
@@ -27,8 +17,6 @@ public:
 private:
     int decode(char* indata, int inlen);
     AVFrame* get_frame(bool native_frame);
-    
-    IFFmpegHardwareVideoDecoder* m_hardware_video_decoder = nullptr;
     
     AVPacket m_packet;
     AVCodec* m_decoder = nullptr;

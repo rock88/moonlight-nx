@@ -204,33 +204,32 @@ static inline Widget *most_closed_widget(Widget *target, std::vector<Widget *> w
 
 static inline Widget* find_new_selectable(std::vector<Widget *> selectables, int jid, int button, int action) {
     auto current = std::find_if(selectables.begin(), selectables.end(), [](auto c) { return c->selected(); });
-     
-     if (current != selectables.end() && (*current)->gamepad_button_event(jid, button, action)) {
-         return NULL;
-     }
-     
-     if (button >= NANOGUI_GAMEPAD_BUTTON_DPAD_UP && button <= NANOGUI_GAMEPAD_BUTTON_DPAD_LEFT) {
-         if (current == selectables.end()) {
-             selectables.front()->set_selected(true);
-             return NULL;
-         }
-         
-         auto current_selectable = *current;
-         auto new_selectable = most_closed_widget(
-             current_selectable,
-             selectables,
-             button == NANOGUI_GAMEPAD_BUTTON_DPAD_LEFT,
-             button == NANOGUI_GAMEPAD_BUTTON_DPAD_RIGHT,
-             button == NANOGUI_GAMEPAD_BUTTON_DPAD_UP,
-             button == NANOGUI_GAMEPAD_BUTTON_DPAD_DOWN
-             );
-         
-         if (new_selectable) {
-             current_selectable->set_selected(false);
-             new_selectable->set_selected(true);
-             return new_selectable;
-         }
-     }
+    
+    if (current != selectables.end() && (*current)->gamepad_button_event(jid, button, action)) {
+        return NULL;
+    }
+    
+    if (button >= NANOGUI_GAMEPAD_BUTTON_DPAD_UP && button <= NANOGUI_GAMEPAD_BUTTON_DPAD_LEFT) {
+        if (current == selectables.end()) {
+            selectables.front()->set_selected(true);
+            return NULL;
+        }
+        
+        auto current_selectable = *current;
+        auto new_selectable = most_closed_widget(current_selectable,
+                                                 selectables,
+                                                 button == NANOGUI_GAMEPAD_BUTTON_DPAD_LEFT,
+                                                 button == NANOGUI_GAMEPAD_BUTTON_DPAD_RIGHT,
+                                                 button == NANOGUI_GAMEPAD_BUTTON_DPAD_UP,
+                                                 button == NANOGUI_GAMEPAD_BUTTON_DPAD_DOWN
+                                                 );
+        
+        if (new_selectable) {
+            current_selectable->set_selected(false);
+            new_selectable->set_selected(true);
+            return new_selectable;
+        }
+    }
     return NULL;
 }
 

@@ -1,4 +1,5 @@
 #include "GLVideoRenderer.hpp"
+#include "Logger.hpp"
 
 static const char *vertex_shader_string = "\
 #version 140\n\
@@ -92,6 +93,8 @@ static const float* gl_color_matrix(enum AVColorSpace color_space, bool color_fu
 }
 
 GLVideoRenderer::~GLVideoRenderer() {
+    Logger::info("GL", "Cleanup...");
+    
     if (m_shader_program) {
         glDeleteProgram(m_shader_program);
     }
@@ -109,6 +112,8 @@ GLVideoRenderer::~GLVideoRenderer() {
             glDeleteTextures(1, &m_texture_id[i]);
         }
     }
+    
+    Logger::info("GL", "Cleanup done!");
 }
 
 void GLVideoRenderer::initialize() {
@@ -157,8 +162,12 @@ void GLVideoRenderer::draw(int width, int height, AVFrame *frame) {
     uint64_t before_render = LiGetMillis();
     
     if (!m_is_initialized) {
+        Logger::info("GL", "Init with width: %i, height: %i", width, height);
+        
         initialize();
         m_is_initialized = true;
+        
+        Logger::info("GL", "Init done");
     }
     
     if (m_width != frame->width || m_height != frame->height) {

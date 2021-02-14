@@ -3,6 +3,7 @@
 #include "Settings.hpp"
 #include "InputController.hpp"
 #include "Logger.hpp"
+#include "AVFrameHolder.hpp"
 #include <nanogui/nanogui.h>
 
 static MoonlightSession* m_active_session = nullptr;
@@ -240,13 +241,17 @@ void MoonlightSession::stop(int terminate_app) {
     }
     
     LiStopConnection();
+    AVFrameHolder::holder()->cleanup();
 }
 
 void MoonlightSession::draw() {
     if (m_video_decoder && m_video_renderer) {
-        if (auto frame = m_video_decoder->frame()) {
+        AVFrameHolder::holder()->get([this](auto frame) {
             m_video_renderer->draw(m_config.width, m_config.height, frame);
-        }
+        });
+//        if (auto frame = m_video_decoder->frame()) {
+//            m_video_renderer->draw(m_config.width, m_config.height, frame);
+//        }
         
         m_session_stats.video_decode_stats = *m_video_decoder->video_decode_stats();
         m_session_stats.video_render_stats = *m_video_renderer->video_render_stats();

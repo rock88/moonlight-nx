@@ -25,6 +25,9 @@
 		3602C3BA245DB3C800368900 /* AppListWindow.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3602C3B8245DB3C800368900 /* AppListWindow.cpp */; };
 		3602C3BD245DBA9100368900 /* AppButton.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3602C3BB245DBA9100368900 /* AppButton.cpp */; };
 		3603E93C246316400051287D /* InputController.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3603E93A246316400051287D /* InputController.cpp */; };
+		3620418D25D7F04400D21EE3 /* MouseController.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3620418B25D7F04400D21EE3 /* MouseController.cpp */; };
+		3620419825D85B6000D21EE3 /* KeyboardController.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3620419625D85B5F00D21EE3 /* KeyboardController.cpp */; };
+		362041A225D94D7700D21EE3 /* StreamControlsController.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 362041A025D94D7700D21EE3 /* StreamControlsController.cpp */; };
 		363898342471B7C500F99920 /* MbedTLSCryptoManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 363898312471B7C500F99920 /* MbedTLSCryptoManager.cpp */; };
 		364A6A8F24786E2200460028 /* BoxArtManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 364A6A8D24786E2200460028 /* BoxArtManager.cpp */; };
 		3652EFCD245B3B00001FABF3 /* widget.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3652EF0F245B3B00001FABF3 /* widget.cpp */; };
@@ -144,6 +147,13 @@
 		3602C3C0245DC7E300368900 /* Makefile */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.make; path = Makefile; sourceTree = "<group>"; };
 		3603E93A246316400051287D /* InputController.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = InputController.cpp; sourceTree = "<group>"; };
 		3603E93B246316400051287D /* InputController.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = InputController.hpp; sourceTree = "<group>"; };
+		3620418B25D7F04400D21EE3 /* MouseController.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = MouseController.cpp; sourceTree = "<group>"; };
+		3620418C25D7F04400D21EE3 /* MouseController.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = MouseController.hpp; sourceTree = "<group>"; };
+		3620419125D7FDDB00D21EE3 /* Singleton.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Singleton.hpp; sourceTree = "<group>"; };
+		3620419625D85B5F00D21EE3 /* KeyboardController.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = KeyboardController.cpp; sourceTree = "<group>"; };
+		3620419725D85B5F00D21EE3 /* KeyboardController.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = KeyboardController.hpp; sourceTree = "<group>"; };
+		362041A025D94D7700D21EE3 /* StreamControlsController.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = StreamControlsController.cpp; sourceTree = "<group>"; };
+		362041A125D94D7700D21EE3 /* StreamControlsController.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = StreamControlsController.hpp; sourceTree = "<group>"; };
 		3638982F2471B7C500F99920 /* MbedTLSCryptoManager.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = MbedTLSCryptoManager.hpp; sourceTree = "<group>"; };
 		363898302471B7C500F99920 /* OpenSSLCryptoManager.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = OpenSSLCryptoManager.cpp; sourceTree = "<group>"; };
 		363898312471B7C500F99920 /* MbedTLSCryptoManager.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MbedTLSCryptoManager.cpp; sourceTree = "<group>"; };
@@ -297,6 +307,7 @@
 		3661D2FE2469E0C00060EE24 /* GLVideoRenderer.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = GLVideoRenderer.hpp; sourceTree = "<group>"; };
 		3678EF712476D9DA0097345D /* DebugFileRecorderAudioRenderer.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = DebugFileRecorderAudioRenderer.cpp; sourceTree = "<group>"; };
 		3678EF722476D9DA0097345D /* DebugFileRecorderAudioRenderer.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = DebugFileRecorderAudioRenderer.hpp; sourceTree = "<group>"; };
+		367CB1E025D312CF00114747 /* AVFrameHolder.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = AVFrameHolder.hpp; sourceTree = "<group>"; };
 		367CD958245DE25F00A95738 /* StreamWindow.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = StreamWindow.cpp; sourceTree = "<group>"; };
 		367CD959245DE25F00A95738 /* StreamWindow.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = StreamWindow.hpp; sourceTree = "<group>"; };
 		367D2D7224829A0800A946F4 /* LogsWindow.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = LogsWindow.cpp; sourceTree = "<group>"; };
@@ -402,6 +413,27 @@
 				367D2D7324829A0800A946F4 /* LogsWindow.hpp */,
 			);
 			path = windows;
+			sourceTree = "<group>";
+		};
+		3620418A25D7F00500D21EE3 /* controls */ = {
+			isa = PBXGroup;
+			children = (
+				362041A025D94D7700D21EE3 /* StreamControlsController.cpp */,
+				362041A125D94D7700D21EE3 /* StreamControlsController.hpp */,
+				3620418B25D7F04400D21EE3 /* MouseController.cpp */,
+				3620418C25D7F04400D21EE3 /* MouseController.hpp */,
+				3620419625D85B5F00D21EE3 /* KeyboardController.cpp */,
+				3620419725D85B5F00D21EE3 /* KeyboardController.hpp */,
+			);
+			path = controls;
+			sourceTree = "<group>";
+		};
+		3620419025D7FDCC00D21EE3 /* helpers */ = {
+			isa = PBXGroup;
+			children = (
+				3620419125D7FDDB00D21EE3 /* Singleton.hpp */,
+			);
+			path = helpers;
 			sourceTree = "<group>";
 		};
 		3652ECC3245B3AFF001FABF3 /* nanogui */ = {
@@ -648,11 +680,13 @@
 		36B406932459F41E005BD903 /* src */ = {
 			isa = PBXGroup;
 			children = (
+				3620419025D7FDCC00D21EE3 /* helpers */,
 				36BFCCE92479723E00245D40 /* libgamestream */,
 				36E63789246FFFDC0032F5FB /* crypto */,
 				36DFE0CA2459FA3F00FC51CE /* nanogui_resources */,
 				36DFDCF12459F79000FC51CE /* ui */,
 				36D3F8462469C8DD00CDEF9B /* streaming */,
+				3620418A25D7F00500D21EE3 /* controls */,
 				36F1646E2474736E00D70AD9 /* switch */,
 				36CF721C25D038C700878A8E /* switch_support */,
 				364A6A8D24786E2200460028 /* BoxArtManager.cpp */,
@@ -704,6 +738,7 @@
 				36BFCCF42479724900245D40 /* GameStreamClient.hpp */,
 				36EB491124993A4C0059EDB7 /* WakeOnLanManager.cpp */,
 				36EB491224993A4C0059EDB7 /* WakeOnLanManager.hpp */,
+				367CB1E025D312CF00114747 /* AVFrameHolder.hpp */,
 			);
 			path = streaming;
 			sourceTree = "<group>";
@@ -937,6 +972,7 @@
 				3652F079245C292B001FABF3 /* RtpReorderQueue.c in Sources */,
 				36BFCCF12479723E00245D40 /* xml.cpp in Sources */,
 				3652F065245C292B001FABF3 /* list.c in Sources */,
+				3620418D25D7F04400D21EE3 /* MouseController.cpp in Sources */,
 				36DFE0CD2459FA3F00FC51CE /* nanogui_resources.cpp in Sources */,
 				36DDACF824929919001133D1 /* InputSettingsWindow.cpp in Sources */,
 				3652F06A245C292B001FABF3 /* protocol.c in Sources */,
@@ -956,6 +992,7 @@
 				3652F070245C292B001FABF3 /* SimpleStun.c in Sources */,
 				3652EFD8245B3B00001FABF3 /* graph.cpp in Sources */,
 				3652EFDF245B3B00001FABF3 /* shader.cpp in Sources */,
+				3620419825D85B6000D21EE3 /* KeyboardController.cpp in Sources */,
 				3652F06C245C292B001FABF3 /* callbacks.c in Sources */,
 				3652EFD9245B3B00001FABF3 /* popup.cpp in Sources */,
 				3652EFEA245B3B00001FABF3 /* renderpass_gl.cpp in Sources */,
@@ -993,6 +1030,7 @@
 				3652EFF3245B3B00001FABF3 /* slider.cpp in Sources */,
 				3652EFCE245B3B00001FABF3 /* common.cpp in Sources */,
 				3652F077245C292B001FABF3 /* VideoDepacketizer.c in Sources */,
+				362041A225D94D7700D21EE3 /* StreamControlsController.cpp in Sources */,
 				3652EFF1245B3B00001FABF3 /* messagedialog.cpp in Sources */,
 				36F16475247473A300D70AD9 /* mbedtls_to_openssl_wrapper.cpp in Sources */,
 				3652F06F245C292B001FABF3 /* ControlStream.c in Sources */,

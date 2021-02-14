@@ -15,7 +15,6 @@ public:
     }
     
     bool has_boxart(int app_id);
-    bool is_blank(int app_id);
     
     void set_data(Data data, int app_id);
     void make_texture_from_boxart(NVGcontext *ctx, int app_id);
@@ -26,5 +25,4 @@ private:
     
     std::map<int, bool> m_has_boxart;
     std::map<int, int> m_texture_handle;
-    std::vector<int> m_blanks;
 };

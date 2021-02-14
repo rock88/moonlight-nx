@@ -63,36 +63,36 @@ void InputController::handle_scroll(double x, double y) {
 void InputController::handle_keyboard_event(int key, int scancode, int action, int modifiers) {
     nanogui::keyboard_callback_event(key, scancode, action, modifiers);
     
-    #ifndef __SWITCH__
-    // Translate keyboard keys to gamepad
-    GLFWgamepadstate glfw_gamepad_state;
-    memset(&glfw_gamepad_state, 0, sizeof(GLFWgamepadstate));
-    static int glfw_keyboard_state[GLFW_KEY_LAST];
-    glfw_keyboard_state[key] = action != GLFW_RELEASE;
-    
-    #define GLFW_KEYBOARD_TO_GAMEPAD(GLFW_KEY, GLFW_GAMEPAD_BUTTON) \
-        glfw_gamepad_state.buttons[GLFW_GAMEPAD_BUTTON] = glfw_keyboard_state[GLFW_KEY]
-    
-    GLFW_KEYBOARD_TO_GAMEPAD(GLFW_KEY_UP, GLFW_GAMEPAD_BUTTON_DPAD_UP);
-    GLFW_KEYBOARD_TO_GAMEPAD(GLFW_KEY_DOWN, GLFW_GAMEPAD_BUTTON_DPAD_DOWN);
-    GLFW_KEYBOARD_TO_GAMEPAD(GLFW_KEY_LEFT, GLFW_GAMEPAD_BUTTON_DPAD_LEFT);
-    GLFW_KEYBOARD_TO_GAMEPAD(GLFW_KEY_RIGHT, GLFW_GAMEPAD_BUTTON_DPAD_RIGHT);
-    GLFW_KEYBOARD_TO_GAMEPAD(GLFW_KEY_Q, GLFW_GAMEPAD_BUTTON_LEFT_BUMPER);
-    GLFW_KEYBOARD_TO_GAMEPAD(GLFW_KEY_E, GLFW_GAMEPAD_BUTTON_RIGHT_BUMPER);
-    GLFW_KEYBOARD_TO_GAMEPAD(GLFW_KEY_A, GLFW_GAMEPAD_BUTTON_A);
-    GLFW_KEYBOARD_TO_GAMEPAD(GLFW_KEY_B, GLFW_GAMEPAD_BUTTON_B);
-    GLFW_KEYBOARD_TO_GAMEPAD(GLFW_KEY_X, GLFW_GAMEPAD_BUTTON_X);
-    GLFW_KEYBOARD_TO_GAMEPAD(GLFW_KEY_Y, GLFW_GAMEPAD_BUTTON_Y);
-    GLFW_KEYBOARD_TO_GAMEPAD(GLFW_KEY_ESCAPE, GLFW_GAMEPAD_BUTTON_START);
-    GLFW_KEYBOARD_TO_GAMEPAD(GLFW_KEY_MINUS, GLFW_GAMEPAD_BUTTON_BACK);
-    GLFW_KEYBOARD_TO_GAMEPAD(GLFW_KEY_R, GLFW_GAMEPAD_BUTTON_LEFT_THUMB);
-    GLFW_KEYBOARD_TO_GAMEPAD(GLFW_KEY_T, GLFW_GAMEPAD_BUTTON_RIGHT_THUMB);
-    
-    glfw_gamepad_state.axes[GLFW_GAMEPAD_AXIS_LEFT_TRIGGER] = glfw_keyboard_state[GLFW_KEY_Z] ? 1 : -1;
-    glfw_gamepad_state.axes[GLFW_GAMEPAD_AXIS_RIGHT_TRIGGER] = glfw_keyboard_state[GLFW_KEY_C] ? 1 : -1;
-    
-    handle_gamepad_event(glfw_gamepad_state);
-    #endif
+//    #ifndef __SWITCH__
+//    // Translate keyboard keys to gamepad
+//    GLFWgamepadstate glfw_gamepad_state;
+//    memset(&glfw_gamepad_state, 0, sizeof(GLFWgamepadstate));
+//    static int glfw_keyboard_state[GLFW_KEY_LAST];
+//    glfw_keyboard_state[key] = action != GLFW_RELEASE;
+//
+//    #define GLFW_KEYBOARD_TO_GAMEPAD(GLFW_KEY, GLFW_GAMEPAD_BUTTON) \
+//        glfw_gamepad_state.buttons[GLFW_GAMEPAD_BUTTON] = glfw_keyboard_state[GLFW_KEY]
+//
+//    GLFW_KEYBOARD_TO_GAMEPAD(GLFW_KEY_UP, GLFW_GAMEPAD_BUTTON_DPAD_UP);
+//    GLFW_KEYBOARD_TO_GAMEPAD(GLFW_KEY_DOWN, GLFW_GAMEPAD_BUTTON_DPAD_DOWN);
+//    GLFW_KEYBOARD_TO_GAMEPAD(GLFW_KEY_LEFT, GLFW_GAMEPAD_BUTTON_DPAD_LEFT);
+//    GLFW_KEYBOARD_TO_GAMEPAD(GLFW_KEY_RIGHT, GLFW_GAMEPAD_BUTTON_DPAD_RIGHT);
+//    GLFW_KEYBOARD_TO_GAMEPAD(GLFW_KEY_Q, GLFW_GAMEPAD_BUTTON_LEFT_BUMPER);
+//    GLFW_KEYBOARD_TO_GAMEPAD(GLFW_KEY_E, GLFW_GAMEPAD_BUTTON_RIGHT_BUMPER);
+//    GLFW_KEYBOARD_TO_GAMEPAD(GLFW_KEY_A, GLFW_GAMEPAD_BUTTON_A);
+//    GLFW_KEYBOARD_TO_GAMEPAD(GLFW_KEY_B, GLFW_GAMEPAD_BUTTON_B);
+//    GLFW_KEYBOARD_TO_GAMEPAD(GLFW_KEY_X, GLFW_GAMEPAD_BUTTON_X);
+//    GLFW_KEYBOARD_TO_GAMEPAD(GLFW_KEY_Y, GLFW_GAMEPAD_BUTTON_Y);
+//    GLFW_KEYBOARD_TO_GAMEPAD(GLFW_KEY_ESCAPE, GLFW_GAMEPAD_BUTTON_START);
+//    GLFW_KEYBOARD_TO_GAMEPAD(GLFW_KEY_MINUS, GLFW_GAMEPAD_BUTTON_BACK);
+//    GLFW_KEYBOARD_TO_GAMEPAD(GLFW_KEY_R, GLFW_GAMEPAD_BUTTON_LEFT_THUMB);
+//    GLFW_KEYBOARD_TO_GAMEPAD(GLFW_KEY_T, GLFW_GAMEPAD_BUTTON_RIGHT_THUMB);
+//
+//    glfw_gamepad_state.axes[GLFW_GAMEPAD_AXIS_LEFT_TRIGGER] = glfw_keyboard_state[GLFW_KEY_Z] ? 1 : -1;
+//    glfw_gamepad_state.axes[GLFW_GAMEPAD_AXIS_RIGHT_TRIGGER] = glfw_keyboard_state[GLFW_KEY_C] ? 1 : -1;
+//
+//    handle_gamepad_event(glfw_gamepad_state);
+//    #endif
 }
 
 void InputController::handle_gamepad_event(GLFWgamepadstate& gamepad) {
@@ -301,22 +301,43 @@ void InputController::send_keyboard_to_stream() {
     }
 }
 
+struct GamepadState {
+    short buttonFlags;
+    unsigned char leftTrigger;
+    unsigned char rightTrigger;
+    short leftStickX;
+    short leftStickY;
+    short rightStickX;
+    short rightStickY;
+    
+    bool is_equal(GamepadState other) {
+        return buttonFlags == other.buttonFlags &&
+        leftTrigger == other.leftTrigger &&
+        rightTrigger == other.rightTrigger &&
+        leftStickX == other.leftStickX &&
+        leftStickY == other.leftStickY &&
+        rightStickX == other.rightStickX &&
+        rightStickY == other.rightStickY;
+    }
+};
+
 void InputController::send_gamepad_to_stream() {
     auto mapped_gamepad = GamepadMapper::mapper()->map(glfw_gamepad_state);
-    short buttonFlags = 0;
-    unsigned char leftTrigger = 0xFFFF * (mapped_gamepad.axes[GLFW_GAMEPAD_AXIS_LEFT_TRIGGER] + 1) / 2;
-    unsigned char rightTrigger = 0xFFFF * (mapped_gamepad.axes[GLFW_GAMEPAD_AXIS_RIGHT_TRIGGER] + 1) / 2;
-    short leftStickX = mapped_gamepad.axes[GLFW_GAMEPAD_AXIS_LEFT_X] * 0x7FFF;
-    short leftStickY = 0xFFFF - mapped_gamepad.axes[GLFW_GAMEPAD_AXIS_LEFT_Y] * 0x7FFF;
-    short rightStickX = mapped_gamepad.axes[GLFW_GAMEPAD_AXIS_RIGHT_X] * 0x7FFF;
-    short rightStickY = 0xFFFF - mapped_gamepad.axes[GLFW_GAMEPAD_AXIS_RIGHT_Y] * 0x7FFF;
+    GamepadState new_state;
+    new_state.buttonFlags = 0;
+    new_state.leftTrigger = 0xFFFF * (mapped_gamepad.axes[GLFW_GAMEPAD_AXIS_LEFT_TRIGGER] + 1) / 2;
+    new_state.rightTrigger = 0xFFFF * (mapped_gamepad.axes[GLFW_GAMEPAD_AXIS_RIGHT_TRIGGER] + 1) / 2;
+    new_state.leftStickX = mapped_gamepad.axes[GLFW_GAMEPAD_AXIS_LEFT_X] * 0x7FFF;
+    new_state.leftStickY = 0xFFFF - mapped_gamepad.axes[GLFW_GAMEPAD_AXIS_LEFT_Y] * 0x7FFF;
+    new_state.rightStickX = mapped_gamepad.axes[GLFW_GAMEPAD_AXIS_RIGHT_X] * 0x7FFF;
+    new_state.rightStickY = 0xFFFF - mapped_gamepad.axes[GLFW_GAMEPAD_AXIS_RIGHT_Y] * 0x7FFF;
     
     if (GamepadMapper::mapper()->gamepad_combo_is_enabled(glfw_gamepad_state, GamepadComboGuide)) {
-        buttonFlags |= SPECIAL_FLAG;
+        new_state.buttonFlags |= SPECIAL_FLAG;
     }
     
     #define SET_GAME_PAD_STATE(LIMELIGHT_KEY, GLFW_GAMEPAD_BUTTON) \
-        mapped_gamepad.buttons[GLFW_GAMEPAD_BUTTON] ? (buttonFlags |= LIMELIGHT_KEY) : (buttonFlags &= ~LIMELIGHT_KEY);
+        mapped_gamepad.buttons[GLFW_GAMEPAD_BUTTON] ? (new_state.buttonFlags |= LIMELIGHT_KEY) : (new_state.buttonFlags &= ~LIMELIGHT_KEY);
     
     SET_GAME_PAD_STATE(UP_FLAG, GLFW_GAMEPAD_BUTTON_DPAD_UP);
     SET_GAME_PAD_STATE(DOWN_FLAG, GLFW_GAMEPAD_BUTTON_DPAD_DOWN);
@@ -337,13 +358,19 @@ void InputController::send_gamepad_to_stream() {
     SET_GAME_PAD_STATE(X_FLAG, GLFW_GAMEPAD_BUTTON_X);
     SET_GAME_PAD_STATE(Y_FLAG, GLFW_GAMEPAD_BUTTON_Y);
     
-    LiSendControllerEvent(
-        buttonFlags,
-        leftTrigger,
-        rightTrigger,
-        leftStickX,
-        leftStickY,
-        rightStickX,
-        rightStickY
-    );
+    static GamepadState last_gamepad_state;
+    
+    if (!last_gamepad_state.is_equal(new_state)) {
+        last_gamepad_state = new_state;
+        
+        LiSendControllerEvent(
+            new_state.buttonFlags,
+            new_state.leftTrigger,
+            new_state.rightTrigger,
+            new_state.leftStickX,
+            new_state.leftStickY,
+            new_state.rightStickX,
+            new_state.rightStickY
+        );
+    }
 }
