@@ -145,12 +145,12 @@ void InputSettingsWindow::reload_gamepad_input_settings() {
     clean_container();
     clean_right_title_buttons();
     
-    set_right_title_button(FA_UNDO, [this] {
-        reset();
-        reload_gamepad_input_settings();
-    });
     set_right_title_button(FA_KEYBOARD, [this] {
         reload_combo_settings();
+    });
+    set_right_title_button(FA_TRASH, [this] {
+        reset();
+        reload_gamepad_input_settings();
     });
     
     container()->add<Label>("Gamepad mapping (Switch -> X360)");
@@ -185,12 +185,12 @@ void InputSettingsWindow::reload_combo_settings() {
     clean_container();
     clean_right_title_buttons();
     
-    set_right_title_button(FA_UNDO, [this] {
-        reset();
-        reload_combo_settings();
-    });
     set_right_title_button(FA_GAMEPAD, [this] {
         reload_gamepad_input_settings();
+    });
+    set_right_title_button(FA_TRASH, [this] {
+        reset();
+        reload_combo_settings();
     });
     
     container()->add<Label>("Keyboard Combo mapping");
