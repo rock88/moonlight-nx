@@ -40,7 +40,7 @@ void MainWindow::reload() {
     auto button_container = container()->add<Widget>();
     button_container->set_layout(new BoxLayout(Orientation::Horizontal, Alignment::Minimum, 0, 10));
     
-    for (auto host: Settings::settings()->hosts()) {
+    for (auto host: Settings::instance().hosts()) {
         auto button = button_container->add<HostButton>(host);
         button->set_fixed_size(Size(200, 200));
         button->set_callback([this, button] {
@@ -70,7 +70,7 @@ void MainWindow::reload() {
                 }
                 
                 alert->add_button("Delete", [this, button] {
-                    Settings::settings()->remove_host(button->host());
+                    Settings::instance().remove_host(button->host());
                     reload();
                 });
             }

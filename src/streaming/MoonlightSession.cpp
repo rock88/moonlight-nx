@@ -1,7 +1,7 @@
 #include "MoonlightSession.hpp"
 #include "GameStreamClient.hpp"
 #include "Settings.hpp"
-#include "InputController.hpp"
+#include "StreamControlsController.hpp"
 #include "Logger.hpp"
 #include "AVFrameHolder.hpp"
 #include <nanogui/nanogui.h>
@@ -80,7 +80,7 @@ void MoonlightSession::connection_log_message(const char* format, ...) {
 }
 
 void MoonlightSession::connection_rumble(unsigned short controller, unsigned short low_freq_motor, unsigned short high_freq_motor) {
-    InputController::controller()->handle_rumple(low_freq_motor, high_freq_motor);
+    StreamControlsController::instance().handle_rumple(controller, low_freq_motor, high_freq_motor);
 }
 
 void MoonlightSession::connection_status_update(int connection_status) {
@@ -161,17 +161,17 @@ void MoonlightSession::audio_renderer_decode_and_play_sample(char* sample_data, 
 void MoonlightSession::start(ServerCallback<bool> callback) {
     LiInitializeStreamConfiguration(&m_config);
     
-    int h = Settings::settings()->resolution();
+    int h = Settings::instance().resolution();
     int w = h * 16 / 9;
     m_config.width = w;
     m_config.height = h;
-    m_config.fps = Settings::settings()->fps();
+    m_config.fps = Settings::instance().fps();
     m_config.audioConfiguration = AUDIO_CONFIGURATION_STEREO;
     m_config.packetSize = 1392;
     m_config.streamingRemotely = STREAM_CFG_LOCAL;
-    m_config.bitrate = Settings::settings()->bitrate();
+    m_config.bitrate = Settings::instance().bitrate();
     
-    switch (Settings::settings()->video_codec()) {
+    switch (Settings::instance().video_codec()) {
         case H264:
             m_config.supportsHevc = 0;
             break;

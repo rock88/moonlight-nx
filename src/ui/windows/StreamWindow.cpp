@@ -1,8 +1,8 @@
 #include "StreamWindow.hpp"
 #include "LoadingOverlay.hpp"
 #include "Alert.hpp"
-#include "InputController.hpp"
 #include "StreamControlsController.hpp"
+#include "MouseController.hpp"
 #include "FFmpegVideoDecoder.hpp"
 #include "GLVideoRenderer.hpp"
 #ifdef __SWITCH__
@@ -16,6 +16,8 @@
 using namespace nanogui;
 
 StreamWindow::StreamWindow(Widget *parent, const std::string &address, int app_id): Widget(parent) {
+    MouseController::instance().set_draw_cursor_for_hid_mouse(false);
+    
     m_size = parent->size();
     m_session = new MoonlightSession(address, app_id);
     
@@ -51,6 +53,7 @@ StreamWindow::StreamWindow(Widget *parent, const std::string &address, int app_i
 }
 
 StreamWindow::~StreamWindow() {
+    MouseController::instance().set_draw_cursor_for_hid_mouse(true);
     delete m_session;
 }
 
@@ -126,19 +129,23 @@ void StreamWindow::draw(NVGcontext *ctx) {
     }
     
     // TODO: Get out of here...
-    if (InputController::controller()->gamepad_combo_is_enabled(GamepadComboExitAndClose)) {
+    
+    if (StreamControlsController::instance().should_exit_and_close()) {
         async([this] { this->terminate(true); });
-    } else if (InputController::controller()->gamepad_combo_is_enabled(GamepadComboExit)) {
+    } else if (StreamControlsController::instance().should_exit()) {
         async([this] { this->terminate(false); });
     }
     
-    if (!m_draw_stats && InputController::controller()->gamepad_combo_is_enabled(GamepadComboShowStats)) {
-        m_draw_stats = true;
-    } else if (m_draw_stats && InputController::controller()->gamepad_combo_is_enabled(GamepadComboHideStats)) {
-        m_draw_stats = false;
+    bool should_show_stats = StreamControlsController::instance().should_show_stats();
+    
+    if (m_should_show_stats != should_show_stats) {
+        m_should_show_stats = should_show_stats;
+        
+        if (m_should_show_stats) {
+            m_draw_stats = !m_draw_stats;
+        }
     }
     
-    //InputController::controller()->send_to_stream();
     StreamControlsController::instance().send_to_stream(width(), height());
 }
 
@@ -151,7 +158,13 @@ bool StreamWindow::mouse_motion_event(const Vector2i &p, const Vector2i &rel, in
 }
 
 void StreamWindow::terminate(bool close_app) {
-    InputController::controller()->stop_rumple();
+    if (m_is_terminated) {
+        return;
+    }
+    
+    m_is_terminated = true;
+    
+    StreamControlsController::instance().stop_rumple();
     
     if (m_loader) {
         m_loader->dispose();

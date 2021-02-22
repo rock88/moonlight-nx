@@ -1,5 +1,6 @@
 #include "GamepadMapper.hpp"
 #include "Settings.hpp"
+#include "Limelight.h"
 #include <jansson.h>
 #include <nanogui/opengl.h>
 #include <GLFW/glfw3.h>
@@ -25,33 +26,59 @@ static int gamepad_button_to_nanogui_button(GamepadButtons button) {
     }
 }
 
-GamepadMapper::GamepadMapper() {
-    load_defaults_gamepad_map();
+static inline int button_to_moonlight_button(int button) {
+    static std::map<int, int> map = {
+        { GamepadButtonA, A_FLAG },
+        { GamepadButtonB, B_FLAG },
+        { GamepadButtonX, X_FLAG },
+        { GamepadButtonY, Y_FLAG },
+        { GamepadButtonLeftThumb, LS_CLK_FLAG },
+        { GamepadButtonRightThumb, RS_CLK_FLAG },
+        { GamepadButtonL, LB_FLAG },
+        { GamepadButtonR, RB_FLAG },
+        { GamepadButtonPlus, PLAY_FLAG },
+        { GamepadButtonMinus, BACK_FLAG },
+        { GamepadButtonUp, UP_FLAG },
+        { GamepadButtonDown, DOWN_FLAG },
+        { GamepadButtonLeft, LEFT_FLAG },
+        { GamepadButtonRight, RIGHT_FLAG }
+    };
+    return map[button];
 }
 
-GLFWgamepadstate GamepadMapper::map(GLFWgamepadstate &gamepad) {
-    GLFWgamepadstate result = gamepad;
+GamepadState GamepadMapper::map(const GamepadState &gamepad) {
+    GamepadState result = gamepad;
+    result.buttonFlags = 0;
+    result.leftTrigger = 0;
+    result.rightTrigger = 0;
     
-    for (int i = 0; i < NANOGUI_GAMEPAD_BUTTON_DPAD_LEFT + 1; i++) {
-        if (m_gamepad_map[i] < GamepadButtonZL) {
-            result.buttons[gamepad_button_to_nanogui_button(m_gamepad_map[i])] = gamepad.buttons[gamepad_button_to_nanogui_button((GamepadButtons)i)];
-        } else if (i < GamepadButtonZL && m_gamepad_map[i] == GamepadButtonZL) {
-            result.axes[NANOGUI_GAMEPAD_AXIS_LEFT_TRIGGER] = gamepad.buttons[gamepad_button_to_nanogui_button((GamepadButtons)i)] ? 1 : -1;
-        } else if (i < GamepadButtonZL && m_gamepad_map[i] == GamepadButtonZR) {
-            result.axes[NANOGUI_GAMEPAD_AXIS_RIGHT_TRIGGER] = gamepad.buttons[gamepad_button_to_nanogui_button((GamepadButtons)i)] ? 1 : -1;
+    for (int i = 0; i <= GamepadButtonR; i++) {
+        int mapped_button = m_gamepad_map[i];
+        int is_pressed = gamepad.buttonFlags & button_to_moonlight_button(i);
+        
+        if (mapped_button == GamepadButtonZL) {
+            result.leftTrigger = is_pressed ? 0xFF : 0;
+        } else if (mapped_button == GamepadButtonZR) {
+            result.rightTrigger = is_pressed ? 0xFF : 0;
+        } else if (gamepad.buttonFlags & button_to_moonlight_button(i)) {
+            result.buttonFlags |= button_to_moonlight_button(mapped_button);
         }
     }
     
-    if (m_gamepad_map[GamepadButtonZL] < GamepadButtonZL) {
-        result.buttons[gamepad_button_to_nanogui_button(m_gamepad_map[GamepadButtonZL])] = gamepad.axes[NANOGUI_GAMEPAD_AXIS_LEFT_TRIGGER] > 0;
+    if (m_gamepad_map[GamepadButtonZL] == GamepadButtonZL) {
+        result.leftTrigger = gamepad.leftTrigger;
     } else if (m_gamepad_map[GamepadButtonZL] == GamepadButtonZR) {
-        result.axes[NANOGUI_GAMEPAD_AXIS_RIGHT_TRIGGER] = gamepad.axes[NANOGUI_GAMEPAD_AXIS_LEFT_TRIGGER];
+        result.rightTrigger = gamepad.leftTrigger;
+    } else if (gamepad.leftTrigger > 0) {
+        result.buttonFlags |= button_to_moonlight_button(m_gamepad_map[GamepadButtonZL]);
     }
     
-    if (m_gamepad_map[GamepadButtonZR] < GamepadButtonZL) {
-        result.buttons[gamepad_button_to_nanogui_button(m_gamepad_map[GamepadButtonZR])] = gamepad.axes[NANOGUI_GAMEPAD_AXIS_RIGHT_TRIGGER] > 0;
+    if (m_gamepad_map[GamepadButtonZR] == GamepadButtonZR) {
+        result.rightTrigger = gamepad.rightTrigger;
     } else if (m_gamepad_map[GamepadButtonZR] == GamepadButtonZL) {
-        result.axes[NANOGUI_GAMEPAD_AXIS_LEFT_TRIGGER] = gamepad.axes[NANOGUI_GAMEPAD_AXIS_RIGHT_TRIGGER];
+        result.leftTrigger = gamepad.rightTrigger;
+    } else if (gamepad.rightTrigger > 0) {
+        result.buttonFlags |= button_to_moonlight_button(m_gamepad_map[GamepadButtonZR]);
     }
     
     return result;
@@ -101,7 +128,7 @@ std::array<GamepadButtons, 3> GamepadMapper::combo_buttons(GamepadCombo combo) {
     return m_combo[combo];
 }
 
-bool GamepadMapper::gamepad_combo_is_enabled(GLFWgamepadstate& gamepad, GamepadCombo combo) {
+bool GamepadMapper::gamepad_combo_is_enabled(const GamepadState& gamepad, GamepadCombo combo) {
     if (m_combo.find(combo) != m_combo.end()) {
         bool result = true;
         
@@ -113,11 +140,11 @@ bool GamepadMapper::gamepad_combo_is_enabled(GLFWgamepadstate& gamepad, GamepadC
             }
             
             if (button < GamepadButtonZL) {
-                result = result && gamepad.buttons[gamepad_button_to_nanogui_button(button)];
+                result = result && (gamepad.buttonFlags & button_to_moonlight_button(button));
             } else if (button == GamepadButtonZL) {
-                result = result && (gamepad.axes[NANOGUI_GAMEPAD_AXIS_LEFT_TRIGGER] == 1);
+                result = result && (gamepad.leftTrigger > 0);
             } else if (button == GamepadButtonZR) {
-                result = result && (gamepad.axes[NANOGUI_GAMEPAD_AXIS_RIGHT_TRIGGER] == 1);
+                result = result && (gamepad.rightTrigger > 0);
             }
         }
         return result;
@@ -127,22 +154,22 @@ bool GamepadMapper::gamepad_combo_is_enabled(GLFWgamepadstate& gamepad, GamepadC
 
 std::string GamepadMapper::button_label(GamepadButtons button, bool use_switch_label) {
     static std::map<GamepadButtons, std::vector<std::string>> map = {
-        {GamepadButtonA, {"A"}},
-        {GamepadButtonB, {"B"}},
-        {GamepadButtonX, {"X"}},
-        {GamepadButtonY, {"Y"}},
-        {GamepadButtonUp, {"Up"}},
-        {GamepadButtonDown, {"Down"}},
-        {GamepadButtonLeft, {"Left"}},
-        {GamepadButtonRight, {"Right"}},
-        {GamepadButtonPlus, {"Start", "Plus"}},
-        {GamepadButtonMinus, {"Back", "Minus"}},
-        {GamepadButtonLeftThumb, {"Left Thumb"}},
-        {GamepadButtonRightThumb, {"Right Thumb"}},
-        {GamepadButtonL, {"LB", "L"}},
-        {GamepadButtonR, {"RB", "R"}},
-        {GamepadButtonZL, {"LT", "ZL"}},
-        {GamepadButtonZR, {"RT", "ZR"}}
+        { GamepadButtonA, {"A"} },
+        { GamepadButtonB, {"B"} },
+        { GamepadButtonX, {"X"} },
+        { GamepadButtonY, {"Y"} },
+        { GamepadButtonUp, {"Up"} },
+        { GamepadButtonDown, {"Down"} },
+        { GamepadButtonLeft, {"Left"} },
+        { GamepadButtonRight, {"Right"} },
+        { GamepadButtonPlus, {"Start", "Plus"} },
+        { GamepadButtonMinus, {"Back", "Minus"} },
+        { GamepadButtonLeftThumb, {"Left Thumb"} },
+        { GamepadButtonRightThumb, {"Right Thumb"} },
+        { GamepadButtonL, {"LB", "L"} },
+        { GamepadButtonR, {"RB", "R"} },
+        { GamepadButtonZL, {"LT", "ZL"} },
+        { GamepadButtonZR, {"RT", "ZR"} }
     };
     
     if (map.find(button) != map.end()) {
@@ -153,13 +180,14 @@ std::string GamepadMapper::button_label(GamepadButtons button, bool use_switch_l
 
 std::string GamepadMapper::combo_label(GamepadCombo combo) {
     static std::map<GamepadCombo, std::string> map = {
-        {GamepadComboGuide, "Guide"},
-        {GamepadComboExit, "Exit"},
-        {GamepadComboExitAndClose, "Exit And Close"},
-        {GamepadComboAltEnter, "Alt + Enter"},
-        {GamepadComboEscape, "Escape"},
-        {GamepadComboShowStats, "Show Stats"},
-        {GamepadComboHideStats, "Hide Stats"}
+        { GamepadComboGuide, "Guide" },
+        { GamepadComboExit, "Exit" },
+        { GamepadComboExitAndClose, "Exit And Close Current App" },
+        { GamepadComboShowStats, "Show/Hide Stats" },
+        { GamepadComboWinKey, "Win Key" },
+        { GamepadComboEscape, "Escape" },
+        { GamepadComboAltEnter, "Alt + Enter" },
+        { GamepadComboShiftTab, "Shift + Tab" }
     };
     
     if (map.find(combo) != map.end()) {
@@ -173,7 +201,7 @@ void GamepadMapper::load_defaults_gamepad_map() {
         m_gamepad_map[i] = (GamepadButtons)i;
     }
     
-    // Swap A/B and X/Y
+    // Swap A/B and X/Y by default
     m_gamepad_map[GamepadButtonA] = GamepadButtonB;
     m_gamepad_map[GamepadButtonB] = GamepadButtonA;
     m_gamepad_map[GamepadButtonX] = GamepadButtonY;
@@ -181,18 +209,19 @@ void GamepadMapper::load_defaults_gamepad_map() {
     
     m_combo.clear();
     m_combo[GamepadComboGuide] = {GamepadButtonMinus, GamepadButtonPlus, GamepadButtonUnknown};
-    m_combo[GamepadComboExit] = {GamepadButtonL, GamepadButtonR, GamepadButtonUp};
-    m_combo[GamepadComboExitAndClose] = {GamepadButtonL, GamepadButtonR, GamepadButtonDown};
-    m_combo[GamepadComboAltEnter] = {GamepadButtonL, GamepadButtonR, GamepadButtonLeft};
-    m_combo[GamepadComboEscape] = {GamepadButtonL, GamepadButtonR, GamepadButtonRight};
+    m_combo[GamepadComboExit] = {GamepadButtonZL, GamepadButtonZR, GamepadButtonUp};
+    m_combo[GamepadComboExitAndClose] = {GamepadButtonZL, GamepadButtonZR, GamepadButtonDown};
     m_combo[GamepadComboShowStats] = {GamepadButtonZL, GamepadButtonZR, GamepadButtonLeft};
-    m_combo[GamepadComboHideStats] = {GamepadButtonZL, GamepadButtonZR, GamepadButtonRight};
+    m_combo[GamepadComboEscape] = {GamepadButtonL, GamepadButtonR, GamepadButtonUp};
+    m_combo[GamepadComboWinKey] = {GamepadButtonL, GamepadButtonR, GamepadButtonDown};
+    m_combo[GamepadComboAltEnter] = {GamepadButtonL, GamepadButtonR, GamepadButtonLeft};
+    m_combo[GamepadComboShiftTab] = {GamepadButtonL, GamepadButtonR, GamepadButtonRight};
 }
 
 void GamepadMapper::load_gamepad_map(int app_id) {
     load_defaults_gamepad_map();
     
-    json_t* root = json_load_file(Settings::settings()->gamepad_mapping_path().c_str(), 0, NULL);
+    json_t* root = json_load_file(Settings::instance().gamepad_mapping_path().c_str(), 0, NULL);
     
     if (root != NULL) {
         if (json_t* mapping = json_object_get(root, std::to_string(app_id).c_str())) {
@@ -223,6 +252,9 @@ void GamepadMapper::load_gamepad_map(int app_id) {
                     }
                 }
             }
+        } else if (app_id != 0) {
+            // If app_id not found try to load default map...
+            load_gamepad_map(0);
         }
         
         json_decref(root);
@@ -230,7 +262,7 @@ void GamepadMapper::load_gamepad_map(int app_id) {
 }
 
 void GamepadMapper::save_gamepad_map(int app_id) {
-    json_t* root = json_load_file(Settings::settings()->gamepad_mapping_path().c_str(), 0, NULL);
+    json_t* root = json_load_file(Settings::instance().gamepad_mapping_path().c_str(), 0, NULL);
     
     if (root == NULL) {
         root = json_object();
@@ -259,7 +291,7 @@ void GamepadMapper::save_gamepad_map(int app_id) {
             }
         }
         
-        json_dump_file(root, Settings::settings()->gamepad_mapping_path().c_str(), JSON_INDENT(4));
+        json_dump_file(root, Settings::instance().gamepad_mapping_path().c_str(), JSON_INDENT(4));
         json_decref(root);
     }
 }

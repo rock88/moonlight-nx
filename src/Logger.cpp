@@ -43,7 +43,7 @@ void Logger::fatal(const char* tag, const char *format, ...) {
 }
 
 void Logger::log(const char* level, const char* tag, const char *format, va_list list) {
-    if (!Settings::settings()->write_log()) {
+    if (!Settings::instance().write_log()) {
         return;
     }
     
@@ -72,7 +72,7 @@ void Logger::log(const char* level, const char* tag, const char *format, va_list
     
     printf("%s", str.c_str());
     
-    FILE *log = fopen(Settings::settings()->log_path().c_str(), "a");
+    FILE *log = fopen(Settings::instance().log_path().c_str(), "a");
     if (log) {
         fwrite(str.c_str(), str.length(), 1, log);
         fclose(log);

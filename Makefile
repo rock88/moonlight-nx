@@ -77,7 +77,7 @@ M_INCLUDES := \
 DEFINES := -DNANOGUI_USE_OPENGL -DNVG_STB_IMAGE_IMPLEMENTATION -DNANOGUI_NO_GLFW \
 	-DHAS_SOCKLEN_T -DHAS_POLL -DHAS_FCNTL -D_GNU_SOURCE -DUSE_MBEDTLS_CRYPTO -DMOONLIGHT_VERSION=\"$(MOONLIGHT_VERSION)\"
 
-CFLAGS	:=	-g -Wall -O2 -ffunction-sections $(ARCH) $(DEFINES) $(INCLUDE) $(M_INCLUDES) -D__SWITCH__
+CFLAGS	:=	-g -Wall -fcompare-debug-second -O2 -ffunction-sections $(ARCH) $(DEFINES) $(INCLUDE) $(M_INCLUDES) -D__SWITCH__
 CXXFLAGS	:= $(CFLAGS) -std=gnu++17
 
 ASFLAGS	:=	-g $(ARCH)
@@ -112,7 +112,6 @@ MOONLIGHT_LIBRETRO_CXX_SOURCES = \
 	LoadingOverlay.cpp \
 	GameStreamClient.cpp \
 	Settings.cpp \
-	InputController.cpp \
 	MoonlightSession.cpp \
 	FFmpegVideoDecoder.cpp \
 	GLVideoRenderer.cpp \
@@ -129,6 +128,7 @@ MOONLIGHT_LIBRETRO_CXX_SOURCES = \
 	WakeOnLanManager.cpp \
 	MouseController.cpp \
 	KeyboardController.cpp \
+	GamepadController.cpp \
 	StreamControlsController.cpp
 
 MOONLIGHT_COMMON_C_SOURCES = \

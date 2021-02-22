@@ -89,17 +89,17 @@ void AppListWindow::run_game(int app_id) {
     int current_app_id = GameStreamClient::instance().server_data(m_address).currentGame;
     
     if (current_app_id == 0 || current_app_id == app_id) {
-        GamepadMapper::mapper()->load_gamepad_map(app_id);
+        GamepadMapper::instance().load_gamepad_map(app_id);
         push<StreamWindow>(m_address, app_id);
     } else {
         auto alert = screen()->add<Alert>("Info", "Another game already running", false);
         alert->add_button("Resume", [this, current_app_id] {
-            GamepadMapper::mapper()->load_gamepad_map(current_app_id);
+            GamepadMapper::instance().load_gamepad_map(current_app_id);
             push<StreamWindow>(m_address, current_app_id);
         });
         alert->add_button("Close", [this, app_id] {
             close_game([this, app_id] {
-                GamepadMapper::mapper()->load_gamepad_map(app_id);
+                GamepadMapper::instance().load_gamepad_map(app_id);
                 push<StreamWindow>(m_address, app_id);
             });
         });

@@ -24,10 +24,10 @@
 		3602C3B7245D903000368900 /* HostButton.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3602C3B5245D903000368900 /* HostButton.cpp */; };
 		3602C3BA245DB3C800368900 /* AppListWindow.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3602C3B8245DB3C800368900 /* AppListWindow.cpp */; };
 		3602C3BD245DBA9100368900 /* AppButton.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3602C3BB245DBA9100368900 /* AppButton.cpp */; };
-		3603E93C246316400051287D /* InputController.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3603E93A246316400051287D /* InputController.cpp */; };
 		3620418D25D7F04400D21EE3 /* MouseController.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3620418B25D7F04400D21EE3 /* MouseController.cpp */; };
 		3620419825D85B6000D21EE3 /* KeyboardController.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3620419625D85B5F00D21EE3 /* KeyboardController.cpp */; };
 		362041A225D94D7700D21EE3 /* StreamControlsController.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 362041A025D94D7700D21EE3 /* StreamControlsController.cpp */; };
+		362041AB25D9BE4A00D21EE3 /* GamepadController.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 362041A925D9BE4900D21EE3 /* GamepadController.cpp */; };
 		363898342471B7C500F99920 /* MbedTLSCryptoManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 363898312471B7C500F99920 /* MbedTLSCryptoManager.cpp */; };
 		364A6A8F24786E2200460028 /* BoxArtManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 364A6A8D24786E2200460028 /* BoxArtManager.cpp */; };
 		3652EFCD245B3B00001FABF3 /* widget.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3652EF0F245B3B00001FABF3 /* widget.cpp */; };
@@ -145,8 +145,6 @@
 		3602C3BB245DBA9100368900 /* AppButton.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = AppButton.cpp; sourceTree = "<group>"; };
 		3602C3BC245DBA9100368900 /* AppButton.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = AppButton.hpp; sourceTree = "<group>"; };
 		3602C3C0245DC7E300368900 /* Makefile */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.make; path = Makefile; sourceTree = "<group>"; };
-		3603E93A246316400051287D /* InputController.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = InputController.cpp; sourceTree = "<group>"; };
-		3603E93B246316400051287D /* InputController.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = InputController.hpp; sourceTree = "<group>"; };
 		3620418B25D7F04400D21EE3 /* MouseController.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = MouseController.cpp; sourceTree = "<group>"; };
 		3620418C25D7F04400D21EE3 /* MouseController.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = MouseController.hpp; sourceTree = "<group>"; };
 		3620419125D7FDDB00D21EE3 /* Singleton.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Singleton.hpp; sourceTree = "<group>"; };
@@ -154,6 +152,8 @@
 		3620419725D85B5F00D21EE3 /* KeyboardController.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = KeyboardController.hpp; sourceTree = "<group>"; };
 		362041A025D94D7700D21EE3 /* StreamControlsController.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = StreamControlsController.cpp; sourceTree = "<group>"; };
 		362041A125D94D7700D21EE3 /* StreamControlsController.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = StreamControlsController.hpp; sourceTree = "<group>"; };
+		362041A925D9BE4900D21EE3 /* GamepadController.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = GamepadController.cpp; sourceTree = "<group>"; };
+		362041AA25D9BE4900D21EE3 /* GamepadController.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = GamepadController.hpp; sourceTree = "<group>"; };
 		3638982F2471B7C500F99920 /* MbedTLSCryptoManager.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = MbedTLSCryptoManager.hpp; sourceTree = "<group>"; };
 		363898302471B7C500F99920 /* OpenSSLCryptoManager.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = OpenSSLCryptoManager.cpp; sourceTree = "<group>"; };
 		363898312471B7C500F99920 /* MbedTLSCryptoManager.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MbedTLSCryptoManager.cpp; sourceTree = "<group>"; };
@@ -424,6 +424,10 @@
 				3620418C25D7F04400D21EE3 /* MouseController.hpp */,
 				3620419625D85B5F00D21EE3 /* KeyboardController.cpp */,
 				3620419725D85B5F00D21EE3 /* KeyboardController.hpp */,
+				362041A925D9BE4900D21EE3 /* GamepadController.cpp */,
+				362041AA25D9BE4900D21EE3 /* GamepadController.hpp */,
+				3689D6DB249154F90008CB75 /* GamepadMapper.cpp */,
+				3689D6DC249154F90008CB75 /* GamepadMapper.hpp */,
 			);
 			path = controls;
 			sourceTree = "<group>";
@@ -693,10 +697,6 @@
 				364A6A8E24786E2200460028 /* BoxArtManager.hpp */,
 				36A0C03B2461F03C0083289C /* Settings.cpp */,
 				36A0C03C2461F03C0083289C /* Settings.hpp */,
-				3603E93A246316400051287D /* InputController.cpp */,
-				3603E93B246316400051287D /* InputController.hpp */,
-				3689D6DB249154F90008CB75 /* GamepadMapper.cpp */,
-				3689D6DC249154F90008CB75 /* GamepadMapper.hpp */,
 				3658241124819E56008B8758 /* Logger.cpp */,
 				3658241224819E56008B8758 /* Logger.hpp */,
 				36BFCCF72479725900245D40 /* main.cpp */,
@@ -1046,7 +1046,6 @@
 				3652F07E245C292B001FABF3 /* AudioStream.c in Sources */,
 				3652F076245C292B001FABF3 /* Connection.c in Sources */,
 				3652EFE4245B3B00001FABF3 /* combobox.cpp in Sources */,
-				3603E93C246316400051287D /* InputController.cpp in Sources */,
 				3652EFF2245B3B00001FABF3 /* textbox.cpp in Sources */,
 				3652F074245C292B001FABF3 /* Platform.c in Sources */,
 				3661D2FF2469E0C00060EE24 /* GLVideoRenderer.cpp in Sources */,
@@ -1057,6 +1056,7 @@
 				367CD95A245DE25F00A95738 /* StreamWindow.cpp in Sources */,
 				3652F07F245C292B001FABF3 /* LinkedBlockingQueue.c in Sources */,
 				3652EFD2245B3B00001FABF3 /* textarea.cpp in Sources */,
+				362041AB25D9BE4A00D21EE3 /* GamepadController.cpp in Sources */,
 				3652EFD5245B3B00001FABF3 /* canvas.cpp in Sources */,
 				3652F078245C292B001FABF3 /* FakeCallbacks.c in Sources */,
 				3652F06B245C292B001FABF3 /* host.c in Sources */,

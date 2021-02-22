@@ -7,7 +7,7 @@ using namespace nanogui;
 LogsWindow::LogsWindow(Widget *parent): ContentWindow(parent, "Logs") {
     set_left_pop_button();
     set_right_title_button(FA_TRASH_ALT, [this] {
-        remove(Settings::settings()->log_path().c_str());
+        remove(Settings::instance().log_path().c_str());
         this->reload();
     });
     set_box_layout(Orientation::Vertical, Alignment::Minimum);
@@ -18,7 +18,7 @@ LogsWindow::LogsWindow(Widget *parent): ContentWindow(parent, "Logs") {
 void LogsWindow::reload() {
     clean_container();
     
-    Data data = Data::read_from_file(Settings::settings()->log_path());
+    Data data = Data::read_from_file(Settings::instance().log_path());
     
     if (data.is_empty()) {
         auto label = container()->add<Label>("No logs...");

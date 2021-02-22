@@ -6,7 +6,7 @@ using namespace nanogui;
 
 #define SET_SETTING(n, func) \
     case n: \
-        Settings::settings()->func; \
+        Settings::instance().func; \
         break;
 
 #define GET_SETTINGS(combo_box, n, i) \
@@ -43,16 +43,16 @@ SettingsWindow::SettingsWindow(nanogui::Widget* parent): ContentWindow(parent, "
         }
     });
     
-    switch (Settings::settings()->resolution()) {
+    switch (Settings::instance().resolution()) {
         GET_SETTINGS(resolution_combo_box, 720, 0);
         GET_SETTINGS(resolution_combo_box, 1080, 1);
         DEFAULT;
     }
     
     auto ignore_unsupported_resolutions = left_container->add<CheckBox>("Ignore unsupported resolutions");
-    ignore_unsupported_resolutions->set_checked(Settings::settings()->ignore_unsupported_resolutions());
+    ignore_unsupported_resolutions->set_checked(Settings::instance().ignore_unsupported_resolutions());
     ignore_unsupported_resolutions->set_callback([](auto value) {
-        Settings::settings()->set_ignore_unsupported_resolutions(value);
+        Settings::instance().set_ignore_unsupported_resolutions(value);
     });
     
     left_container->add<Label>("FPS");
@@ -68,7 +68,7 @@ SettingsWindow::SettingsWindow(nanogui::Widget* parent): ContentWindow(parent, "
         }
     });
     
-    switch (Settings::settings()->fps()) {
+    switch (Settings::instance().fps()) {
         GET_SETTINGS(fps_combo_box, 30, 0);
         GET_SETTINGS(fps_combo_box, 60, 1);
         DEFAULT;
@@ -87,22 +87,22 @@ SettingsWindow::SettingsWindow(nanogui::Widget* parent): ContentWindow(parent, "
         }
     });
     
-    switch (Settings::settings()->video_codec()) {
+    switch (Settings::instance().video_codec()) {
         GET_SETTINGS(video_codec_combo_box, H264, 0);
         GET_SETTINGS(video_codec_combo_box, H265, 1);
         DEFAULT;
     }
     
     char bitrate_str[100];
-    sprintf(bitrate_str, "Video bitrate: %0.1f Mbps", float(Settings::settings()->bitrate()) / 1000);
+    sprintf(bitrate_str, "Video bitrate: %0.1f Mbps", float(Settings::instance().bitrate()) / 1000);
     
     auto video_bitrate_label = left_container->add<Label>(bitrate_str);
     auto video_bitrate_slider = left_container->add<Slider>();
     video_bitrate_slider->set_step(0.5);
     video_bitrate_slider->set_highlight_color(Color(62, 78, 184, 255));
     video_bitrate_slider->set_range({0.5, 150});
-    video_bitrate_slider->set_value(float(Settings::settings()->bitrate()) / 1000);
-    video_bitrate_slider->set_highlighted_range({0, float(Settings::settings()->bitrate()) / 1000 / 150});
+    video_bitrate_slider->set_value(float(Settings::instance().bitrate()) / 1000);
+    video_bitrate_slider->set_highlighted_range({0, float(Settings::instance().bitrate()) / 1000 / 150});
     video_bitrate_slider->set_fixed_size(Size(container_width - 80, 30));
     video_bitrate_slider->set_callback([video_bitrate_label, video_bitrate_slider](auto value) {
         video_bitrate_slider->set_highlighted_range({0, value / 150});
@@ -110,14 +110,14 @@ SettingsWindow::SettingsWindow(nanogui::Widget* parent): ContentWindow(parent, "
         char bitrate_str[100];
         sprintf(bitrate_str, "Video bitrate: %0.1f Mbps", bitrate);
         video_bitrate_label->set_caption(bitrate_str);
-        Settings::settings()->set_bitrate(bitrate * 1000);
+        Settings::instance().set_bitrate(bitrate * 1000);
     });
     
     left_container->add<Label>("Input Settings");
     auto click_by_tap = left_container->add<CheckBox>("Mouse click by tap on screen");
-    click_by_tap->set_checked(Settings::settings()->click_by_tap());
+    click_by_tap->set_checked(Settings::instance().click_by_tap());
     click_by_tap->set_callback([](auto value) {
-        Settings::settings()->set_click_by_tap(value);
+        Settings::instance().set_click_by_tap(value);
     });
     
     auto right_container = container()->add<Widget>();
@@ -139,7 +139,7 @@ SettingsWindow::SettingsWindow(nanogui::Widget* parent): ContentWindow(parent, "
         }
     });
     
-    switch (Settings::settings()->decoder_threads()) {
+    switch (Settings::instance().decoder_threads()) {
         GET_SETTINGS(decoder_threads_combo_box, 0, 0);
         GET_SETTINGS(decoder_threads_combo_box, 2, 1);
         GET_SETTINGS(decoder_threads_combo_box, 3, 2);
@@ -149,22 +149,22 @@ SettingsWindow::SettingsWindow(nanogui::Widget* parent): ContentWindow(parent, "
     
     right_container->add<Label>("Stream Settings");
     auto sops = right_container->add<CheckBox>("Use Streaming Optimal Playable Settings");
-    sops->set_checked(Settings::settings()->sops());
+    sops->set_checked(Settings::instance().sops());
     sops->set_callback([](auto value) {
-        Settings::settings()->set_sops(value);
+        Settings::instance().set_sops(value);
     });
     
     auto play_audio = right_container->add<CheckBox>("Play Audio on PC");
-    play_audio->set_checked(Settings::settings()->play_audio());
+    play_audio->set_checked(Settings::instance().play_audio());
     play_audio->set_callback([](auto value) {
-        Settings::settings()->set_play_audio(value);
+        Settings::instance().set_play_audio(value);
     });
     
     right_container->add<Label>("Debug");
     auto write_log = right_container->add<CheckBox>("Write log");
-    write_log->set_checked(Settings::settings()->write_log());
+    write_log->set_checked(Settings::instance().write_log());
     write_log->set_callback([](auto value) {
-        Settings::settings()->set_write_log(value);
+        Settings::instance().set_write_log(value);
     });
     
     auto log_button = right_container->add<Button>("Show logs");
@@ -175,5 +175,5 @@ SettingsWindow::SettingsWindow(nanogui::Widget* parent): ContentWindow(parent, "
 }
 
 void SettingsWindow::window_disappear() {
-    Settings::settings()->save();
+    Settings::instance().save();
 }

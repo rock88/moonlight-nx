@@ -62,13 +62,13 @@ typedef enum {
     HidMouseButton_Back    = BIT(4),
 } HidMouseButton;
 
-static void hidInitializeMouse(void) {}
+inline static void hidInitializeMouse(void) {}
 
-static size_t hidGetMouseStates(HidMouseState *states, size_t count) {
+inline static size_t hidGetMouseStates(HidMouseState *states, size_t count) {
     return 0;
 }
 
-static void hidInitializeTouchScreen(void) {}
+inline static void hidInitializeTouchScreen(void) {}
 
 /// HidTouchState
 typedef struct HidTouchState {
@@ -91,11 +91,11 @@ typedef struct HidTouchScreenState {
     HidTouchState touches[16];                  ///< Array of \ref HidTouchState, with the above count.
 } HidTouchScreenState;
 
-static size_t hidGetTouchScreenStates(HidTouchScreenState *states, size_t count) {
+inline static size_t hidGetTouchScreenStates(HidTouchScreenState *states, size_t count) {
     return 0;
 }
 
-/// HidKeyboardScancode \deprecated
+/// HidKeyboardScancode deprecated
 typedef enum DEPRECATED {
     KBD_NONE = 0x00,
     KBD_ERR_OVF = 0x01,
@@ -294,8 +294,189 @@ typedef struct HidKeyboardState {
     u64 keys[4];
 } HidKeyboardState;
 
-static void hidInitializeKeyboard(void) {}
+inline static void hidInitializeKeyboard(void) {}
 
-static size_t hidGetKeyboardStates(HidKeyboardState *states, size_t count) {
+inline static size_t hidGetKeyboardStates(HidKeyboardState *states, size_t count) {
+    return 0;
+}
+
+/// HidNpadButton
+typedef enum {
+    HidNpadButton_A             = BIT(0),  ///< A button / Right face button
+    HidNpadButton_B             = BIT(1),  ///< B button / Down face button
+    HidNpadButton_X             = BIT(2),  ///< X button / Up face button
+    HidNpadButton_Y             = BIT(3),  ///< Y button / Left face button
+    HidNpadButton_StickL        = BIT(4),  ///< Left Stick button
+    HidNpadButton_StickR        = BIT(5),  ///< Right Stick button
+    HidNpadButton_L             = BIT(6),  ///< L button
+    HidNpadButton_R             = BIT(7),  ///< R button
+    HidNpadButton_ZL            = BIT(8),  ///< ZL button
+    HidNpadButton_ZR            = BIT(9),  ///< ZR button
+    HidNpadButton_Plus          = BIT(10), ///< Plus button
+    HidNpadButton_Minus         = BIT(11), ///< Minus button
+    HidNpadButton_Left          = BIT(12), ///< D-Pad Left button
+    HidNpadButton_Up            = BIT(13), ///< D-Pad Up button
+    HidNpadButton_Right         = BIT(14), ///< D-Pad Right button
+    HidNpadButton_Down          = BIT(15), ///< D-Pad Down button
+    HidNpadButton_StickLLeft    = BIT(16), ///< Left Stick pseudo-button when moved Left
+    HidNpadButton_StickLUp      = BIT(17), ///< Left Stick pseudo-button when moved Up
+    HidNpadButton_StickLRight   = BIT(18), ///< Left Stick pseudo-button when moved Right
+    HidNpadButton_StickLDown    = BIT(19), ///< Left Stick pseudo-button when moved Down
+    HidNpadButton_StickRLeft    = BIT(20), ///< Right Stick pseudo-button when moved Left
+    HidNpadButton_StickRUp      = BIT(21), ///< Right Stick pseudo-button when moved Up
+    HidNpadButton_StickRRight   = BIT(22), ///< Right Stick pseudo-button when moved Right
+    HidNpadButton_StickRDown    = BIT(23), ///< Right Stick pseudo-button when moved Left
+    HidNpadButton_LeftSL        = BIT(24), ///< SL button on Left Joy-Con
+    HidNpadButton_LeftSR        = BIT(25), ///< SR button on Left Joy-Con
+    HidNpadButton_RightSL       = BIT(26), ///< SL button on Right Joy-Con
+    HidNpadButton_RightSR       = BIT(27), ///< SR button on Right Joy-Con
+    HidNpadButton_Palma         = BIT(28), ///< Top button on Poké Ball Plus (Palma) controller
+    HidNpadButton_29            = BIT(29),
+    HidNpadButton_HandheldLeftB = BIT(30), ///< B button on Left NES/HVC controller in Handheld mode
+
+    HidNpadButton_AnyLeft  = HidNpadButton_Left   | HidNpadButton_StickLLeft  | HidNpadButton_StickRLeft,  ///< Bitmask containing all buttons that are considered Left (D-Pad, Sticks)
+    HidNpadButton_AnyUp    = HidNpadButton_Up     | HidNpadButton_StickLUp    | HidNpadButton_StickRUp,    ///< Bitmask containing all buttons that are considered Up (D-Pad, Sticks)
+    HidNpadButton_AnyRight = HidNpadButton_Right  | HidNpadButton_StickLRight | HidNpadButton_StickRRight, ///< Bitmask containing all buttons that are considered Right (D-Pad, Sticks)
+    HidNpadButton_AnyDown  = HidNpadButton_Down   | HidNpadButton_StickLDown  | HidNpadButton_StickRDown,  ///< Bitmask containing all buttons that are considered Down (D-Pad, Sticks)
+    HidNpadButton_AnySL    = HidNpadButton_LeftSL | HidNpadButton_RightSL,                                 ///< Bitmask containing SL buttons on both Joy-Cons (Left/Right)
+    HidNpadButton_AnySR    = HidNpadButton_LeftSR | HidNpadButton_RightSR,                                 ///< Bitmask containing SR buttons on both Joy-Cons (Left/Right)
+} HidNpadButton;
+
+/// HidAnalogStickState
+typedef struct HidAnalogStickState {
+    s32 x;                                    ///< X
+    s32 y;                                    ///< Y
+} HidAnalogStickState;
+
+/// Mask including all existing controller IDs.
+#define PAD_ANY_ID_MASK 0x1000100FFUL
+
+/// HID controller IDs
+typedef enum {
+    HidNpadIdType_No1      = 0,    ///< Player 1 controller
+    HidNpadIdType_No2      = 1,    ///< Player 2 controller
+    HidNpadIdType_No3      = 2,    ///< Player 3 controller
+    HidNpadIdType_No4      = 3,    ///< Player 4 controller
+    HidNpadIdType_No5      = 4,    ///< Player 5 controller
+    HidNpadIdType_No6      = 5,    ///< Player 6 controller
+    HidNpadIdType_No7      = 6,    ///< Player 7 controller
+    HidNpadIdType_No8      = 7,    ///< Player 8 controller
+    HidNpadIdType_Other    = 0x10, ///< Other controller
+    HidNpadIdType_Handheld = 0x20, ///< Handheld mode controls
+} HidNpadIdType;
+
+/// HidNpadAttribute
+typedef enum {
+    HidNpadAttribute_IsConnected          = BIT(0),    ///< IsConnected
+    HidNpadAttribute_IsWired              = BIT(1),    ///< IsWired
+    HidNpadAttribute_IsLeftConnected      = BIT(2),    ///< IsLeftConnected
+    HidNpadAttribute_IsLeftWired          = BIT(3),    ///< IsLeftWired
+    HidNpadAttribute_IsRightConnected     = BIT(4),    ///< IsRightConnected
+    HidNpadAttribute_IsRightWired         = BIT(5),    ///< IsRightWired
+} HidNpadAttribute;
+
+/// HID controller styles
+typedef enum {
+    HidNpadStyleTag_NpadFullKey       = BIT(0),       ///< Pro Controller
+    HidNpadStyleTag_NpadHandheld      = BIT(1),       ///< Joy-Con controller in handheld mode
+    HidNpadStyleTag_NpadJoyDual       = BIT(2),       ///< Joy-Con controller in dual mode
+    HidNpadStyleTag_NpadJoyLeft       = BIT(3),       ///< Joy-Con left controller in single mode
+    HidNpadStyleTag_NpadJoyRight      = BIT(4),       ///< Joy-Con right controller in single mode
+    HidNpadStyleTag_NpadGc            = BIT(5),       ///< GameCube controller
+    HidNpadStyleTag_NpadPalma         = BIT(6),       ///< Poké Ball Plus controller
+    HidNpadStyleTag_NpadLark          = BIT(7),       ///< NES/Famicom controller
+    HidNpadStyleTag_NpadHandheldLark  = BIT(8),       ///< NES/Famicom controller in handheld mode
+    HidNpadStyleTag_NpadLucia         = BIT(9),       ///< SNES controller
+    HidNpadStyleTag_Npad10            = BIT(10),
+    HidNpadStyleTag_NpadSystemExt     = BIT(29),      ///< Generic external controller
+    HidNpadStyleTag_NpadSystem        = BIT(30),      ///< Generic controller
+
+    HidNpadStyleSet_NpadFullCtrl = HidNpadStyleTag_NpadFullKey  | HidNpadStyleTag_NpadHandheld | HidNpadStyleTag_NpadJoyDual,  ///< Style set comprising Npad styles containing the full set of controls {FullKey, Handheld, JoyDual}
+    HidNpadStyleSet_NpadStandard = HidNpadStyleSet_NpadFullCtrl | HidNpadStyleTag_NpadJoyLeft  | HidNpadStyleTag_NpadJoyRight, ///< Style set comprising all standard Npad styles {FullKey, Handheld, JoyDual, JoyLeft, JoyRight}
+} HidNpadStyleTag;
+
+/// Pad state object.
+typedef struct {
+    u8 id_mask;
+    u8 active_id_mask;
+    bool read_handheld;
+    bool active_handheld;
+    u32 style_set; // HidNpadStyleTag
+    u32 attributes; // HidNpadAttribute
+    u64 buttons_cur; // HidNpadButton
+    u64 buttons_old;
+    HidAnalogStickState sticks[2];
+    u32 gc_triggers[2];
+} PadState;
+
+inline static void padConfigureInput(u32 max_players, u32 style_set) {}
+
+#define padInitialize(_pad, ...) ({ \
+    const HidNpadIdType _pad_ids[] = { __VA_ARGS__ }; \
+    u64 _pad_mask = 0; \
+    for (unsigned _pad_i = 0; _pad_i < (sizeof(_pad_ids)/sizeof(_pad_ids[0])); ++_pad_i) \
+        _pad_mask |= 1UL << (_pad_ids[_pad_i]); \
+    padInitializeWithMask((_pad), _pad_mask); \
+})
+
+inline static void padInitializeWithMask(PadState* pad, u64 mask) {}
+inline static void padInitializeAny(PadState* pad) {}
+inline static void padInitializeDefault(PadState* pad) {}
+inline static void padUpdate(PadState* pad) {}
+
+inline static bool padIsHandheld(const PadState* pad) {
+    return pad->active_handheld;
+}
+
+inline static bool padIsNpadActive(const PadState* pad, HidNpadIdType id) {
+    return false;
+}
+
+inline static bool padIsConnected(const PadState* pad) {
+    return pad->attributes & HidNpadAttribute_IsConnected;
+}
+
+inline static u64 padGetButtons(const PadState* pad) {
+    return pad->buttons_cur;
+}
+
+inline static HidAnalogStickState padGetStickPos(const PadState* pad, unsigned i) {
+    return pad->sticks[i];
+}
+
+inline static u32 padGetGcTriggerPos(const PadState* pad, unsigned i) {
+    return pad->gc_triggers[i];
+}
+
+/// HidVibrationDeviceHandle
+typedef union HidVibrationDeviceHandle {
+    u32 type_value;                                   ///< TypeValue
+    struct {
+        u32 npad_style_index : 8;                     ///< NpadStyleIndex
+        u32 player_number : 8;                        ///< PlayerNumber
+        u32 device_idx : 8;                           ///< DeviceIdx
+        u32 pad : 8;                                  ///< Padding
+    };
+} HidVibrationDeviceHandle;
+
+/// HidVibrationDeviceInfo
+typedef struct HidVibrationDeviceInfo {
+    u32 type;                                         ///< \ref HidVibrationDeviceType
+    u32 position;                                     ///< \ref HidVibrationDevicePosition
+} HidVibrationDeviceInfo;
+
+/// HidVibrationValue
+typedef struct HidVibrationValue {
+    float amp_low;   ///< Low Band amplitude. 1.0f: Max amplitude.
+    float freq_low;  ///< Low Band frequency in Hz.
+    float amp_high;  ///< High Band amplitude. 1.0f: Max amplitude.
+    float freq_high; ///< High Band frequency in Hz.
+} HidVibrationValue;
+
+inline static Result hidInitializeVibrationDevices(HidVibrationDeviceHandle *handles, s32 total_handles, HidNpadIdType id, HidNpadStyleTag style) {
+    return 0;
+}
+
+inline static Result hidSendVibrationValues(const HidVibrationDeviceHandle *handles, const HidVibrationValue *values, s32 count) {
     return 0;
 }

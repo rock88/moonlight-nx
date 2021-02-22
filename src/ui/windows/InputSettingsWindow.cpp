@@ -15,7 +15,7 @@ public:
     
     bool gamepad_button_event(int jid, int button, int action) override {
         if (action) {
-            GamepadButtons gamepad_button = GamepadMapper::mapper()->convert_nanogui_gamepad_button(button);
+            GamepadButtons gamepad_button = GamepadMapper::instance().convert_nanogui_gamepad_button(button);
             handle_button_input(button, gamepad_button);
         }
         return false;
@@ -23,7 +23,7 @@ public:
     
     bool gamepad_analog_event(int jid, int axis, float value) override {
         if (value > 0) {
-            GamepadButtons gamepad_button = GamepadMapper::mapper()->convert_nanogui_analog_axis(axis);
+            GamepadButtons gamepad_button = GamepadMapper::instance().convert_nanogui_analog_axis(axis);
             handle_button_input(-1, gamepad_button);
         }
         return false;
@@ -83,23 +83,23 @@ public:
         nvgText(ctx, width() / 2, height() / 2 - 80, m_caption.c_str(), NULL);
         
         if (m_buttons[0] != GamepadButtonUnknown) {
-            std::string string = "\"" + GamepadMapper::mapper()->button_label(m_buttons[0], true) + "\"";
+            std::string string = "\"" + GamepadMapper::instance().button_label(m_buttons[0], true) + "\"";
             
             if (m_buttons[1] != GamepadButtonUnknown) {
-                string += " + \"" + GamepadMapper::mapper()->button_label(m_buttons[1], true) + "\"";
+                string += " + \"" + GamepadMapper::instance().button_label(m_buttons[1], true) + "\"";
             }
             
             if (m_buttons[2] != GamepadButtonUnknown) {
-                string += " + \"" + GamepadMapper::mapper()->button_label(m_buttons[2], true) + "\"";
+                string += " + \"" + GamepadMapper::instance().button_label(m_buttons[2], true) + "\"";
             }
             
             nvgText(ctx, width() / 2, height() / 2, string.c_str(), NULL);
             
             if (is_done()) {
                 string = "Press \"" +
-                    GamepadMapper::mapper()->button_label(GamepadButtonA, true) +
+                    GamepadMapper::instance().button_label(GamepadButtonA, true) +
                     "\" for Accept, \"" +
-                    GamepadMapper::mapper()->button_label(GamepadButtonB, true) +
+                    GamepadMapper::instance().button_label(GamepadButtonB, true) +
                     "\" for Cancel.";
                 nvgText(ctx, width() / 2, height() / 2 + 80, string.c_str(), NULL);
             }
@@ -127,7 +127,7 @@ static GamepadInputOverlay* overlay = nullptr;
 
 InputSettingsWindow::InputSettingsWindow(Widget* parent, int app_id, std::string app_name): ContentWindow(parent, "Input Settings (" + app_name + ")") {
     m_app_id = app_id;
-    GamepadMapper::mapper()->load_gamepad_map(m_app_id);
+    GamepadMapper::instance().load_gamepad_map(m_app_id);
     
     set_left_pop_button();
     set_box_layout(Orientation::Vertical, Alignment::Minimum);
@@ -159,7 +159,7 @@ void InputSettingsWindow::reload_gamepad_input_settings() {
     content->set_layout(new BoxLayout(Orientation::Horizontal, Alignment::Minimum, 30, 10));
     auto button_container = new_container(content);
     
-    for (int i = 0; i < GamepadMapper::mapper()->button_count(); i++) {
+    for (int i = 0; i < GamepadMapper::instance().button_count(); i++) {
         if (i == GamepadButtonUp) {
             button_container = new_container(content);
         }
@@ -172,8 +172,8 @@ void InputSettingsWindow::reload_gamepad_input_settings() {
             button_container = new_container(content);
         }
         
-        button_container->add<Label>(GamepadMapper::mapper()->button_label((GamepadButtons)i, false));
-        auto button = button_container->add<Button>(GamepadMapper::mapper()->button_label(GamepadMapper::mapper()->mapped_button((GamepadButtons)i), true));
+        button_container->add<Label>(GamepadMapper::instance().button_label((GamepadButtons)i, false));
+        auto button = button_container->add<Button>(GamepadMapper::instance().button_label(GamepadMapper::instance().mapped_button((GamepadButtons)i), true));
         button->set_callback([this, i] {
             assign_button((GamepadButtons)i);
         });
@@ -199,18 +199,18 @@ void InputSettingsWindow::reload_combo_settings() {
     content->set_layout(new BoxLayout(Orientation::Horizontal, Alignment::Minimum, 30, 10));
     auto button_container = new_container(content, 360);
     
-    for (int i = 0; i < GamepadMapper::mapper()->combo_count(); i++) {
+    for (int i = 0; i < GamepadMapper::instance().combo_count(); i++) {
         if (i == GamepadComboEscape) {
             button_container = new_container(content, 360);
         }
         
-        auto buttons = GamepadMapper::mapper()->combo_buttons((GamepadCombo)i);
+        auto buttons = GamepadMapper::instance().combo_buttons((GamepadCombo)i);
         
         std::string combo_text = "";
         
         for (int i = 0; i < 3; i++) {
             if (buttons[i] != GamepadButtonUnknown) {
-                combo_text += GamepadMapper::mapper()->button_label(GamepadMapper::mapper()->mapped_button(buttons[i]), true);
+                combo_text += GamepadMapper::instance().button_label(GamepadMapper::instance().mapped_button(buttons[i]), true);
                 
                 if (i < 2 && buttons[i + 1] != GamepadButtonUnknown) {
                     combo_text += " + ";
@@ -218,7 +218,7 @@ void InputSettingsWindow::reload_combo_settings() {
             }
         }
         
-        button_container->add<Label>(GamepadMapper::mapper()->combo_label((GamepadCombo)i));
+        button_container->add<Label>(GamepadMapper::instance().combo_label((GamepadCombo)i));
         auto button = button_container->add<Button>(combo_text);
         button->set_callback([this, i] {
             assign_combo((GamepadCombo)i, i == GamepadComboGuide ? 2 : 3);
@@ -230,12 +230,12 @@ void InputSettingsWindow::reload_combo_settings() {
 
 void InputSettingsWindow::reset() {
     if (m_app_id == 0) {
-        GamepadMapper::mapper()->load_defaults_gamepad_map();
+        GamepadMapper::instance().load_defaults_gamepad_map();
     } else {
-        GamepadMapper::mapper()->load_gamepad_map(0);
+        GamepadMapper::instance().load_gamepad_map(0);
     }
     
-    GamepadMapper::mapper()->save_gamepad_map(m_app_id);
+    GamepadMapper::instance().save_gamepad_map(m_app_id);
 }
 
 bool InputSettingsWindow::mouse_button_event(const Vector2i &p, int button, bool down, int modifiers) {
@@ -261,37 +261,37 @@ bool InputSettingsWindow::gamepad_analog_event(int jid, int axis, float value) {
 
 void InputSettingsWindow::window_disappear() {
     if (m_has_changes) {
-        GamepadMapper::mapper()->save_gamepad_map(m_app_id);
+        GamepadMapper::instance().save_gamepad_map(m_app_id);
     }
 }
 
 void InputSettingsWindow::assign_button(GamepadButtons button) {
-    GamepadButtons current = GamepadMapper::mapper()->mapped_button(button);
+    GamepadButtons current = GamepadMapper::instance().mapped_button(button);
     
-    overlay = screen()->add<GamepadInputOverlay>("Press button for reassign \"" + GamepadMapper::mapper()->button_label(button, false) + "\"");
+    overlay = screen()->add<GamepadInputOverlay>("Press button for reassign \"" + GamepadMapper::instance().button_label(button, false) + "\"");
     overlay->set_completion([this, button, current](auto result) {
         overlay->dispose();
         overlay = NULL;
         
         if (current != result[0]) {
             m_has_changes = true;
-            GamepadMapper::mapper()->set_mapped_button(button, result[0]);
+            GamepadMapper::instance().set_mapped_button(button, result[0]);
             reload_gamepad_input_settings();
         }
     });
 }
 
 void InputSettingsWindow::assign_combo(GamepadCombo combo, int buttons_count) {
-    auto current = GamepadMapper::mapper()->combo_buttons(combo);
+    auto current = GamepadMapper::instance().combo_buttons(combo);
     
-    overlay = screen()->add<GamepadInputOverlay>("Enter combo for reassign \"" + GamepadMapper::mapper()->combo_label(combo) + "\"", buttons_count);
+    overlay = screen()->add<GamepadInputOverlay>("Enter combo for reassign \"" + GamepadMapper::instance().combo_label(combo) + "\"", buttons_count);
     overlay->set_completion([this, combo, current](auto result) {
         overlay->dispose();
         overlay = NULL;
         
         if (current != result) {
             m_has_changes = true;
-            GamepadMapper::mapper()->set_combo_buttons(result, combo);
+            GamepadMapper::instance().set_combo_buttons(result, combo);
             reload_combo_settings();
         }
     });

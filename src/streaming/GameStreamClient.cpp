@@ -92,7 +92,7 @@ void GameStreamClient::connect(const std::string &address, ServerCallback<SERVER
     
     perform_async([this, address, callback] {
         // TODO: mem leak here :(
-        int status = gs_init(&m_server_data[address], (char *)(new std::string(address))->c_str(), Settings::settings()->key_dir().c_str(), Settings::settings()->ignore_unsupported_resolutions());
+        int status = gs_init(&m_server_data[address], (char *)(new std::string(address))->c_str(), Settings::instance().key_dir().c_str(), Settings::instance().ignore_unsupported_resolutions());
         
         nanogui::async([this, address, callback, status] {
             if (status == GS_OK) {
@@ -100,7 +100,7 @@ void GameStreamClient::connect(const std::string &address, ServerCallback<SERVER
                 host.address = address;
                 host.hostname = m_server_data[address].hostname ?: "";
                 host.mac = m_server_data[address].mac ?: "";
-                Settings::settings()->add_host(host);
+                Settings::instance().add_host(host);
                 callback(GSResult<SERVER_DATA>::success(m_server_data[address]));
             } else {
                 callback(GSResult<SERVER_DATA>::failure(gs_error()));
@@ -187,7 +187,7 @@ void GameStreamClient::start(const std::string &address, STREAM_CONFIGURATION co
     m_config = config;
     
     perform_async([this, address, app_id, callback] {
-        int status = gs_start_app(&m_server_data[address], &m_config, app_id, Settings::settings()->sops(), Settings::settings()->play_audio(), 0x1);
+        int status = gs_start_app(&m_server_data[address], &m_config, app_id, Settings::instance().sops(), Settings::instance().play_audio(), 0x1);
         
         nanogui::async([this, callback, status] {
             if (status == GS_OK) {

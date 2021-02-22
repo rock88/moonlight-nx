@@ -1,3 +1,4 @@
+#include "Singleton.hpp"
 #include <stdio.h>
 #include <string>
 #include <vector>
@@ -14,13 +15,8 @@ struct Host {
     std::string mac;
 };
 
-class Settings {
+class Settings: public Singleton<Settings> {
 public:
-    static Settings* settings() {
-        static Settings settings;
-        return &settings;
-    }
-    
     void set_working_dir(std::string working_dir);
     
     std::string key_dir() const {
@@ -130,8 +126,6 @@ public:
     void save();
 
 private:
-    Settings() {};
-    
     std::string m_working_dir;
     std::string m_key_dir;
     std::string m_boxart_dir;

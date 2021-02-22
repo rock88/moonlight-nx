@@ -20,4 +20,6 @@ private:
     MoonlightSession* m_session;
     LoadingOverlay* m_loader;
     bool m_draw_stats = false;
+    bool m_should_show_stats = false;
+    bool m_is_terminated = false;
 };

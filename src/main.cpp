@@ -3,17 +3,15 @@
 #include "Application.hpp"
 #include "Settings.hpp"
 #include "Limelight.h"
-#include "InputController.hpp"
 #include "GameStreamClient.hpp"
 #include "Logger.hpp"
 #include "MouseController.hpp"
 #include "KeyboardController.hpp"
+#include "GamepadController.hpp"
 #include <glad/glad.h>
 #include <switch.h>
-
 #include <GLFW/glfw3.h>
 
-GLFWgamepadstate glfw_gamepad_state;
 int moonlight_exit = 0;
 
 static int m_width, m_height, m_fb_width, m_fb_height;
@@ -31,9 +29,9 @@ int main(int argc, const char * argv[]) {
         appletInitializeGamePlayRecording();
     }
     
-    Settings::settings()->set_working_dir("sdmc:/switch/moonlight");
+    Settings::instance().set_working_dir("sdmc:/switch/moonlight");
     #else
-    Settings::settings()->set_working_dir("/Users/rock88/Documents/Projects/Switch/moonlight-nx/working_dir");
+    Settings::instance().set_working_dir("/Users/rock88/Documents/Projects/Switch/moonlight-nx/working_dir");
     #endif
     
     Logger::info("Moonlight", "Starting...");
@@ -67,6 +65,7 @@ int main(int argc, const char * argv[]) {
     
     MouseController::instance().init(window);
     KeyboardController::instance().init(window);
+    GamepadController::instance().init();
     
     nanogui::init();
     nanogui::ref<Application> app = new Application(Size(m_width, m_height), Size(m_fb_width, m_fb_height));
@@ -76,13 +75,9 @@ int main(int argc, const char * argv[]) {
     while (!glfwWindowShouldClose(window) && !moonlight_exit) {
         glfwPollEvents();
         
-        #ifdef __SWITCH__
-            glfwGetGamepadState(GLFW_JOYSTICK_1, &glfw_gamepad_state);
-            InputController::controller()->handle_gamepad_event(glfw_gamepad_state);
-        #endif
-        
         MouseController::instance().handle_mouse();
         KeyboardController::instance().handle_keyboard();
+        GamepadController::instance().handle_gamepad();
         
         int width, height;
         glfwGetFramebufferSize(window, &width, &height);
@@ -90,7 +85,7 @@ int main(int argc, const char * argv[]) {
         
         nanogui::draw();
         
-        //MouseController::instance().draw_cursor(app);
+        MouseController::instance().draw_cursor(app);
         
         glfwSwapBuffers(window);
     }

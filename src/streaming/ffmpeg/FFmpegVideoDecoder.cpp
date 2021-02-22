@@ -124,7 +124,7 @@ int FFmpegVideoDecoder::setup(int video_format, int width, int height, int redra
         // Use low delay single threaded encoding
         m_decoder_context->flags |= AV_CODEC_FLAG_LOW_DELAY;
     
-    int decoder_threads = Settings::settings()->decoder_threads();
+    int decoder_threads = Settings::instance().decoder_threads();
     
     if (decoder_threads == 0) {
         m_decoder_context->thread_type = FF_THREAD_FRAME;
