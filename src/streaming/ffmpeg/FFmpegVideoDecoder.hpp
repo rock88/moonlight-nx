@@ -10,7 +10,6 @@ public:
     void cleanup() override;
     int submit_decode_unit(PDECODE_UNIT decode_unit) override;
     int capabilities() const override;
-    AVFrame* frame() const override;
     VideoDecodeStats* video_decode_stats() override;
     
 private:

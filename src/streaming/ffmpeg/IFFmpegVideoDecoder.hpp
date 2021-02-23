@@ -27,6 +27,5 @@ public:
     virtual void cleanup() = 0;
     virtual int submit_decode_unit(PDECODE_UNIT decode_unit) = 0;
     virtual int capabilities() const = 0;
-    virtual AVFrame* frame() const = 0;
     virtual VideoDecodeStats* video_decode_stats() = 0;
 };

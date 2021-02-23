@@ -222,10 +222,6 @@ AVFrame* FFmpegVideoDecoder::get_frame(bool native_frame) {
     return NULL;
 }
 
-AVFrame* FFmpegVideoDecoder::frame() const {
-    return m_frame;
-}
-
 VideoDecodeStats* FFmpegVideoDecoder::video_decode_stats() {
     uint64_t now = LiGetMillis();
     m_video_decode_stats.total_fps = (float)m_video_decode_stats.total_frames / ((float)(now - m_video_decode_stats.measurement_start_timestamp) / 1000);
