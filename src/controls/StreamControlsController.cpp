@@ -106,15 +106,15 @@ void StreamControlsController::send_to_stream(int width, int height) {
     // Keyboard
     auto keyboard_state = KeyboardController::instance().keyboard_state();
     
-//    for (int i = 0; i < keyboard_state.keys.size(); i++) {
-//        if (keyboard_state.keys[i].is_pressed != m_keyboard_state.keys[i].is_pressed) {
-//            LiSendKeyboardEvent(
-//                keyboard_state.keys[i].codes.moonlight_keycode,
-//                keyboard_state.keys[i].is_pressed ? KEY_ACTION_DOWN : KEY_ACTION_UP,
-//                keyboard_state.moonlight_modifiers
-//            );
-//        }
-//    }
+    for (int i = 0; i < keyboard_state.keys.size(); i++) {
+        if (keyboard_state.keys[i].is_pressed != m_keyboard_state.keys[i].is_pressed) {
+            LiSendKeyboardEvent(
+                keyboard_state.keys[i].codes.moonlight_keycode,
+                keyboard_state.keys[i].is_pressed ? KEY_ACTION_DOWN : KEY_ACTION_UP,
+                keyboard_state.moonlight_modifiers
+            );
+        }
+    }
     
     m_keyboard_state = keyboard_state;
     
