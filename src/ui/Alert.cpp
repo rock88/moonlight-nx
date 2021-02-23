@@ -28,6 +28,9 @@ void Alert::perform_layout(NVGcontext *ctx) {
     m_button_container->set_fixed_width(screen()->width() / 2);
     m_container->set_fixed_width(screen()->width() / 2);
     
+    for (auto child: m_container->children()) {
+        child->set_fixed_width(m_container->fixed_width() - 40);
+    }
     for (auto child: m_button_container->children()) {
         child->set_fixed_width(m_container->fixed_width() - 20);
     }

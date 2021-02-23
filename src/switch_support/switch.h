@@ -1,6 +1,12 @@
 // Some mock part of libnx stuff for import and use <switch.h> on others plaforms
 #include <stdlib.h>
-
+#include <string.h>
+#include <sys/types.h>
+#include <sys/socket.h>
+#include <sys/ioctl.h>
+#include <net/if.h>
+#include <arpa/inet.h>
+#include <unistd.h>
 #pragma once
 
 typedef uint8_t u8;       ///<   8-bit unsigned integer.
@@ -478,5 +484,19 @@ inline static Result hidInitializeVibrationDevices(HidVibrationDeviceHandle *han
 }
 
 inline static Result hidSendVibrationValues(const HidVibrationDeviceHandle *handles, const HidVibrationValue *values, s32 count) {
+    return 0;
+}
+
+inline static Result nifmGetCurrentIpAddress(u32* out) {
+    struct ifreq ifr;
+    ifr.ifr_addr.sa_family = AF_INET;
+    strncpy(ifr.ifr_name, "en0", IFNAMSIZ - 1);
+    
+    int fd = socket(AF_INET, SOCK_DGRAM, 0);
+    ioctl(fd, SIOCGIFADDR, &ifr);
+    close(fd);
+    
+    *out = ((struct sockaddr_in *)&ifr.ifr_addr)->sin_addr.s_addr;
+    
     return 0;
 }

@@ -14,4 +14,5 @@ public:
 private:
     void reload();
     void wake_up_host(const Host &host);
+    void find_host();
 };

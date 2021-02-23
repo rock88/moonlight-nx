@@ -25,8 +25,10 @@ int sigaction(int a, const struct sigaction* b, struct sigaction* c) {
 void userAppInit() {
     socketInitializeDefault();
     nxlinkStdio();
+    nifmInitialize(NifmServiceType_User);
 }
 
 void userAppExit() {
     socketExit();
+    nifmExit();
 }

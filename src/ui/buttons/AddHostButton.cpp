@@ -3,10 +3,10 @@
 
 using namespace nanogui;
 
-AddHostButton::AddHostButton(Widget* parent): Button(parent, "") {
+AddHostButton::AddHostButton(Widget* parent, AddHostButtonType type): Button(parent, ""), m_type(type) {
     set_layout(new BoxLayout(Orientation::Vertical, Alignment::Middle));
     add<Widget>()->set_fixed_height(170);
-    auto label = add<Label>("Add Host");
+    auto label = add<Label>(type == AddHostButtonTypeFind ? "Find Host" : "Add Host");
     label->set_font_size(20);
     screen()->perform_layout();
 }
@@ -25,7 +25,7 @@ void AddHostButton::draw(NVGcontext *ctx) {
     nvgText(ctx, width() / 2, height() / 2 - 4, utf8(FA_DESKTOP).data(), NULL);
     
     nvgFontSize(ctx, 40);
-    nvgText(ctx, width() / 2, height() / 2 - 16, utf8(FA_PLUS).data(), NULL);
+    nvgText(ctx, width() / 2, height() / 2 - 16, utf8(m_type == AddHostButtonTypeFind ? FA_SEARCH : FA_PLUS).data(), NULL);
     
     nvgRestore(ctx);
 }

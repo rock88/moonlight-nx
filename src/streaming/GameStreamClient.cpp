@@ -10,6 +10,7 @@
 #include <future>
 #include <nanogui/nanogui.h>
 #include <unistd.h>
+#include <switch.h>
 
 static std::mutex m_async_mutex;
 static std::vector<std::function<void()>> m_tasks;
@@ -33,7 +34,6 @@ static void task_loop() {
 }
 
 #ifdef __SWITCH__
-#include <switch.h>
 static Thread task_loop_thread;
 static void start_task_loop() {
     threadCreate(
@@ -74,6 +74,59 @@ void GameStreamClient::stop() {
     threadWaitForExit(&task_loop_thread);
     threadClose(&task_loop_thread);
     #endif
+}
+
+std::vector<std::string> GameStreamClient::host_addresses_for_find() {
+    std::vector<std::string> addresses;
+    u32 address;
+    Result result = nifmGetCurrentIpAddress(&address);
+    
+    if (R_SUCCEEDED(result)) {
+        int a = address & 0xFF;
+        int b = (address >> 8) & 0xFF;
+        int c = (address >> 16) & 0xFF;
+        int d = (address >> 24) & 0xFF;
+        
+        for (int i = 0; i < 256; i++) {
+            if (i == d) {
+                continue;
+            }
+            addresses.push_back(std::to_string(a) + "." + std::to_string(b) + "." + std::to_string(c) + "." + std::to_string(i));
+        }
+    }
+    return addresses;
+}
+
+void GameStreamClient::find_host(ServerCallback<Host> callback) {
+    perform_async([this, callback] {
+        auto addresses = host_addresses_for_find();
+        
+        if (addresses.empty()) {
+            nanogui::async([callback] { callback(GSResult<Host>::failure("Can't obtain IP address...")); });
+        } else {
+            bool found = false;
+            
+            for (int i = 0; i < addresses.size(); i++) {
+                SERVER_DATA server_data;
+                
+                int status = gs_init(&server_data, addresses[i], true);
+                if (status == GS_OK) {
+                    found = true;
+                    
+                    Host host;
+                    host.address = addresses[i];
+                    host.hostname = server_data.hostname;
+                    host.mac = server_data.mac;
+                    nanogui::async([callback, host] { callback(GSResult<Host>::success(host)); });
+                    break;
+                }
+            }
+            
+            if (!found) {
+                nanogui::async([callback] { callback(GSResult<Host>::failure("Host PC not found...")); });
+            }
+        }
+    });
 }
 
 void GameStreamClient::wake_up_host(const Host &host, ServerCallback<bool> callback) {

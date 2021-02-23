@@ -49,16 +49,16 @@ void Settings::set_working_dir(std::string working_dir) {
 }
 
 void Settings::add_host(const Host& host) {
-    auto it = std::find_if(m_hosts.begin(), m_hosts.end(), [host](auto h){ return h.address == host.address; });
+    remove_host(host);
     
-    if (it == m_hosts.end()) {
-        m_hosts.push_back(host);
-        save();
-    }
+    m_hosts.push_back(host);
+    save();
 }
 
 void Settings::remove_host(const Host& host) {
-    auto it = std::find_if(m_hosts.begin(), m_hosts.end(), [host](auto h){ return h.address == host.address; });
+    auto it = std::find_if(m_hosts.begin(), m_hosts.end(), [host](auto h){
+        return h.address == host.address || h.hostname == host.hostname || h.mac == host.mac;
+    });
     
     if (it != m_hosts.end()) {
         m_hosts.erase(it);

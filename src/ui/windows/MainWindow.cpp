@@ -61,7 +61,7 @@ void MainWindow::reload() {
                     });
                 }
             } else {
-                auto alert = screen()->add<Alert>("Error", "Innactive host...");
+                auto alert = screen()->add<Alert>("Error", "Innactive host...", false);
                 
                 if (!button->host().mac.empty()) {
                     alert->add_button("Wake Up", [this, button] {
@@ -73,13 +73,30 @@ void MainWindow::reload() {
                     Settings::instance().remove_host(button->host());
                     reload();
                 });
+                alert->add_button("Cancel");
             }
         });
     }
     
-    auto button = button_container->add<AddHostButton>();
-    button->set_fixed_size(Size(200, 200));
-    button->set_callback([this] {
+    auto find_button = button_container->add<AddHostButton>(AddHostButtonTypeFind);
+    find_button->set_fixed_size(Size(200, 200));
+    find_button->set_callback([this] {
+        auto addresses = GameStreamClient::instance().host_addresses_for_find();
+        
+        if (addresses.empty()) {
+            screen()->add<Alert>("Error", "Can't obtain IP address...");
+        } else {
+            auto alert = screen()->add<Alert>("Find Host", "Search Host PC in the same network as yours Switch by evalute IP addresses from " + addresses.front() + " to " + addresses.back() + ".\nPlease check your PC and Switch network before tap on a Find.", false);
+            alert->add_button("Find", [this] {
+                find_host();
+            });
+            alert->add_button("Cancel");
+        }
+    });
+    
+    auto add_button = button_container->add<AddHostButton>(AddHostButtonTypeAdd);
+    add_button->set_fixed_size(Size(200, 200));
+    add_button->set_callback([this] {
         push<AddHostWindow>();
     });
     
@@ -108,6 +125,21 @@ void MainWindow::wake_up_host(const Host &host) {
         loader->dispose();
         
         if (result.isSuccess()) {
+            reload();
+        } else {
+            screen()->add<Alert>("Error", result.error());
+        }
+    });
+}
+
+void MainWindow::find_host() {
+    auto loader = add<LoadingOverlay>("Find Host...");
+    
+    GameStreamClient::instance().find_host([this, loader](auto result) {
+        loader->dispose();
+        
+        if (result.isSuccess()) {
+            Settings::instance().add_host(result.value());
             reload();
         } else {
             screen()->add<Alert>("Error", result.error());
