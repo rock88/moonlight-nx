@@ -1,5 +1,4 @@
 #include "IFFmpegVideoDecoder.hpp"
-#include <pthread.h>
 #pragma once
 
 class FFmpegVideoDecoder: public IFFmpegVideoDecoder {
@@ -34,5 +33,4 @@ private:
     
     char* m_ffmpeg_buffer = nullptr;
     AVFrame* m_frame = nullptr;
-    pthread_mutex_t m_mutex;
 };

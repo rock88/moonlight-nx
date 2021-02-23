@@ -10,77 +10,9 @@
 
 #define DECODER_BUFFER_SIZE 92 * 1024 * 2
 
-#include <switch.h>
-#include <unistd.h>
+FFmpegVideoDecoder::FFmpegVideoDecoder() {}
 
-class ThreadLockWatcher {
-public:
-    void start() {
-        std::lock_guard<std::mutex> lock(m_mutex);
-        is_alive = true;
-        prev = current = 0;
-        pthread_create(&thread, NULL, entry, this);
-    }
-    
-    void stop() {
-        std::lock_guard<std::mutex> lock(m_mutex);
-        is_alive = false;
-    }
-    
-    void enter(int line) {
-        std::lock_guard<std::mutex> lock(m_mutex);
-        
-        last_line = line;
-        prev = current;
-        current++;
-    }
-    
-private:
-    bool is_alive = false;
-    u64 prev = 0;
-    u64 current = 0;
-    int last_line = 0;
-    
-    static void* entry(void* context) {
-        while (true) {
-            if (auto watcher = static_cast<ThreadLockWatcher *>(context)) {
-                if (watcher->is_alive) {
-                    if (watcher->current != 0) {
-                        std::lock_guard<std::mutex> lock(watcher->m_mutex);
-                        
-                        if (watcher->prev > watcher->current) {
-                            Logger::error("ThreadLockWatcher", "Thread Lock Detected on a line: %i", watcher->last_line);
-                        } else {
-                            watcher->prev++;
-                        }
-                    }
-                    usleep(500'000);
-                } else {
-                    return NULL;
-                }
-            } else {
-                return NULL;
-            }
-        }
-        return NULL;
-    }
-    
-    std::mutex m_mutex;
-    pthread_t thread;
-};
-
-static ThreadLockWatcher watcher;
-#define DBG() watcher.enter(__LINE__);
-
-FFmpegVideoDecoder::FFmpegVideoDecoder() {
-    //pthread_mutex_init(&m_mutex, NULL);
-    watcher.start();
-}
-
-FFmpegVideoDecoder::~FFmpegVideoDecoder() {
-    watcher.stop();
-    //pthread_mutex_destroy(&m_mutex);
-}
+FFmpegVideoDecoder::~FFmpegVideoDecoder() {}
 
 int FFmpegVideoDecoder::setup(int video_format, int width, int height, int redraw_rate, void *context, int dr_flags) {
     m_stream_fps = redraw_rate;
@@ -200,26 +132,22 @@ void FFmpegVideoDecoder::cleanup() {
 }
 
 int FFmpegVideoDecoder::submit_decode_unit(PDECODE_UNIT decode_unit) {
-    DBG();
     if (decode_unit->fullLength < DECODER_BUFFER_SIZE) {
         PLENTRY entry = decode_unit->bufferList;
-        DBG();
+        
         if (!m_last_frame) {
             m_video_decode_stats.measurement_start_timestamp = LiGetMillis();
             m_last_frame = decode_unit->frameNumber;
-            DBG();
         }
         else {
             // Any frame number greater than m_LastFrameNumber + 1 represents a dropped frame
             m_video_decode_stats.network_dropped_frames += decode_unit->frameNumber - (m_last_frame + 1);
             m_video_decode_stats.total_frames += decode_unit->frameNumber - (m_last_frame + 1);
             m_last_frame = decode_unit->frameNumber;
-            DBG();
         }
         
         m_video_decode_stats.received_frames++;
         m_video_decode_stats.total_frames++;
-        DBG();
         
         int length = 0;
         while (entry != NULL) {
@@ -227,14 +155,11 @@ int FFmpegVideoDecoder::submit_decode_unit(PDECODE_UNIT decode_unit) {
                 Logger::error("FFmpeg", "Big buffer to decode... !");
             }
             
-            DBG();
             memcpy(m_ffmpeg_buffer + length, entry->data, entry->length);
             length += entry->length;
             entry = entry->next;
-            DBG();
         }
         
-        DBG();
         m_video_decode_stats.total_reassembly_time += LiGetMillis() - decode_unit->receiveTimeMs;
         
         m_frames_in++;
@@ -245,24 +170,17 @@ int FFmpegVideoDecoder::submit_decode_unit(PDECODE_UNIT decode_unit) {
             Logger::error("FFmpeg", "Big buffer to decode...");
         }
         
-        DBG();
         if (decode(m_ffmpeg_buffer, length) == 0) {
             m_frames_out++;
-            DBG();
             m_video_decode_stats.total_decode_time += LiGetMillis() - before_decode;
             
             // Also count the frame-to-frame delay if the decoder is delaying frames
             // until a subsequent frame is submitted.
             m_video_decode_stats.total_decode_time += (m_frames_in - m_frames_out) * (1000 / m_stream_fps);
             m_video_decode_stats.decoded_frames++;
-            DBG();
-            //if (pthread_mutex_lock(&m_mutex) == 0) {
-                m_frame = get_frame(true);
-                AVFrameHolder::instance().push(m_frame);
-            DBG();//
-                // Push event!!
-                //pthread_mutex_unlock(&m_mutex);
-            //}
+            
+            m_frame = get_frame(true);
+            AVFrameHolder::instance().push(m_frame);
         }
     } else {
         Logger::error("FFmpeg", "Big buffer to decode... 2");
@@ -277,36 +195,28 @@ int FFmpegVideoDecoder::capabilities() const {
 int FFmpegVideoDecoder::decode(char* indata, int inlen) {
     m_packet.data = (uint8_t *)indata;
     m_packet.size = inlen;
-    DBG();
+    
     int err = avcodec_send_packet(m_decoder_context, &m_packet);
-    DBG();
+    
     if (err != 0) {
-        DBG();
         char error[512];
         av_strerror(err, error, sizeof(error));
         Logger::error("FFmpeg", "Decode failed - %s", error);
-        DBG();
     }
-    DBG();
     return err != 0 ? err : 0;
 }
 
 AVFrame* FFmpegVideoDecoder::get_frame(bool native_frame) {
-    DBG();
     int err = avcodec_receive_frame(m_decoder_context, m_frames[m_next_frame]);
-    DBG();
+    
     if (err == 0) {
-        DBG();
         m_current_frame = m_next_frame;
         m_next_frame = (m_current_frame + 1) % m_frames_count;
-        DBG();
         if (/*ffmpeg_decoder == SOFTWARE ||*/ native_frame)
             return m_frames[m_current_frame];
     } else if (err != AVERROR(EAGAIN)) {
-        DBG();
         char error[512];
         av_strerror(err, error, sizeof(error));
-        DBG();
         Logger::error("FFmpeg", "Receive failed - %d/%s", err, error);
     }
     return NULL;

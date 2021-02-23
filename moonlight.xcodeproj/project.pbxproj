@@ -106,6 +106,7 @@
 		36A0C0372461DBA30083289C /* AddHostButton.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 36A0C0352461DBA30083289C /* AddHostButton.cpp */; };
 		36A0C03A2461E4C00083289C /* SettingsWindow.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 36A0C0382461E4C00083289C /* SettingsWindow.cpp */; };
 		36A0C03D2461F03C0083289C /* Settings.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 36A0C03B2461F03C0083289C /* Settings.cpp */; };
+		36BD0AFE25E5251300DD1B86 /* LockThreadDetector.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 36BD0AFC25E5251300DD1B86 /* LockThreadDetector.cpp */; };
 		36BFCCF12479723E00245D40 /* xml.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 36BFCCEA2479723E00245D40 /* xml.cpp */; };
 		36BFCCF22479723E00245D40 /* client.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 36BFCCEC2479723E00245D40 /* client.cpp */; };
 		36BFCCF32479723E00245D40 /* http.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 36BFCCF02479723E00245D40 /* http.cpp */; };
@@ -320,6 +321,8 @@
 		36A0C0392461E4C00083289C /* SettingsWindow.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = SettingsWindow.hpp; sourceTree = "<group>"; };
 		36A0C03B2461F03C0083289C /* Settings.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Settings.cpp; sourceTree = "<group>"; };
 		36A0C03C2461F03C0083289C /* Settings.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Settings.hpp; sourceTree = "<group>"; };
+		36BD0AFC25E5251300DD1B86 /* LockThreadDetector.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = LockThreadDetector.cpp; sourceTree = "<group>"; };
+		36BD0AFD25E5251300DD1B86 /* LockThreadDetector.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = LockThreadDetector.hpp; sourceTree = "<group>"; };
 		36BFCCEA2479723E00245D40 /* xml.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = xml.cpp; sourceTree = "<group>"; };
 		36BFCCEB2479723E00245D40 /* client.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = client.h; sourceTree = "<group>"; };
 		36BFCCEC2479723E00245D40 /* client.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = client.cpp; sourceTree = "<group>"; };
@@ -432,12 +435,14 @@
 			path = controls;
 			sourceTree = "<group>";
 		};
-		3620419025D7FDCC00D21EE3 /* helpers */ = {
+		3620419025D7FDCC00D21EE3 /* utils */ = {
 			isa = PBXGroup;
 			children = (
 				3620419125D7FDDB00D21EE3 /* Singleton.hpp */,
+				36BD0AFC25E5251300DD1B86 /* LockThreadDetector.cpp */,
+				36BD0AFD25E5251300DD1B86 /* LockThreadDetector.hpp */,
 			);
-			path = helpers;
+			path = utils;
 			sourceTree = "<group>";
 		};
 		3652ECC3245B3AFF001FABF3 /* nanogui */ = {
@@ -684,7 +689,7 @@
 		36B406932459F41E005BD903 /* src */ = {
 			isa = PBXGroup;
 			children = (
-				3620419025D7FDCC00D21EE3 /* helpers */,
+				3620419025D7FDCC00D21EE3 /* utils */,
 				36BFCCE92479723E00245D40 /* libgamestream */,
 				36E63789246FFFDC0032F5FB /* crypto */,
 				36DFE0CA2459FA3F00FC51CE /* nanogui_resources */,
@@ -1008,6 +1013,7 @@
 				3652EFE8245B3B00001FABF3 /* opengl.cpp in Sources */,
 				3652EFD7245B3B00001FABF3 /* screen.cpp in Sources */,
 				3652EFE1245B3B00001FABF3 /* progressbar.cpp in Sources */,
+				36BD0AFE25E5251300DD1B86 /* LockThreadDetector.cpp in Sources */,
 				3652EFF5245B3B00001FABF3 /* popupbutton.cpp in Sources */,
 				3652EFF0245B3B00001FABF3 /* colorwheel.cpp in Sources */,
 				3652F068245C292B001FABF3 /* unix.c in Sources */,
