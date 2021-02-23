@@ -37,7 +37,7 @@ void MouseController::handle_mouse() {
             state.scroll_y = (double)hid_mouse_state.wheel_delta_x / 100; // Why wheel_delta_x?
             
             if (m_mouse_state.x != state.x || m_mouse_state.y != state.y) {
-                nanogui::cursor_pos_callback_event(state.x, state.y);
+                nanogui::cursor_pos_callback_event((double)state.x, (double)state.y);
             }
             
             if (m_mouse_state.l_pressed != state.l_pressed) {
@@ -97,12 +97,12 @@ void MouseController::draw_cursor(Application *app) {
     }
 }
 
-void MouseController::handle_mouse_move(int x, int y) {
+void MouseController::handle_mouse_move(double x, double y) {
     m_hid_mouse_is_used = false;
     
     auto state = m_mouse_state;
-    state.x = x;
-    state.y = y;
+    state.x = (int)x;
+    state.y = (int)y;
     
     if (set_new_mouse_state(state)) {
         nanogui::cursor_pos_callback_event(x, y);
