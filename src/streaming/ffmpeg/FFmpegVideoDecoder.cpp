@@ -194,6 +194,8 @@ void FFmpegVideoDecoder::cleanup() {
         m_ffmpeg_buffer = nullptr;
     }
     
+    AVFrameHolder::instance().cleanup();
+    
     Logger::info("FFmpeg", "Cleanup done!");
 }
 
@@ -256,7 +258,7 @@ int FFmpegVideoDecoder::submit_decode_unit(PDECODE_UNIT decode_unit) {
             DBG();
             //if (pthread_mutex_lock(&m_mutex) == 0) {
                 m_frame = get_frame(true);
-                AVFrameHolder::holder()->push(m_frame);
+                AVFrameHolder::instance().push(m_frame);
             DBG();//
                 // Push event!!
                 //pthread_mutex_unlock(&m_mutex);

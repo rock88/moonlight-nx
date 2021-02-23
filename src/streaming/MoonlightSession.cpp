@@ -241,12 +241,11 @@ void MoonlightSession::stop(int terminate_app) {
     }
     
     LiStopConnection();
-    AVFrameHolder::holder()->cleanup();
 }
 
 void MoonlightSession::draw() {
     if (m_video_decoder && m_video_renderer) {
-        AVFrameHolder::holder()->get([this](auto frame) {
+        AVFrameHolder::instance().get([this](auto frame) {
             m_video_renderer->draw(m_config.width, m_config.height, frame);
         });
         
