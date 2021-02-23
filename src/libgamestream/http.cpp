@@ -48,7 +48,7 @@ static size_t _write_curl(void *contents, size_t size, size_t nmemb, void *userp
     return realsize;
 }
 
-int http_init(const char* key_directory) {
+int http_init(const std::string key_directory) {
     if (!curl) {
         curl_global_init(CURL_GLOBAL_ALL);
         Logger::info("Curl", "%s", curl_version());
@@ -62,10 +62,10 @@ int http_init(const char* key_directory) {
         return GS_FAILED;
     
     char certificateFilePath[4096];
-    sprintf(certificateFilePath, "%s/%s", key_directory, CERTIFICATE_FILE_NAME);
+    sprintf(certificateFilePath, "%s/%s", key_directory.c_str(), CERTIFICATE_FILE_NAME);
     
     char keyFilePath[4096];
-    sprintf(&keyFilePath[0], "%s/%s", key_directory, KEY_FILE_NAME);
+    sprintf(&keyFilePath[0], "%s/%s", key_directory.c_str(), KEY_FILE_NAME);
     
     curl_easy_setopt(curl, CURLOPT_SSL_VERIFYHOST, 0L);
     curl_easy_setopt(curl, CURLOPT_SSLENGINE_DEFAULT, 1L);
@@ -81,15 +81,15 @@ int http_init(const char* key_directory) {
     return GS_OK;
 }
 
-int http_request(char* url, Data* data, HTTPRequestTimeout timeout) {
-    Logger::info("Curl", "Request:\n%s", url);
+int http_request(const std::string url, Data* data, HTTPRequestTimeout timeout) {
+    Logger::info("Curl", "Request:\n%s", url.c_str());
     
     HTTP_DATA* http_data = (HTTP_DATA*)malloc(sizeof(HTTP_DATA));
     http_data->memory = (char*)malloc(1);
     http_data->size = 0;
     
     curl_easy_setopt(curl, CURLOPT_WRITEDATA, http_data);
-    curl_easy_setopt(curl, CURLOPT_URL, url);
+    curl_easy_setopt(curl, CURLOPT_URL, url.c_str());
     curl_easy_setopt(curl, CURLOPT_TIMEOUT, timeout);
     
     CURLcode res = curl_easy_perform(curl);

@@ -16,9 +16,9 @@
  * You should have received a copy of the GNU General Public License
  * along with Moonlight; if not, see <http://www.gnu.org/licenses/>.
  */
-#pragma once
 
-#include <stdio.h>
+#include "Data.hpp"
+#pragma once
 
 typedef struct _APP_LIST {
   char* name;
@@ -33,7 +33,7 @@ typedef struct _DISPLAY_MODE {
   struct _DISPLAY_MODE *next;
 } DISPLAY_MODE, *PDISPLAY_MODE;
 
-int xml_search(unsigned char* data, size_t len, char* node, char** result);
-int xml_applist(unsigned char* data, size_t len, PAPP_LIST *app_list);
-int xml_modelist(unsigned char* data, size_t len, PDISPLAY_MODE *mode_list);
-int xml_status(unsigned char* data, size_t len);
+int xml_search(const Data& data, const std::string node, std::string* result);
+int xml_applist(const Data& data, PAPP_LIST *app_list);
+int xml_modelist(const Data& data, PDISPLAY_MODE *mode_list);
+int xml_status(const Data& data);

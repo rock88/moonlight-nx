@@ -91,15 +91,14 @@ void GameStreamClient::connect(const std::string &address, ServerCallback<SERVER
     m_server_data[address] = SERVER_DATA();
     
     perform_async([this, address, callback] {
-        // TODO: mem leak here :(
-        int status = gs_init(&m_server_data[address], (char *)(new std::string(address))->c_str(), Settings::instance().key_dir().c_str(), Settings::instance().ignore_unsupported_resolutions());
+        int status = gs_init(&m_server_data[address], address);
         
         nanogui::async([this, address, callback, status] {
             if (status == GS_OK) {
                 Host host;
                 host.address = address;
-                host.hostname = m_server_data[address].hostname ?: "";
-                host.mac = m_server_data[address].mac ?: "";
+                host.hostname = m_server_data[address].hostname;
+                host.mac = m_server_data[address].mac;
                 Settings::instance().add_host(host);
                 callback(GSResult<SERVER_DATA>::success(m_server_data[address]));
             } else {
