@@ -62,7 +62,7 @@ docker cp CONTAINER_ID:moonlight-nx/moonlight.nro .
 2. Install deps (`dkp-pacman` for Linux like arch, `pacman` for MacOS) and update all to latest versions:
 
 ```
-sudo (dkp-)pacman --noconfirm -S devkitA64 switch-tools libnx switch-ffmpeg switch-glad switch-glfw switch-jansson switch-libdrm_nouveau switch-libexpat switch-libopus switch-libvpx switch-mbedtls switch-mesa switch-zlib switch-ffmpeg
+sudo (dkp-)pacman --noconfirm -S devkitA64 switch-tools libnx switch-ffmpeg switch-glad switch-glfw switch-jansson switch-libdrm_nouveau switch-libexpat switch-libopus switch-libvpx switch-mbedtls switch-mesa switch-zlib switch-ffmpeg switch-curl
 sudo (dkp-)pacman --noconfirm -Suy
 ```
 
