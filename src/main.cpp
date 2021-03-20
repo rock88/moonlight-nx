@@ -31,7 +31,7 @@ int main(int argc, const char * argv[]) {
     
     Settings::instance().set_working_dir("sdmc:/switch/moonlight");
     #else
-    Settings::instance().set_working_dir("/Users/rock88/Documents/Projects/Switch/moonlight-nx/working_dir");
+    Settings::instance().set_working_dir("/Users/Shared/moonlight-nx");
     #endif
     
     Logger::info("Moonlight", "Starting...");

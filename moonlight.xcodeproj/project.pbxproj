@@ -21,6 +21,7 @@
 /* End PBXAggregateTarget section */
 
 /* Begin PBXBuildFile section */
+		28AD4A752606120A009314C6 /* glad.c in Sources */ = {isa = PBXBuildFile; fileRef = 28AD4A722606120A009314C6 /* glad.c */; };
 		3602C3B7245D903000368900 /* HostButton.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3602C3B5245D903000368900 /* HostButton.cpp */; };
 		3602C3BA245DB3C800368900 /* AppListWindow.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3602C3B8245DB3C800368900 /* AppListWindow.cpp */; };
 		3602C3BD245DBA9100368900 /* AppButton.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3602C3BB245DBA9100368900 /* AppButton.cpp */; };
@@ -139,6 +140,9 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		28AD4A712606120A009314C6 /* glad.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = glad.h; sourceTree = "<group>"; };
+		28AD4A722606120A009314C6 /* glad.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = glad.c; sourceTree = "<group>"; };
+		28AD4A742606120A009314C6 /* khrplatform.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = khrplatform.h; sourceTree = "<group>"; };
 		3602C3B5245D903000368900 /* HostButton.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = HostButton.cpp; sourceTree = "<group>"; };
 		3602C3B6245D903000368900 /* HostButton.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = HostButton.hpp; sourceTree = "<group>"; };
 		3602C3B8245DB3C800368900 /* AppListWindow.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = AppListWindow.cpp; sourceTree = "<group>"; };
@@ -382,6 +386,23 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		28AD4A702606120A009314C6 /* glad */ = {
+			isa = PBXGroup;
+			children = (
+				28AD4A712606120A009314C6 /* glad.h */,
+				28AD4A722606120A009314C6 /* glad.c */,
+			);
+			path = glad;
+			sourceTree = "<group>";
+		};
+		28AD4A732606120A009314C6 /* KHR */ = {
+			isa = PBXGroup;
+			children = (
+				28AD4A742606120A009314C6 /* khrplatform.h */,
+			);
+			path = KHR;
+			sourceTree = "<group>";
+		};
 		3602C3BE245DBFF900368900 /* buttons */ = {
 			isa = PBXGroup;
 			children = (
@@ -726,6 +747,8 @@
 		36CF721C25D038C700878A8E /* switch_support */ = {
 			isa = PBXGroup;
 			children = (
+				28AD4A702606120A009314C6 /* glad */,
+				28AD4A732606120A009314C6 /* KHR */,
 				36CF721D25D038C700878A8E /* switch.h */,
 			);
 			path = switch_support;
@@ -995,6 +1018,7 @@
 				3652F066245C292B001FABF3 /* compress.c in Sources */,
 				3652F07D245C292B001FABF3 /* Misc.c in Sources */,
 				3652F070245C292B001FABF3 /* SimpleStun.c in Sources */,
+				28AD4A752606120A009314C6 /* glad.c in Sources */,
 				3652EFD8245B3B00001FABF3 /* graph.cpp in Sources */,
 				3652EFDF245B3B00001FABF3 /* shader.cpp in Sources */,
 				3620419825D85B6000D21EE3 /* KeyboardController.cpp in Sources */,
@@ -1169,7 +1193,7 @@
 					"-DMOONLIGHT_VERSION=\\\"1.1.0\\\"",
 				);
 				OTHER_LDFLAGS = (
-					"-lglfw3",
+					"-lglfw",
 					"-lcurl",
 					"-lexpat",
 					"-lavcodec",
@@ -1182,7 +1206,6 @@
 					"-lmbedx509",
 					"-lmbedcrypto",
 					"-ljansson",
-					"-lglad",
 				);
 				SDKROOT = macosx;
 			};
@@ -1261,7 +1284,7 @@
 					"-DMOONLIGHT_VERSION=\\\"1.1.0\\\"",
 				);
 				OTHER_LDFLAGS = (
-					"-lglfw3",
+					"-lglfw",
 					"-lcurl",
 					"-lexpat",
 					"-lavcodec",
@@ -1274,7 +1297,6 @@
 					"-lmbedx509",
 					"-lmbedcrypto",
 					"-ljansson",
-					"-lglad",
 				);
 				SDKROOT = macosx;
 			};
