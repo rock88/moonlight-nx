@@ -10,18 +10,37 @@ Moonlight-NX is a port of [Moonlight Game Streaming Project](https://github.com/
 3. Launch hbmenu over *Title Redirection* (for FULL RAM access);
 4. Launch moonlight.
 
-# Controls (Defaults)
-1. Move cursor with move finger on touch screen;
-2. Scroll with two fingers;
-3. L/R + tap on screen - Left/Right mouse click (allow to move cursor);
-4. ZL/ZR + tap on screen - Left/Right mouse click (without move cursor);
-5. L+R+Down - exit from stream (and close current app);
-6. L+R+Up - exit from stream (without closing current app);
-7. L+R+Left - Alt+Enter (for enable/disable fullscreen mode);
-8. L+R+Right - ESC key;
-9. ZL+ZR+Left - show video decoder/render stats;
-10. ZL+ZR+Right - hide video decoder/render stats;
-11. Minus+Plus - Guide button;
+# Controls
+## Mouse
+With touch screen you can configure two mouse input mode: 
+- Moving the cursor along the movement your finger (by default);
+- Immediately move cursor by tap area and perform left mouse click (enable `Mouse click by tap on screen` option in Settings).
+
+In both case you can hold L/R buttons an tap on a screen for left/right click (cursor will not move) or hold ZL/ZR for allow cursor movement while left/right mouse buttons holded.
+
+Also you can scroll pages with two fingers.
+
+## Keyboard
+Currently full keyboard input not supported, but you can use this combinations for most common cases:
+
+1. Minus+Plus - Guide button;
+2. ZL+ZR+Up - Exit from stream (without closing current app);
+3. ZL+ZR+Down - Exit from stream (and close current app);
+4. ZL+ZR+Left - Show/hide video decoder/render stats;
+5. L+R+Up - ESC key;
+6. L+R+Down - Win key;
+7. L+R+Left - Alt+Enter (for enable/disable fullscreen mode in some games or emulators);
+8. L+R+Right - Shift+Tab (for open/close Steam overlay).
+
+You can change this combos on a Input Settings screen (Gamepad icon on a main screen, next tap keyboard icon) or by press Y button on a Applications screen for adjust keyboard combos for a specific game/application.
+
+## Gamepad
+By default Switch gamepad configured as X360 gamepad (A/B and X/Y swapped). You can reconfigure buttons on a Input Settings screen or by press Y button on a Applications screen for adjust gamepad mapping for a specific game/application.
+
+Multiple gamepad currently not supported.
+
+## HID Keyboard/Mouse
+Moonlight-NX support attached hardware keyboard/mouse over USB connected on Switch directly or over dock (Switch should be in dock).
 
 # Build Moonlight-NX
 ## Using Docker
