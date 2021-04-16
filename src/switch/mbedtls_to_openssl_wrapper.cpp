@@ -88,6 +88,30 @@ int EVP_EncryptFinal_ex(EVP_CIPHER_CTX *ctx, unsigned char *out, int *outl) {
     return 1;
 }
 
+// TODO: This is correct?
+int EVP_DecryptInit_ex(EVP_CIPHER_CTX *ctx, const EVP_CIPHER *cipher, ENGINE *impl, const unsigned char *key, const unsigned char *iv) {
+    if (ctx && key != NULL && iv != NULL) {
+        mbedtls_gcm_setkey(&ctx->ctx, MBEDTLS_CIPHER_ID_AES, key, ctx->iv_len * 8);
+        mbedtls_gcm_starts(&ctx->ctx, MBEDTLS_GCM_DECRYPT, iv, ctx->iv_len, NULL, 0);
+        ctx->iv = iv;
+    }
+    return 1;
+}
+
+int EVP_DecryptUpdate(EVP_CIPHER_CTX *ctx, unsigned char *out, int *outl, const unsigned char *in, int inl) {
+    if (ctx) {
+        ctx->tag = (unsigned char*)malloc(ctx->iv_len);
+        
+        mbedtls_gcm_crypt_and_tag(&ctx->ctx, MBEDTLS_GCM_DECRYPT, inl, ctx->iv, ctx->iv_len, NULL, 0, in, out, ctx->iv_len, ctx->tag);
+        *outl = inl;
+    }
+    return 1;
+}
+
+int EVP_DecryptFinal_ex(EVP_CIPHER_CTX *ctx, unsigned char *outm, int *outl) {
+    return 1;
+}
+
 int RAND_bytes(unsigned char *buf, int num) {
     Data rand = Data::random_bytes(num);
     for (int i = 0; i < num; i++) {
