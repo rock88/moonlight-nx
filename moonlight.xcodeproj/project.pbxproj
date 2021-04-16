@@ -22,6 +22,7 @@
 
 /* Begin PBXBuildFile section */
 		28AD4A752606120A009314C6 /* glad.c in Sources */ = {isa = PBXBuildFile; fileRef = 28AD4A722606120A009314C6 /* glad.c */; };
+		28AD4A7A26061679009314C6 /* virtual_keyboard.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 28AD4A7926061679009314C6 /* virtual_keyboard.cpp */; };
 		3602C3B7245D903000368900 /* HostButton.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3602C3B5245D903000368900 /* HostButton.cpp */; };
 		3602C3BA245DB3C800368900 /* AppListWindow.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3602C3B8245DB3C800368900 /* AppListWindow.cpp */; };
 		3602C3BD245DBA9100368900 /* AppButton.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3602C3BB245DBA9100368900 /* AppButton.cpp */; };
@@ -143,6 +144,8 @@
 		28AD4A712606120A009314C6 /* glad.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = glad.h; sourceTree = "<group>"; };
 		28AD4A722606120A009314C6 /* glad.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = glad.c; sourceTree = "<group>"; };
 		28AD4A742606120A009314C6 /* khrplatform.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = khrplatform.h; sourceTree = "<group>"; };
+		28AD4A782606166D009314C6 /* virtual_keyboard.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = virtual_keyboard.h; sourceTree = "<group>"; };
+		28AD4A7926061679009314C6 /* virtual_keyboard.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = virtual_keyboard.cpp; sourceTree = "<group>"; };
 		3602C3B5245D903000368900 /* HostButton.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = HostButton.cpp; sourceTree = "<group>"; };
 		3602C3B6245D903000368900 /* HostButton.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = HostButton.hpp; sourceTree = "<group>"; };
 		3602C3B8245DB3C800368900 /* AppListWindow.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = AppListWindow.cpp; sourceTree = "<group>"; };
@@ -525,6 +528,7 @@
 				3652ED0B245B3AFF001FABF3 /* formhelper.h */,
 				3652ED0C245B3AFF001FABF3 /* tabwidget.h */,
 				3652ED0D245B3AFF001FABF3 /* textarea.h */,
+				28AD4A782606166D009314C6 /* virtual_keyboard.h */,
 			);
 			path = nanogui;
 			sourceTree = "<group>";
@@ -562,6 +566,7 @@
 		3652EF0E245B3B00001FABF3 /* src */ = {
 			isa = PBXGroup;
 			children = (
+				28AD4A7926061679009314C6 /* virtual_keyboard.cpp */,
 				3652EF0F245B3B00001FABF3 /* widget.cpp */,
 				3652EF15245B3B00001FABF3 /* button.cpp */,
 				3652EF10245B3B00001FABF3 /* common.cpp */,
@@ -1008,6 +1013,7 @@
 				3652EFD3245B3B00001FABF3 /* button.cpp in Sources */,
 				3652EFE6245B3B00001FABF3 /* traits.cpp in Sources */,
 				3652EFDE245B3B00001FABF3 /* tabwidget.cpp in Sources */,
+				28AD4A7A26061679009314C6 /* virtual_keyboard.cpp in Sources */,
 				3652F07A245C292B001FABF3 /* SdpGenerator.c in Sources */,
 				3652EFEB245B3B00001FABF3 /* imagepanel.cpp in Sources */,
 				36E63790247010C70032F5FB /* Data.cpp in Sources */,

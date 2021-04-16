@@ -84,7 +84,16 @@ void ContentWindow::perform_layout(NVGcontext *ctx) {
     m_title_container->set_fixed_size(Size(width() - 40, 80));
     m_title_label->set_fixed_width(m_title_container->width() - button_count * 60 - space);
     m_scroll->set_fixed_size(Size(width() - 60, height() - 80));
+    
     Widget::perform_layout(ctx);
+    
+    for (auto &child: children()) {
+        if (auto keyboard = dynamic_cast<VirtualKeyboard*>(child)) {
+            keyboard->set_fixed_size({ width(), height() / 2 });
+            keyboard->set_position({ 0, height() / 2 });
+            break;
+        }
+    }
 }
 
 static inline std::vector<Widget *> selectables_child_recursive(Widget *widget) {

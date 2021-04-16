@@ -25,6 +25,8 @@ MainWindow::MainWindow(Widget *parent): ContentWindow(parent, "Moonlight") {
     set_right_title_button(FA_COG, [this] {
         push<SettingsWindow>();
     });
+    
+    add<VirtualKeyboard>();
 }
 
 void MainWindow::window_appear() {

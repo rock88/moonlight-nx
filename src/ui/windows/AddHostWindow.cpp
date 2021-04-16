@@ -72,4 +72,6 @@ AddHostWindow::AddHostWindow(Widget *parent): ContentWindow(parent, "Add Host") 
             });
         }
     });
+    
+    add<VirtualKeyboard>();
 }
