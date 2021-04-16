@@ -40,7 +40,7 @@ By default Switch gamepad configured as X360 gamepad (A/B and X/Y swapped). You 
 Multiple gamepad currently not supported.
 
 ## HID Keyboard/Mouse
-Moonlight-NX support attached hardware keyboard/mouse over USB connected on Switch directly or over dock (Switch should be in dock).
+Moonlight-NX support attached hardware keyboard/mouse over USB connected to Switch directly or over dock (Switch should be in dock).
 
 # Build Moonlight-NX
 ## Using Docker
