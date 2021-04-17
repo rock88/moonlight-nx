@@ -21,6 +21,8 @@
 /* End PBXAggregateTarget section */
 
 /* Begin PBXBuildFile section */
+		28896568262B64CD00139ABE /* MouseFrontendSwitch.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 28896566262B64CD00139ABE /* MouseFrontendSwitch.cpp */; };
+		28896570262B6EDD00139ABE /* GamepadFrontendSwitch.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2889656E262B6EDD00139ABE /* GamepadFrontendSwitch.cpp */; };
 		28AD4A752606120A009314C6 /* glad.c in Sources */ = {isa = PBXBuildFile; fileRef = 28AD4A722606120A009314C6 /* glad.c */; };
 		3602C3B7245D903000368900 /* HostButton.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3602C3B5245D903000368900 /* HostButton.cpp */; };
 		3602C3BA245DB3C800368900 /* AppListWindow.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3602C3B8245DB3C800368900 /* AppListWindow.cpp */; };
@@ -140,6 +142,12 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		28896563262B628700139ABE /* MouseFrontend.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = MouseFrontend.hpp; sourceTree = "<group>"; };
+		28896566262B64CD00139ABE /* MouseFrontendSwitch.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = MouseFrontendSwitch.cpp; sourceTree = "<group>"; };
+		28896567262B64CD00139ABE /* MouseFrontendSwitch.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = MouseFrontendSwitch.hpp; sourceTree = "<group>"; };
+		2889656B262B6E0100139ABE /* GamepadFrontend.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = GamepadFrontend.hpp; sourceTree = "<group>"; };
+		2889656E262B6EDD00139ABE /* GamepadFrontendSwitch.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = GamepadFrontendSwitch.cpp; sourceTree = "<group>"; };
+		2889656F262B6EDD00139ABE /* GamepadFrontendSwitch.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = GamepadFrontendSwitch.hpp; sourceTree = "<group>"; };
 		28AD4A712606120A009314C6 /* glad.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = glad.h; sourceTree = "<group>"; };
 		28AD4A722606120A009314C6 /* glad.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = glad.c; sourceTree = "<group>"; };
 		28AD4A742606120A009314C6 /* khrplatform.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = khrplatform.h; sourceTree = "<group>"; };
@@ -446,10 +454,16 @@
 				362041A125D94D7700D21EE3 /* StreamControlsController.hpp */,
 				3620418B25D7F04400D21EE3 /* MouseController.cpp */,
 				3620418C25D7F04400D21EE3 /* MouseController.hpp */,
+				28896563262B628700139ABE /* MouseFrontend.hpp */,
+				28896566262B64CD00139ABE /* MouseFrontendSwitch.cpp */,
+				28896567262B64CD00139ABE /* MouseFrontendSwitch.hpp */,
 				3620419625D85B5F00D21EE3 /* KeyboardController.cpp */,
 				3620419725D85B5F00D21EE3 /* KeyboardController.hpp */,
 				362041A925D9BE4900D21EE3 /* GamepadController.cpp */,
 				362041AA25D9BE4900D21EE3 /* GamepadController.hpp */,
+				2889656B262B6E0100139ABE /* GamepadFrontend.hpp */,
+				2889656E262B6EDD00139ABE /* GamepadFrontendSwitch.cpp */,
+				2889656F262B6EDD00139ABE /* GamepadFrontendSwitch.hpp */,
 				3689D6DB249154F90008CB75 /* GamepadMapper.cpp */,
 				3689D6DC249154F90008CB75 /* GamepadMapper.hpp */,
 			);
@@ -995,11 +1009,13 @@
 				3652F075245C292B001FABF3 /* VideoStream.c in Sources */,
 				3652EFE0245B3B00001FABF3 /* imageview.cpp in Sources */,
 				3652EFDB245B3B00001FABF3 /* texture.cpp in Sources */,
+				28896568262B64CD00139ABE /* MouseFrontendSwitch.cpp in Sources */,
 				36A0C03D2461F03C0083289C /* Settings.cpp in Sources */,
 				36BFCCF82479725900245D40 /* main.cpp in Sources */,
 				3652F079245C292B001FABF3 /* RtpReorderQueue.c in Sources */,
 				36BFCCF12479723E00245D40 /* xml.cpp in Sources */,
 				3652F065245C292B001FABF3 /* list.c in Sources */,
+				28896570262B6EDD00139ABE /* GamepadFrontendSwitch.cpp in Sources */,
 				3620418D25D7F04400D21EE3 /* MouseController.cpp in Sources */,
 				36DFE0CD2459FA3F00FC51CE /* nanogui_resources.cpp in Sources */,
 				36DDACF824929919001133D1 /* InputSettingsWindow.cpp in Sources */,

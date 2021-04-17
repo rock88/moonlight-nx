@@ -6,8 +6,10 @@
 #include "GameStreamClient.hpp"
 #include "Logger.hpp"
 #include "MouseController.hpp"
+#include "MouseFrontendSwitch.hpp"
 #include "KeyboardController.hpp"
 #include "GamepadController.hpp"
+#include "GamepadFrontendSwitch.hpp"
 #include <glad/glad.h>
 #include <switch.h>
 #include <GLFW/glfw3.h>
@@ -63,9 +65,9 @@ int main(int argc, const char * argv[]) {
     
     GameStreamClient::instance().start();
     
-    MouseController::instance().init(window);
+    MouseController::instance().init(new MouseFrontendSwitch(window));
     KeyboardController::instance().init(window);
-    GamepadController::instance().init();
+    GamepadController::instance().init(new GamepadFrontendSwitch());
     
     nanogui::init();
     nanogui::ref<Application> app = new Application(Size(m_width, m_height), Size(m_fb_width, m_fb_height));
