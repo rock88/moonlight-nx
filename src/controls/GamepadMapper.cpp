@@ -6,26 +6,6 @@
 #include <GLFW/glfw3.h>
 #include <vector>
 
-static int gamepad_button_to_nanogui_button(GamepadButtons button) {
-    switch (button) {
-        case GamepadButtonA: return NANOGUI_GAMEPAD_BUTTON_A;
-        case GamepadButtonB: return NANOGUI_GAMEPAD_BUTTON_B;
-        case GamepadButtonX: return NANOGUI_GAMEPAD_BUTTON_X;
-        case GamepadButtonY: return NANOGUI_GAMEPAD_BUTTON_Y;
-        case GamepadButtonUp: return NANOGUI_GAMEPAD_BUTTON_DPAD_UP;
-        case GamepadButtonDown: return NANOGUI_GAMEPAD_BUTTON_DPAD_DOWN;
-        case GamepadButtonLeft: return NANOGUI_GAMEPAD_BUTTON_DPAD_LEFT;
-        case GamepadButtonRight: return NANOGUI_GAMEPAD_BUTTON_DPAD_RIGHT;
-        case GamepadButtonPlus: return NANOGUI_GAMEPAD_BUTTON_START;
-        case GamepadButtonMinus: return NANOGUI_GAMEPAD_BUTTON_BACK;
-        case GamepadButtonLeftThumb: return NANOGUI_GAMEPAD_BUTTON_LEFT_THUMB;
-        case GamepadButtonRightThumb: return NANOGUI_GAMEPAD_BUTTON_RIGHT_THUMB;
-        case GamepadButtonL: return NANOGUI_GAMEPAD_BUTTON_LEFT_BUMPER;
-        case GamepadButtonR: return NANOGUI_GAMEPAD_BUTTON_RIGHT_BUMPER;
-        default: return 0;
-    }
-}
-
 static inline int button_to_moonlight_button(int button) {
     static std::map<int, int> map = {
         { GamepadButtonA, A_FLAG },
