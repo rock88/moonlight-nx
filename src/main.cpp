@@ -8,6 +8,7 @@
 #include "MouseController.hpp"
 #include "MouseFrontendSwitch.hpp"
 #include "KeyboardController.hpp"
+#include "KeyboardFrontendSwitch.hpp"
 #include "GamepadController.hpp"
 #include "GamepadFrontendSwitch.hpp"
 #include <glad/glad.h>
@@ -66,7 +67,7 @@ int main(int argc, const char * argv[]) {
     GameStreamClient::instance().start();
     
     MouseController::instance().init(new MouseFrontendSwitch(window));
-    KeyboardController::instance().init(window);
+    KeyboardController::instance().init(new KeyboardFrontendSwitch(window));
     GamepadController::instance().init(new GamepadFrontendSwitch());
     
     nanogui::init();

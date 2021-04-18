@@ -1,6 +1,7 @@
 #include "GameStreamClient.hpp"
 #include "Settings.hpp"
 #include "WakeOnLanManager.hpp"
+#include <nanogui/nanogui.h>
 #include <thread>
 #include <mutex>
 #include <algorithm>
@@ -8,9 +9,15 @@
 #include <iostream>
 #include <fstream>
 #include <future>
-#include <nanogui/nanogui.h>
 #include <unistd.h>
+#include <sys/socket.h>
+#include <sys/ioctl.h>
+#include <net/if.h>
+#include <arpa/inet.h>
+
+#ifdef __SWITCH__
 #include <switch.h>
+#endif
 
 static std::mutex m_async_mutex;
 static std::vector<std::function<void()>> m_tasks;
@@ -78,10 +85,26 @@ void GameStreamClient::stop() {
 
 std::vector<std::string> GameStreamClient::host_addresses_for_find() {
     std::vector<std::string> addresses;
-    u32 address;
-    Result result = nifmGetCurrentIpAddress(&address);
+    uint32_t address = 0;
     
-    if (R_SUCCEEDED(result)) {
+    #ifdef __SWITCH__
+    Result result = nifmGetCurrentIpAddress(&address);
+    bool isSucceed = R_SUCCEEDED(result);
+    #else
+    struct ifreq ifr;
+    ifr.ifr_addr.sa_family = AF_INET;
+    strncpy(ifr.ifr_name, "en0", IFNAMSIZ - 1);
+    
+    int fd = socket(AF_INET, SOCK_DGRAM, 0);
+    ioctl(fd, SIOCGIFADDR, &ifr);
+    close(fd);
+    
+    address = ((struct sockaddr_in *)&ifr.ifr_addr)->sin_addr.s_addr;
+    
+    bool isSucceed = true;
+    #endif
+    
+    if (isSucceed) {
         int a = address & 0xFF;
         int b = (address >> 8) & 0xFF;
         int c = (address >> 16) & 0xFF;

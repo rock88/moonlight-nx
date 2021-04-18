@@ -16,6 +16,6 @@ public:
 private:
     OpusMSDecoder* m_decoder = nullptr;
     short* m_buffer = nullptr;
-    bool m_enable;
+    bool m_enable = false;
     Data m_data;
 };

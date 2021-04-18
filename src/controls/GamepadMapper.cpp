@@ -3,8 +3,6 @@
 #include "Limelight.h"
 #include <jansson.h>
 #include <nanogui/opengl.h>
-#include <GLFW/glfw3.h>
-#include <vector>
 
 static inline int button_to_moonlight_button(int button) {
     static std::map<int, int> map = {
