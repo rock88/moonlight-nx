@@ -1,5 +1,9 @@
 #include "IVideoRenderer.hpp"
+#if defined(__LIBRETRO__)
+#include "glsym.h"
+#else
 #include <glad/glad.h>
+#endif
 #pragma once
 
 class GLVideoRenderer: public IVideoRenderer {
