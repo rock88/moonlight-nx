@@ -3,7 +3,7 @@
 
 class DummyMouseFrontend: public MouseFrontend {
 public:
-    MouseFrontendDummy() {}
+    DummyMouseFrontend() {}
     
     void handle_mouse() {}
     

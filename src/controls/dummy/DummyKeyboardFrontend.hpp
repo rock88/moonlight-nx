@@ -3,7 +3,7 @@
 
 class DummyKeyboardFrontend: public KeyboardFrontend {
 public:
-    KeyboardFrontendDummy() {}
+    DummyKeyboardFrontend() {}
     
     void handle_keyboard() {}
     

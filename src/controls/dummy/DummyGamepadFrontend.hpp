@@ -3,7 +3,7 @@
 
 class DummyGamepadFrontend: public GamepadFrontend {
 public:
-    GamepadFrontendDummy() {}
+    DummyGamepadFrontend() {}
     
     void handle_gamepad() {}
     
