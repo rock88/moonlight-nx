@@ -1,7 +1,6 @@
 #include "MouseController.hpp"
 #include "Application.hpp"
 #include <nanogui/opengl.h>
-#include <GLFW/glfw3.h>
 
 void MouseController::init(MouseFrontend* frontend) {
     m_frontend = frontend;
