@@ -147,6 +147,9 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		28858412262CA94800862DB4 /* MouseFrontendDummy.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = MouseFrontendDummy.hpp; sourceTree = "<group>"; };
+		28858415262CA98C00862DB4 /* KeyboardFrontendDummy.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = KeyboardFrontendDummy.hpp; sourceTree = "<group>"; };
+		28858416262CA9BD00862DB4 /* GamepadFrontendDummy.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = GamepadFrontendDummy.hpp; sourceTree = "<group>"; };
 		28896563262B628700139ABE /* MouseFrontend.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = MouseFrontend.hpp; sourceTree = "<group>"; };
 		2889656B262B6E0100139ABE /* GamepadFrontend.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = GamepadFrontend.hpp; sourceTree = "<group>"; };
 		28896573262C20C000139ABE /* KeyboardFrontend.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = KeyboardFrontend.hpp; sourceTree = "<group>"; };
@@ -410,6 +413,16 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		28858411262CA93300862DB4 /* dummy */ = {
+			isa = PBXGroup;
+			children = (
+				28858412262CA94800862DB4 /* MouseFrontendDummy.hpp */,
+				28858415262CA98C00862DB4 /* KeyboardFrontendDummy.hpp */,
+				28858416262CA9BD00862DB4 /* GamepadFrontendDummy.hpp */,
+			);
+			path = dummy;
+			sourceTree = "<group>";
+		};
 		2889657D262C343C00139ABE /* switch */ = {
 			isa = PBXGroup;
 			children = (
@@ -479,6 +492,7 @@
 		3620418A25D7F00500D21EE3 /* controls */ = {
 			isa = PBXGroup;
 			children = (
+				28858411262CA93300862DB4 /* dummy */,
 				2889657D262C343C00139ABE /* switch */,
 				362041A025D94D7700D21EE3 /* StreamControlsController.cpp */,
 				362041A125D94D7700D21EE3 /* StreamControlsController.hpp */,
@@ -1225,7 +1239,7 @@
 					/opt/devkitpro/libnx/include2,
 				);
 				LIBRARY_SEARCH_PATHS = /usr/local/lib;
-				MACOSX_DEPLOYMENT_TARGET = 10.15;
+				MACOSX_DEPLOYMENT_TARGET = 11.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -1319,7 +1333,7 @@
 					/opt/devkitpro/libnx/include2,
 				);
 				LIBRARY_SEARCH_PATHS = /usr/local/lib;
-				MACOSX_DEPLOYMENT_TARGET = 10.15;
+				MACOSX_DEPLOYMENT_TARGET = 11.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				OTHER_CFLAGS = (
