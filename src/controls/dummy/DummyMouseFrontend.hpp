@@ -1,7 +1,7 @@
 #include "MouseFrontend.hpp"
 #pragma once
 
-class MouseFrontendDummy: public MouseFrontend {
+class DummyMouseFrontend: public MouseFrontend {
 public:
     MouseFrontendDummy() {}
     

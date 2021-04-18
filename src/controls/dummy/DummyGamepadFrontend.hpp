@@ -1,7 +1,7 @@
 #include "GamepadFrontend.hpp"
 #pragma once
 
-class GamepadFrontendDummy: public GamepadFrontend {
+class DummyGamepadFrontend: public GamepadFrontend {
 public:
     GamepadFrontendDummy() {}
     

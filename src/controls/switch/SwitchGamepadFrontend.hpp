@@ -2,9 +2,9 @@
 #include <switch.h>
 #pragma once
 
-class GamepadFrontendSwitch: public GamepadFrontend {
+class SwitchGamepadFrontend: public GamepadFrontend {
 public:
-    GamepadFrontendSwitch();
+    SwitchGamepadFrontend();
     
     void handle_gamepad();
     

@@ -21,9 +21,10 @@
 /* End PBXAggregateTarget section */
 
 /* Begin PBXBuildFile section */
-		28896584262C343C00139ABE /* GamepadFrontendSwitch.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2889657E262C343C00139ABE /* GamepadFrontendSwitch.cpp */; };
-		28896585262C343C00139ABE /* KeyboardFrontendSwitch.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2889657F262C343C00139ABE /* KeyboardFrontendSwitch.cpp */; };
-		28896586262C343C00139ABE /* MouseFrontendSwitch.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 28896580262C343C00139ABE /* MouseFrontendSwitch.cpp */; };
+		28858432262CBC5300862DB4 /* SwitchMoonlightSessionDecoderAndRenderProvider.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 28858430262CBC5300862DB4 /* SwitchMoonlightSessionDecoderAndRenderProvider.cpp */; };
+		28896584262C343C00139ABE /* SwitchGamepadFrontend.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2889657E262C343C00139ABE /* SwitchGamepadFrontend.cpp */; };
+		28896585262C343C00139ABE /* SwitchKeyboardFrontend.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2889657F262C343C00139ABE /* SwitchKeyboardFrontend.cpp */; };
+		28896586262C343C00139ABE /* SwitchMouseFrontend.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 28896580262C343C00139ABE /* SwitchMouseFrontend.cpp */; };
 		28896595262C88C000139ABE /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 28896594262C88C000139ABE /* AudioToolbox.framework */; };
 		28896597262C88C700139ABE /* CoreMedia.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 28896596262C88C700139ABE /* CoreMedia.framework */; };
 		28896599262C88D000139ABE /* CoreVideo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 28896598262C88D000139ABE /* CoreVideo.framework */; };
@@ -147,18 +148,21 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		28858412262CA94800862DB4 /* MouseFrontendDummy.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = MouseFrontendDummy.hpp; sourceTree = "<group>"; };
-		28858415262CA98C00862DB4 /* KeyboardFrontendDummy.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = KeyboardFrontendDummy.hpp; sourceTree = "<group>"; };
-		28858416262CA9BD00862DB4 /* GamepadFrontendDummy.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = GamepadFrontendDummy.hpp; sourceTree = "<group>"; };
+		28858412262CA94800862DB4 /* DummyMouseFrontend.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = DummyMouseFrontend.hpp; sourceTree = "<group>"; };
+		28858415262CA98C00862DB4 /* DummyKeyboardFrontend.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = DummyKeyboardFrontend.hpp; sourceTree = "<group>"; };
+		28858416262CA9BD00862DB4 /* DummyGamepadFrontend.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = DummyGamepadFrontend.hpp; sourceTree = "<group>"; };
+		28858430262CBC5300862DB4 /* SwitchMoonlightSessionDecoderAndRenderProvider.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = SwitchMoonlightSessionDecoderAndRenderProvider.cpp; sourceTree = "<group>"; };
+		28858431262CBC5300862DB4 /* SwitchMoonlightSessionDecoderAndRenderProvider.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = SwitchMoonlightSessionDecoderAndRenderProvider.hpp; sourceTree = "<group>"; };
+		28858437262CBC8700862DB4 /* MoonlightSessionDecoderAndRenderProvider.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = MoonlightSessionDecoderAndRenderProvider.hpp; sourceTree = "<group>"; };
 		28896563262B628700139ABE /* MouseFrontend.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = MouseFrontend.hpp; sourceTree = "<group>"; };
 		2889656B262B6E0100139ABE /* GamepadFrontend.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = GamepadFrontend.hpp; sourceTree = "<group>"; };
 		28896573262C20C000139ABE /* KeyboardFrontend.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = KeyboardFrontend.hpp; sourceTree = "<group>"; };
-		2889657E262C343C00139ABE /* GamepadFrontendSwitch.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GamepadFrontendSwitch.cpp; sourceTree = "<group>"; };
-		2889657F262C343C00139ABE /* KeyboardFrontendSwitch.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = KeyboardFrontendSwitch.cpp; sourceTree = "<group>"; };
-		28896580262C343C00139ABE /* MouseFrontendSwitch.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MouseFrontendSwitch.cpp; sourceTree = "<group>"; };
-		28896581262C343C00139ABE /* GamepadFrontendSwitch.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = GamepadFrontendSwitch.hpp; sourceTree = "<group>"; };
-		28896582262C343C00139ABE /* KeyboardFrontendSwitch.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = KeyboardFrontendSwitch.hpp; sourceTree = "<group>"; };
-		28896583262C343C00139ABE /* MouseFrontendSwitch.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = MouseFrontendSwitch.hpp; sourceTree = "<group>"; };
+		2889657E262C343C00139ABE /* SwitchGamepadFrontend.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SwitchGamepadFrontend.cpp; sourceTree = "<group>"; };
+		2889657F262C343C00139ABE /* SwitchKeyboardFrontend.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SwitchKeyboardFrontend.cpp; sourceTree = "<group>"; };
+		28896580262C343C00139ABE /* SwitchMouseFrontend.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SwitchMouseFrontend.cpp; sourceTree = "<group>"; };
+		28896581262C343C00139ABE /* SwitchGamepadFrontend.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = SwitchGamepadFrontend.hpp; sourceTree = "<group>"; };
+		28896582262C343C00139ABE /* SwitchKeyboardFrontend.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = SwitchKeyboardFrontend.hpp; sourceTree = "<group>"; };
+		28896583262C343C00139ABE /* SwitchMouseFrontend.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = SwitchMouseFrontend.hpp; sourceTree = "<group>"; };
 		28896594262C88C000139ABE /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
 		28896596262C88C700139ABE /* CoreMedia.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMedia.framework; path = System/Library/Frameworks/CoreMedia.framework; sourceTree = SDKROOT; };
 		28896598262C88D000139ABE /* CoreVideo.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreVideo.framework; path = System/Library/Frameworks/CoreVideo.framework; sourceTree = SDKROOT; };
@@ -416,22 +420,31 @@
 		28858411262CA93300862DB4 /* dummy */ = {
 			isa = PBXGroup;
 			children = (
-				28858412262CA94800862DB4 /* MouseFrontendDummy.hpp */,
-				28858415262CA98C00862DB4 /* KeyboardFrontendDummy.hpp */,
-				28858416262CA9BD00862DB4 /* GamepadFrontendDummy.hpp */,
+				28858412262CA94800862DB4 /* DummyMouseFrontend.hpp */,
+				28858415262CA98C00862DB4 /* DummyKeyboardFrontend.hpp */,
+				28858416262CA9BD00862DB4 /* DummyGamepadFrontend.hpp */,
 			);
 			path = dummy;
+			sourceTree = "<group>";
+		};
+		2885842F262CBC3B00862DB4 /* switch */ = {
+			isa = PBXGroup;
+			children = (
+				28858430262CBC5300862DB4 /* SwitchMoonlightSessionDecoderAndRenderProvider.cpp */,
+				28858431262CBC5300862DB4 /* SwitchMoonlightSessionDecoderAndRenderProvider.hpp */,
+			);
+			path = switch;
 			sourceTree = "<group>";
 		};
 		2889657D262C343C00139ABE /* switch */ = {
 			isa = PBXGroup;
 			children = (
-				28896580262C343C00139ABE /* MouseFrontendSwitch.cpp */,
-				28896583262C343C00139ABE /* MouseFrontendSwitch.hpp */,
-				2889657F262C343C00139ABE /* KeyboardFrontendSwitch.cpp */,
-				28896582262C343C00139ABE /* KeyboardFrontendSwitch.hpp */,
-				2889657E262C343C00139ABE /* GamepadFrontendSwitch.cpp */,
-				28896581262C343C00139ABE /* GamepadFrontendSwitch.hpp */,
+				28896580262C343C00139ABE /* SwitchMouseFrontend.cpp */,
+				28896583262C343C00139ABE /* SwitchMouseFrontend.hpp */,
+				2889657F262C343C00139ABE /* SwitchKeyboardFrontend.cpp */,
+				28896582262C343C00139ABE /* SwitchKeyboardFrontend.hpp */,
+				2889657E262C343C00139ABE /* SwitchGamepadFrontend.cpp */,
+				28896581262C343C00139ABE /* SwitchGamepadFrontend.hpp */,
 			);
 			path = switch;
 			sourceTree = "<group>";
@@ -812,11 +825,13 @@
 		36D3F8462469C8DD00CDEF9B /* streaming */ = {
 			isa = PBXGroup;
 			children = (
+				2885842F262CBC3B00862DB4 /* switch */,
 				36D3F8482469CC0400CDEF9B /* audio */,
 				3661D2FB2469DEDB0060EE24 /* video */,
 				36D3F8472469CB8800CDEF9B /* ffmpeg */,
 				36D3F8422469B5C400CDEF9B /* MoonlightSession.cpp */,
 				36D3F8432469B5C400CDEF9B /* MoonlightSession.hpp */,
+				28858437262CBC8700862DB4 /* MoonlightSessionDecoderAndRenderProvider.hpp */,
 				36BFCCF52479724900245D40 /* GameStreamClient.cpp */,
 				36BFCCF42479724900245D40 /* GameStreamClient.hpp */,
 				36EB491124993A4C0059EDB7 /* WakeOnLanManager.cpp */,
@@ -1090,7 +1105,7 @@
 				3652F067245C292B001FABF3 /* packet.c in Sources */,
 				3661D2F92469D1940060EE24 /* FFmpegVideoDecoder.cpp in Sources */,
 				363898342471B7C500F99920 /* MbedTLSCryptoManager.cpp in Sources */,
-				28896586262C343C00139ABE /* MouseFrontendSwitch.cpp in Sources */,
+				28896586262C343C00139ABE /* SwitchMouseFrontend.cpp in Sources */,
 				3652F072245C292B001FABF3 /* RtspConnection.c in Sources */,
 				36BFCCF22479723E00245D40 /* client.cpp in Sources */,
 				3678EF732476D9DA0097345D /* DebugFileRecorderAudioRenderer.cpp in Sources */,
@@ -1107,7 +1122,7 @@
 				367D2D7424829A0800A946F4 /* LogsWindow.cpp in Sources */,
 				36A0C03A2461E4C00083289C /* SettingsWindow.cpp in Sources */,
 				3652EFD4245B3B00001FABF3 /* shader_gl.cpp in Sources */,
-				28896585262C343C00139ABE /* KeyboardFrontendSwitch.cpp in Sources */,
+				28896585262C343C00139ABE /* SwitchKeyboardFrontend.cpp in Sources */,
 				3602C3BD245DBA9100368900 /* AppButton.cpp in Sources */,
 				36BFCCF32479723E00245D40 /* http.cpp in Sources */,
 				36D3F8442469B5C400CDEF9B /* MoonlightSession.cpp in Sources */,
@@ -1126,6 +1141,7 @@
 				3652F06F245C292B001FABF3 /* ControlStream.c in Sources */,
 				3652EFD6245B3B00001FABF3 /* window.cpp in Sources */,
 				3652F071245C292B001FABF3 /* InputStream.c in Sources */,
+				28858432262CBC5300862DB4 /* SwitchMoonlightSessionDecoderAndRenderProvider.cpp in Sources */,
 				3652EFDD245B3B00001FABF3 /* texture_gl.cpp in Sources */,
 				3652F069245C292B001FABF3 /* peer.c in Sources */,
 				3602C3B7245D903000368900 /* HostButton.cpp in Sources */,
@@ -1152,7 +1168,7 @@
 				3652F078245C292B001FABF3 /* FakeCallbacks.c in Sources */,
 				3652F06B245C292B001FABF3 /* host.c in Sources */,
 				3602C3BA245DB3C800368900 /* AppListWindow.cpp in Sources */,
-				28896584262C343C00139ABE /* GamepadFrontendSwitch.cpp in Sources */,
+				28896584262C343C00139ABE /* SwitchGamepadFrontend.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

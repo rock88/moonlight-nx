@@ -3,9 +3,9 @@
 
 struct GLFWwindow;
 
-class KeyboardFrontendSwitch: public KeyboardFrontend {
+class SwitchKeyboardFrontend: public KeyboardFrontend {
 public:
-    KeyboardFrontendSwitch(GLFWwindow* window);
+    SwitchKeyboardFrontend(GLFWwindow* window);
     
     void handle_keyboard();
     

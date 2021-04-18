@@ -1,10 +1,10 @@
-#include "MouseFrontendSwitch.hpp"
+#include "SwitchMouseFrontend.hpp"
 #include <nanogui/opengl.h>
 #include <GLFW/glfw3.h>
 
-static MouseFrontendSwitch* m_frontend = NULL;
+static SwitchMouseFrontend* m_frontend = NULL;
 
-MouseFrontendSwitch::MouseFrontendSwitch(GLFWwindow* window) {
+SwitchMouseFrontend::SwitchMouseFrontend(GLFWwindow* window) {
     m_frontend = this;
     
     hidInitializeMouse();
@@ -23,7 +23,7 @@ MouseFrontendSwitch::MouseFrontendSwitch(GLFWwindow* window) {
     });
 }
 
-void MouseFrontendSwitch::handle_mouse() {
+void SwitchMouseFrontend::handle_mouse() {
     HidMouseState hid_mouse_state;
     
     if (hidGetMouseStates(&hid_mouse_state, 1) && (hid_mouse_state.attributes & HidMouseAttribute_IsConnected)) {
@@ -57,14 +57,14 @@ void MouseFrontendSwitch::handle_mouse() {
     }
 }
 
-void MouseFrontendSwitch::handle_mouse_move(double x, double y) {
+void SwitchMouseFrontend::handle_mouse_move(double x, double y) {
     m_hid_mouse_is_used = false;
     
     m_mouse_state.x = (int)x;
     m_mouse_state.y = (int)y;
 }
 
-void MouseFrontendSwitch::handle_mouse_buttons(int button, int action, int modifiers) {
+void SwitchMouseFrontend::handle_mouse_buttons(int button, int action, int modifiers) {
     m_hid_mouse_is_used = false;
     
     if (button == NANOGUI_MOUSE_BUTTON_1) {
@@ -74,7 +74,7 @@ void MouseFrontendSwitch::handle_mouse_buttons(int button, int action, int modif
     }
 }
 
-void MouseFrontendSwitch::handle_mouse_scroll(int x, int y) {
+void SwitchMouseFrontend::handle_mouse_scroll(int x, int y) {
     m_hid_mouse_is_used = false;
     
     m_mouse_state.scroll_y = y;

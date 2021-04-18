@@ -1,11 +1,11 @@
-#include "KeyboardFrontendSwitch.hpp"
+#include "SwitchKeyboardFrontend.hpp"
 #include "Logger.hpp"
 #include "Limelight.h"
 #include <switch.h>
 #include <nanogui/opengl.h>
 #include <GLFW/glfw3.h>
 
-static KeyboardFrontendSwitch* m_frontend = NULL;
+static SwitchKeyboardFrontend* m_frontend = NULL;
 
 static inline int find_glfw_key_index(int key, KeyboardState& state) {
     for (int i = 0; i < state.keys.size(); i++) {
@@ -60,7 +60,7 @@ static inline int find_switch_key_index(int key, KeyboardState& state) {
     }
 }
 
-KeyboardFrontendSwitch::KeyboardFrontendSwitch(GLFWwindow* window) {
+SwitchKeyboardFrontend::SwitchKeyboardFrontend(GLFWwindow* window) {
     m_frontend = this;
     
     hidInitializeKeyboard();
@@ -80,7 +80,7 @@ KeyboardFrontendSwitch::KeyboardFrontendSwitch(GLFWwindow* window) {
     m_hid_keyboard_state.assign(256, false);
 }
 
-void KeyboardFrontendSwitch::handle_keyboard() {
+void SwitchKeyboardFrontend::handle_keyboard() {
     HidKeyboardState state;
     
     if (hidGetKeyboardStates(&state, 1)) {
@@ -124,7 +124,7 @@ void KeyboardFrontendSwitch::handle_keyboard() {
     }
 }
 
-void KeyboardFrontendSwitch::handle_key(int key, int scancode, int action, int mods) {
+void SwitchKeyboardFrontend::handle_key(int key, int scancode, int action, int mods) {
     int index = find_glfw_key_index(key, m_keyboard_state);
     
     if (index >= 0) {
@@ -156,6 +156,6 @@ void KeyboardFrontendSwitch::handle_key(int key, int scancode, int action, int m
     m_keyboard_state.moonlight_modifiers = moonlight_modifiers;
 }
 
-void KeyboardFrontendSwitch::handle_char(unsigned int input) {
+void SwitchKeyboardFrontend::handle_char(unsigned int input) {
     // TODO: no needs anymore?
 }

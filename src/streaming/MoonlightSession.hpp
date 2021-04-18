@@ -1,7 +1,5 @@
 #include "GameStreamClient.hpp"
-#include "IAudioRenderer.hpp"
-#include "IVideoRenderer.hpp"
-#include "IFFmpegVideoDecoder.hpp"
+#include "MoonlightSessionDecoderAndRenderProvider.hpp"
 #pragma once
 
 struct SessionStats {
@@ -11,20 +9,10 @@ struct SessionStats {
 
 class MoonlightSession {
 public:
+    static void set_provider(MoonlightSessionDecoderAndRenderProvider* provider);
+    
     MoonlightSession(const std::string &address, int app_id);
     ~MoonlightSession();
-
-    void set_video_decoder(IFFmpegVideoDecoder* video_decoder) {
-        m_video_decoder = video_decoder;
-    }
-    
-    void set_video_renderer(IVideoRenderer* video_renderer) {
-        m_video_renderer = video_renderer;
-    }
-    
-    void set_audio_renderer(IAudioRenderer* audio_renderer) {
-        m_audio_renderer = audio_renderer;
-    }
     
     void start(ServerCallback<bool> callback);
     void stop(int terminate_app);

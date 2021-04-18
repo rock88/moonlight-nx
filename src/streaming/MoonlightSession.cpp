@@ -7,12 +7,21 @@
 #include <nanogui/nanogui.h>
 
 static MoonlightSession* m_active_session = nullptr;
+static MoonlightSessionDecoderAndRenderProvider* m_provider = nullptr;
+
+void MoonlightSession::set_provider(MoonlightSessionDecoderAndRenderProvider* provider) {
+    m_provider = provider;
+}
 
 MoonlightSession::MoonlightSession(const std::string &address, int app_id) {
     m_address = address;
     m_app_id = app_id;
     
     m_active_session = this;
+    
+    m_video_decoder = m_provider->video_decoder();
+    m_video_renderer = m_provider->video_renderer();
+    m_audio_renderer = m_provider->audio_renderer();
 }
 
 MoonlightSession::~MoonlightSession() {

@@ -3,12 +3,6 @@
 #include "Alert.hpp"
 #include "StreamControlsController.hpp"
 #include "MouseController.hpp"
-#include "FFmpegVideoDecoder.hpp"
-#include "GLVideoRenderer.hpp"
-#ifdef __SWITCH__
-#include "AudrenAudioRenderer.hpp"
-#endif
-#include "DebugFileRecorderAudioRenderer.hpp"
 #include "nanovg.h"
 #include <algorithm>
 #include <memory>
@@ -20,15 +14,6 @@ StreamWindow::StreamWindow(Widget *parent, const std::string &address, int app_i
     
     m_size = parent->size();
     m_session = new MoonlightSession(address, app_id);
-    
-    m_session->set_video_decoder(new FFmpegVideoDecoder());
-    m_session->set_video_renderer(new GLVideoRenderer());
-    
-    #ifdef __SWITCH__
-    m_session->set_audio_renderer(new AudrenAudioRenderer());
-    #else
-    m_session->set_audio_renderer(new DebugFileRecorderAudioRenderer(false));
-    #endif
     
     m_loader = add<LoadingOverlay>("Starting...");
     

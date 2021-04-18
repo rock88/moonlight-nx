@@ -6,11 +6,13 @@
 #include "GameStreamClient.hpp"
 #include "Logger.hpp"
 #include "MouseController.hpp"
-#include "MouseFrontendSwitch.hpp"
+#include "SwitchMouseFrontend.hpp"
 #include "KeyboardController.hpp"
-#include "KeyboardFrontendSwitch.hpp"
+#include "SwitchKeyboardFrontend.hpp"
 #include "GamepadController.hpp"
-#include "GamepadFrontendSwitch.hpp"
+#include "SwitchGamepadFrontend.hpp"
+#include "MoonlightSession.hpp"
+#include "SwitchMoonlightSessionDecoderAndRenderProvider.hpp"
 #include <glad/glad.h>
 #include <switch.h>
 #include <GLFW/glfw3.h>
@@ -66,9 +68,10 @@ int main(int argc, const char * argv[]) {
     
     GameStreamClient::instance().start();
     
-    MouseController::instance().init(new MouseFrontendSwitch(window));
-    KeyboardController::instance().init(new KeyboardFrontendSwitch(window));
-    GamepadController::instance().init(new GamepadFrontendSwitch());
+    MoonlightSession::set_provider(new SwitchMoonlightSessionDecoderAndRenderProvider());
+    MouseController::instance().init(new SwitchMouseFrontend(window));
+    KeyboardController::instance().init(new SwitchKeyboardFrontend(window));
+    GamepadController::instance().init(new SwitchGamepadFrontend());
     
     nanogui::init();
     nanogui::ref<Application> app = new Application(Size(m_width, m_height), Size(m_fb_width, m_fb_height));

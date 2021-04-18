@@ -1,7 +1,7 @@
 #include "KeyboardFrontend.hpp"
 #pragma once
 
-class KeyboardFrontendDummy: public KeyboardFrontend {
+class DummyKeyboardFrontend: public KeyboardFrontend {
 public:
     KeyboardFrontendDummy() {}
     

@@ -4,9 +4,9 @@
 
 struct GLFWwindow;
 
-class MouseFrontendSwitch: public MouseFrontend {
+class SwitchMouseFrontend: public MouseFrontend {
 public:
-    MouseFrontendSwitch(GLFWwindow* window);
+    SwitchMouseFrontend(GLFWwindow* window);
     
     void handle_mouse();
     

@@ -1,4 +1,4 @@
-#include "GamepadFrontendSwitch.hpp"
+#include "SwitchGamepadFrontend.hpp"
 #include "Limelight.h"
 #include <nanogui/opengl.h>
 #include <GLFW/glfw3.h>
@@ -117,7 +117,7 @@ static inline void padUpdateOverKeyboard(PadState* pad) {
     }
 }
 
-GamepadFrontendSwitch::GamepadFrontendSwitch() {
+SwitchGamepadFrontend::SwitchGamepadFrontend() {
     padConfigureInput(1, HidNpadStyleSet_NpadStandard);
     padInitializeDefault(&m_pad_state);
     
@@ -125,7 +125,7 @@ GamepadFrontendSwitch::GamepadFrontendSwitch() {
     hidInitializeVibrationDevices(m_vibration_device_handles[1], 2, HidNpadIdType_No1, HidNpadStyleTag_NpadJoyDual);
 }
 
-void GamepadFrontendSwitch::handle_gamepad() {
+void SwitchGamepadFrontend::handle_gamepad() {
     PadState state = m_pad_state;
     
 #ifdef __SWITCH__
@@ -156,7 +156,7 @@ void GamepadFrontendSwitch::handle_gamepad() {
     }
 }
 
-void GamepadFrontendSwitch::handle_rumple(unsigned short controller, unsigned short low_freq_motor, unsigned short high_freq_motor) {
+void SwitchGamepadFrontend::handle_rumple(unsigned short controller, unsigned short low_freq_motor, unsigned short high_freq_motor) {
     if (controller == 0) {
         float low = (float)low_freq_motor / 0xFFFF;
         float high = (float)high_freq_motor / 0xFFFF;
@@ -178,7 +178,7 @@ void GamepadFrontendSwitch::handle_rumple(unsigned short controller, unsigned sh
     }
 }
 
-void GamepadFrontendSwitch::stop_rumple() {
+void SwitchGamepadFrontend::stop_rumple() {
     HidVibrationValue stop;
     memset(&stop, 0, sizeof(HidVibrationValue));
     
@@ -193,7 +193,7 @@ void GamepadFrontendSwitch::stop_rumple() {
     hidSendVibrationValues(m_vibration_device_handles[1 - target_device], m_vibration_values, 2);
 }
 
-bool GamepadFrontendSwitch::set_new_pad_state(PadState& state) {
+bool SwitchGamepadFrontend::set_new_pad_state(PadState& state) {
     if (!pad_is_equal(m_pad_state, state)) {
         m_pad_state = state;
         return true;

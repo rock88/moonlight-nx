@@ -45,7 +45,7 @@ APP_VERSION	:= 1.2.0
 BUILD		:=	build
 SOURCES		:=	src src/libgamestream src/switch src/nanogui_resources src/streaming src/streaming/ffmpeg \
 	src/crypto src/streaming/video src/crypto src/streaming/audio src/ui/windows src/ui/buttons src/ui src/utils \
-	src/controls src/controls/switch \
+	src/controls src/controls/switch src/streaming/switch \
 	third_party/moonlight-common-c/enet third_party/moonlight-common-c/reedsolomon third_party/moonlight-common-c/src \
 	third_party/nanogui/ext/nanovg/src third_party/nanogui/src
 DATA		:=	data
@@ -65,7 +65,7 @@ ARCH	:=	-march=armv8-a+crc+crypto -mtune=cortex-a57 -mtp=soft -fPIE
 
 M_INCLUDES := \
 	-I$(TOPDIR)/src -I$(TOPDIR)/src/switch -I$(TOPDIR)/src/streaming -I$(TOPDIR)/src/crypto -I$(TOPDIR)/src/crypto/keys \
-	-I$(TOPDIR)/src/streaming/ffmpeg -I$(TOPDIR)/src/streaming/video -I$(TOPDIR)/src/streaming/audio \
+	-I$(TOPDIR)/src/streaming/ffmpeg -I$(TOPDIR)/src/streaming/video -I$(TOPDIR)/src/streaming/audio -I$(TOPDIR)/src/streaming/switch \
 	-I$(TOPDIR)/src/nanogui_resources -I$(TOPDIR)/src/utils -I$(TOPDIR)/src/controls -I$(TOPDIR)/src/controls/switch \
 	-I$(TOPDIR)/src/ui -I$(TOPDIR)/src/ui/buttons -I$(TOPDIR)/src/ui/windows \
 	-I$(TOPDIR)/src/libgamestream \
@@ -131,9 +131,10 @@ MOONLIGHT_LIBRETRO_CXX_SOURCES = \
 	KeyboardController.cpp \
 	GamepadController.cpp \
 	StreamControlsController.cpp \
-	MouseFrontendSwitch.cpp \
-	KeyboardFrontendSwitch.cpp \
-	GamepadFrontendSwitch.cpp
+	SwitchMouseFrontend.cpp \
+	SwitchKeyboardFrontend.cpp \
+	SwitchGamepadFrontend.cpp \
+	SwitchMoonlightSessionDecoderAndRenderProvider.cpp
 
 MOONLIGHT_COMMON_C_SOURCES = \
 	callbacks.c \
