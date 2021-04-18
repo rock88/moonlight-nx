@@ -9,7 +9,6 @@
 #include <openssl/pem.h>
 #include <openssl/evp.h>
 #include <openssl/pkcs12.h>
-#include "Log.h"
 
 static Data m_cert;
 static Data m_key;
@@ -22,8 +21,8 @@ static bool _generate_new_cert_key_pair();
 
 bool OpenSSLCryptoManager::load_cert_key_pair() {
     if (m_key.is_empty() || m_cert.is_empty()) {
-        Data cert = Data::read_from_file(Settings::settings()->key_dir() + "/" + CERTIFICATE_FILE_NAME);
-        Data key = Data::read_from_file(Settings::settings()->key_dir() + "/" + KEY_FILE_NAME);
+        Data cert = Data::read_from_file(Settings::instance().key_dir() + "/" + CERTIFICATE_FILE_NAME);
+        Data key = Data::read_from_file(Settings::instance().key_dir() + "/" + KEY_FILE_NAME);
         
         if (!cert.is_empty() && !key.is_empty()) {
             m_cert = cert;
@@ -38,8 +37,8 @@ bool OpenSSLCryptoManager::load_cert_key_pair() {
 bool OpenSSLCryptoManager::generate_new_cert_key_pair() {
     if (_generate_new_cert_key_pair()) {
         if (!m_cert.is_empty() && !m_key.is_empty()) {
-            m_cert.write_to_file(Settings::settings()->key_dir() + "/" + CERTIFICATE_FILE_NAME);
-            m_key.write_to_file(Settings::settings()->key_dir() + "/" + KEY_FILE_NAME);
+            m_cert.write_to_file(Settings::instance().key_dir() + "/" + CERTIFICATE_FILE_NAME);
+            m_key.write_to_file(Settings::instance().key_dir() + "/" + KEY_FILE_NAME);
             return true;
         }
     }
@@ -47,8 +46,8 @@ bool OpenSSLCryptoManager::generate_new_cert_key_pair() {
 }
 
 void OpenSSLCryptoManager::remove_cert_key_pair() {
-    remove((Settings::settings()->key_dir() + "/" + CERTIFICATE_FILE_NAME).c_str());
-    remove((Settings::settings()->key_dir() + "/" + KEY_FILE_NAME).c_str());
+    remove((Settings::instance().key_dir() + "/" + CERTIFICATE_FILE_NAME).c_str());
+    remove((Settings::instance().key_dir() + "/" + KEY_FILE_NAME).c_str());
     m_cert = Data();
     m_key = Data();
 }

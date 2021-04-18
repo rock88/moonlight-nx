@@ -24,6 +24,11 @@
 		28896584262C343C00139ABE /* GamepadFrontendSwitch.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2889657E262C343C00139ABE /* GamepadFrontendSwitch.cpp */; };
 		28896585262C343C00139ABE /* KeyboardFrontendSwitch.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2889657F262C343C00139ABE /* KeyboardFrontendSwitch.cpp */; };
 		28896586262C343C00139ABE /* MouseFrontendSwitch.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 28896580262C343C00139ABE /* MouseFrontendSwitch.cpp */; };
+		28896595262C88C000139ABE /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 28896594262C88C000139ABE /* AudioToolbox.framework */; };
+		28896597262C88C700139ABE /* CoreMedia.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 28896596262C88C700139ABE /* CoreMedia.framework */; };
+		28896599262C88D000139ABE /* CoreVideo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 28896598262C88D000139ABE /* CoreVideo.framework */; };
+		2889659D262C88DD00139ABE /* VideoToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2889659C262C88DC00139ABE /* VideoToolbox.framework */; };
+		288965AF262C89D800139ABE /* mbedtls_to_openssl_wrapper.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 36F16474247473A300D70AD9 /* mbedtls_to_openssl_wrapper.cpp */; };
 		28AD4A752606120A009314C6 /* glad.c in Sources */ = {isa = PBXBuildFile; fileRef = 28AD4A722606120A009314C6 /* glad.c */; };
 		3602C3B7245D903000368900 /* HostButton.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3602C3B5245D903000368900 /* HostButton.cpp */; };
 		3602C3BA245DB3C800368900 /* AppListWindow.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3602C3B8245DB3C800368900 /* AppListWindow.cpp */; };
@@ -127,7 +132,6 @@
 		36E63790247010C70032F5FB /* Data.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 36E6378E247010C70032F5FB /* Data.cpp */; };
 		36EB490F249927C60059EDB7 /* Alert.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 36EB490D249927C60059EDB7 /* Alert.cpp */; };
 		36EB491324993A4C0059EDB7 /* WakeOnLanManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 36EB491124993A4C0059EDB7 /* WakeOnLanManager.cpp */; };
-		36F16475247473A300D70AD9 /* mbedtls_to_openssl_wrapper.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 36F16474247473A300D70AD9 /* mbedtls_to_openssl_wrapper.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -152,6 +156,10 @@
 		28896581262C343C00139ABE /* GamepadFrontendSwitch.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = GamepadFrontendSwitch.hpp; sourceTree = "<group>"; };
 		28896582262C343C00139ABE /* KeyboardFrontendSwitch.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = KeyboardFrontendSwitch.hpp; sourceTree = "<group>"; };
 		28896583262C343C00139ABE /* MouseFrontendSwitch.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = MouseFrontendSwitch.hpp; sourceTree = "<group>"; };
+		28896594262C88C000139ABE /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
+		28896596262C88C700139ABE /* CoreMedia.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMedia.framework; path = System/Library/Frameworks/CoreMedia.framework; sourceTree = SDKROOT; };
+		28896598262C88D000139ABE /* CoreVideo.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreVideo.framework; path = System/Library/Frameworks/CoreVideo.framework; sourceTree = SDKROOT; };
+		2889659C262C88DC00139ABE /* VideoToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = VideoToolbox.framework; path = System/Library/Frameworks/VideoToolbox.framework; sourceTree = SDKROOT; };
 		28AD4A712606120A009314C6 /* glad.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = glad.h; sourceTree = "<group>"; };
 		28AD4A722606120A009314C6 /* glad.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = glad.c; sourceTree = "<group>"; };
 		28AD4A742606120A009314C6 /* khrplatform.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = khrplatform.h; sourceTree = "<group>"; };
@@ -389,9 +397,13 @@
 			files = (
 				36DBDE9C2450BCD90057C8D3 /* CoreGraphics.framework in Frameworks */,
 				36DBDEA02450BCF80057C8D3 /* AppKit.framework in Frameworks */,
+				2889659D262C88DD00139ABE /* VideoToolbox.framework in Frameworks */,
 				36DBDE9A2450BCD50057C8D3 /* CoreFoundation.framework in Frameworks */,
 				36DFE0CE2459FAB100FC51CE /* OpenGL.framework in Frameworks */,
 				36DBDE9E2450BCF00057C8D3 /* IOKit.framework in Frameworks */,
+				28896595262C88C000139ABE /* AudioToolbox.framework in Frameworks */,
+				28896597262C88C700139ABE /* CoreMedia.framework in Frameworks */,
+				28896599262C88D000139ABE /* CoreVideo.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -845,6 +857,10 @@
 		36DBDE982450BCD50057C8D3 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				2889659C262C88DC00139ABE /* VideoToolbox.framework */,
+				28896598262C88D000139ABE /* CoreVideo.framework */,
+				28896596262C88C700139ABE /* CoreMedia.framework */,
+				28896594262C88C000139ABE /* AudioToolbox.framework */,
 				36DBDEA42450C2850057C8D3 /* Metal.framework */,
 				36DBDEA22450C2640057C8D3 /* OpenGL.framework */,
 				36DBDE9F2450BCF70057C8D3 /* AppKit.framework */,
@@ -1093,7 +1109,6 @@
 				3652F077245C292B001FABF3 /* VideoDepacketizer.c in Sources */,
 				362041A225D94D7700D21EE3 /* StreamControlsController.cpp in Sources */,
 				3652EFF1245B3B00001FABF3 /* messagedialog.cpp in Sources */,
-				36F16475247473A300D70AD9 /* mbedtls_to_openssl_wrapper.cpp in Sources */,
 				3652F06F245C292B001FABF3 /* ControlStream.c in Sources */,
 				3652EFD6245B3B00001FABF3 /* window.cpp in Sources */,
 				3652F071245C292B001FABF3 /* InputStream.c in Sources */,
@@ -1103,6 +1118,7 @@
 				3652EFD0245B3B00001FABF3 /* vscrollpanel.cpp in Sources */,
 				3652F06D245C292B001FABF3 /* win32.c in Sources */,
 				3652F002245B6961001FABF3 /* AddHostWindow.cpp in Sources */,
+				288965AF262C89D800139ABE /* mbedtls_to_openssl_wrapper.cpp in Sources */,
 				3652EFF8245B4EE2001FABF3 /* Application.cpp in Sources */,
 				3652F07E245C292B001FABF3 /* AudioStream.c in Sources */,
 				3652F076245C292B001FABF3 /* Connection.c in Sources */,
@@ -1197,6 +1213,8 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				HEADER_SEARCH_PATHS = (
 					/usr/local/include,
+					/usr/local/Cellar/ffmpeg/4.4/include,
+					"/usr/local/Cellar/openssl@1.1/1.1.1k/include_wrong",
 					"\"$(SRCROOT)/third_party/nanogui/include\"",
 					"\"$(SRCROOT)/third_party/nanogui/ext/nanovg/src\"",
 					"\"$(SRCROOT)/src/nanogui_resources\"",
@@ -1236,6 +1254,8 @@
 					"-lmbedx509",
 					"-lmbedcrypto",
 					"-ljansson",
+					"-liconv",
+					"-llzma",
 				);
 				SDKROOT = macosx;
 			};
@@ -1287,6 +1307,8 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				HEADER_SEARCH_PATHS = (
 					/usr/local/include,
+					/usr/local/Cellar/ffmpeg/4.4/include,
+					"/usr/local/Cellar/openssl@1.1/1.1.1k/include_wrong",
 					"\"$(SRCROOT)/third_party/nanogui/include\"",
 					"\"$(SRCROOT)/third_party/nanogui/ext/nanovg/src\"",
 					"\"$(SRCROOT)/src/nanogui_resources\"",
@@ -1325,6 +1347,8 @@
 					"-lmbedx509",
 					"-lmbedcrypto",
 					"-ljansson",
+					"-liconv",
+					"-llzma",
 				);
 				SDKROOT = macosx;
 			};
