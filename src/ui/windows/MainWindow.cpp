@@ -42,7 +42,7 @@ void MainWindow::reload() {
     
     for (auto host: Settings::instance().hosts()) {
         auto button = button_container->add<HostButton>(host);
-        button->set_fixed_size(Size(200, 200));
+        button->set_fixed_size({ 200, 200 });
         button->set_callback([this, button] {
             if (button->is_active()) {
                 if (button->is_paired()) {
@@ -79,7 +79,7 @@ void MainWindow::reload() {
     }
     
     auto find_button = button_container->add<AddHostButton>(AddHostButtonTypeFind);
-    find_button->set_fixed_size(Size(200, 200));
+    find_button->set_fixed_size({ 200, 200 });
     find_button->set_callback([this] {
         auto addresses = GameStreamClient::instance().host_addresses_for_find();
         
@@ -95,7 +95,7 @@ void MainWindow::reload() {
     });
     
     auto add_button = button_container->add<AddHostButton>(AddHostButtonTypeAdd);
-    add_button->set_fixed_size(Size(200, 200));
+    add_button->set_fixed_size({ 200, 200 });
     add_button->set_callback([this] {
         push<AddHostWindow>();
     });

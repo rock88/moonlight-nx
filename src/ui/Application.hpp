@@ -1,8 +1,6 @@
 #include <nanogui/nanogui.h>
 #pragma once
 
-#define Size(x, y) (nanogui::Vector2f((x), (y)))
-
 class Application: public nanogui::Screen {
 public:
     Application(nanogui::Vector2f size, nanogui::Vector2f framebuffer_size);

@@ -74,8 +74,8 @@ void Application::pop_window() {
 
 void Application::resize_callback_event(int width, int height, int fb_width, int fb_height) {
     for (auto window: m_windows) {
-        window->set_size(Size(width, height));
-        window->set_fixed_size(Size(width, height));
+        window->set_size({ width, height });
+        window->set_fixed_size({ width, height });
         window->perform_layout(nvg_context());
     }
     Screen::resize_callback_event(width, height, fb_width, fb_height);

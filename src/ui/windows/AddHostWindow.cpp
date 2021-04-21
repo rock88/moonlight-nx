@@ -22,7 +22,7 @@ AddHostWindow::AddHostWindow(Widget *parent): ContentWindow(parent, "Add Host") 
     
     for (auto key: keys) {
         auto button = number_buttons_container->add<Button>(key);
-        button->set_fixed_size(Size(100, 100));
+        button->set_fixed_size({ 100, 100 });
         button->set_callback([text, button] {
             text->set_value(text->value() + button->caption());
         });
@@ -32,13 +32,13 @@ AddHostWindow::AddHostWindow(Widget *parent): ContentWindow(parent, "Add Host") 
     other_buttons_container->set_layout(new BoxLayout(Orientation::Horizontal, Alignment::Minimum, 0, 10));
     
     auto dot = other_buttons_container->add<Button>(".");
-    dot->set_fixed_size(Size(100, 100));
+    dot->set_fixed_size({ 100, 100 });
     dot->set_callback([text, dot] {
         text->set_value(text->value() + dot->caption());
     });
     
     auto zero = other_buttons_container->add<Button>("0");
-    zero->set_fixed_size(Size(100, 100));
+    zero->set_fixed_size({ 100, 100 });
     zero->set_callback([text, zero] {
         text->set_value(text->value() + zero->caption());
     });
@@ -46,7 +46,7 @@ AddHostWindow::AddHostWindow(Widget *parent): ContentWindow(parent, "Add Host") 
     auto backspace = other_buttons_container->add<Button>("");
     backspace->set_icon(FA_BACKSPACE);
     backspace->set_icon_extra_scale(2);
-    backspace->set_fixed_size(Size(100, 100));
+    backspace->set_fixed_size({ 100, 100 });
     backspace->set_callback([text] {
         if (text->value().size() > 0) {
             auto value = text->value();
@@ -56,7 +56,7 @@ AddHostWindow::AddHostWindow(Widget *parent): ContentWindow(parent, "Add Host") 
     });
     
     auto connect = other_buttons_container->add<Button>("Connect");
-    connect->set_fixed_size(Size(100, 100));
+    connect->set_fixed_size({ 100, 100 });
     connect->set_callback([text, this] {
         if (text->value().size() > 0) {
             auto loader = add<LoadingOverlay>();

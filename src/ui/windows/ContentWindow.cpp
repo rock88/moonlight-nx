@@ -58,7 +58,7 @@ void ContentWindow::draw(NVGcontext *ctx) {
 
 void ContentWindow::set_left_title_button(int icon, const std::function<void()> &callback) {
     auto button = m_left_title_button_container->add<Button>("", icon);
-    button->set_fixed_size(Size(60, 60));
+    button->set_fixed_size({ 60, 60 });
     button->set_icon_extra_scale(3);
     button->set_selectable_color(Color(255, 255, 255, 200));
     button->set_callback([callback] {
@@ -69,7 +69,7 @@ void ContentWindow::set_left_title_button(int icon, const std::function<void()> 
 
 void ContentWindow::set_right_title_button(int icon, const std::function<void()> &callback) {
     auto button = m_right_title_button_container->add<Button>("", icon);
-    button->set_fixed_size(Size(60, 60));
+    button->set_fixed_size({ 60, 60 });
     button->set_icon_extra_scale(3);
     button->set_selectable_color(Color(255, 255, 255, 200));
     button->set_callback([callback] {
@@ -81,9 +81,9 @@ void ContentWindow::set_right_title_button(int icon, const std::function<void()>
 void ContentWindow::perform_layout(NVGcontext *ctx) {
     int button_count = (int)m_left_title_button_container->children().size() + (int)m_right_title_button_container->children().size();
     int space = (2 + button_count) * 10;
-    m_title_container->set_fixed_size(Size(width() - 40, 80));
+    m_title_container->set_fixed_size({ width() - 40, 80 });
     m_title_label->set_fixed_width(m_title_container->width() - button_count * 60 - space);
-    m_scroll->set_fixed_size(Size(width() - 60, height() - 80));
+    m_scroll->set_fixed_size({ width() - 60, height() - 80 });
     Widget::perform_layout(ctx);
 }
 

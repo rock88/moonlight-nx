@@ -14,7 +14,7 @@ public:
     
     Vector2i preferred_size(NVGcontext *ctx, const Widget *widget) const override {
         auto width = (widget->parent()->width() - spacing(0) * (resolution() - 1)) / resolution() - 10;
-        auto size = Size(width, width * 1.4f);
+        auto size = Vector2f(width, width * 1.4f);
         
         for (auto &child: widget->children()) {
             if (child->fixed_size() != size) {

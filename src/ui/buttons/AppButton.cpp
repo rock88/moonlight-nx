@@ -14,7 +14,7 @@ AppButton::AppButton(Widget* parent, const std::string &address, AppInfo app, in
     
     m_label = add<Label>(m_app.name);
     
-    set_fixed_size(Size(210, 296));
+    set_fixed_size({ 210, 296 });
     set_layout(new BoxLayout(Orientation::Vertical, Alignment::Minimum, 10));
     
     if (m_app.app_id == current_game) {

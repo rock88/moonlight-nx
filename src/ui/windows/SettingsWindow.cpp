@@ -103,7 +103,7 @@ SettingsWindow::SettingsWindow(nanogui::Widget* parent): ContentWindow(parent, "
     video_bitrate_slider->set_range({0.5, 150});
     video_bitrate_slider->set_value(float(Settings::instance().bitrate()) / 1000);
     video_bitrate_slider->set_highlighted_range({0, float(Settings::instance().bitrate()) / 1000 / 150});
-    video_bitrate_slider->set_fixed_size(Size(container_width - 80, 30));
+    video_bitrate_slider->set_fixed_size({ container_width - 80, 30 });
     video_bitrate_slider->set_callback([video_bitrate_label, video_bitrate_slider](auto value) {
         video_bitrate_slider->set_highlighted_range({0, value / 150});
         float bitrate = round(2.0 * value) / 2.0;
