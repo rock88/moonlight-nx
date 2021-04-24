@@ -410,7 +410,7 @@ int gs_start_app(PSERVER_DATA server, STREAM_CONFIGURATION *config, int appId, b
     memcpy(config->remoteInputAesKey, rand.bytes(), 16);
     
     char url[4096];
-    u_int32_t rikeyid = 0;
+    int rikeyid = 0;
     
     Data data;
     

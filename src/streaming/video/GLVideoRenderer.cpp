@@ -1,14 +1,15 @@
 #include "GLVideoRenderer.hpp"
 #include "Logger.hpp"
 
+#ifdef GL_CORE
 static const char *vertex_shader_string = "\
 #version 140\n\
 in vec2 position;\n\
 out mediump vec2 tex_position;\n\
 \
 void main() {\n\
-gl_Position = vec4(position, 1, 1);\n\
-tex_position = vec2((position.x + 1.0) / 2.0, (1.0 - position.y) / 2.0);\n\
+    gl_Position = vec4(position, 1, 1);\n\
+    tex_position = vec2((position.x + 1.0) / 2.0, (1.0 - position.y) / 2.0);\n\
 }";
 
 static const char *fragment_shader_string = "\
@@ -22,14 +23,42 @@ in mediump vec2 tex_position;\n\
 out vec4 FragColor;\n\
 \
 void main() {\n\
-vec3 YCbCr = vec3(\n\
-texture(ymap, tex_position).r,\n\
-texture(umap, tex_position).r - 0.0,\n\
-texture(vmap, tex_position).r - 0.0\n\
-);\n\
-YCbCr -= offset;\n\
-FragColor = vec4(clamp(yuvmat * YCbCr, 0.0, 1.0), 1.0);\n\
+    vec3 YCbCr = vec3(\n\
+        texture(ymap, tex_position).r,\n\
+        texture(umap, tex_position).r - 0.0,\n\
+        texture(vmap, tex_position).r - 0.0\n\
+    );\n\
+    YCbCr -= offset;\n\
+    FragColor = vec4(clamp(yuvmat * YCbCr, 0.0, 1.0), 1.0);\n\
 }";
+#else
+static const char *vertex_shader_string = "\
+attribute vec2 position;\n\
+varying vec2 tex_position;\n\
+\
+void main() {\n\
+    gl_Position = vec4(position, 1, 1);\n\
+    tex_position = vec2((position.x + 1.0) / 2.0, (1.0 - position.y) / 2.0);\n\
+}";
+
+static const char *fragment_shader_string = "\
+uniform sampler2D ymap;\n\
+uniform sampler2D umap;\n\
+uniform sampler2D vmap;\n\
+uniform mat3 yuvmat;\n\
+uniform vec3 offset;\n\
+varying vec2 tex_position;\n\
+\
+void main() {\n\
+    vec3 YCbCr = vec3(\n\
+        texture(ymap, tex_position).r,\n\
+        texture(umap, tex_position).r - 0.0,\n\
+        texture(vmap, tex_position).r - 0.0\n\
+    );\n\
+    YCbCr -= offset;\n\
+    gl_FragColor = vec4(clamp(yuvmat * YCbCr, 0.0, 1.0), 1.0);\n\
+}";
+#endif
 
 static const float vertices[] = {
     -1.f, -1.f,
@@ -92,6 +121,24 @@ static const float* gl_color_matrix(enum AVColorSpace color_space, bool color_fu
     };
 }
 
+static void check_shader(GLuint handle) {
+    GLint success = 0;
+    glGetShaderiv(handle, GL_COMPILE_STATUS, &success);
+    
+    Logger::info("GL", "GL_COMPILE_STATUS: %i", success);
+    
+    if (!success) {
+        GLint length = 0;
+        glGetShaderiv(handle, GL_INFO_LOG_LENGTH, &length);
+        
+        char* buffer = (char* )malloc(length);
+        
+        glGetShaderInfoLog(handle, length, &length, buffer);
+        Logger::error("GL", "Compile shader error: %s", buffer);
+        free(buffer);
+    }
+}
+
 GLVideoRenderer::~GLVideoRenderer() {
     Logger::info("GL", "Cleanup...");
     
@@ -123,9 +170,11 @@ void GLVideoRenderer::initialize() {
     
     glShaderSource(vert, 1, &vertex_shader_string, 0);
     glCompileShader(vert);
+    check_shader(vert);
     
     glShaderSource(frag, 1, &fragment_shader_string, 0);
     glCompileShader(frag);
+    check_shader(frag);
     
     glAttachShader(m_shader_program, vert);
     glAttachShader(m_shader_program, frag);

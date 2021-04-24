@@ -71,7 +71,10 @@ Data& Data::operator=(const Data& that) {
 
 Data Data::random_bytes(size_t size) {
     unsigned char* bytes = (unsigned char*)malloc(sizeof(char) * size);
+    
+    #ifndef _WIN32
     srand(time(NULL));
+    #endif
     
     for (int i = 0; i < size; i++) {
         bytes[i] = rand() % 255;

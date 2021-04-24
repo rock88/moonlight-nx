@@ -6,6 +6,12 @@
 #include <limits.h>
 #include <sys/stat.h>
 
+#ifdef _WIN32
+static int mkdir(const char* dir, mode_t mode) {
+    return mkdir(dir);
+}
+#endif
+
 static int mkdirtree(const char* directory) {
     char buffer[PATH_MAX];
     char* p = buffer;
