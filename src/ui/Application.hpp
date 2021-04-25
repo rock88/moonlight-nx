@@ -20,6 +20,7 @@ public:
     void gamepad_button_callback_event(int jid, int button, int action) override;
     void gamepad_analog_callback_event(int jid, int axis, float value) override;
     
+    void draw_contents() override;
     void perform_layout();
     
 private:

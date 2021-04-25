@@ -42,16 +42,16 @@ StreamWindow::~StreamWindow() {
     delete m_session;
 }
 
+void StreamWindow::draw_contents() {
+    m_session->draw();
+}
+
 void StreamWindow::draw(NVGcontext *ctx) {
+    Widget::draw(ctx);
+    
     if (!m_session->is_active()) {
         async([this] { this->terminate(false); });
     }
-    
-    nvgSave(ctx);
-    
-    m_session->draw();
-    
-    nvgRestore(ctx);
     
     if (m_session->connection_status_is_poor()) {
         nvgFontSize(ctx, 20);

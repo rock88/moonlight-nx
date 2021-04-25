@@ -66,7 +66,7 @@ void Application::pop_window() {
         update_focus(m_windows.back());
         perform_layout();
         
-        if (auto w = static_cast<ContentWindow *>(m_windows.back())) {
+        if (auto w = dynamic_cast<ContentWindow *>(m_windows.back())) {
             w->window_appear();
         }
     }
@@ -95,6 +95,14 @@ void Application::gamepad_button_callback_event(int jid, int button, int action)
 void Application::gamepad_analog_callback_event(int jid, int axis, float value) {
     if (!m_windows.empty()) {
         m_windows.back()->gamepad_analog_event(jid, axis, value);
+    }
+}
+
+void Application::draw_contents() {
+    Screen::draw_contents();
+    
+    if (auto w = dynamic_cast<StreamWindow *>(m_windows.back())) {
+        w->draw_contents();
     }
 }
 

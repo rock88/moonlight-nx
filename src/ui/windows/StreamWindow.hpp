@@ -9,6 +9,7 @@ public:
     StreamWindow(Widget *parent, const std::string &address, int app_id);
     ~StreamWindow();
     
+    void draw_contents();
     void draw(NVGcontext *ctx) override;
     
     bool mouse_button_event(const nanogui::Vector2i &p, int button, bool down, int modifiers) override;
