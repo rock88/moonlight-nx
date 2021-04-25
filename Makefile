@@ -76,7 +76,8 @@ M_INCLUDES := \
 	-I$(TOPDIR)/third_party/nanogui/ext/nanovg/src
 
 DEFINES := -DNANOGUI_USE_OPENGL -DNVG_STB_IMAGE_IMPLEMENTATION -DNANOGUI_NO_GLFW \
-	-DHAS_SOCKLEN_T -DHAS_POLL -DHAS_FCNTL -DUSE_MBEDTLS_CRYPTO -DMOONLIGHT_VERSION=\"$(MOONLIGHT_VERSION)\"
+	-DUSE_MBEDTLS -DHAS_SOCKLEN_T -DHAS_POLL -DHAS_FCNTL -DUSE_MBEDTLS_CRYPTO \
+	-DMOONLIGHT_VERSION=\"$(MOONLIGHT_VERSION)\"
 
 CFLAGS	:=	-g -Wall -fcompare-debug-second -O2 -ffunction-sections $(ARCH) $(DEFINES) $(INCLUDE) $(M_INCLUDES) -D__SWITCH__
 CXXFLAGS	:= $(CFLAGS) -std=gnu++17
@@ -118,7 +119,6 @@ MOONLIGHT_LIBRETRO_CXX_SOURCES = \
 	GLVideoRenderer.cpp \
 	Data.cpp \
 	MbedTLSCryptoManager.cpp \
-	mbedtls_to_openssl_wrapper.cpp \
 	AudrenAudioRenderer.cpp \
 	BoxArtManager.cpp \
 	Logger.cpp \
@@ -157,6 +157,7 @@ MOONLIGHT_COMMON_C_SOURCES = \
 	Misc.c \
 	Platform.c \
 	PlatformSockets.c \
+	PlatformCrypto.c \
 	RtpFecQueue.c \
 	RtpReorderQueue.c \
 	RtspConnection.c \

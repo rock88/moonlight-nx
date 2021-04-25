@@ -29,8 +29,8 @@
 		28896597262C88C700139ABE /* CoreMedia.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 28896596262C88C700139ABE /* CoreMedia.framework */; };
 		28896599262C88D000139ABE /* CoreVideo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 28896598262C88D000139ABE /* CoreVideo.framework */; };
 		2889659D262C88DD00139ABE /* VideoToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2889659C262C88DC00139ABE /* VideoToolbox.framework */; };
-		288965AF262C89D800139ABE /* mbedtls_to_openssl_wrapper.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 36F16474247473A300D70AD9 /* mbedtls_to_openssl_wrapper.cpp */; };
 		28AD4A752606120A009314C6 /* glad.c in Sources */ = {isa = PBXBuildFile; fileRef = 28AD4A722606120A009314C6 /* glad.c */; };
+		28EE5DAC2635B49E00C9C623 /* PlatformCrypto.c in Sources */ = {isa = PBXBuildFile; fileRef = 28EE5DAA2635B49E00C9C623 /* PlatformCrypto.c */; };
 		3602C3B7245D903000368900 /* HostButton.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3602C3B5245D903000368900 /* HostButton.cpp */; };
 		3602C3BA245DB3C800368900 /* AppListWindow.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3602C3B8245DB3C800368900 /* AppListWindow.cpp */; };
 		3602C3BD245DBA9100368900 /* AppButton.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3602C3BB245DBA9100368900 /* AppButton.cpp */; };
@@ -170,6 +170,8 @@
 		28AD4A712606120A009314C6 /* glad.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = glad.h; sourceTree = "<group>"; };
 		28AD4A722606120A009314C6 /* glad.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = glad.c; sourceTree = "<group>"; };
 		28AD4A742606120A009314C6 /* khrplatform.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = khrplatform.h; sourceTree = "<group>"; };
+		28EE5DAA2635B49E00C9C623 /* PlatformCrypto.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = PlatformCrypto.c; sourceTree = "<group>"; };
+		28EE5DAB2635B49E00C9C623 /* PlatformCrypto.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PlatformCrypto.h; sourceTree = "<group>"; };
 		3602C3B5245D903000368900 /* HostButton.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = HostButton.cpp; sourceTree = "<group>"; };
 		3602C3B6245D903000368900 /* HostButton.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = HostButton.hpp; sourceTree = "<group>"; };
 		3602C3B8245DB3C800368900 /* AppListWindow.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = AppListWindow.cpp; sourceTree = "<group>"; };
@@ -392,7 +394,6 @@
 		36F1646F2474736E00D70AD9 /* switch_wrapper.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = switch_wrapper.c; sourceTree = "<group>"; };
 		36F164712474736E00D70AD9 /* evp.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = evp.h; sourceTree = "<group>"; };
 		36F164722474736E00D70AD9 /* rand.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = rand.h; sourceTree = "<group>"; };
-		36F16474247473A300D70AD9 /* mbedtls_to_openssl_wrapper.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = mbedtls_to_openssl_wrapper.cpp; sourceTree = "<group>"; };
 		36F16476247481F200D70AD9 /* AudrenAudioRenderer.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = AudrenAudioRenderer.cpp; sourceTree = "<group>"; };
 		36F16477247481F200D70AD9 /* AudrenAudioRenderer.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = AudrenAudioRenderer.hpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -732,6 +733,8 @@
 			isa = PBXGroup;
 			children = (
 				3652F04E245C292B001FABF3 /* Limelight.h */,
+				28EE5DAA2635B49E00C9C623 /* PlatformCrypto.c */,
+				28EE5DAB2635B49E00C9C623 /* PlatformCrypto.h */,
 				3652F047245C292B001FABF3 /* PlatformThreads.h */,
 				3652F048245C292B001FABF3 /* Input.h */,
 				3652F049245C292B001FABF3 /* ControlStream.c */,
@@ -952,7 +955,6 @@
 			children = (
 				36F164702474736E00D70AD9 /* openssl */,
 				36F1646F2474736E00D70AD9 /* switch_wrapper.c */,
-				36F16474247473A300D70AD9 /* mbedtls_to_openssl_wrapper.cpp */,
 			);
 			path = switch;
 			sourceTree = "<group>";
@@ -1148,11 +1150,11 @@
 				3652EFD0245B3B00001FABF3 /* vscrollpanel.cpp in Sources */,
 				3652F06D245C292B001FABF3 /* win32.c in Sources */,
 				3652F002245B6961001FABF3 /* AddHostWindow.cpp in Sources */,
-				288965AF262C89D800139ABE /* mbedtls_to_openssl_wrapper.cpp in Sources */,
 				3652EFF8245B4EE2001FABF3 /* Application.cpp in Sources */,
 				3652F07E245C292B001FABF3 /* AudioStream.c in Sources */,
 				3652F076245C292B001FABF3 /* Connection.c in Sources */,
 				3652EFE4245B3B00001FABF3 /* combobox.cpp in Sources */,
+				28EE5DAC2635B49E00C9C623 /* PlatformCrypto.c in Sources */,
 				3652EFF2245B3B00001FABF3 /* textbox.cpp in Sources */,
 				3652F074245C292B001FABF3 /* Platform.c in Sources */,
 				3661D2FF2469E0C00060EE24 /* GLVideoRenderer.cpp in Sources */,
@@ -1271,6 +1273,7 @@
 					"-DHAVE_PULSE",
 					"-DUSE_MBEDTLS_CRYPTO",
 					"-DMOONLIGHT_VERSION=\\\"1.1.0\\\"",
+					"-DUSE_MBEDTLS",
 				);
 				OTHER_LDFLAGS = (
 					"-lglfw",
@@ -1364,6 +1367,7 @@
 					"-DHAVE_PULSE",
 					"-DUSE_MBEDTLS_CRYPTO",
 					"-DMOONLIGHT_VERSION=\\\"1.1.0\\\"",
+					"-DUSE_MBEDTLS",
 				);
 				OTHER_LDFLAGS = (
 					"-lglfw",
