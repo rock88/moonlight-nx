@@ -125,7 +125,7 @@ GSResult<bool> send_packet_win32(const Host &host, const Data &payload) {
     udpServer.sin_port = htons(9);
     
     // Send the packet
-    sendto(udpSocket, payload.bytes(), sizeof(unsigned char) * 102, 0, (struct sockaddr*) &udpServer, sizeof(udpServer));
+    sendto(udpSocket, (const char *)payload.bytes(), sizeof(unsigned char) * 102, 0, (struct sockaddr*) &udpServer, sizeof(udpServer));
     return GSResult<bool>::success(true);
 }
 #endif
