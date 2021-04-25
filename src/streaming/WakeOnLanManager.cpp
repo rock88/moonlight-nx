@@ -2,26 +2,28 @@
 #include "Data.hpp"
 #include "Logger.hpp"
 #include "Settings.hpp"
-#include <sys/socket.h>
-#include <netinet/in.h>
-#include <arpa/inet.h>
-#include <netdb.h>
+#include <errno.h>
 #include <unistd.h>
 #include <string.h>
 
-static const int numPorts = 5;
-static const int ports[numPorts] = {7, 9, 47998, 47999, 48000};
+#if defined(__linux) || defined(__APPLE__) || defined(__SWITCH__)
+#define UNIX_SOCKS
+#include <sys/types.h>
+#include <sys/socket.h>
+#include <netinet/in.h>
+#include <netdb.h>
+#include <arpa/inet.h>
 
-static void populate_address(struct sockaddr_storage* addr, unsigned short port) {
-    if (addr->ss_family == AF_INET) {
-        struct sockaddr_in *sin = (struct sockaddr_in*)addr;
-        sin->sin_port = htons(port);
-    }
-    else if (addr->ss_family == AF_INET6) {
-        struct sockaddr_in6 *sin6 = (struct sockaddr_in6*)addr;
-        sin6->sin6_port = htons(port);
-    }
-}
+#elif defined(_WIN32)
+#define WIN32_SOCKS
+
+#include <winsock2.h>
+#include <windows.h>
+#include <ws2tcpip.h>
+
+#endif
+
+#if defined(UNIX_SOCKS) || defined(WIN32_SOCKS)
 
 static Data mac_string_to_bytes(std::string mac) {
     std::string str = mac;
@@ -51,49 +53,99 @@ static Data create_payload(const Host &host) {
     }
     return payload;
 }
+#endif
 
-bool WakeOnLanManager::wake_up_host(const Host &host) {
-    bool result = false;
+#if defined(UNIX_SOCKS)
+GSResult<bool> send_packet_unix(const Host &host, const Data &payload) {
+    struct sockaddr_in udpClient, udpServer;
+    int broadcast = 1;
+    
+    int udpSocket = socket(AF_INET, SOCK_DGRAM, 0);
+    if (udpSocket == -1) {
+        Logger::error("WakeOnLanManager", "An error was encountered creating the UDP socket: '%s'", strerror(errno));
+        return GSResult<bool>::failure("An error was encountered creating the UDP socket: " + std::string(strerror(errno)));
+    }
+    
+    int setsock_result = setsockopt(udpSocket, SOL_SOCKET, SO_BROADCAST, &broadcast, sizeof broadcast);
+    if (setsock_result == -1) {
+        Logger::error("WakeOnLanManager", "Failed to set socket options: '%s'", strerror(errno));
+        return GSResult<bool>::failure("Failed to set socket options: " + std::string(strerror(errno)));
+    }
+    
+    // Set parameters
+    udpClient.sin_family = AF_INET;
+    udpClient.sin_addr.s_addr = INADDR_ANY;
+    udpClient.sin_port = 0;
+    // Bind socket
+    int bind_result = bind(udpSocket, (struct sockaddr*) &udpClient, sizeof(udpClient));
+    if (bind_result == -1) {
+        Logger::error("WakeOnLanManager", "Failed to bind socket: '%s'", strerror(errno));
+        return GSResult<bool>::failure("Failed to bind socket: " + std::string(strerror(errno)));
+    }
+    
+    // Set server end point (the broadcast addres)
+    udpServer.sin_family = AF_INET;
+    udpServer.sin_addr.s_addr = inet_addr(host.address.c_str());
+    udpServer.sin_port = htons(9);
+    
+    // Send the packet
+    ssize_t result = sendto(udpSocket, payload.bytes(), sizeof(unsigned char) * 102, 0, (struct sockaddr*) &udpServer, sizeof(udpServer));
+    if (result == -1) {
+        Logger::error("WakeOnLanManager", "Failed to send magic packet to socket: '%s'", strerror(errno));
+        return GSResult<bool>::failure("Failed to send magic packet to socket: " + std::string(strerror(errno)));
+    }
+    return GSResult<bool>::success(true);
+}
+#elif defined(_WIN32)
+GSResult<bool> send_packet_win32(const Host &host, const Data &payload) {
+    struct sockaddr_in udpClient, udpServer;
+    int broadcast = 1;
+    
+    WSADATA data;
+    SOCKET udpSocket;
+    
+    // Setup broadcast socket
+    WSAStartup(MAKEWORD(2, 2), &data);
+    udpSocket = socket(AF_INET, SOCK_DGRAM, IPPROTO_UDP);
+    
+    if (setsockopt(udpSocket, SOL_SOCKET, SO_BROADCAST, (char *) &broadcast, sizeof(broadcast)) == -1){
+        return GSResult<bool>::failure("Failed to setup a broadcast socket");
+    }
+    
+    // Set parameters
+    udpClient.sin_family = AF_INET;
+    udpClient.sin_addr.s_addr = INADDR_ANY;
+    udpClient.sin_port = htons(0);
+    // Bind socket
+    bind(udpSocket, (struct sockaddr*) &udpClient, sizeof(udpClient));
+    
+    // Set server end point (the broadcast addres)
+    udpServer.sin_family = AF_INET;
+    udpServer.sin_addr.s_addr = inet_addr(host.address.c_str());
+    udpServer.sin_port = htons(9);
+    
+    // Send the packet
+    sendto(udpSocket, payload.bytes(), sizeof(unsigned char) * 102, 0, (struct sockaddr*) &udpServer, sizeof(udpServer));
+    return GSResult<bool>::success(true);
+}
+#endif
+
+bool WakeOnLanManager::can_wake_up_host(const Host &host) {
+#if defined(UNIX_SOCKS) || defined(WIN32_SOCKS)
+    return true;
+#else
+    return false;
+#endif
+}
+
+GSResult<bool> WakeOnLanManager::wake_up_host(const Host &host) {
     Data payload = create_payload(host);
     
-    struct addrinfo hints, *res, *curr;
+#if defined(UNIX_SOCKS)
+    return send_packet_unix(host, payload);
+#elif defined(_WIN32)
+    return send_packet_win32(host, payload);
+#endif
     
-    memset(&hints, 0, sizeof(hints));
-    hints.ai_family = AF_UNSPEC;
-    hints.ai_flags = AI_ADDRCONFIG;
-    
-    if (getaddrinfo(host.address.c_str(), NULL, &hints, &res) != 0 || res == NULL) {
-        // Failed to resolve address
-        Logger::error("WakeOnLanManager", "Failed to resolve WOL address");
-        return result;
-    }
-    
-    // Try all addresses that this DNS name resolves to. We have
-    // to create a new socket each time because the addresses
-    // may be different address families.
-    for (curr = res; curr != NULL; curr = curr->ai_next) {
-        int wol_socket = socket(curr->ai_family, SOCK_DGRAM, IPPROTO_UDP);
-        if (wol_socket < 0) {
-            Logger::error("WakeOnLanManager", "Failed to create WOL socket");
-            continue;
-        }
-        
-        int val = 1;
-        setsockopt(wol_socket, SOL_SOCKET, SO_BROADCAST, &val, sizeof(val));
-        
-        struct sockaddr_storage addr;
-        memset(&addr, 0, sizeof(addr));
-        memcpy(&addr, curr->ai_addr, curr->ai_addrlen);
-        
-        for (int j = 0; j < numPorts; j++) {
-            populate_address(&addr, ports[j]);
-            long err = sendto(wol_socket, payload.bytes(), payload.size(), 0, (struct sockaddr*)&addr, curr->ai_addrlen);
-            result = result || err > 0;
-            Logger::info("WakeOnLanManager", "Sending WOL packet returned: %ld", err);
-        }
-        
-        close(wol_socket);
-    }
-    freeaddrinfo(res);
-    return result;
+    return GSResult<bool>::failure("Wake up host not supported...");
 }
