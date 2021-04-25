@@ -1,8 +1,9 @@
 #include "GLVideoRenderer.hpp"
 #include "Logger.hpp"
 
-#ifdef GL_CORE
-static const char *vertex_shader_string = "\
+// TODO: GLES support
+
+static const char *vertex_shader_string_core = "\
 #version 140\n\
 in vec2 position;\n\
 out mediump vec2 tex_position;\n\
@@ -12,7 +13,7 @@ void main() {\n\
     tex_position = vec2((position.x + 1.0) / 2.0, (1.0 - position.y) / 2.0);\n\
 }";
 
-static const char *fragment_shader_string = "\
+static const char *fragment_shader_string_core = "\
 #version 140\n\
 uniform lowp sampler2D ymap;\n\
 uniform lowp sampler2D umap;\n\
@@ -31,8 +32,9 @@ void main() {\n\
     YCbCr -= offset;\n\
     FragColor = vec4(clamp(yuvmat * YCbCr, 0.0, 1.0), 1.0);\n\
 }";
-#else
+
 static const char *vertex_shader_string = "\
+#version 120\n\
 attribute vec2 position;\n\
 varying vec2 tex_position;\n\
 \
@@ -42,6 +44,7 @@ void main() {\n\
 }";
 
 static const char *fragment_shader_string = "\
+#version 120\n\
 uniform sampler2D ymap;\n\
 uniform sampler2D umap;\n\
 uniform sampler2D vmap;\n\
@@ -58,7 +61,6 @@ void main() {\n\
     YCbCr -= offset;\n\
     gl_FragColor = vec4(clamp(yuvmat * YCbCr, 0.0, 1.0), 1.0);\n\
 }";
-#endif
 
 static const float vertices[] = {
     -1.f, -1.f,
@@ -131,12 +133,17 @@ static void check_shader(GLuint handle) {
         GLint length = 0;
         glGetShaderiv(handle, GL_INFO_LOG_LENGTH, &length);
         
-        char* buffer = (char* )malloc(length);
+        char* buffer = (char*)malloc(length);
         
         glGetShaderInfoLog(handle, length, &length, buffer);
         Logger::error("GL", "Compile shader error: %s", buffer);
         free(buffer);
     }
+}
+
+static bool use_core_shaders() {
+    char* version = (char *)glGetString(GL_SHADING_LANGUAGE_VERSION);
+    return version[0] == '3' || version[0] == '4';
 }
 
 GLVideoRenderer::~GLVideoRenderer() {
@@ -168,11 +175,13 @@ void GLVideoRenderer::initialize() {
     GLuint vert = glCreateShader(GL_VERTEX_SHADER);
     GLuint frag = glCreateShader(GL_FRAGMENT_SHADER);
     
-    glShaderSource(vert, 1, &vertex_shader_string, 0);
+    bool use_gl_core = use_core_shaders();
+    
+    glShaderSource(vert, 1, use_gl_core ? &vertex_shader_string_core : &vertex_shader_string, 0);
     glCompileShader(vert);
     check_shader(vert);
     
-    glShaderSource(frag, 1, &fragment_shader_string, 0);
+    glShaderSource(frag, 1, use_gl_core ? &fragment_shader_string_core : &fragment_shader_string, 0);
     glCompileShader(frag);
     check_shader(frag);
     
@@ -211,6 +220,7 @@ void GLVideoRenderer::draw(int width, int height, AVFrame *frame) {
     uint64_t before_render = LiGetMillis();
     
     if (!m_is_initialized) {
+        Logger::info("GL", "GL: %s, GLSL: %s", glGetString(GL_VERSION), glGetString(GL_SHADING_LANGUAGE_VERSION));
         Logger::info("GL", "Init with width: %i, height: %i", width, height);
         
         initialize();
