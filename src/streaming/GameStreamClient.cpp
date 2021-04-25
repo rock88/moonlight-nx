@@ -10,12 +10,14 @@
 #include <fstream>
 #include <future>
 #include <unistd.h>
+
+#if defined(__linux) || defined(__APPLE__)
 #include <sys/socket.h>
 #include <sys/ioctl.h>
 #include <net/if.h>
 #include <arpa/inet.h>
 
-#ifdef __SWITCH__
+#elif defined(__SWITCH__)
 #include <switch.h>
 #endif
 
@@ -83,14 +85,9 @@ void GameStreamClient::stop() {
     #endif
 }
 
-std::vector<std::string> GameStreamClient::host_addresses_for_find() {
-    std::vector<std::string> addresses;
+static uint32_t get_my_ip_address() {
     uint32_t address = 0;
-    
-    #ifdef __SWITCH__
-    Result result = nifmGetCurrentIpAddress(&address);
-    bool isSucceed = R_SUCCEEDED(result);
-    #else
+#if defined(__linux) || defined(__APPLE__)
     struct ifreq ifr;
     ifr.ifr_addr.sa_family = AF_INET;
     strncpy(ifr.ifr_name, "en0", IFNAMSIZ - 1);
@@ -100,9 +97,17 @@ std::vector<std::string> GameStreamClient::host_addresses_for_find() {
     close(fd);
     
     address = ((struct sockaddr_in *)&ifr.ifr_addr)->sin_addr.s_addr;
+#elif defined(__SWITCH__)
+    nifmGetCurrentIpAddress(&address);
+#endif
+    return address;
+}
+
+std::vector<std::string> GameStreamClient::host_addresses_for_find() {
+    std::vector<std::string> addresses;
     
-    bool isSucceed = true;
-    #endif
+    uint32_t address = get_my_ip_address();
+    bool isSucceed = address != 0;
     
     if (isSucceed) {
         int a = address & 0xFF;
@@ -118,6 +123,10 @@ std::vector<std::string> GameStreamClient::host_addresses_for_find() {
         }
     }
     return addresses;
+}
+
+bool GameStreamClient::can_find_host() {
+    return get_my_ip_address() != 0;
 }
 
 void GameStreamClient::find_host(ServerCallback<Host> callback) {
@@ -152,13 +161,19 @@ void GameStreamClient::find_host(ServerCallback<Host> callback) {
     });
 }
 
+bool GameStreamClient::can_wake_up_host(const Host &host) {
+    return WakeOnLanManager::instance().can_wake_up_host(host);
+}
+
 void GameStreamClient::wake_up_host(const Host &host, ServerCallback<bool> callback) {
     perform_async([this, host, callback] {
-        if (WakeOnLanManager::instance().wake_up_host(host)) {
+        auto result = WakeOnLanManager::instance().wake_up_host(host);
+        
+        if (result.isSuccess()) {
             usleep(5'000'000);
-            nanogui::async([callback] { callback(GSResult<bool>::success(true)); });
+            nanogui::async([callback, result] { callback(result); });
         } else {
-            nanogui::async([callback] { callback(GSResult<bool>::failure("Wake up failed...")); });
+            nanogui::async([callback, result] { callback(result); });
         }
     });
 }

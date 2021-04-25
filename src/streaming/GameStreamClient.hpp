@@ -67,8 +67,13 @@ public:
     void stop();
     
     std::vector<std::string> host_addresses_for_find();
+    
+    bool can_find_host();
     void find_host(ServerCallback<Host> callback);
+    
+    bool can_wake_up_host(const Host &host);
     void wake_up_host(const Host &host, ServerCallback<bool> callback);
+    
     void connect(const std::string &address, ServerCallback<SERVER_DATA> callback);
     void pair(const std::string &address, const std::string &pin, ServerCallback<bool> callback);
     void applist(const std::string &address, ServerCallback<AppInfoList> callback);

@@ -74,7 +74,7 @@ int main(int argc, const char * argv[]) {
     GamepadController::instance().init(new SwitchGamepadFrontend());
     
     nanogui::init();
-    nanogui::ref<Application> app = new Application(Size(m_width, m_height), Size(m_fb_width, m_fb_height));
+    nanogui::ref<Application> app = new Application({ (float)m_width, (float)m_height }, { (float)m_fb_width, (float)m_fb_height });
     
     nanogui::setup(1.0 / 15.0);
     
