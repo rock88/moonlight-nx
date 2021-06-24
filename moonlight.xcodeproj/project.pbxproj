@@ -392,8 +392,6 @@
 		36EB491124993A4C0059EDB7 /* WakeOnLanManager.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = WakeOnLanManager.cpp; sourceTree = "<group>"; };
 		36EB491224993A4C0059EDB7 /* WakeOnLanManager.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = WakeOnLanManager.hpp; sourceTree = "<group>"; };
 		36F1646F2474736E00D70AD9 /* switch_wrapper.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = switch_wrapper.c; sourceTree = "<group>"; };
-		36F164712474736E00D70AD9 /* evp.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = evp.h; sourceTree = "<group>"; };
-		36F164722474736E00D70AD9 /* rand.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = rand.h; sourceTree = "<group>"; };
 		36F16476247481F200D70AD9 /* AudrenAudioRenderer.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = AudrenAudioRenderer.cpp; sourceTree = "<group>"; };
 		36F16477247481F200D70AD9 /* AudrenAudioRenderer.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = AudrenAudioRenderer.hpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -953,19 +951,9 @@
 		36F1646E2474736E00D70AD9 /* switch */ = {
 			isa = PBXGroup;
 			children = (
-				36F164702474736E00D70AD9 /* openssl */,
 				36F1646F2474736E00D70AD9 /* switch_wrapper.c */,
 			);
 			path = switch;
-			sourceTree = "<group>";
-		};
-		36F164702474736E00D70AD9 /* openssl */ = {
-			isa = PBXGroup;
-			children = (
-				36F164712474736E00D70AD9 /* evp.h */,
-				36F164722474736E00D70AD9 /* rand.h */,
-			);
-			path = openssl;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
