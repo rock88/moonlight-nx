@@ -1,12 +1,12 @@
 #include <stdio.h>
 #pragma once
 
-#if defined(USE_OPENSSL_CRYPTO)
+#if defined(USE_OPENSSL)
 
 #include "OpenSSLCryptoManager.hpp"
 #define CryptoManager OpenSSLCryptoManager
 
-#elif defined(USE_MBEDTLS_CRYPTO)
+#elif defined(USE_MBEDTLS)
 
 #include "MbedTLSCryptoManager.hpp"
 #define CryptoManager MbedTLSCryptoManager
