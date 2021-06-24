@@ -76,8 +76,7 @@ M_INCLUDES := \
 	-I$(TOPDIR)/third_party/nanogui/ext/nanovg/src
 
 DEFINES := -DNANOGUI_USE_OPENGL -DNVG_STB_IMAGE_IMPLEMENTATION -DNANOGUI_NO_GLFW \
-	-DUSE_MBEDTLS -DHAS_SOCKLEN_T -DHAS_POLL -DHAS_FCNTL -DUSE_MBEDTLS_CRYPTO \
-	-DMOONLIGHT_VERSION=\"$(MOONLIGHT_VERSION)\"
+	-DHAS_SOCKLEN_T -DHAS_POLL -DHAS_FCNTL -DUSE_MBEDTLS -DMOONLIGHT_VERSION=\"$(MOONLIGHT_VERSION)\"
 
 CFLAGS	:=	-g -Wall -fcompare-debug-second -O2 -ffunction-sections $(ARCH) $(DEFINES) $(INCLUDE) $(M_INCLUDES) -D__SWITCH__
 CXXFLAGS	:= $(CFLAGS) -std=gnu++17
@@ -156,8 +155,8 @@ MOONLIGHT_COMMON_C_SOURCES = \
 	LinkedBlockingQueue.c \
 	Misc.c \
 	Platform.c \
-	PlatformSockets.c \
 	PlatformCrypto.c \
+	PlatformSockets.c \
 	RtpFecQueue.c \
 	RtpReorderQueue.c \
 	RtspConnection.c \

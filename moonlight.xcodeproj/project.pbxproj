@@ -30,6 +30,10 @@
 		28896599262C88D000139ABE /* CoreVideo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 28896598262C88D000139ABE /* CoreVideo.framework */; };
 		2889659D262C88DD00139ABE /* VideoToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2889659C262C88DC00139ABE /* VideoToolbox.framework */; };
 		28AD4A752606120A009314C6 /* glad.c in Sources */ = {isa = PBXBuildFile; fileRef = 28AD4A722606120A009314C6 /* glad.c */; };
+		28E7A5772684F1AD003F418C /* RtspConnection.c in Sources */ = {isa = PBXBuildFile; fileRef = 28E7A5762684F1AD003F418C /* RtspConnection.c */; };
+		28E7A5792684F1B3003F418C /* RtspParser.c in Sources */ = {isa = PBXBuildFile; fileRef = 28E7A5782684F1B3003F418C /* RtspParser.c */; };
+		28E7A57E2684F7D3003F418C /* RtpFecQueue.c in Sources */ = {isa = PBXBuildFile; fileRef = 28E7A57A2684F7D3003F418C /* RtpFecQueue.c */; };
+		28E7A57F2684F7D3003F418C /* RtpReorderQueue.c in Sources */ = {isa = PBXBuildFile; fileRef = 28E7A57D2684F7D3003F418C /* RtpReorderQueue.c */; };
 		28EE5DAC2635B49E00C9C623 /* PlatformCrypto.c in Sources */ = {isa = PBXBuildFile; fileRef = 28EE5DAA2635B49E00C9C623 /* PlatformCrypto.c */; };
 		3602C3B7245D903000368900 /* HostButton.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3602C3B5245D903000368900 /* HostButton.cpp */; };
 		3602C3BA245DB3C800368900 /* AppListWindow.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3602C3B8245DB3C800368900 /* AppListWindow.cpp */; };
@@ -89,17 +93,13 @@
 		3652F06F245C292B001FABF3 /* ControlStream.c in Sources */ = {isa = PBXBuildFile; fileRef = 3652F049245C292B001FABF3 /* ControlStream.c */; };
 		3652F070245C292B001FABF3 /* SimpleStun.c in Sources */ = {isa = PBXBuildFile; fileRef = 3652F04C245C292B001FABF3 /* SimpleStun.c */; };
 		3652F071245C292B001FABF3 /* InputStream.c in Sources */ = {isa = PBXBuildFile; fileRef = 3652F04D245C292B001FABF3 /* InputStream.c */; };
-		3652F072245C292B001FABF3 /* RtspConnection.c in Sources */ = {isa = PBXBuildFile; fileRef = 3652F050245C292B001FABF3 /* RtspConnection.c */; };
 		3652F073245C292B001FABF3 /* PlatformSockets.c in Sources */ = {isa = PBXBuildFile; fileRef = 3652F052245C292B001FABF3 /* PlatformSockets.c */; };
 		3652F074245C292B001FABF3 /* Platform.c in Sources */ = {isa = PBXBuildFile; fileRef = 3652F054245C292B001FABF3 /* Platform.c */; };
 		3652F075245C292B001FABF3 /* VideoStream.c in Sources */ = {isa = PBXBuildFile; fileRef = 3652F055245C292B001FABF3 /* VideoStream.c */; };
 		3652F076245C292B001FABF3 /* Connection.c in Sources */ = {isa = PBXBuildFile; fileRef = 3652F057245C292B001FABF3 /* Connection.c */; };
 		3652F077245C292B001FABF3 /* VideoDepacketizer.c in Sources */ = {isa = PBXBuildFile; fileRef = 3652F058245C292B001FABF3 /* VideoDepacketizer.c */; };
 		3652F078245C292B001FABF3 /* FakeCallbacks.c in Sources */ = {isa = PBXBuildFile; fileRef = 3652F059245C292B001FABF3 /* FakeCallbacks.c */; };
-		3652F079245C292B001FABF3 /* RtpReorderQueue.c in Sources */ = {isa = PBXBuildFile; fileRef = 3652F05A245C292B001FABF3 /* RtpReorderQueue.c */; };
 		3652F07A245C292B001FABF3 /* SdpGenerator.c in Sources */ = {isa = PBXBuildFile; fileRef = 3652F05C245C292B001FABF3 /* SdpGenerator.c */; };
-		3652F07B245C292B001FABF3 /* RtspParser.c in Sources */ = {isa = PBXBuildFile; fileRef = 3652F05D245C292B001FABF3 /* RtspParser.c */; };
-		3652F07C245C292B001FABF3 /* RtpFecQueue.c in Sources */ = {isa = PBXBuildFile; fileRef = 3652F05E245C292B001FABF3 /* RtpFecQueue.c */; };
 		3652F07D245C292B001FABF3 /* Misc.c in Sources */ = {isa = PBXBuildFile; fileRef = 3652F05F245C292B001FABF3 /* Misc.c */; };
 		3652F07E245C292B001FABF3 /* AudioStream.c in Sources */ = {isa = PBXBuildFile; fileRef = 3652F060245C292B001FABF3 /* AudioStream.c */; };
 		3652F07F245C292B001FABF3 /* LinkedBlockingQueue.c in Sources */ = {isa = PBXBuildFile; fileRef = 3652F062245C292B001FABF3 /* LinkedBlockingQueue.c */; };
@@ -170,6 +170,12 @@
 		28AD4A712606120A009314C6 /* glad.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = glad.h; sourceTree = "<group>"; };
 		28AD4A722606120A009314C6 /* glad.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = glad.c; sourceTree = "<group>"; };
 		28AD4A742606120A009314C6 /* khrplatform.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = khrplatform.h; sourceTree = "<group>"; };
+		28E7A5762684F1AD003F418C /* RtspConnection.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = RtspConnection.c; sourceTree = "<group>"; };
+		28E7A5782684F1B3003F418C /* RtspParser.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = RtspParser.c; sourceTree = "<group>"; };
+		28E7A57A2684F7D3003F418C /* RtpFecQueue.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = RtpFecQueue.c; sourceTree = "<group>"; };
+		28E7A57B2684F7D3003F418C /* RtpReorderQueue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RtpReorderQueue.h; sourceTree = "<group>"; };
+		28E7A57C2684F7D3003F418C /* RtpFecQueue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RtpFecQueue.h; sourceTree = "<group>"; };
+		28E7A57D2684F7D3003F418C /* RtpReorderQueue.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = RtpReorderQueue.c; sourceTree = "<group>"; };
 		28EE5DAA2635B49E00C9C623 /* PlatformCrypto.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = PlatformCrypto.c; sourceTree = "<group>"; };
 		28EE5DAB2635B49E00C9C623 /* PlatformCrypto.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PlatformCrypto.h; sourceTree = "<group>"; };
 		3602C3B5245D903000368900 /* HostButton.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = HostButton.cpp; sourceTree = "<group>"; };
@@ -301,13 +307,10 @@
 		3652F047245C292B001FABF3 /* PlatformThreads.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PlatformThreads.h; sourceTree = "<group>"; };
 		3652F048245C292B001FABF3 /* Input.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Input.h; sourceTree = "<group>"; };
 		3652F049245C292B001FABF3 /* ControlStream.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = ControlStream.c; sourceTree = "<group>"; };
-		3652F04A245C292B001FABF3 /* RtpReorderQueue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RtpReorderQueue.h; sourceTree = "<group>"; };
 		3652F04B245C292B001FABF3 /* Rtsp.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Rtsp.h; sourceTree = "<group>"; };
 		3652F04C245C292B001FABF3 /* SimpleStun.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = SimpleStun.c; sourceTree = "<group>"; };
 		3652F04D245C292B001FABF3 /* InputStream.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = InputStream.c; sourceTree = "<group>"; };
 		3652F04E245C292B001FABF3 /* Limelight.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Limelight.h; sourceTree = "<group>"; };
-		3652F04F245C292B001FABF3 /* RtpFecQueue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RtpFecQueue.h; sourceTree = "<group>"; };
-		3652F050245C292B001FABF3 /* RtspConnection.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = RtspConnection.c; sourceTree = "<group>"; };
 		3652F051245C292B001FABF3 /* ByteBuffer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ByteBuffer.h; sourceTree = "<group>"; };
 		3652F052245C292B001FABF3 /* PlatformSockets.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = PlatformSockets.c; sourceTree = "<group>"; };
 		3652F053245C292B001FABF3 /* LinkedBlockingQueue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LinkedBlockingQueue.h; sourceTree = "<group>"; };
@@ -317,11 +320,8 @@
 		3652F057245C292B001FABF3 /* Connection.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = Connection.c; sourceTree = "<group>"; };
 		3652F058245C292B001FABF3 /* VideoDepacketizer.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = VideoDepacketizer.c; sourceTree = "<group>"; };
 		3652F059245C292B001FABF3 /* FakeCallbacks.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = FakeCallbacks.c; sourceTree = "<group>"; };
-		3652F05A245C292B001FABF3 /* RtpReorderQueue.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = RtpReorderQueue.c; sourceTree = "<group>"; };
 		3652F05B245C292B001FABF3 /* Video.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Video.h; sourceTree = "<group>"; };
 		3652F05C245C292B001FABF3 /* SdpGenerator.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = SdpGenerator.c; sourceTree = "<group>"; };
-		3652F05D245C292B001FABF3 /* RtspParser.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = RtspParser.c; sourceTree = "<group>"; };
-		3652F05E245C292B001FABF3 /* RtpFecQueue.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = RtpFecQueue.c; sourceTree = "<group>"; };
 		3652F05F245C292B001FABF3 /* Misc.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = Misc.c; sourceTree = "<group>"; };
 		3652F060245C292B001FABF3 /* AudioStream.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = AudioStream.c; sourceTree = "<group>"; };
 		3652F061245C292B001FABF3 /* Platform.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Platform.h; sourceTree = "<group>"; };
@@ -730,38 +730,38 @@
 		3652F046245C292B001FABF3 /* src */ = {
 			isa = PBXGroup;
 			children = (
-				3652F04E245C292B001FABF3 /* Limelight.h */,
-				28EE5DAA2635B49E00C9C623 /* PlatformCrypto.c */,
-				28EE5DAB2635B49E00C9C623 /* PlatformCrypto.h */,
-				3652F047245C292B001FABF3 /* PlatformThreads.h */,
-				3652F048245C292B001FABF3 /* Input.h */,
-				3652F049245C292B001FABF3 /* ControlStream.c */,
-				3652F04A245C292B001FABF3 /* RtpReorderQueue.h */,
-				3652F04B245C292B001FABF3 /* Rtsp.h */,
-				3652F04C245C292B001FABF3 /* SimpleStun.c */,
-				3652F04D245C292B001FABF3 /* InputStream.c */,
-				3652F04F245C292B001FABF3 /* RtpFecQueue.h */,
-				3652F050245C292B001FABF3 /* RtspConnection.c */,
-				3652F051245C292B001FABF3 /* ByteBuffer.h */,
-				3652F052245C292B001FABF3 /* PlatformSockets.c */,
-				3652F053245C292B001FABF3 /* LinkedBlockingQueue.h */,
-				3652F054245C292B001FABF3 /* Platform.c */,
-				3652F055245C292B001FABF3 /* VideoStream.c */,
-				3652F056245C292B001FABF3 /* Limelight-internal.h */,
-				3652F057245C292B001FABF3 /* Connection.c */,
-				3652F058245C292B001FABF3 /* VideoDepacketizer.c */,
-				3652F059245C292B001FABF3 /* FakeCallbacks.c */,
-				3652F05A245C292B001FABF3 /* RtpReorderQueue.c */,
-				3652F05B245C292B001FABF3 /* Video.h */,
-				3652F05C245C292B001FABF3 /* SdpGenerator.c */,
-				3652F05D245C292B001FABF3 /* RtspParser.c */,
-				3652F05E245C292B001FABF3 /* RtpFecQueue.c */,
-				3652F05F245C292B001FABF3 /* Misc.c */,
 				3652F060245C292B001FABF3 /* AudioStream.c */,
-				3652F061245C292B001FABF3 /* Platform.h */,
-				3652F062245C292B001FABF3 /* LinkedBlockingQueue.c */,
-				3652F063245C292B001FABF3 /* PlatformSockets.h */,
 				3652F064245C292B001FABF3 /* ByteBuffer.c */,
+				3652F051245C292B001FABF3 /* ByteBuffer.h */,
+				3652F057245C292B001FABF3 /* Connection.c */,
+				3652F049245C292B001FABF3 /* ControlStream.c */,
+				3652F059245C292B001FABF3 /* FakeCallbacks.c */,
+				3652F048245C292B001FABF3 /* Input.h */,
+				3652F04D245C292B001FABF3 /* InputStream.c */,
+				3652F04E245C292B001FABF3 /* Limelight.h */,
+				3652F056245C292B001FABF3 /* Limelight-internal.h */,
+				3652F062245C292B001FABF3 /* LinkedBlockingQueue.c */,
+				3652F053245C292B001FABF3 /* LinkedBlockingQueue.h */,
+				3652F05F245C292B001FABF3 /* Misc.c */,
+				3652F054245C292B001FABF3 /* Platform.c */,
+				3652F061245C292B001FABF3 /* Platform.h */,
+				28EE5DAB2635B49E00C9C623 /* PlatformCrypto.h */,
+				28EE5DAA2635B49E00C9C623 /* PlatformCrypto.c */,
+				3652F052245C292B001FABF3 /* PlatformSockets.c */,
+				3652F063245C292B001FABF3 /* PlatformSockets.h */,
+				3652F047245C292B001FABF3 /* PlatformThreads.h */,
+				28E7A57A2684F7D3003F418C /* RtpFecQueue.c */,
+				28E7A57C2684F7D3003F418C /* RtpFecQueue.h */,
+				28E7A57D2684F7D3003F418C /* RtpReorderQueue.c */,
+				28E7A57B2684F7D3003F418C /* RtpReorderQueue.h */,
+				3652F04B245C292B001FABF3 /* Rtsp.h */,
+				28E7A5762684F1AD003F418C /* RtspConnection.c */,
+				28E7A5782684F1B3003F418C /* RtspParser.c */,
+				3652F05C245C292B001FABF3 /* SdpGenerator.c */,
+				3652F04C245C292B001FABF3 /* SimpleStun.c */,
+				3652F05B245C292B001FABF3 /* Video.h */,
+				3652F058245C292B001FABF3 /* VideoDepacketizer.c */,
+				3652F055245C292B001FABF3 /* VideoStream.c */,
 			);
 			path = src;
 			sourceTree = "<group>";
@@ -1056,12 +1056,13 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				28E7A5792684F1B3003F418C /* RtspParser.c in Sources */,
 				3652F075245C292B001FABF3 /* VideoStream.c in Sources */,
 				3652EFE0245B3B00001FABF3 /* imageview.cpp in Sources */,
 				3652EFDB245B3B00001FABF3 /* texture.cpp in Sources */,
 				36A0C03D2461F03C0083289C /* Settings.cpp in Sources */,
+				28E7A57F2684F7D3003F418C /* RtpReorderQueue.c in Sources */,
 				36BFCCF82479725900245D40 /* main.cpp in Sources */,
-				3652F079245C292B001FABF3 /* RtpReorderQueue.c in Sources */,
 				36BFCCF12479723E00245D40 /* xml.cpp in Sources */,
 				3652F065245C292B001FABF3 /* list.c in Sources */,
 				3620418D25D7F04400D21EE3 /* MouseController.cpp in Sources */,
@@ -1071,6 +1072,7 @@
 				3652EFFC245B6434001FABF3 /* MainWindow.cpp in Sources */,
 				3652EFD3245B3B00001FABF3 /* button.cpp in Sources */,
 				3652EFE6245B3B00001FABF3 /* traits.cpp in Sources */,
+				28E7A57E2684F7D3003F418C /* RtpFecQueue.c in Sources */,
 				3652EFDE245B3B00001FABF3 /* tabwidget.cpp in Sources */,
 				3652F07A245C292B001FABF3 /* SdpGenerator.c in Sources */,
 				3652EFEB245B3B00001FABF3 /* imagepanel.cpp in Sources */,
@@ -1089,14 +1091,12 @@
 				3652F06C245C292B001FABF3 /* callbacks.c in Sources */,
 				3652EFD9245B3B00001FABF3 /* popup.cpp in Sources */,
 				3652EFEA245B3B00001FABF3 /* renderpass_gl.cpp in Sources */,
-				3652F07C245C292B001FABF3 /* RtpFecQueue.c in Sources */,
 				3652F083245C60D1001FABF3 /* LoadingOverlay.cpp in Sources */,
 				3652EFF6245B3CF2001FABF3 /* nanovg.c in Sources */,
 				3652F067245C292B001FABF3 /* packet.c in Sources */,
 				3661D2F92469D1940060EE24 /* FFmpegVideoDecoder.cpp in Sources */,
 				363898342471B7C500F99920 /* MbedTLSCryptoManager.cpp in Sources */,
 				28896586262C343C00139ABE /* SwitchMouseFrontend.cpp in Sources */,
-				3652F072245C292B001FABF3 /* RtspConnection.c in Sources */,
 				36BFCCF22479723E00245D40 /* client.cpp in Sources */,
 				3678EF732476D9DA0097345D /* DebugFileRecorderAudioRenderer.cpp in Sources */,
 				3652EFE8245B3B00001FABF3 /* opengl.cpp in Sources */,
@@ -1106,7 +1106,7 @@
 				3652EFF5245B3B00001FABF3 /* popupbutton.cpp in Sources */,
 				3652EFF0245B3B00001FABF3 /* colorwheel.cpp in Sources */,
 				3652F068245C292B001FABF3 /* unix.c in Sources */,
-				3652F07B245C292B001FABF3 /* RtspParser.c in Sources */,
+				28E7A5772684F1AD003F418C /* RtspConnection.c in Sources */,
 				3652EFCF245B3B00001FABF3 /* checkbox.cpp in Sources */,
 				3658241324819E56008B8758 /* Logger.cpp in Sources */,
 				367D2D7424829A0800A946F4 /* LogsWindow.cpp in Sources */,
@@ -1233,7 +1233,7 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				HEADER_SEARCH_PATHS = (
 					/usr/local/include,
-					/usr/local/Cellar/ffmpeg/4.4/include,
+					/usr/local/Cellar/ffmpeg/4.4_1/include,
 					"/usr/local/Cellar/openssl@1.1/1.1.1k/include_wrong",
 					"\"$(SRCROOT)/third_party/nanogui/include\"",
 					"\"$(SRCROOT)/third_party/nanogui/ext/nanovg/src\"",
@@ -1259,9 +1259,8 @@
 					"-DHAS_POLL",
 					"-DHAS_FCNTL",
 					"-DHAVE_PULSE",
-					"-DUSE_MBEDTLS_CRYPTO",
-					"-DMOONLIGHT_VERSION=\\\"1.1.0\\\"",
 					"-DUSE_MBEDTLS",
+					"-DMOONLIGHT_VERSION=\\\"1.1.0\\\"",
 				);
 				OTHER_LDFLAGS = (
 					"-lglfw",
@@ -1328,7 +1327,7 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				HEADER_SEARCH_PATHS = (
 					/usr/local/include,
-					/usr/local/Cellar/ffmpeg/4.4/include,
+					/usr/local/Cellar/ffmpeg/4.4_1/include,
 					"/usr/local/Cellar/openssl@1.1/1.1.1k/include_wrong",
 					"\"$(SRCROOT)/third_party/nanogui/include\"",
 					"\"$(SRCROOT)/third_party/nanogui/ext/nanovg/src\"",
@@ -1353,9 +1352,8 @@
 					"-DHAS_POLL",
 					"-DHAS_FCNTL",
 					"-DHAVE_PULSE",
-					"-DUSE_MBEDTLS_CRYPTO",
-					"-DMOONLIGHT_VERSION=\\\"1.1.0\\\"",
 					"-DUSE_MBEDTLS",
+					"-DMOONLIGHT_VERSION=\\\"1.1.0\\\"",
 				);
 				OTHER_LDFLAGS = (
 					"-lglfw",
